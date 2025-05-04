@@ -1,0 +1,32 @@
+{
+	"name": "test",
+	"globIgnorePaths": ["**/package.json", "**/tsconfig.json", "**/*.tsbuildinfo"],
+	"emitLegacyScripts": false,
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"TS": {
+				"$className": "Folder",
+				"node_modules": {
+					"$className": "Folder",
+					"@rbxts": {
+						"$path": "test\\node_modules\\@rbxts"
+					}
+				},
+				"include": {
+					"$path": "test\\out\\include"
+				},
+				"shared": {
+					"$path": "test\\out\\shared"
+				}
+			}
+		},
+		"TestService": {
+			"$properties": {
+				"ExecuteWithStudioRun": true,
+				"Timeout": 300
+			},
+			"$path": "test\\out\\test"
+		}
+	}
+}

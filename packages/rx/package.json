@@ -1,0 +1,48 @@
+{
+	"name": "@rbxts/rx",
+	"version": "7.8.2-rc.1",
+	"description": "Reactive Extensions for modern JavaScript. (Ported to Roblox-TS)",
+	"main": "out/init.luau",
+	"types": "out/index.d.ts",
+	"files": [
+		"out",
+		"default.project.json",
+		"!**/*.tsbuildinfo",
+		"!**/__tests__"
+	],
+	"scripts": {
+		"build": "shx rm -rf out && rbxtsc --verbose --allowCommentDirectives",
+		"dev": "shx rm -rf out && rbxtsc -w --allowCommentDirectives"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lisachandra/rbxts-rx.git"
+	},
+	"contributors": [
+		"Ben Lesh <ben@benlesh.com>",
+		"Paul Taylor <paul.e.taylor@me.com>",
+		"Jeff Cross <crossj@google.com>",
+		"Matthew Podwysocki <matthewp@microsoft.com>",
+		"OJ Kwon <kwon.ohjoong@gmail.com>",
+		"Andre Staltz <andre@staltz.com>",
+		"lisachandra <lisachandra@proton.me>"
+	],
+	"license": "Apache-2.0",
+	"bugs": {
+		"url": "https://github.com/lisachandra/rbxts-rx/issues"
+	},
+	"homepage": "https://github.com/lisachandra/rbxts-rx/tree/main/packages/rx#readme",
+	"dependencies": {
+		"@rbxts/luau-polyfill": "^1.0.0",
+		"@rbxts/regexp": "^0.2.1-ts.4",
+		"@rbxts/services": "^1.0.0"
+	},
+	"devDependencies": {
+		"@rbxts/compiler-types": "^3.0.0-types.0",
+		"@rbxts/types": "^1.0.844",
+		"ajv": "^8.12.0",
+		"pkg-up": "^3.1.0",
+		"roblox-ts": "^3.0.0",
+		"shx": "^0.3.4"
+	}
+}
