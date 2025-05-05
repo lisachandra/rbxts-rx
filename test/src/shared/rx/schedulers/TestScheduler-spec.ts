@@ -28,7 +28,7 @@ describe('TestScheduler', () => {
       expect(result).deep.equal([
         { frame: 70, notification: nextNotification('A') },
         { frame: 110, notification: nextNotification('B') },
-        { frame: 150, notification: COMPLETE_NOTIFICATION }
+        { frame: 150, notification: COMPLETE_NOTIFICATION },
       ]);
     });
 
@@ -37,7 +37,7 @@ describe('TestScheduler', () => {
       expect(result).deep.equal([
         { frame: 20, notification: nextNotification('A') },
         { frame: 50, notification: nextNotification('B') },
-        { frame: 80, notification: COMPLETE_NOTIFICATION }
+        { frame: 80, notification: COMPLETE_NOTIFICATION },
       ]);
     });
 
@@ -46,7 +46,7 @@ describe('TestScheduler', () => {
       expect(result).deep.equal([
         { frame: 40, notification: nextNotification('A') },
         { frame: 80, notification: nextNotification('B') },
-        { frame: 120, notification: COMPLETE_NOTIFICATION }
+        { frame: 120, notification: COMPLETE_NOTIFICATION },
       ]);
     });
 
@@ -55,7 +55,7 @@ describe('TestScheduler', () => {
       expect(result).deep.equal([
         { frame: 70, notification: nextNotification('A') },
         { frame: 110, notification: nextNotification('B') },
-        { frame: 150, notification: errorNotification('omg error!') }
+        { frame: 150, notification: errorNotification('omg error!') },
       ]);
     });
 
@@ -73,7 +73,7 @@ describe('TestScheduler', () => {
       expect(result).deep.equal([
         { frame: 30, notification: nextNotification('a') },
         { frame: 30, notification: nextNotification('b') },
-        { frame: 30, notification: nextNotification('c') }
+        { frame: 30, notification: nextNotification('c') },
       ]);
     });
 
@@ -84,7 +84,7 @@ describe('TestScheduler', () => {
         { frame: 10, notification: nextNotification('A') },
         { frame: 30, notification: nextNotification('B') },
         { frame: 50, notification: nextNotification('C') },
-        { frame: 60, notification: COMPLETE_NOTIFICATION }
+        { frame: 60, notification: COMPLETE_NOTIFICATION },
       ]);
     });
 
@@ -93,9 +93,9 @@ describe('TestScheduler', () => {
       const result = TestScheduler.parseMarbles('10.2ms a 1.2s b 1m c|', { a: 'A', b: 'B', c: 'C' }, undefined, undefined, runMode);
       expect(result).deep.equal([
         { frame: 10.2, notification: nextNotification('A') },
-        { frame: 10.2 + 10 + (1.2 * 1000), notification: nextNotification('B') },
-        { frame: 10.2 + 10 + (1.2 * 1000) + 10 + (1000 * 60), notification: nextNotification('C') },
-        { frame: 10.2 + 10 + (1.2 * 1000) + 10 + (1000 * 60) + 10, notification: COMPLETE_NOTIFICATION }
+        { frame: 10.2 + 10 + 1.2 * 1000, notification: nextNotification('B') },
+        { frame: 10.2 + 10 + 1.2 * 1000 + 10 + 1000 * 60, notification: nextNotification('C') },
+        { frame: 10.2 + 10 + 1.2 * 1000 + 10 + 1000 * 60 + 10, notification: COMPLETE_NOTIFICATION },
       ]);
     });
 
@@ -105,7 +105,7 @@ describe('TestScheduler', () => {
         { frame: 20, notification: nextNotification('🙈') },
         { frame: 50, notification: nextNotification('🙉') },
         { frame: 80, notification: nextNotification('🙊') },
-        { frame: 110, notification: COMPLETE_NOTIFICATION }
+        { frame: 110, notification: COMPLETE_NOTIFICATION },
       ]);
     });
   });
@@ -140,7 +140,7 @@ describe('TestScheduler', () => {
       const runMode = true;
       const result = TestScheduler.parseMarblesAsSubscriptions('10.2ms ^ 1.2s - 1m !', runMode);
       expect(result.subscribedFrame).to.equal(10.2);
-      expect(result.unsubscribedFrame).to.equal(10.2 + 10 + (1.2 * 1000) + 10 + (1000 * 60));
+      expect(result.unsubscribedFrame).to.equal(10.2 + 10 + 1.2 * 1000 + 10 + 1000 * 60);
     });
 
     it('should throw if found more than one subscription point', () => {
@@ -186,7 +186,7 @@ describe('TestScheduler', () => {
       const scheduler = new TestScheduler(null!);
       const source = scheduler.createColdObservable('--a---b--|', { a: 'A', b: 'B' });
       expect(source).to.be.an.instanceOf(Observable);
-      source.subscribe(x => {
+      source.subscribe((x) => {
         expect(x).to.equal(expected.shift());
       });
       scheduler.flush();
@@ -200,7 +200,7 @@ describe('TestScheduler', () => {
       const scheduler = new TestScheduler(null!);
       const source = scheduler.createHotObservable('--a---b--|', { a: 'A', b: 'B' });
       expect(source).to.be.an.instanceof(Subject);
-      source.subscribe(x => {
+      source.subscribe((x) => {
         expect(x).to.equal(expected.shift());
       });
       scheduler.flush();
@@ -224,11 +224,14 @@ describe('TestScheduler', () => {
       it('should create a cold observable', () => {
         const expected = [1, 2];
         const source = cold('-a-b-|', { a: 1, b: 2 });
-        source.subscribe({ next: (x: number) => {
-          expect(x).to.equal(expected.shift());
-        }, complete: () => {
-          expect(expected.size()).to.equal(0);
-        } });
+        source.subscribe({
+          next: (x: number) => {
+            expect(x).to.equal(expected.shift());
+          },
+          complete: () => {
+            expect(expected.size()).to.equal(0);
+          },
+        });
         expectObservable(source).toBe('-a-b-|', { a: 1, b: 2 });
       });
     });
@@ -283,15 +286,15 @@ describe('TestScheduler', () => {
 
       it('should accept an unsubscription marble diagram', () => {
         const source = hot('---^-a-b-|');
-        const unsubscribe  =  '---!';
-        const expected =      '--a';
+        const unsubscribe = '---!';
+        const expected = '--a';
         expectObservable(source, unsubscribe).toBe(expected);
       });
 
       it('should accept a subscription marble diagram', () => {
         const source = hot('-a-b-c|');
-        const subscribe =  '---^';
-        const expected =   '---b-c|';
+        const subscribe = '---^';
+        const expected = '---b-c|';
         expectObservable(source, subscribe).toBe(expected);
       });
     });
@@ -313,20 +316,20 @@ describe('TestScheduler', () => {
 
       it('should assert subscriptions of a cold observable', () => {
         const source = cold('---a---b-|');
-        const subs =        '^--------!';
+        const subs = '^--------!';
         expectSubscriptions(source.subscriptions).toBe(subs);
         source.subscribe();
       });
 
       it('should support empty subscription marbles', () => {
         const source = cold('---a---b-|');
-        const subs =        '----------';
+        const subs = '----------';
         expectSubscriptions(source.subscriptions).toBe(subs);
       });
 
       it('should support empty subscription marbles within arrays', () => {
         const source = cold('---a---b-|');
-        const subs =       ['----------'];
+        const subs = ['----------'];
         expectSubscriptions(source.subscriptions).toBe(subs);
       });
     });
@@ -335,7 +338,7 @@ describe('TestScheduler', () => {
       it('should be awesome', () => {
         const values = { a: 1, b: 2 };
         const myObservable = cold('---a---b--|', values);
-        const subs =              '^---------!';
+        const subs = '^---------!';
         expectObservable(myObservable).toBe('---a---b--|', values);
         expectSubscriptions(myObservable.subscriptions).toBe(subs);
       });
@@ -344,7 +347,7 @@ describe('TestScheduler', () => {
         const x = cold('-a-b|');
         const y = cold('-c-d|');
         const myObservable = hot('---x---y----|', { x: x, y: y });
-        const expected =         '---x---y----|';
+        const expected = '---x---y----|';
         const expectedx = cold('-a-b|');
         const expectedy = cold('-c-d|');
         expectObservable(myObservable).toBe(expected, { x: expectedx, y: expectedy });
@@ -363,11 +366,7 @@ describe('TestScheduler', () => {
 
         testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
           const input = cold('  -a - b -    c |       ');
-          const output = input.pipe(
-            concatMap(d => of(d).pipe(
-              delay(10)
-            ))
-          );
+          const output = input.pipe(concatMap((d) => of(d).pipe(delay(10))));
           const expected = '     -- 9ms a 9ms b 9ms (c|) ';
 
           expectObservable(output).toBe(expected);
@@ -397,7 +396,7 @@ describe('TestScheduler', () => {
         expect(expectObservable).to.be.a('function');
         expect(expectSubscriptions).to.be.a('function');
 
-      const obs1 = cold('-a-c-e|');
+        const obs1 = cold('-a-c-e|');
         const obs2 = hot(' ^-b-d-f|');
         const output = merge(obs1, obs2);
         const expected = ' -abcdef|';
@@ -416,9 +415,7 @@ describe('TestScheduler', () => {
       const testScheduler = new TestScheduler(assertDeepEquals);
 
       testScheduler.run(({ cold, expectObservable }) => {
-        const output = cold('-a-b-c--------|').pipe(
-          debounceTime(5)
-        );
+        const output = cold('-a-b-c--------|').pipe(debounceTime(5));
         const expected = '   ------ 4ms c---|';
         expectObservable(output).toBe(expected);
       });
@@ -428,9 +425,7 @@ describe('TestScheduler', () => {
       const testScheduler = new TestScheduler(assertDeepEquals);
 
       testScheduler.run(({ cold, expectObservable }) => {
-        const output = cold('-a|').pipe(
-          delay(1000 * 10)
-        );
+        const output = cold('-a|').pipe(delay(1000 * 10));
         const expected = '   - 10s (a|)';
         expectObservable(output).toBe(expected);
       });
@@ -440,9 +435,7 @@ describe('TestScheduler', () => {
       const testScheduler = new TestScheduler(assertDeepEquals);
 
       testScheduler.run(({ cold, expectObservable }) => {
-        const output = cold('-a-b-c--------|').pipe(
-          debounceTime(5)
-        );
+        const output = cold('-a-b-c--------|').pipe(debounceTime(5));
         const expected = '   ----------c---|';
         expectObservable(output).toBe(expected);
       });
@@ -453,11 +446,7 @@ describe('TestScheduler', () => {
         expect(actual).deep.equal(expected);
       });
       testScheduler.run(({ cold, expectObservable }) => {
-        const output = cold('-a-b-c|').pipe(
-          concatMap(d => of(d).pipe(
-            delay(10)
-          ))
-        );
+        const output = cold('-a-b-c|').pipe(concatMap((d) => of(d).pipe(delay(10))));
         const expected = '   -- 9ms a 9ms b 9ms (c|)';
         expectObservable(output).toBe(expected);
 
@@ -473,11 +462,7 @@ describe('TestScheduler', () => {
       const testScheduler = new TestScheduler(assertDeepEquals);
 
       testScheduler.run(({ cold, expectObservable, flush }) => {
-        const output = cold('-a-b-c|').pipe(
-          concatMap(d => of(d).pipe(
-            delay(10)
-          ))
-        );
+        const output = cold('-a-b-c|').pipe(concatMap((d) => of(d).pipe(delay(10))));
         const expected = '   -- 9ms a 9ms b 9ms (c|)';
         expectObservable(output).toBe(expected);
 
@@ -497,12 +482,14 @@ describe('TestScheduler', () => {
     it('should pass-through return values, e.g. Promises', (done) => {
       const testScheduler = new TestScheduler(assertDeepEquals);
 
-      testScheduler.run(() => {
-        return Promise.resolve('foo');
-      }).then(value => {
-        expect(value).to.equal('foo');
-        done();
-      });
+      testScheduler
+        .run(() => {
+          return Promise.resolve('foo');
+        })
+        .then((value) => {
+          expect(value).to.equal('foo');
+          done();
+        });
     });
 
     it('should restore changes upon thrown errors', () => {
@@ -516,7 +503,9 @@ describe('TestScheduler', () => {
         testScheduler.run(() => {
           throw new Error('kaboom!');
         });
-      } catch { /* empty */ }
+      } catch {
+        /* empty */
+      }
 
       expect(TestScheduler['frameTimeFactor']).to.equal(frameTimeFactor);
       expect(testScheduler.maxFrames).to.equal(maxFrames);
@@ -539,31 +528,41 @@ describe('TestScheduler', () => {
     describe('animate', () => {
       it('should throw if animate() is not called when needed', () => {
         const testScheduler = new TestScheduler(assertDeepEquals);
-        expect(() => testScheduler.run(() => {
-          animationFrameProvider.schedule(() => { /* pointless lint rule */ });
-        })).to.throw();
+        expect(() =>
+          testScheduler.run(() => {
+            animationFrameProvider.schedule(() => {
+              /* pointless lint rule */
+            });
+          })
+        ).to.throw();
       });
 
       it('should throw if animate() is called more than once', () => {
         const testScheduler = new TestScheduler(assertDeepEquals);
-        expect(() => testScheduler.run(({ animate }) => {
-          animate('--x');
-          animate('--x');
-        })).to.throw();
+        expect(() =>
+          testScheduler.run(({ animate }) => {
+            animate('--x');
+            animate('--x');
+          })
+        ).to.throw();
       });
 
       it('should throw if animate() completes', () => {
         const testScheduler = new TestScheduler(assertDeepEquals);
-        expect(() => testScheduler.run(({ animate }) => {
-          animate('--|');
-        })).to.throw();
+        expect(() =>
+          testScheduler.run(({ animate }) => {
+            animate('--|');
+          })
+        ).to.throw();
       });
 
       it('should throw if animate() errors', () => {
         const testScheduler = new TestScheduler(assertDeepEquals);
-        expect(() => testScheduler.run(({ animate }) => {
-          animate('--#');
-        })).to.throw();
+        expect(() =>
+          testScheduler.run(({ animate }) => {
+            animate('--#');
+          })
+        ).to.throw();
       });
 
       it('should schedule async requests within animate()', () => {
@@ -575,11 +574,11 @@ describe('TestScheduler', () => {
           const { schedule } = animationFrameProvider;
 
           testScheduler.schedule(() => {
-            schedule(t => values.push(`a@${t}`));
+            schedule((t) => values.push(`a@${t}`));
             expect(values).to.deep.equal([]);
           }, 0);
           testScheduler.schedule(() => {
-            schedule(t => values.push(`b@${t}`));
+            schedule((t) => values.push(`b@${t}`));
             expect(values).to.deep.equal([]);
           }, 1);
           testScheduler.schedule(() => {
@@ -597,8 +596,8 @@ describe('TestScheduler', () => {
           const { schedule } = animationFrameProvider;
 
           testScheduler.schedule(() => {
-            schedule(t => values.push(`a@${t}`));
-            schedule(t => values.push(`b@${t}`));
+            schedule((t) => values.push(`a@${t}`));
+            schedule((t) => values.push(`b@${t}`));
             expect(values).to.deep.equal([]);
           }, 1);
           testScheduler.schedule(() => {
@@ -616,8 +615,8 @@ describe('TestScheduler', () => {
           const { schedule } = animationFrameProvider;
 
           testScheduler.schedule(() => {
-            const subscription = schedule(t => values.push(`a@${t}`));
-            schedule(t => values.push(`b@${t}`));
+            const subscription = schedule((t) => values.push(`a@${t}`));
+            schedule((t) => values.push(`b@${t}`));
             subscription.unsubscribe();
             expect(values).to.deep.equal([]);
           }, 1);
@@ -743,12 +742,16 @@ describe('TestScheduler', () => {
           const mapped = cold('--m-------');
           const tb = time('      -----|  ');
           const expected = '   --(dc)-b-a';
-          const result = mapped.pipe(mergeMap(() => merge(
-            of('a').pipe(delay(0, animationFrameScheduler)),
-            of('b').pipe(delay(tb, asyncScheduler)),
-            of('c').pipe(delay(0, asyncScheduler)),
-            of('d').pipe(delay(0, asapScheduler))
-          )));
+          const result = mapped.pipe(
+            mergeMap(() =>
+              merge(
+                of('a').pipe(delay(0, animationFrameScheduler)),
+                of('b').pipe(delay(tb, asyncScheduler)),
+                of('c').pipe(delay(0, asyncScheduler)),
+                of('d').pipe(delay(0, asapScheduler))
+              )
+            )
+          );
           expectObservable(result).toBe(expected);
         });
       });
@@ -758,10 +761,9 @@ describe('TestScheduler', () => {
         testScheduler.run(({ cold, expectObservable }) => {
           const mapped = cold('--ab------');
           const expected = '   ---(ba)---';
-          const result = mapped.pipe(mergeMap((value) => value === 'a'
-            ? of(value).pipe(delay(1, asyncScheduler))
-            : of(value).pipe(delay(0, asapScheduler))
-          ));
+          const result = mapped.pipe(
+            mergeMap((value) => (value === 'a' ? of(value).pipe(delay(1, asyncScheduler)) : of(value).pipe(delay(0, asapScheduler))))
+          );
           expectObservable(result).toBe(expected);
         });
       });
@@ -771,10 +773,11 @@ describe('TestScheduler', () => {
         testScheduler.run(({ cold, expectObservable }) => {
           const mapped = cold('--m-------');
           const expected = '   --(bbbaaa)';
-          const result = mapped.pipe(mergeMap(() => merge(
-            interval(0, asyncScheduler).pipe(mapTo('a'), take(3)),
-            interval(0, asapScheduler).pipe(mapTo('b'), take(3))
-          )));
+          const result = mapped.pipe(
+            mergeMap(() =>
+              merge(interval(0, asyncScheduler).pipe(mapTo('a'), take(3)), interval(0, asapScheduler).pipe(mapTo('b'), take(3)))
+            )
+          );
           expectObservable(result).toBe(expected);
         });
       });

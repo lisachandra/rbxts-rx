@@ -76,7 +76,6 @@ describe('forkJoin({})', () => {
   it('should reject non-ObservableInput values', () => {
     const obj = { answer: 42 };
     const res = forkJoin(obj); // $ExpectError
-
   });
 });
 
@@ -86,7 +85,7 @@ describe('forkJoin([])', () => {
     const resConst = forkJoin([] as const); // $ExpectType Observable<never>
   });
 
-    it('should properly type readonly arrays', () => {
+  it('should properly type readonly arrays', () => {
     const res = forkJoin([a$, b$, c$] as const); // $ExpectType Observable<[A, B, C]>
   });
 
@@ -121,5 +120,5 @@ describe('forkJoin([])', () => {
   it('should return unknown for argument of any', () => {
     const arg: any = null;
     const res = forkJoin(arg); // $ExpectType Observable<unknown>
-  })
+  });
 });

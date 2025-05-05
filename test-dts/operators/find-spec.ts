@@ -14,7 +14,7 @@ it('should support a user-defined type guard that takes an index and the source'
 });
 
 it('should support a predicate', () => {
-  const o = of('foo').pipe(find(s => true)); // $ExpectType Observable<string | undefined>
+  const o = of('foo').pipe(find((s) => true)); // $ExpectType Observable<string | undefined>
 });
 
 it('should support a predicate that takes an index', () => {
@@ -36,10 +36,12 @@ it('should support Boolean properly', () => {
 
 it('should support this', () => {
   const thisArg = { wanted: 5 };
-  const a = of(1, 2, 3).pipe(find(function (val) {
-    const wanted = this.wanted; // $ExpectType number
-    return val < wanted;
-  }, thisArg));
+  const a = of(1, 2, 3).pipe(
+    find(function (val) {
+      const wanted = this.wanted; // $ExpectType number
+      return val < wanted;
+    }, thisArg)
+  );
 });
 
 it('should deprecate thisArg usage', () => {

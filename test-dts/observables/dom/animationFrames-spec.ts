@@ -9,5 +9,9 @@ it('should allow the passing of a timestampProvider', () => {
 });
 
 it('should not allow the passing of an invalid timestamp provider', () => {
-  const o$ = animationFrames({ now() { return 'wee' } }); // $ExpectError
+  const o$ = animationFrames({
+    now() {
+      return 'wee';
+    },
+  }); // $ExpectError
 });

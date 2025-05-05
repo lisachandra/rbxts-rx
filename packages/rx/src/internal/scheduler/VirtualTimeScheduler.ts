@@ -29,7 +29,10 @@ export class VirtualTimeScheduler extends AsyncScheduler {
    * @param schedulerActionCtor The type of Action to initialize when initializing actions during scheduling.
    * @param maxFrames The maximum number of frames to process before stopping. Used to prevent endless flush cycles.
    */
-  constructor(schedulerActionCtor: typeof AsyncAction = VirtualAction as any, public maxFrames: number = math.huge) {
+  constructor(
+    schedulerActionCtor: typeof AsyncAction = VirtualAction as any,
+    public maxFrames: number = math.huge
+  ) {
     super(schedulerActionCtor, () => this.frame);
   }
 

@@ -160,7 +160,10 @@ describe('last', () => {
         baz?: number;
       }
       class Foo implements Bar, Baz {
-        constructor(public bar: string = 'name', public baz: number = 42) {}
+        constructor(
+          public bar: string = 'name',
+          public baz: number = 42
+        ) {}
       }
 
       const isBar = (x: any): x is Bar => x && (x as Bar).bar !== undefined;

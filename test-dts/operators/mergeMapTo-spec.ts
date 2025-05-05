@@ -22,7 +22,7 @@ it('should support a concurrent parameter', () => {
 });
 
 it('should infer correctly by using the resultSelector first parameter', () => {
-  const o = of(1, 2, 3).pipe(mergeMapTo(of('foo'), a => a)); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(mergeMapTo(of('foo'), (a) => a)); // $ExpectType Observable<number>
 });
 
 it('should infer correctly by using the resultSelector second parameter', () => {
@@ -55,12 +55,12 @@ it('should enforce types', () => {
 });
 
 it('should enforce types of the observable parameter', () => {
-  const fn = () => {}
+  const fn = () => {};
   const o = of(1, 2, 3).pipe(mergeMapTo(fn)); // $ExpectError
 });
 
 it('should enforce the return type', () => {
-  const o = of(1, 2, 3).pipe(mergeMapTo(p => p)); // $ExpectError
+  const o = of(1, 2, 3).pipe(mergeMapTo((p) => p)); // $ExpectError
   const p = of(1, 2, 3).pipe(mergeMapTo(4)); // $ExpectError
 });
 
@@ -69,7 +69,7 @@ it('should enforce types of the concurrent parameter', () => {
 });
 
 it('should enforce types of the concurrent parameter with a resultSelector', () => {
-  const o = of(1, 2, 3).pipe(mergeMapTo(of('foo'), (a => a), '4')); // $ExpectError
+  const o = of(1, 2, 3).pipe(mergeMapTo(of('foo'), (a) => a, '4')); // $ExpectError
 });
 
 it('should produce `Observable<never>` when mapping to an `ObservableInput<never>`', () => {

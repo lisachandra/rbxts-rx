@@ -30,10 +30,7 @@ describe('Scheduler.animationFrame', () => {
       const tb = time(' --------|    ');
       const expected = '----a---b----';
 
-      const result = merge(
-        a.pipe(delay(ta, animationFrame)),
-        b.pipe(delay(tb, animationFrame))
-      );
+      const result = merge(a.pipe(delay(ta, animationFrame)), b.pipe(delay(tb, animationFrame)));
       expectObservable(result).toBe(expected);
     });
   });
@@ -50,9 +47,7 @@ describe('Scheduler.animationFrame', () => {
       const subs = '    ^-!          ';
       const expected = '-------------';
 
-      const result = merge(
-        a.pipe(delay(ta, animationFrame))
-      );
+      const result = merge(a.pipe(delay(ta, animationFrame)));
       expectObservable(result, subs).toBe(expected);
 
       flush();
@@ -79,30 +74,42 @@ describe('Scheduler.animationFrame', () => {
   it('should execute recursively scheduled actions in separate asynchronous contexts', (done) => {
     let syncExec1 = true;
     let syncExec2 = true;
-    animationFrame.schedule(function (index) {
-      if (index === 0) {
-        this.schedule(1);
-        animationFrame.schedule(() => { syncExec1 = false; });
-      } else if (index === 1) {
-        this.schedule(2);
-        animationFrame.schedule(() => { syncExec2 = false; });
-      } else if (index === 2) {
-        this.schedule(3);
-      } else if (index === 3) {
-        if (!syncExec1 && !syncExec2) {
-          done();
-        } else {
-          done(new Error('Execution happened synchronously.'));
+    animationFrame.schedule(
+      function (index) {
+        if (index === 0) {
+          this.schedule(1);
+          animationFrame.schedule(() => {
+            syncExec1 = false;
+          });
+        } else if (index === 1) {
+          this.schedule(2);
+          animationFrame.schedule(() => {
+            syncExec2 = false;
+          });
+        } else if (index === 2) {
+          this.schedule(3);
+        } else if (index === 3) {
+          if (!syncExec1 && !syncExec2) {
+            done();
+          } else {
+            done(new Error('Execution happened synchronously.'));
+          }
         }
-      }
-    }, 0, 0);
+      },
+      0,
+      0
+    );
   });
 
   it('should cancel the animation frame if all scheduled actions unsubscribe before it executes', (done) => {
     let animationFrameExec1 = false;
     let animationFrameExec2 = false;
-    const action1 = animationFrame.schedule(() => { animationFrameExec1 = true; });
-    const action2 = animationFrame.schedule(() => { animationFrameExec2 = true; });
+    const action1 = animationFrame.schedule(() => {
+      animationFrameExec1 = true;
+    });
+    const action2 = animationFrame.schedule(() => {
+      animationFrameExec2 = true;
+    });
     expect(animationFrame._scheduled).to.exist;
     expect(animationFrame.actions.size()).to.equal(2);
     action1.unsubscribe();
@@ -143,14 +150,18 @@ describe('Scheduler.animationFrame', () => {
 
   it('should schedule next frame actions from a delayed one', (done) => {
     animationFrame.schedule(() => {
-      animationFrame.schedule(() => { done(); });
+      animationFrame.schedule(() => {
+        done();
+      });
     }, 1);
   });
 
   it('should schedule 2 actions for a subsequent frame', (done) => {
     let runFirst = false;
     animationFrame.schedule(() => {
-      animationFrame.schedule(() => { runFirst = true; });
+      animationFrame.schedule(() => {
+        runFirst = true;
+      });
       animationFrame.schedule(() => {
         if (runFirst) {
           done();
@@ -206,18 +217,22 @@ describe('Scheduler.animationFrame', () => {
       }
     };
 
-    animationFrame.schedule(function (index) {
-      if (flushCount < 2) {
-        this.schedule(index! + 1);
-        scheduledIndices.push(index! + 1);
-      }
-    }, 0, 0);
+    animationFrame.schedule(
+      function (index) {
+        if (flushCount < 2) {
+          this.schedule(index! + 1);
+          scheduledIndices.push(index! + 1);
+        }
+      },
+      0,
+      0
+    );
     scheduledIndices.push(0);
   });
 
   it('should execute actions scheduled when flushing in a subsequent flush', (done) => {
     const sandbox = sinon.createSandbox();
-    const stubFlush = (sandbox.stub(animationFrameScheduler, 'flush')).callThrough();
+    const stubFlush = sandbox.stub(animationFrameScheduler, 'flush').callThrough();
 
     let a: Subscription;
     let b: Subscription;
@@ -238,7 +253,7 @@ describe('Scheduler.animationFrame', () => {
 
   it('should execute actions scheduled when flushing in a subsequent flush when some actions are unsubscribed', (done) => {
     const sandbox = sinon.createSandbox();
-    const stubFlush = (sandbox.stub(animationFrameScheduler, 'flush')).callThrough();
+    const stubFlush = sandbox.stub(animationFrameScheduler, 'flush').callThrough();
 
     let a: Subscription;
     let b: Subscription;

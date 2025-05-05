@@ -28,7 +28,8 @@ it('should enforce types of scheduler', () => {
 });
 
 it('Check info argument to factory', () => {
-  const o = of('a').pipe( // $ExpectType Observable<string | number>
+  const o = of('a').pipe(
+    // $ExpectType Observable<string | number>
     timeout({
       meta: new A(),
       with: (info) => {
@@ -41,23 +42,25 @@ it('Check info argument to factory', () => {
         info.seen = 12; // $ExpectError
         info.lastValue = 'blah'; // $ExpectError
         return of(123);
-      }
+      },
     })
   );
 });
 
 it('Check config arguments', () => {
-  const o = of('a').pipe( // $ExpectType Observable<string>
+  const o = of('a').pipe(
+    // $ExpectType Observable<string>
     timeout({
-      first: 1000
+      first: 1000,
     })
   );
 });
 
 it('should support a union', () => {
-  const o = a$.pipe( // $ExpectType Observable<A | B | C>
+  const o = a$.pipe(
+    // $ExpectType Observable<A | B | C>
     timeout({
-      with: () => math.random() > 0.5 ? b$ : c$
+      with: () => (math.random() > 0.5 ? b$ : c$),
     })
   );
 });

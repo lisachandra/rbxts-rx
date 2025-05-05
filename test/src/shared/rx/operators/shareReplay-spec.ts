@@ -201,7 +201,9 @@ describe('shareReplay', () => {
   it('when no windowTime is given ReplaySubject should be in _infiniteTimeWindow mode', () => {
     const spy = sinon.spy(testScheduler, 'now');
 
-    of(1).pipe(shareReplay(1, undefined, testScheduler)).subscribe();
+    of(1)
+      .pipe(shareReplay(1, undefined, testScheduler))
+      .subscribe();
     spy.restore();
     expect(spy, 'ReplaySubject should not call scheduler.now() when no windowTime is given').to.be.not.called;
   });

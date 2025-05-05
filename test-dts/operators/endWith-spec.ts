@@ -19,6 +19,6 @@ it('should infer type for N values', () => {
 
 it('should infer correctly with a single specified type', () => {
   const r0 = of(a).pipe(endWith<A>(a)); // $ExpectType Observable<A>
-  const r1 = of(a).pipe(endWith<A|B>(b)); // $ExpectType Observable<A | B>
-  const r2 = of(a).pipe(endWith<A|B>(a)); // $ExpectType Observable<A | B>
+  const r1 = of(a).pipe(endWith<A | B>(b)); // $ExpectType Observable<A | B>
+  const r2 = of(a).pipe(endWith<A | B>(a)); // $ExpectType Observable<A | B>
 });

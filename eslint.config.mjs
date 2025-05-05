@@ -1,20 +1,15 @@
 // @ts-check
 import tseslint from "typescript-eslint";
-import tsparser from "@typescript-eslint/parser"
+import tsparser from "@typescript-eslint/parser";
 import eslint from "@eslint/js";
 import eslintPluginPrettier from "eslint-plugin-prettier";
 import eslintPluginRoblox from "isentinel-eslint-plugin-roblox-ts";
 import prettierConfig from "./prettier.config.mjs";
-import * as eslintPluginImportX from "eslint-plugin-import-x"
+import * as eslintPluginImportX from "eslint-plugin-import-x";
 
 export default tseslint.config(
 	{
-		ignores: [
-			"**/out/**",
-			"pnpm-lock.yaml",
-			"eslint.config.mjs",
-			"prettier.config.mjs",
-		],
+		ignores: ["**/out/**", "pnpm-lock.yaml", "eslint.config.mjs", "prettier.config.mjs"],
 	},
 	{
 		languageOptions: {
@@ -47,7 +42,6 @@ export default tseslint.config(
 	},
 	{
 		rules: {
-
 			"@typescript-eslint/no-empty-object-type": [
 				"error",
 				{

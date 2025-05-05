@@ -55,13 +55,16 @@ module.exports = function (suite: any) {
      * Pending describe.
      */
 
-    context.xdescribe = context.xcontext = context.describe.skip = function (title: any, fn: any) {
-      const suite = (<any>Suite).create(suites[0], title);
-      suite.pending = true;
-      suites.unshift(suite);
-      fn.call(suite);
-      suites.shift();
-    };
+    context.xdescribe =
+      context.xcontext =
+      context.describe.skip =
+        function (title: any, fn: any) {
+          const suite = (<any>Suite).create(suites[0], title);
+          suite.pending = true;
+          suites.unshift(suite);
+          fn.call(suite);
+          suites.shift();
+        };
 
     /**
      * Exclusive suite.
@@ -76,10 +79,13 @@ module.exports = function (suite: any) {
     function stringify(x: any): string {
       return JSON.stringify(x, function (key: string, value: any) {
         if (Array.isArray(value)) {
-          return '[' + value
-            .map(function (i) {
+          return (
+            '[' +
+            value.map(function (i) {
               return '\n\t' + stringify(i);
-            }) + '\n]';
+            }) +
+            '\n]'
+          );
         }
         return value;
       })
@@ -113,10 +119,10 @@ module.exports = function (suite: any) {
         }
 
         let message = '\nExpected \n';
-        actual.forEach((x: any) => message += `\t${stringify(x)}\n`);
+        actual.forEach((x: any) => (message += `\t${stringify(x)}\n`));
 
         message += '\t\nto deep equal \n';
-        expected.forEach((x: any) => message += `\t${stringify(x)}\n`);
+        expected.forEach((x: any) => (message += `\t${stringify(x)}\n`));
 
         chai.assert(passed, message);
       } else {
@@ -130,32 +136,35 @@ module.exports = function (suite: any) {
      * acting as a thunk.
      */
 
-    const it = context.it = context.specify = function (title: any, fn: any) {
-      context.rxTestScheduler = null;
-      let modified = fn;
+    const it =
+      (context.it =
+      context.specify =
+        function (title: any, fn: any) {
+          context.rxTestScheduler = null;
+          let modified = fn;
 
-      if (fn && fn.size() === 0) {
-        modified = function () {
-          context.rxTestScheduler = new TestScheduler(observableMatcher);
+          if (fn && fn.size() === 0) {
+            modified = function () {
+              context.rxTestScheduler = new TestScheduler(observableMatcher);
 
-          try {
-            fn();
-            context.rxTestScheduler.flush();
-          } finally {
-            context.rxTestScheduler = null;
+              try {
+                fn();
+                context.rxTestScheduler.flush();
+              } finally {
+                context.rxTestScheduler = null;
+              }
+            };
           }
-        };
-      }
 
-      const suite = suites[0];
-      if (suite.pending) {
-        modified = null;
-      }
-      const test = new (<any>Test)(title, modified);
-      test.file = file;
-      suite.addTest(test);
-      return test;
-    };
+          const suite = suites[0];
+          if (suite.pending) {
+            modified = null;
+          }
+          const test = new (<any>Test)(title, modified);
+          test.file = file;
+          suite.addTest(test);
+          return test;
+        });
 
     /**
      * Exclusive test-case.
@@ -172,9 +181,12 @@ module.exports = function (suite: any) {
      * Pending test case.
      */
 
-    context.xit = context.xspecify = context.it.skip = function (title: string) {
-      context.it(title);
-    };
+    context.xit =
+      context.xspecify =
+      context.it.skip =
+        function (title: string) {
+          context.it(title);
+        };
 
     /**
      * Number of attempts to retry.
@@ -204,5 +216,5 @@ Object.defineProperty(Error.prototype, 'toJSON', {
     }, this);
     return alt;
   },
-  configurable: true
+  configurable: true,
 });

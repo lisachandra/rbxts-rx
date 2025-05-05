@@ -5,7 +5,7 @@ describe('Subject', () => {
     const s1 = new Subject(); // $ExpectType Subject<unknown>
     s1.next(); // $ExpectError
     s1.next('test'); // $ExpectType void
-    s1.subscribe(value => {
+    s1.subscribe((value) => {
       const x = value; // $ExpectType unknown
     });
   });
@@ -15,7 +15,7 @@ describe('Subject', () => {
     s1.next(); // $ExpectError
     s1.next('test'); // $ExpectType void
     s1.next(32); // $ExpectError
-    s1.subscribe(value => {
+    s1.subscribe((value) => {
       const x = value; // $ExpectType string
     });
   });
@@ -25,13 +25,13 @@ describe('Subject', () => {
     s1.next(); // $ExpectType void
     s1.next(undefined); // $ExpectType void
     s1.next('test'); // $ExpectError
-    s1.subscribe(value => {
+    s1.subscribe((value) => {
       const x = value; // $ExpectType void
     });
   });
 
   it('should not accept an argument in the ctor', () => {
-    const s1 = new Subject<number>(subscriber => { }); // $ExpectError
+    const s1 = new Subject<number>((subscriber) => {}); // $ExpectError
   });
 
   describe('asObservable', () => {

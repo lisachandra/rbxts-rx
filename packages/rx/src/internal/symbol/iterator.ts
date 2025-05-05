@@ -1,7 +1,7 @@
-import { Symbol } from "@rbxts/luau-polyfill";
+import { Symbol } from '@rbxts/luau-polyfill';
 
 export function getSymbolIterator(): symbol {
-  return Symbol("iterator");
+  return Symbol('iterator');
 }
 
 export const iterator = getSymbolIterator();

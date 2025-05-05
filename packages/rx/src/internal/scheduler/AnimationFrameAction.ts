@@ -5,7 +5,10 @@ import { animationFrameProvider } from './animationFrameProvider';
 import { TimerHandle } from './timerHandle';
 
 export class AnimationFrameAction<T> extends AsyncAction<T> {
-  constructor(protected scheduler: AnimationFrameScheduler, protected work: (this: SchedulerAction<T>, state?: T) => void) {
+  constructor(
+    protected scheduler: AnimationFrameScheduler,
+    protected work: (this: SchedulerAction<T>, state?: T) => void
+  ) {
     super(scheduler, work);
   }
 

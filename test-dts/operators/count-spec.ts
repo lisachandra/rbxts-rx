@@ -2,8 +2,8 @@ import { of, Observable } from 'rxjs';
 import { count } from 'rxjs/operators';
 
 it('should always infer number', () => {
-  const o = of(1, 2, 3).pipe(count(x => x > 1)); // $ExpectType Observable<number>
-  const j = of('a', 'b', 'c').pipe(count(x => x === 'a')); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(count((x) => x > 1)); // $ExpectType Observable<number>
+  const j = of('a', 'b', 'c').pipe(count((x) => x === 'a')); // $ExpectType Observable<number>
 });
 
 it('should accept empty parameter', () => {
@@ -27,5 +27,5 @@ it('should expect function parameter', () => {
 });
 
 it('should enforce source type', () => {
-  const o = of(1, 2, 3).pipe(count(x => x === '')); // $ExpectError
+  const o = of(1, 2, 3).pipe(count((x) => x === '')); // $ExpectError
 });

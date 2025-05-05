@@ -1,8 +1,8 @@
 {
-  "rulesDirectory": ["../node_modules/tslint-etc/dist/rules"],
-  "rules": {
-    "expect-deprecation": true,
-    "expect-type": true,
-    "no-dtslint-typo": true
-  }
+	"rulesDirectory": ["../node_modules/tslint-etc/dist/rules"],
+	"rules": {
+		"expect-deprecation": true,
+		"expect-type": true,
+		"no-dtslint-typo": true
+	}
 }

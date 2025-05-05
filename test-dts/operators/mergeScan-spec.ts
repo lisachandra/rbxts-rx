@@ -14,7 +14,7 @@ it('should support the accumulator returning an iterable', () => {
 });
 
 it('should support the accumulator returning a promise', () => {
-  const o = of(1, 2, 3).pipe(mergeScan(acc => Promise.resolve(acc), '')); // $ExpectType Observable<string>
+  const o = of(1, 2, 3).pipe(mergeScan((acc) => Promise.resolve(acc), '')); // $ExpectType Observable<string>
 });
 
 it('should support a currency', () => {

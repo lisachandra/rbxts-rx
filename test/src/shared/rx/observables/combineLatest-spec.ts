@@ -18,11 +18,11 @@ describe('static combineLatest', () => {
     const results: string[] = [];
     combineLatest([]).subscribe({
       next: () => {
-        throw new Error('should not emit')
+        throw new Error('should not emit');
       },
       complete: () => {
         results.push('done');
-      }
+      },
     });
 
     expect(results).to.deep.equal(['done']);
@@ -32,25 +32,25 @@ describe('static combineLatest', () => {
     const results: string[] = [];
     combineLatest({}).subscribe({
       next: () => {
-        throw new Error('should not emit')
+        throw new Error('should not emit');
       },
       complete: () => {
         results.push('done');
-      }
+      },
     });
 
     expect(results).to.deep.equal(['done']);
   });
-  
+
   it('should return EMPTY if passed an empty array and scheduler as the only argument', () => {
     const results: string[] = [];
     combineLatest([], rxTestScheduler).subscribe({
       next: () => {
-        throw new Error('should not emit')
+        throw new Error('should not emit');
       },
       complete: () => {
         results.push('done');
-      }
+      },
     });
 
     expect(results).to.deep.equal([]);
@@ -85,16 +85,18 @@ describe('static combineLatest', () => {
 
     const actual: [number, number][] = [];
     //type definition need to be updated
-    combineLatest(a, b, queueScheduler).subscribe(
-      { next: (vals) => {
+    combineLatest(a, b, queueScheduler).subscribe({
+      next: (vals) => {
         actual.push(vals);
-      }, error: () => {
+      },
+      error: () => {
         done(new Error('should not be called'));
-      }, complete: () => {
+      },
+      complete: () => {
         expect(actual).to.deep.equal(r);
         done();
-      } }
-    );
+      },
+    });
   });
 
   it('should accept array of observables', () => {
@@ -111,15 +113,13 @@ describe('static combineLatest', () => {
 
   it('should accept a dictionary of observables', () => {
     rxTestScheduler.run(({ hot, expectObservable }) => {
-      const firstSource =  hot('----a----b----c----|');
+      const firstSource = hot('----a----b----c----|');
       const secondSource = hot('--d--e--f--g--|');
       const expected = '        ----uv--wx-y--z----|';
 
-      const combined = combineLatest({a: firstSource, b: secondSource}).pipe(
-        map(({a, b}) => '' + a + b)
-      );  
+      const combined = combineLatest({ a: firstSource, b: secondSource }).pipe(map(({ a, b }) => '' + a + b));
 
-      expectObservable(combined).toBe(expected, {u: 'ad', v: 'ae', w: 'af', x: 'bf', y: 'bg', z: 'cg'});
+      expectObservable(combined).toBe(expected, { u: 'ad', v: 'ae', w: 'af', x: 'bf', y: 'bg', z: 'cg' });
     });
   });
 

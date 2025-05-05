@@ -13,7 +13,10 @@ export class AsyncAction<T> extends Action<T> {
   public delay: number;
   protected pending: boolean = false;
 
-  constructor(protected scheduler: AsyncScheduler, protected work: (this: SchedulerAction<T>, state?: T) => void) {
+  constructor(
+    protected scheduler: AsyncScheduler,
+    protected work: (this: SchedulerAction<T>, state?: T) => void
+  ) {
     super(scheduler, work);
   }
 

@@ -5,7 +5,10 @@ import { SchedulerAction } from '../types';
 import { TimerHandle } from './timerHandle';
 
 export class QueueAction<T> extends AsyncAction<T> {
-  constructor(protected scheduler: QueueScheduler, protected work: (this: SchedulerAction<T>, state?: T) => void) {
+  constructor(
+    protected scheduler: QueueScheduler,
+    protected work: (this: SchedulerAction<T>, state?: T) => void
+  ) {
     super(scheduler, work);
   }
 

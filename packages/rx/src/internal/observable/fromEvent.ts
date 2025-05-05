@@ -263,11 +263,11 @@ export function fromEvent<T>(
     isEventTarget(target)
       ? eventTargetMethods.map((methodName) => (handler: any) => target[methodName](eventName, handler, options as EventListenerOptions))
       : // In all other cases, the call pattern is identical with the exception of the method names.
-      isNodeStyleEventEmitter(target)
-      ? nodeEventEmitterMethods.map(toCommonHandlerRegistry(target, eventName))
-      : isJQueryStyleEventEmitter(target)
-      ? jqueryMethods.map(toCommonHandlerRegistry(target, eventName))
-      : [];
+        isNodeStyleEventEmitter(target)
+        ? nodeEventEmitterMethods.map(toCommonHandlerRegistry(target, eventName))
+        : isJQueryStyleEventEmitter(target)
+          ? jqueryMethods.map(toCommonHandlerRegistry(target, eventName))
+          : [];
 
   // If add is falsy, it's because we didn't match a pattern above.
   // Check to see if it is an ArrayLike, because if it is, we want to

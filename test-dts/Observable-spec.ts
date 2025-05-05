@@ -11,7 +11,7 @@ function a<I, O extends string>(output: O): OperatorFunction<I, O>;
  * That is, `a('0', '1')` returns `OperatorFunction<'0', '1'>`.
  * That means that the `a` function can be used to create consecutive
  * arguments that are either compatible or incompatible.
- * 
+ *
  * ```javascript
  * a('0', '1'), a('1', '2') // OK
  * a('0', '1'), a('#', '2') // Error '1' is not compatible with '#'
@@ -30,7 +30,7 @@ function a<I, O extends string>(output: O): OperatorFunction<I, O>;
  * @param {string} output The `OperatorFunction` output type parameter
  */
 function a<I, O extends string>(inputOrOutput: I | O, output?: O): OperatorFunction<I, O> {
-  return mapTo<I, O>(output === undefined ? inputOrOutput as O : output);
+  return mapTo<I, O>(output === undefined ? (inputOrOutput as O) : output);
 }
 
 describe('pipe', () => {
@@ -123,7 +123,10 @@ describe('pipe', () => {
   });
 
   it('should support operators that return generics', () => {
-    const customOperator = () => <T>(a: Observable<T>) => a;
+    const customOperator =
+      () =>
+      <T>(a: Observable<T>) =>
+        a;
     const o = of('foo').pipe(customOperator()); // $ExpectType Observable<string>
   });
 

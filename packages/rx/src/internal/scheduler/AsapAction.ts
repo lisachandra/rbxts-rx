@@ -5,7 +5,10 @@ import { immediateProvider } from './immediateProvider';
 import { TimerHandle } from './timerHandle';
 
 export class AsapAction<T> extends AsyncAction<T> {
-  constructor(protected scheduler: AsapScheduler, protected work: (this: SchedulerAction<T>, state?: T) => void) {
+  constructor(
+    protected scheduler: AsapScheduler,
+    protected work: (this: SchedulerAction<T>, state?: T) => void
+  ) {
     super(scheduler, work);
   }
 

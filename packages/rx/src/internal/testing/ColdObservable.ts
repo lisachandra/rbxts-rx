@@ -16,7 +16,10 @@ export class ColdObservable<T> extends Observable<T> implements SubscriptionLogg
   // @ts-ignore: Property has no initializer and is not definitely assigned
   logUnsubscribedFrame: (index: number) => void;
 
-  constructor(public messages: TestMessage[], scheduler: Scheduler) {
+  constructor(
+    public messages: TestMessage[],
+    scheduler: Scheduler
+  ) {
     super(function (this: Observable<T>, subscriber: Subscriber<any>) {
       const observable: ColdObservable<T> = this as any;
       const index = observable.logSubscribedFrame();
@@ -39,7 +42,10 @@ export class ColdObservable<T> extends Observable<T> implements SubscriptionLogg
       subscriber.add(
         this.scheduler.schedule(
           (state) => {
-            const { message: { notification }, subscriber: destination } = state!;
+            const {
+              message: { notification },
+              subscriber: destination,
+            } = state!;
             observeNotification(notification, destination);
           },
           message.frame,

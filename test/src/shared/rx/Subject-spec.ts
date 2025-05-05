@@ -15,11 +15,12 @@ describe('Subject', () => {
 
   it('should allow next with undefined or any when created with no type', (done) => {
     const subject = new Subject();
-    subject.subscribe(
-      { next: (x) => {
+    subject.subscribe({
+      next: (x) => {
         expect(x).to.be.a('undefined');
-      }, complete: done }
-    );
+      },
+      complete: done,
+    });
 
     const data: any = undefined;
     subject.next(undefined);
@@ -29,11 +30,12 @@ describe('Subject', () => {
 
   it('should allow empty next when created with void type', (done) => {
     const subject = new Subject<void>();
-    subject.subscribe(
-      { next: (x) => {
+    subject.subscribe({
+      next: (x) => {
         expect(x).to.be.a('undefined');
-      }, complete: done }
-    );
+      },
+      complete: done,
+    });
 
     subject.next();
     subject.complete();
@@ -43,11 +45,12 @@ describe('Subject', () => {
     const subject = new Subject<string>();
     const expected = ['foo', 'bar'];
 
-    subject.subscribe(
-      { next: (x: string) => {
+    subject.subscribe({
+      next: (x: string) => {
         expect(x).to.equal(expected.shift());
-      }, complete: done }
-    );
+      },
+      complete: done,
+    });
 
     subject.next('foo');
     subject.next('bar');
@@ -65,11 +68,12 @@ describe('Subject', () => {
       expect(x).to.equal(expected[i++]);
     });
 
-    subject.subscribe(
-      { next: function (x) {
+    subject.subscribe({
+      next: function (x) {
         expect(x).to.equal(expected[j++]);
-      }, complete: done }
-    );
+      },
+      complete: done,
+    });
 
     expect(subject.observers.size()).to.equal(2);
     subject.next('foo');
@@ -88,27 +92,31 @@ describe('Subject', () => {
     subject.next(3);
     subject.next(4);
 
-    const subscription1 = subject.subscribe(
-      { next: function (x) {
+    const subscription1 = subject.subscribe({
+      next: function (x) {
         results1.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results1.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results1.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(5);
 
-    const subscription2 = subject.subscribe(
-      { next: function (x) {
+    const subscription2 = subject.subscribe({
+      next: function (x) {
         results2.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results2.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results2.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(6);
     subject.next(7);
@@ -122,15 +130,17 @@ describe('Subject', () => {
     subject.next(9);
     subject.next(10);
 
-    const subscription3 = subject.subscribe(
-      { next: function (x) {
+    const subscription3 = subject.subscribe({
+      next: function (x) {
         results3.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results3.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results3.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(11);
 
@@ -152,27 +162,31 @@ describe('Subject', () => {
     subject.next(3);
     subject.next(4);
 
-    const subscription1 = subject.subscribe(
-      { next: function (x) {
+    const subscription1 = subject.subscribe({
+      next: function (x) {
         results1.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results1.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results1.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(5);
 
-    const subscription2 = subject.subscribe(
-      { next: function (x) {
+    const subscription2 = subject.subscribe({
+      next: function (x) {
         results2.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results2.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results2.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(6);
     subject.next(7);
@@ -183,15 +197,17 @@ describe('Subject', () => {
 
     subscription2.unsubscribe();
 
-    const subscription3 = subject.subscribe(
-      { next: function (x) {
+    const subscription3 = subject.subscribe({
+      next: function (x) {
         results3.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results3.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results3.push('C');
-      } }
-    );
+      },
+    });
 
     subscription3.unsubscribe();
 
@@ -211,27 +227,31 @@ describe('Subject', () => {
     subject.next(3);
     subject.next(4);
 
-    const subscription1 = subject.subscribe(
-      { next: function (x) {
+    const subscription1 = subject.subscribe({
+      next: function (x) {
         results1.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results1.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results1.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(5);
 
-    const subscription2 = subject.subscribe(
-      { next: function (x) {
+    const subscription2 = subject.subscribe({
+      next: function (x) {
         results2.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results2.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results2.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(6);
     subject.next(7);
@@ -242,15 +262,17 @@ describe('Subject', () => {
 
     subscription2.unsubscribe();
 
-    const subscription3 = subject.subscribe(
-      { next: function (x) {
+    const subscription3 = subject.subscribe({
+      next: function (x) {
         results3.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results3.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results3.push('C');
-      } }
-    );
+      },
+    });
 
     subscription3.unsubscribe();
 
@@ -265,25 +287,29 @@ describe('Subject', () => {
     const results2: (number | string)[] = [];
     const results3: (number | string)[] = [];
 
-    const subscription1 = subject.subscribe(
-      { next: function (x) {
+    const subscription1 = subject.subscribe({
+      next: function (x) {
         results1.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results1.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results1.push('C');
-      } }
-    );
+      },
+    });
 
-    const subscription2 = subject.subscribe(
-      { next: function (x) {
+    const subscription2 = subject.subscribe({
+      next: function (x) {
         results2.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results2.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results2.push('C');
-      } }
-    );
+      },
+    });
 
     subscription1.unsubscribe();
 
@@ -291,15 +317,17 @@ describe('Subject', () => {
 
     subscription2.unsubscribe();
 
-    const subscription3 = subject.subscribe(
-      { next: function (x) {
+    const subscription3 = subject.subscribe({
+      next: function (x) {
         results3.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results3.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results3.push('C');
-      } }
-    );
+      },
+    });
 
     subscription3.unsubscribe();
 
@@ -314,28 +342,32 @@ describe('Subject', () => {
     const results2: (number | string)[] = [];
     const results3: (number | string)[] = [];
 
-    const subscription1 = subject.subscribe(
-      { next: function (x) {
+    const subscription1 = subject.subscribe({
+      next: function (x) {
         results1.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results1.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results1.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(1);
     subject.next(2);
 
-    const subscription2 = subject.subscribe(
-      { next: function (x) {
+    const subscription2 = subject.subscribe({
+      next: function (x) {
         results2.push(x);
-      }, error: function (e) {
+      },
+      error: function (e) {
         results2.push('E');
-      }, complete: () => {
+      },
+      complete: () => {
         results2.push('C');
-      } }
-    );
+      },
+    });
 
     subject.next(3);
     subject.next(4);
@@ -346,13 +378,14 @@ describe('Subject', () => {
     subject.unsubscribe();
 
     expect(() => {
-      subject.subscribe(
-        { next: function (x) {
+      subject.subscribe({
+        next: function (x) {
           results3.push(x);
-        }, error: function (err) {
+        },
+        error: function (err) {
           expect(false).to.equal('should not throw error: ' + err.toString());
-        } }
-      );
+        },
+      });
     }).to.throw(ObjectUnsubscribedError);
 
     expect(results1).to.deep.equal([1, 2, 3, 4, 5]);
@@ -450,7 +483,7 @@ describe('Subject', () => {
       },
       complete: () => {
         outputComplete = true;
-      }
+      },
     });
 
     sub.next('a');
@@ -499,7 +532,7 @@ describe('Subject', () => {
       },
       complete: () => {
         outputComplete = true;
-      }
+      },
     });
 
     sub.next('a');
@@ -520,15 +553,17 @@ describe('Subject', () => {
     const subject = new Subject<number>();
     const expected = [1, 2, 3, 4, 5];
 
-    subject.subscribe(
-      { next: function (x) {
+    subject.subscribe({
+      next: function (x) {
         expect(x).to.equal(expected.shift());
-      }, error: (x) => {
+      },
+      error: (x) => {
         done(new Error('should not be called'));
-      }, complete: () => {
+      },
+      complete: () => {
         done();
-      } }
-    );
+      },
+    });
 
     source.subscribe(subject);
   });
@@ -539,15 +574,17 @@ describe('Subject', () => {
 
     const expected = [1, 2, 3];
 
-    subject.subscribe(
-      { next: function (x) {
+    subject.subscribe({
+      next: function (x) {
         expect(x).to.equal(expected.shift());
-      }, error: (x) => {
+      },
+      error: (x) => {
         done(new Error('should not be called'));
-      }, complete: () => {
+      },
+      complete: () => {
         done();
-      } }
-    );
+      },
+    });
 
     source.subscribe(subject);
   });
@@ -572,9 +609,7 @@ describe('Subject', () => {
   it('should not next after completed', () => {
     const subject = new Subject<string>();
     const results: string[] = [];
-    subject.subscribe(
-      { next: (x) => results.push(x), complete: () => results.push('C') }
-    );
+    subject.subscribe({ next: (x) => results.push(x), complete: () => results.push('C') });
     subject.next('a');
     subject.complete();
     subject.next('b');
@@ -585,9 +620,7 @@ describe('Subject', () => {
     const error = new Error('wut?');
     const subject = new Subject<string>();
     const results: string[] = [];
-    subject.subscribe(
-      { next: (x) => results.push(x), error: (err) => results.push(err) }
-    );
+    subject.subscribe({ next: (x) => results.push(x), error: (err) => results.push(err) });
     subject.next('a');
     subject.error(error);
     subject.next('b');
@@ -649,9 +682,7 @@ describe('Subject', () => {
 
       const observable = subject.asObservable();
 
-      observable.subscribe(
-        { next: (x) => results.push(x), complete: () => results.push('done') }
-      );
+      observable.subscribe({ next: (x) => results.push(x), complete: () => results.push('done') });
 
       expect(results).to.deep.equal([42, 'done']);
     });
@@ -732,7 +763,12 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
 
   it('should throw an error when nexting with a flattened, erroring inner observable with more than one operator', () => {
     const subject = new Subject<string>();
-    subject.pipe(mergeMap(() => throwError(() => new Error('bad'))), map(x => x)).subscribe();
+    subject
+      .pipe(
+        mergeMap(() => throwError(() => new Error('bad'))),
+        map((x) => x)
+      )
+      .subscribe();
 
     expect(() => {
       subject.next('wee');
@@ -750,21 +786,28 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
 
   it('should throw an error when nexting with an operator that errors synchronously', () => {
     const subject = new Subject<string>();
-    subject.pipe(mergeMap(() => {
-      throw new Error('lol');
-    })).subscribe();
+    subject
+      .pipe(
+        mergeMap(() => {
+          throw new Error('lol');
+        })
+      )
+      .subscribe();
 
     expect(() => {
       subject.next('wee');
     }).to.throw(Error, 'lol');
   });
 
-
   it('should throw an error when notifying an error with a catchError that errors synchronously', () => {
     const subject = new Subject<string>();
-    subject.pipe(catchError(() => {
-      throw new Error('lol');
-    })).subscribe();
+    subject
+      .pipe(
+        catchError(() => {
+          throw new Error('lol');
+        })
+      )
+      .subscribe();
 
     expect(() => {
       subject.error('wee');
@@ -787,7 +830,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
     subject.subscribe({
       error: () => {
         throw new Error('lol');
-      }
+      },
     });
 
     expect(() => {
@@ -800,7 +843,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
     subject.subscribe({
       complete: () => {
         throw new Error('lol');
-      }
+      },
     });
 
     expect(() => {
@@ -834,7 +877,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
   it('should not throw on second error passed, even after having been operated on', () => {
     const subject = new Subject();
 
-    subject.pipe(mergeMap(x => [x])).subscribe();
+    subject.pipe(mergeMap((x) => [x])).subscribe();
 
     expect(() => {
       subject.error(new Error('one'));
@@ -852,7 +895,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
     subject2.subscribe();
 
     subject1.subscribe({
-      next: () => subject2.error(new Error('hahaha'))
+      next: () => subject2.error(new Error('hahaha')),
     });
 
     expect(() => {
@@ -866,7 +909,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
     subject1.subscribe({
       next: () => {
         throwError(new Error('hahaha')).subscribe();
-      }
+      },
     });
 
     expect(() => {

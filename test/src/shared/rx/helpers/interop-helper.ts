@@ -24,9 +24,9 @@ export function asInteropObservable<T>(observable: Observable<T>): Observable<T>
       return {
         ...rest,
         lift: interopLift(lift),
-        subscribe: interopSubscribe(subscribe)
+        subscribe: interopSubscribe(subscribe),
       };
-    }
+    },
   });
 }
 
@@ -52,7 +52,7 @@ export function asInteropSubscriber<T>(subscriber: Subscriber<T>): Subscriber<T>
     getPrototypeOf(target: Subscriber<T>) {
       const { ...rest } = Object.getPrototypeOf(target);
       return rest;
-    }
+    },
   });
 }
 

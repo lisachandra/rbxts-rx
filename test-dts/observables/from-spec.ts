@@ -9,9 +9,9 @@ it('should accept a Promise', () => {
 });
 
 it('should accept an Iterable', () => {
-  const iterable = (function*() {
+  const iterable = (function* () {
     yield 42;
-  }());
+  })();
 
   const o = from(iterable); // $ExpectType Observable<number>
 });

@@ -1,6 +1,5 @@
 import { combineLatest } from 'rxjs';
-import { a$,  b$,  c$,  d$,  e$,  f$,  g$, A, B, C, D, E, F } from '../helpers';
-
+import { a$, b$, c$, d$, e$, f$, g$, A, B, C, D, E, F } from '../helpers';
 
 it('should accept 1 param', () => {
   const o = combineLatest(a$); // $ExpectType Observable<[A]>
@@ -125,7 +124,10 @@ it('should accept 6 params and a result selector', () => {
 });
 
 it('should accept 7 or more params and a result selector', () => {
-  const o = combineLatest([a$, b$, c$, d$, e$, f$, g$, g$, g$], (a: any, b: any, c: any, d: any, e: any, f: any, g1: any, g2: any, g3: any) => new A()); // $ExpectType Observable<A>
+  const o = combineLatest(
+    [a$, b$, c$, d$, e$, f$, g$, g$, g$],
+    (a: any, b: any, c: any, d: any, e: any, f: any, g1: any, g2: any, g3: any) => new A()
+  ); // $ExpectType Observable<A>
 });
 
 describe('combineLatest({})', () => {

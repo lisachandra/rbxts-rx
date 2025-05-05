@@ -6,7 +6,7 @@ import {
   ObjectUnsubscribedError,
   SequenceError,
   TimeoutError,
-  UnsubscriptionError
+  UnsubscriptionError,
 } from 'rxjs';
 
 it('should deprecate error construction', () => {

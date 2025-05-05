@@ -2,7 +2,7 @@ import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 it('should support a predicate', () => {
-  const o = of(1, 2, 3).pipe(filter(value => value < 3)); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(filter((value) => value < 3)); // $ExpectType Observable<number>
 });
 
 it('should support a predicate with an index', () => {
@@ -10,7 +10,7 @@ it('should support a predicate with an index', () => {
 });
 
 it('should support a predicate and an argument', () => {
-  const o = of(1, 2, 3).pipe(filter(value => value < 3, 'bonjour')); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(filter((value) => value < 3, 'bonjour')); // $ExpectType Observable<number>
 });
 
 it('should support a user-defined type guard', () => {
@@ -30,7 +30,7 @@ it('should enforce types', () => {
 });
 
 it('should enforce predicate types', () => {
-  const o = of(1, 2, 3).pipe(filter(value => value < '3')); // $ExpectError
+  const o = of(1, 2, 3).pipe(filter((value) => value < '3')); // $ExpectError
   const p = of(1, 2, 3).pipe(filter((value, index) => index < '3')); // $ExpectError
 });
 
@@ -47,7 +47,7 @@ it('should support Boolean as a predicate', () => {
   const s = of(false as const).pipe(filter(Boolean)); // $ExpectType Observable<never>
   const t = of(0 as const, -0 as const, 1 as const).pipe(filter(Boolean)); // $ExpectType Observable<1>
   const u = of(0 as const, -0 as const).pipe(filter(Boolean)); // $ExpectType Observable<never>
-  const v = of('' as const, "foo" as const, "bar" as const).pipe(filter(Boolean)); // $ExpectType Observable<"foo" | "bar">
+  const v = of('' as const, 'foo' as const, 'bar' as const).pipe(filter(Boolean)); // $ExpectType Observable<"foo" | "bar">
   const w = of('' as const).pipe(filter(Boolean)); // $ExpectType Observable<never>
   // Intentionally weird looking test... `false` is `boolean`, which is `true | false`.
   const x = of(false, false, false, false).pipe(filter(Boolean)); // $ExpectType Observable<true>
@@ -63,17 +63,20 @@ it('should support inference from a return type with Boolean as a predicate', ()
   }
 
   const i$: Observable<I> = of();
-  const s$: Observable<string> = i$.pipe(map(i => i.a), filter(Boolean)); // $ExpectType Observable<string>
+  const s$: Observable<string> = i$.pipe(
+    map((i) => i.a),
+    filter(Boolean)
+  ); // $ExpectType Observable<string>
 });
 
 it('should support inference from a generic return type of the predicate', () => {
   function isDefined<T>() {
-    return (value: T|undefined|null): value is T => {
+    return (value: T | undefined | null): value is T => {
       return value !== undefined && value !== null;
     };
   }
 
-  const o$ = of(1, null, {foo: 'bar'}, true, undefined, 'Nick Cage').pipe(filter(isDefined())); // $ExpectType Observable<string | number | boolean | { foo: string; }>
+  const o$ = of(1, null, { foo: 'bar' }, true, undefined, 'Nick Cage').pipe(filter(isDefined())); // $ExpectType Observable<string | number | boolean | { foo: string; }>
 });
 
 it('should support inference from a predicate that returns any', () => {
@@ -86,10 +89,12 @@ it('should support inference from a predicate that returns any', () => {
 
 it('should support this', () => {
   const thisArg = { limit: 5 };
-  const a = of(1, 2, 3).pipe(filter(function (val) {
-    const limit = this.limit; // $ExpectType number
-    return val < limit;
-  }, thisArg));
+  const a = of(1, 2, 3).pipe(
+    filter(function (val) {
+      const limit = this.limit; // $ExpectType number
+      return val < limit;
+    }, thisArg)
+  );
 });
 
 it('should deprecate thisArg usage', () => {

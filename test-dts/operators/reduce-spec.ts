@@ -19,9 +19,22 @@ it('should accept seed parameter of the same type', () => {
 });
 
 it('should accept seed parameter of the seed array type', () => {
-  const a = of(1, 2, 3).pipe(reduce((x, y, z) => { x.push(y); return x; }, [4])); // $ExpectType Observable<number[]>
+  const a = of(1, 2, 3).pipe(
+    reduce(
+      (x, y, z) => {
+        x.push(y);
+        return x;
+      },
+      [4]
+    )
+  ); // $ExpectType Observable<number[]>
   // Array must be typed...
-  const b = of(1, 2, 3).pipe(reduce((x, y, z) => { x.push(y); return x; }, [])); // $ExpectError
+  const b = of(1, 2, 3).pipe(
+    reduce((x, y, z) => {
+      x.push(y);
+      return x;
+    }, [])
+  ); // $ExpectError
 });
 
 it('should accept seed parameter of a different type', () => {

@@ -1,4 +1,4 @@
-import { of, asyncScheduler  } from 'rxjs';
+import { of, asyncScheduler } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
 it('should accept an individual bufferSize parameter', () => {

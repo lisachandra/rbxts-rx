@@ -93,8 +93,8 @@ export function merge(...args: (ObservableInput<unknown> | number | SchedulerLik
     ? // No source provided
       EMPTY
     : sources.size() === 1
-    ? // One source? Just return it.
-      innerFrom(sources[0])
-    : // Merge all sources
-      mergeAll(concurrent)(from(sources, scheduler));
+      ? // One source? Just return it.
+        innerFrom(sources[0])
+      : // Merge all sources
+        mergeAll(concurrent)(from(sources, scheduler));
 }

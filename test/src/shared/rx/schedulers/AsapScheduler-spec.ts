@@ -29,10 +29,7 @@ describe('Scheduler.asap', () => {
       const tb = time(' --------|    ');
       const expected = '----a---b----';
 
-      const result = merge(
-        a.pipe(delay(ta, asap)),
-        b.pipe(delay(tb, asap))
-      );
+      const result = merge(a.pipe(delay(ta, asap)), b.pipe(delay(tb, asap)));
       expectObservable(result).toBe(expected);
     });
   });
@@ -49,9 +46,7 @@ describe('Scheduler.asap', () => {
       const subs = '    ^-!          ';
       const expected = '-------------';
 
-      const result = merge(
-        a.pipe(delay(ta, asap))
-      );
+      const result = merge(a.pipe(delay(ta, asap)));
       expectObservable(result, subs).toBe(expected);
 
       flush();
@@ -66,7 +61,7 @@ describe('Scheduler.asap', () => {
     const sandbox = sinon.createSandbox();
     const fakeTimer = sandbox.useFakeTimers();
     // callThrough is missing from the declarations installed by the typings tool in stable
-    const stubSetInterval = (<any> sandbox.stub(fakeTimer, 'setInterval')).callThrough();
+    const stubSetInterval = (<any>sandbox.stub(fakeTimer, 'setInterval')).callThrough();
     const period = 50;
     const state = { index: 0, period };
     type State = typeof state;
@@ -92,7 +87,7 @@ describe('Scheduler.asap', () => {
     const sandbox = sinon.createSandbox();
     const fakeTimer = sandbox.useFakeTimers();
     // callThrough is missing from the declarations installed by the typings tool in stable
-    const stubSetInterval = (<any> sandbox.stub(fakeTimer, 'setInterval')).callThrough();
+    const stubSetInterval = (<any>sandbox.stub(fakeTimer, 'setInterval')).callThrough();
     const period = 50;
     const state = { index: 0, period };
     type State = typeof state;
@@ -129,36 +124,50 @@ describe('Scheduler.asap', () => {
   it('should execute recursively scheduled actions in separate asynchronous contexts', (done) => {
     let syncExec1 = true;
     let syncExec2 = true;
-    asap.schedule(function (index) {
-      if (index === 0) {
-        this.schedule(1);
-        asap.schedule(() => { syncExec1 = false; });
-      } else if (index === 1) {
-        this.schedule(2);
-        asap.schedule(() => { syncExec2 = false; });
-      } else if (index === 2) {
-        this.schedule(3);
-      } else if (index === 3) {
-        if (!syncExec1 && !syncExec2) {
-          done();
-        } else {
-          done(new Error('Execution happened synchronously.'));
+    asap.schedule(
+      function (index) {
+        if (index === 0) {
+          this.schedule(1);
+          asap.schedule(() => {
+            syncExec1 = false;
+          });
+        } else if (index === 1) {
+          this.schedule(2);
+          asap.schedule(() => {
+            syncExec2 = false;
+          });
+        } else if (index === 2) {
+          this.schedule(3);
+        } else if (index === 3) {
+          if (!syncExec1 && !syncExec2) {
+            done();
+          } else {
+            done(new Error('Execution happened synchronously.'));
+          }
         }
-      }
-    }, 0, 0);
+      },
+      0,
+      0
+    );
   });
 
   it('should schedule asap actions from a delayed one', (done) => {
     asap.schedule(() => {
-      asap.schedule(() => { done(); });
+      asap.schedule(() => {
+        done();
+      });
     }, 1);
   });
 
   it('should cancel the setImmediate if all scheduled actions unsubscribe before it executes', (done) => {
     let asapExec1 = false;
     let asapExec2 = false;
-    const action1 = asap.schedule(() => { asapExec1 = true; });
-    const action2 = asap.schedule(() => { asapExec2 = true; });
+    const action1 = asap.schedule(() => {
+      asapExec1 = true;
+    });
+    const action2 = asap.schedule(() => {
+      asapExec2 = true;
+    });
     expect(asap._scheduled).to.exist;
     expect(asap.actions.size()).to.equal(2);
     action1.unsubscribe();
@@ -216,18 +225,22 @@ describe('Scheduler.asap', () => {
       }
     };
 
-    asap.schedule(function (index) {
-      if (flushCount < 2) {
-        this.schedule(index! + 1);
-        scheduledIndices.push(index! + 1);
-      }
-    }, 0, 0);
+    asap.schedule(
+      function (index) {
+        if (flushCount < 2) {
+          this.schedule(index! + 1);
+          scheduledIndices.push(index! + 1);
+        }
+      },
+      0,
+      0
+    );
     scheduledIndices.push(0);
   });
 
   it('should execute actions scheduled when flushing in a subsequent flush', (done) => {
     const sandbox = sinon.createSandbox();
-    const stubFlush = (sandbox.stub(asapScheduler, 'flush')).callThrough();
+    const stubFlush = sandbox.stub(asapScheduler, 'flush').callThrough();
 
     let a: Subscription;
     let b: Subscription;
@@ -248,7 +261,7 @@ describe('Scheduler.asap', () => {
 
   it('should execute actions scheduled when flushing in a subsequent flush when some actions are unsubscribed', (done) => {
     const sandbox = sinon.createSandbox();
-    const stubFlush = (sandbox.stub(asapScheduler, 'flush')).callThrough();
+    const stubFlush = sandbox.stub(asapScheduler, 'flush').callThrough();
 
     let a: Subscription;
     let b: Subscription;
@@ -299,10 +312,10 @@ describe('Scheduler.asap', () => {
     const results: any[] = [];
 
     let resolve: () => void;
-    let promise = new Promise<void>((r) => resolve = r);
+    let promise = new Promise<void>((r) => (resolve = r));
 
     asapScheduler.schedule(() => {
-      results.push(1)
+      results.push(1);
       asapScheduler.schedule(() => {
         results.push(2);
       });

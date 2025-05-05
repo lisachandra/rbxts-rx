@@ -29,7 +29,10 @@ export class ConnectableObservable<T> extends Observable<T> {
    * `source.pipe(share({ connector: factory }))`.
    * Details: https://rxjs.dev/deprecations/multicasting
    */
-  constructor(public source: Observable<T>, protected subjectFactory: () => Subject<T>) {
+  constructor(
+    public source: Observable<T>,
+    protected subjectFactory: () => Subject<T>
+  ) {
     super();
     // If we have lift, monkey patch that here. This is done so custom observable
     // types will compose through multicast. Otherwise the resulting observable would

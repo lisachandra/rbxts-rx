@@ -6,5 +6,5 @@ it('should infer correctly', () => {
 });
 
 it('should enforce types', () => {
-  const o = of(1, 2, 3).pipe(takeUntil(value => value < 3)); // $ExpectError
+  const o = of(1, 2, 3).pipe(takeUntil((value) => value < 3)); // $ExpectError
 });

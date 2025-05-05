@@ -78,7 +78,7 @@ describe('withLatestFrom', () => {
   describe('with project parameter', () => {
     it('should infer correctly with project param', () => {
       const a = of(1, 2, 3);
-      const res = a.pipe(withLatestFrom(v1 => 'b')); // $ExpectType Observable<string>
+      const res = a.pipe(withLatestFrom((v1) => 'b')); // $ExpectType Observable<string>
     });
 
     it('should infer correctly with 1 param', () => {
@@ -155,7 +155,7 @@ describe('withLatestFrom', () => {
     /*
      * The following test does not typecheck because the project function is missing a third parameter.
      * If such an issue occurs in a consumer code base the fix is to specify the missing parameters.
-     * 
+     *
      * It looks like this is a TS bug.
      */
     // it('should infer correct parameters with fewer arguments to project function', () => {

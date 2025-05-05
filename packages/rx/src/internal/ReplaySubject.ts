@@ -60,7 +60,7 @@ export class ReplaySubject<T> extends Subject<T> {
   next(value: T): void {
     const { isStopped, _buffer, _infiniteTimeWindow, _timestampProvider, _windowTime } = this;
     if (!isStopped) {
-      typeAssertIs<defined[]>(_buffer)
+      typeAssertIs<defined[]>(_buffer);
       _buffer.push(value);
       !_infiniteTimeWindow && _buffer.push(_timestampProvider.now() + _windowTime);
     }

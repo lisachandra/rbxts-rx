@@ -22,7 +22,7 @@ it('should accept windowTime, bufferSize, selector of OperatorFunction', () => {
 });
 
 it('should accept windowTime, bufferSize, selector returning union type', () => {
-  const a = of(1, 2, 3).pipe(publishReplay(1, 1,  () => math.random() > 0.5 ? of(123) : of('test'))); // $ExpectType Observable<string | number>
+  const a = of(1, 2, 3).pipe(publishReplay(1, 1, () => (math.random() > 0.5 ? of(123) : of('test')))); // $ExpectType Observable<string | number>
 });
 
 it('should accept windowTime, bufferSize, selector  of MonoTypeOperatorFunction', () => {
@@ -30,7 +30,7 @@ it('should accept windowTime, bufferSize, selector  of MonoTypeOperatorFunction'
 });
 
 it('should accept windowTime, bufferSize, selector returning union type, and a scheduler', () => {
-  const a = of(1, 2, 3).pipe(publishReplay(1, 1, () => math.random() > 0.5 ? of(123) : of('test'), asyncScheduler)); // $ExpectType Observable<string | number>
+  const a = of(1, 2, 3).pipe(publishReplay(1, 1, () => (math.random() > 0.5 ? of(123) : of('test')), asyncScheduler)); // $ExpectType Observable<string | number>
 });
 
 it('should accept windowTime, bufferSize, selector of OperatorFunction, and scheduler', () => {

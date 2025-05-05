@@ -8,24 +8,26 @@ it('should infer correctly', () => {
 });
 
 it('should accept a keySelector', () => {
-  interface Person { name: string; }
-  const o = of({ name: 'Tim' } as Person).pipe(distinct(person => person.name)); // $ExpectType Observable<Person>
+  interface Person {
+    name: string;
+  }
+  const o = of({ name: 'Tim' } as Person).pipe(distinct((person) => person.name)); // $ExpectType Observable<Person>
 });
 
 it('should accept observable flush', () => {
-  const o = of(1, 2, 3).pipe(distinct(n => n, of('t', 'i', 'm'))); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(distinct((n) => n, of('t', 'i', 'm'))); // $ExpectType Observable<number>
 });
 
 it('should accept interop observable flush', () => {
-  of(1, 2, 3).pipe(distinct(n => n, asInteropObservable(of('t', 'i', 'm')))); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(distinct((n) => n, asInteropObservable(of('t', 'i', 'm')))); // $ExpectType Observable<number>
 });
 
 it('should accept array-like flush', () => {
-  of(1, 2, 3).pipe(distinct(n => n, [1,2,3])); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(distinct((n) => n, [1, 2, 3])); // $ExpectType Observable<number>
 });
 
 it('should accept promise flush', () => {
-  of(1, 2, 3).pipe(distinct(n => n, Promise.resolve())); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(distinct((n) => n, Promise.resolve())); // $ExpectType Observable<number>
 });
 
 it('should accept async iterable flush', () => {
@@ -38,16 +40,16 @@ it('should accept async iterable flush', () => {
         last: this.to,
         async next() {
           await Promise.resolve();
-          const done = (this.current > this.last);
+          const done = this.current > this.last;
           return {
             done,
-            value: done ? this.current++ : undefined
+            value: done ? this.current++ : undefined,
           };
-        }
+        },
       };
-    }
+    },
   };
-  of(1, 2, 3).pipe(distinct(n => n, asyncRange)); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(distinct((n) => n, asyncRange)); // $ExpectType Observable<number>
 });
 
 it('should accept iterable flush', () => {
@@ -59,16 +61,16 @@ it('should accept iterable flush', () => {
         current: this.from,
         last: this.to,
         next() {
-          const done = (this.current > this.last);
+          const done = this.current > this.last;
           return {
             done,
-            value: done ? this.current++ : undefined
+            value: done ? this.current++ : undefined,
           };
-        }
+        },
       };
-    }
+    },
   };
-  of(1, 2, 3).pipe(distinct(n => n, syncRange)); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(distinct((n) => n, syncRange)); // $ExpectType Observable<number>
 });
 
 it('should accept readable stream flush', () => {
@@ -78,11 +80,11 @@ it('should accept readable stream flush', () => {
       controller.close();
     },
   });
-  of(1, 2, 3).pipe(distinct(n => n, readable)); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(distinct((n) => n, readable)); // $ExpectType Observable<number>
 });
 
 it('should error with unsupported flush', () => {
-  of(1, 2, 3).pipe(distinct(n => n, {})); // $ExpectError
+  of(1, 2, 3).pipe(distinct((n) => n, {})); // $ExpectError
 });
 
 it('should enforce types', () => {
@@ -90,5 +92,5 @@ it('should enforce types', () => {
 });
 
 it('should enforce types of keySelector', () => {
-  const o = of<{ id: string; }>({id: 'F00D'}).pipe(distinct(item => item.foo)); // $ExpectError
+  const o = of<{ id: string }>({ id: 'F00D' }).pipe(distinct((item) => item.foo)); // $ExpectError
 });

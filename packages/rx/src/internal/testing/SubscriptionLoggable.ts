@@ -14,9 +14,6 @@ export class SubscriptionLoggable {
   logUnsubscribedFrame(index: number) {
     const subscriptionLogs = this.subscriptions;
     const oldSubscriptionLog = subscriptionLogs[index];
-    subscriptionLogs[index] = new SubscriptionLog(
-      oldSubscriptionLog.subscribedFrame,
-      this.scheduler.now()
-    );
+    subscriptionLogs[index] = new SubscriptionLog(oldSubscriptionLog.subscribedFrame, this.scheduler.now());
   }
 }

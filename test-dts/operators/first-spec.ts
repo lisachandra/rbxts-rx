@@ -48,15 +48,15 @@ it('should widen a user-defined type guard with a non-S default', () => {
 });
 
 it('should support a predicate with no default', () => {
-  const o = of('foo').pipe(first(x => !!x)); // $ExpectType Observable<string>
+  const o = of('foo').pipe(first((x) => !!x)); // $ExpectType Observable<string>
 });
 
 it('should support a predicate with a T default', () => {
-  const o = of('foo').pipe(first(x => !!x, 'bar')); // $ExpectType Observable<string>
+  const o = of('foo').pipe(first((x) => !!x, 'bar')); // $ExpectType Observable<string>
 });
 
 it('should support a predicate with a non-T default', () => {
-  const o = of('foo').pipe(first(x => !!x, false)); // $ExpectType Observable<string | boolean>
+  const o = of('foo').pipe(first((x) => !!x, false)); // $ExpectType Observable<string | boolean>
 });
 
 it('should work properly with the Boolean constructor', () => {

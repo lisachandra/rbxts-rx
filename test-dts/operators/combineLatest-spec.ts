@@ -58,7 +58,7 @@ describe('combineLatest', () => {
   describe('with project parameter', () => {
     it('should infer correctly with project param', () => {
       const a = of(1, 2, 3);
-      const res = a.pipe(combineLatest(v1 => 'b')); // $ExpectType Observable<string>
+      const res = a.pipe(combineLatest((v1) => 'b')); // $ExpectType Observable<string>
     });
 
     it('should infer correctly with 1 param', () => {

@@ -1,12 +1,4 @@
-import {
-  Observable,
-  ObservedValueOf,
-  ObservedValueUnionFromArray,
-  ObservedValueTupleFromArray,
-  Cons,
-  Head,
-  Tail
-} from 'rxjs';
+import { Observable, ObservedValueOf, ObservedValueUnionFromArray, ObservedValueTupleFromArray, Cons, Head, Tail } from 'rxjs';
 import { A, B, C } from './helpers';
 
 describe('ObservedValueOf', () => {

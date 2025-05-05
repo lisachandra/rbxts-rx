@@ -2,7 +2,7 @@ import { of, Observable } from 'rxjs';
 import { findIndex } from 'rxjs/operators';
 
 it('should infer correctly', () => {
-  const o = of('foo', 'bar', 'baz').pipe(findIndex(p => p === 'foo')); // $ExpectType Observable<number>
+  const o = of('foo', 'bar', 'baz').pipe(findIndex((p) => p === 'foo')); // $ExpectType Observable<number>
 });
 
 it('should support a predicate that takes an index ', () => {
@@ -14,7 +14,7 @@ it('should support a predicate that takes a source ', () => {
 });
 
 it('should support an argument ', () => {
-  const o = of('foo', 'bar', 'baz').pipe(findIndex(p => p === 'foo', 123)); // $ExpectType Observable<number>
+  const o = of('foo', 'bar', 'baz').pipe(findIndex((p) => p === 'foo', 123)); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {
@@ -28,7 +28,7 @@ it('should enforce predicate types', () => {
 });
 
 it('should enforce predicate return type', () => {
-  const o = of('foo', 'bar', 'baz').pipe(findIndex(p => p)); // $ExpectError
+  const o = of('foo', 'bar', 'baz').pipe(findIndex((p) => p)); // $ExpectError
 });
 
 it('should support Boolean constructor', () => {
@@ -45,10 +45,12 @@ it('should support inference from a predicate that returns any', () => {
 
 it('should support this', () => {
   const thisArg = { wanted: 5 };
-  const a = of(1, 2, 3).pipe(findIndex(function (val) {
-    const wanted = this.wanted; // $ExpectType number
-    return val < wanted;
-  }, thisArg));
+  const a = of(1, 2, 3).pipe(
+    findIndex(function (val) {
+      const wanted = this.wanted; // $ExpectType number
+      return val < wanted;
+    }, thisArg)
+  );
 });
 
 it('should deprecate thisArg usage', () => {

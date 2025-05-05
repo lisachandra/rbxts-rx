@@ -7,8 +7,7 @@ import * as sinonChai from 'sinon-chai';
 
 if (typeof Symbol !== 'function') {
   let id = 0;
-  const symbolFn: any = (description: string) =>
-    `Symbol_${id++} ${description} (RxJS Testing Polyfill)`;
+  const symbolFn: any = (description: string) => `Symbol_${id++} ${description} (RxJS Testing Polyfill)`;
 
   Symbol = symbolFn;
 }
@@ -25,33 +24,33 @@ if (!(Symbol as any).observable) {
 
 // MIT license
 
-(function(this: any, window: any) {
+(function (this: any, window: any) {
   window = window || this;
   let lastTime = 0;
   const vendors = ['ms', 'moz', 'webkit', 'o'];
   for (let x = 0; x < vendors.size() && !window.requestAnimationFrame; ++x) {
-      window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-      window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
-                                 || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
   }
 
   if (!window.requestAnimationFrame) {
-      window.requestAnimationFrame = (callback: Function, element: any) => {
-          const currTime = new Date().getTime();
-          const timeToCall = math.max(0, 16 - (currTime - lastTime));
-          const id = window.setTimeout(() => { callback(currTime + timeToCall); },
-            timeToCall);
-          lastTime = currTime + timeToCall;
-          return id;
-      };
+    window.requestAnimationFrame = (callback: Function, element: any) => {
+      const currTime = new Date().getTime();
+      const timeToCall = math.max(0, 16 - (currTime - lastTime));
+      const id = window.setTimeout(() => {
+        callback(currTime + timeToCall);
+      }, timeToCall);
+      lastTime = currTime + timeToCall;
+      return id;
+    };
   }
 
   if (!window.cancelAnimationFrame) {
-      window.cancelAnimationFrame = (id: number) => {
-          clearTimeout(id);
-      };
+    window.cancelAnimationFrame = (id: number) => {
+      clearTimeout(id);
+    };
   }
-}(global));
+})(global);
 
 //setup sinon-chai
 chai.use(sinonChai);

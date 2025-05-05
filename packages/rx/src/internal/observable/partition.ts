@@ -83,6 +83,6 @@ export function partition<T>(
 ): [Observable<T>, Observable<T>] {
   return [filter(predicate, thisArg)(innerFrom(source)), filter(not(predicate, thisArg))(innerFrom(source))] as [
     Observable<T>,
-    Observable<T>
+    Observable<T>,
   ];
 }

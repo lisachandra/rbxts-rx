@@ -25,26 +25,41 @@ it('should enforce predicate types', () => {
 
 it('should support this with type guard', () => {
   const thisArg = { limit: 2 };
-  const a = partition(of(1, 2, 3), function (val): val is 1 { // $ExpectType [Observable<1>, Observable<number>]
-    const limit = this.limit; // $ExpectType number
-    return val < limit;
-  }, thisArg);
+  const a = partition(
+    of(1, 2, 3),
+    function (val): val is 1 {
+      // $ExpectType [Observable<1>, Observable<number>]
+      const limit = this.limit; // $ExpectType number
+      return val < limit;
+    },
+    thisArg
+  );
 });
 
 it('should support this with exclusion based on the user-defined type guard', () => {
   const thisArg = { limit: 2 };
-  const a = partition(from([1, 2] as const), function (val): val is 1 { // $ExpectType [Observable<1>, Observable<2>]
-    const limit = this.limit; // $ExpectType number
-    return val < limit;
-  }, thisArg);
+  const a = partition(
+    from([1, 2] as const),
+    function (val): val is 1 {
+      // $ExpectType [Observable<1>, Observable<2>]
+      const limit = this.limit; // $ExpectType number
+      return val < limit;
+    },
+    thisArg
+  );
 });
 
 it('should support this with predicate', () => {
   const thisArg = { limit: 2 };
-  const a = partition(of(1, 2, 3), function (val) { // $ExpectType [Observable<number>, Observable<number>]
-    const limit = this.limit; // $ExpectType number
-    return val < limit;
-  }, thisArg);
+  const a = partition(
+    of(1, 2, 3),
+    function (val) {
+      // $ExpectType [Observable<number>, Observable<number>]
+      const limit = this.limit; // $ExpectType number
+      return val < limit;
+    },
+    thisArg
+  );
 });
 
 it('should deprecate thisArg usage', () => {

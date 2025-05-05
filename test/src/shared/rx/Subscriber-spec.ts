@@ -10,7 +10,9 @@ describe('SafeSubscriber', () => {
     let times = 0;
 
     const sub = new SafeSubscriber<void>({
-      next() { times += 1; }
+      next() {
+        times += 1;
+      },
     });
 
     sub.next();
@@ -26,8 +28,12 @@ describe('SafeSubscriber', () => {
     let errorCalled = false;
 
     const sub = new SafeSubscriber<void>({
-      next() { times += 1; },
-      error() { errorCalled = true; }
+      next() {
+        times += 1;
+      },
+      error() {
+        errorCalled = true;
+      },
     });
 
     sub.next();
@@ -45,8 +51,12 @@ describe('SafeSubscriber', () => {
     let completeCalled = false;
 
     const sub = new SafeSubscriber<void>({
-      next() { times += 1; },
-      complete() { completeCalled = true; }
+      next() {
+        times += 1;
+      },
+      complete() {
+        completeCalled = true;
+      },
     });
 
     sub.next();
@@ -61,7 +71,9 @@ describe('SafeSubscriber', () => {
 
   it('should not be closed when other subscriber with same observer instance completes', () => {
     const observer = {
-      next: function () { /*noop*/ }
+      next: function () {
+        /*noop*/
+      },
     };
 
     const sub1 = new SafeSubscriber(observer);
@@ -79,7 +91,7 @@ describe('SafeSubscriber', () => {
     const observer = {
       complete: (...args: Array<any>) => {
         argument = args;
-      }
+      },
     };
 
     const sub1 = new SafeSubscriber(observer);
@@ -94,11 +106,11 @@ describe('SafeSubscriber', () => {
     let subscriptionUnsubscribed = false;
 
     const subscriber = new SafeSubscriber<void>();
-    subscriber.add(() => subscriberUnsubscribed = true);
+    subscriber.add(() => (subscriberUnsubscribed = true));
 
-    const source = new Observable<void>(() => () => observableUnsubscribed = true);
+    const source = new Observable<void>(() => () => (observableUnsubscribed = true));
     const subscription = source.subscribe(asInteropSubscriber(subscriber));
-    subscription.add(() => subscriptionUnsubscribed = true);
+    subscription.add(() => (subscriptionUnsubscribed = true));
     subscriber.unsubscribe();
 
     expect(observableUnsubscribed).to.be.true;
@@ -122,7 +134,7 @@ describe('SafeSubscriber', () => {
   it('should close, unsubscribe, and unregister all finalizers after complete', () => {
     let isUnsubscribed = false;
     const subscriber = new SafeSubscriber();
-    subscriber.add(() => isUnsubscribed = true);
+    subscriber.add(() => (isUnsubscribed = true));
     subscriber.complete();
     expect(isUnsubscribed).to.be.true;
     expect(subscriber.closed).to.be.true;
@@ -136,9 +148,9 @@ describe('SafeSubscriber', () => {
         // Mischief managed!
         // Adding this handler here to prevent the call to error from
         // throwing, since it will have an error handler now.
-      }
+      },
     });
-    subscriber.add(() => isTornDown = true);
+    subscriber.add(() => (isTornDown = true));
     subscriber.error(new Error('test'));
     expect(isTornDown).to.be.true;
     expect(subscriber.closed).to.be.true;
@@ -150,7 +162,9 @@ describe('Subscriber', () => {
   it('should finalize and unregister all finalizers after complete', () => {
     let isTornDown = false;
     const subscriber = new Subscriber();
-    subscriber.add(() => { isTornDown = true });
+    subscriber.add(() => {
+      isTornDown = true;
+    });
     subscriber.complete();
     expect(isTornDown).to.be.true;
     expect(getRegisteredFinalizers(subscriber).size()).to.equal(0);
@@ -171,7 +185,7 @@ describe('Subscriber', () => {
           this.valuesProcessed.push(value);
         }
       }
-    };
+    }
 
     const consumer = new CustomConsumer();
 
@@ -192,7 +206,7 @@ describe('Subscriber', () => {
     it('should allow changing the context of `this` in a POJO subscriber', () => {
       const results: any[] = [];
 
-      const source = new Observable<number>(subscriber => {
+      const source = new Observable<number>((subscriber) => {
         for (let i = 0; i < 10 && !subscriber.closed; i++) {
           subscriber.next(i);
         }
@@ -213,7 +227,7 @@ describe('Subscriber', () => {
         },
         complete() {
           throw new Error('should not be called');
-        }
+        },
       });
 
       expect(results).to.deep.equal([0, 1, 2, 3, 'finalizer']);
@@ -233,7 +247,7 @@ describe('Subscriber', () => {
             this.valuesProcessed.push(value);
           }
         }
-      };
+      }
 
       const consumer = new CustomConsumer();
 
@@ -245,12 +259,17 @@ describe('Subscriber', () => {
 
   const FinalizationRegistry = (global as any).FinalizationRegistry;
   if (FinalizationRegistry && global.gc) {
-
     it('should not leak the destination', (done) => {
       let observer: Observer<number> | undefined = {
-        next() { /* noop */ },
-        error() { /* noop */ },
-        complete() { /* noop */ }
+        next() {
+          /* noop */
+        },
+        error() {
+          /* noop */
+        },
+        complete() {
+          /* noop */
+        },
       };
 
       const registry = new FinalizationRegistry((value: any) => {
@@ -264,7 +283,6 @@ describe('Subscriber', () => {
       observer = undefined;
       global.gc?.();
     });
-
   } else {
     console.warn(`No support for FinalizationRegistry in Node ${process.version}`);
   }
