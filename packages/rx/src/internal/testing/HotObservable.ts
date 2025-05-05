@@ -37,7 +37,7 @@ export class HotObservable<T> extends Subject<T> implements SubscriptionLoggable
 
   setup() {
     const subject = this;
-    const messagesLength = subject.messages.length;
+    const messagesLength = subject.messages.size();
     /* tslint:disable:no-var-keyword */
     for (let i = 0; i < messagesLength; i++) {
       (() => {

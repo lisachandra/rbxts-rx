@@ -74,7 +74,7 @@ class MockAbortSignal {
 
   _signal() {
     this.aborted = true;
-    while (this._listeners.length > 0) {
+    while (this._listeners.size() > 0) {
       this._listeners.shift()!();
     }
   }
@@ -116,7 +116,7 @@ describe('fromFetch', () => {
 
   it('should fetch', (done) => {
     const fetch$ = fromFetch('/foo');
-    expect(mockFetch.calls.length).to.equal(0);
+    expect(mockFetch.calls.size()).to.equal(0);
     expect(MockAbortController.created).to.equal(0);
 
     fetch$.subscribe({
@@ -129,7 +129,7 @@ describe('fromFetch', () => {
         // before testing these expectations:
         setTimeout(() => {
           expect(MockAbortController.created).to.equal(1);
-          expect(mockFetch.calls.length).to.equal(1);
+          expect(mockFetch.calls.size()).to.equal(1);
           expect(mockFetch.calls[0].input).to.equal('/foo');
           expect(mockFetch.calls[0].init!.signal).not.to.be.undefined;
           expect(mockFetch.calls[0].init!.signal!.aborted).to.be.false;
@@ -147,7 +147,7 @@ describe('fromFetch', () => {
     } as any as Response;
 
     const fetch$ = fromFetch('/foo');
-    expect(mockFetch.calls.length).to.equal(0);
+    expect(mockFetch.calls.size()).to.equal(0);
     expect(MockAbortController.created).to.equal(0);
 
     fetch$.subscribe({
@@ -159,7 +159,7 @@ describe('fromFetch', () => {
     });
 
     expect(MockAbortController.created).to.equal(1);
-    expect(mockFetch.calls.length).to.equal(1);
+    expect(mockFetch.calls.size()).to.equal(1);
     expect(mockFetch.calls[0].input).to.equal('/foo');
     expect(mockFetch.calls[0].init!.signal).not.to.be.undefined;
     expect(mockFetch.calls[0].init!.signal!.aborted).to.be.false;
@@ -167,12 +167,12 @@ describe('fromFetch', () => {
 
   it('should abort when unsubscribed', () => {
     const fetch$ = fromFetch('/foo');
-    expect(mockFetch.calls.length).to.equal(0);
+    expect(mockFetch.calls.size()).to.equal(0);
     expect(MockAbortController.created).to.equal(0);
     const subscription = fetch$.subscribe();
 
     expect(MockAbortController.created).to.equal(1);
-    expect(mockFetch.calls.length).to.equal(1);
+    expect(mockFetch.calls.size()).to.equal(1);
     expect(mockFetch.calls[0].input).to.equal('/foo');
     expect(mockFetch.calls[0].init!.signal).not.to.be.undefined;
     expect(mockFetch.calls[0].init!.signal!.aborted).to.be.false;
@@ -183,7 +183,7 @@ describe('fromFetch', () => {
 
   it('should not immediately abort repeat subscribers', () => {
     const fetch$ = fromFetch('/foo');
-    expect(mockFetch.calls.length).to.equal(0);
+    expect(mockFetch.calls.size()).to.equal(0);
     expect(MockAbortController.created).to.equal(0);
     let subscription = fetch$.subscribe();
     expect(MockAbortController.created).to.equal(1);
@@ -276,7 +276,7 @@ describe('fromFetch', () => {
     const fetch$ = fromFetch('/foo', {
       selector: response => response.text()
     });
-    expect(mockFetch.calls.length).to.equal(0);
+    expect(mockFetch.calls.size()).to.equal(0);
     expect(MockAbortController.created).to.equal(0);
 
     fetch$.subscribe({
@@ -289,7 +289,7 @@ describe('fromFetch', () => {
         // before testing these expectations:
         setTimeout(() => {
           expect(MockAbortController.created).to.equal(1);
-          expect(mockFetch.calls.length).to.equal(1);
+          expect(mockFetch.calls.size()).to.equal(1);
           expect(mockFetch.calls[0].input).to.equal('/foo');
           expect(mockFetch.calls[0].init!.signal).not.to.be.undefined;
           expect(mockFetch.calls[0].init!.signal!.aborted).to.be.false;
@@ -307,12 +307,12 @@ describe('fromFetch', () => {
     const fetch$ = fromFetch('/foo', {
       selector: response => response.text()
     });
-    expect(mockFetch.calls.length).to.equal(0);
+    expect(mockFetch.calls.size()).to.equal(0);
     expect(MockAbortController.created).to.equal(0);
     const subscription = fetch$.subscribe();
 
     expect(MockAbortController.created).to.equal(1);
-    expect(mockFetch.calls.length).to.equal(1);
+    expect(mockFetch.calls.size()).to.equal(1);
     expect(mockFetch.calls[0].input).to.equal('/foo');
     expect(mockFetch.calls[0].init!.signal).not.to.be.undefined;
     expect(mockFetch.calls[0].init!.signal!.aborted).to.be.false;

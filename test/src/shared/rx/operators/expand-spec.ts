@@ -39,7 +39,7 @@ describe('expand', () => {
       const expected = '--a-b-c-d|';
       const values = { a: 1, b: 2, c: 4, d: 8 };
 
-      const result = e1.pipe(expand((x) => (x === 8 ? EMPTY : e2.pipe(map((c) => c * x))), Infinity, testScheduler));
+      const result = e1.pipe(expand((x) => (x === 8 ? EMPTY : e2.pipe(map((c) => c * x))), math.huge, testScheduler));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -389,7 +389,7 @@ describe('expand', () => {
           expect(x).to.equal(expected.shift());
         },
         complete: () => {
-          expect(expected.length).to.equal(0);
+          expect(expected.size()).to.equal(0);
           done();
         },
       });
@@ -411,7 +411,7 @@ describe('expand', () => {
           expect(x).to.equal(expected.shift());
         },
         complete: () => {
-          expect(expected.length).to.equal(0);
+          expect(expected.size()).to.equal(0);
           done();
         },
       });
@@ -442,7 +442,7 @@ describe('expand', () => {
           expect(x).to.equal(expected.shift());
         },
         complete: () => {
-          expect(expected.length).to.equal(0);
+          expect(expected.size()).to.equal(0);
           done();
         },
       });
@@ -480,7 +480,7 @@ describe('expand', () => {
     const expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     of(0)
       .pipe(
-        expand((x) => of(x + 1), Infinity, asapScheduler),
+        expand((x) => of(x + 1), math.huge, asapScheduler),
         take(10),
         toArray()
       )
@@ -491,7 +491,7 @@ describe('expand', () => {
     const expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     of(0)
       .pipe(
-        expand((x) => of(x + 1), Infinity, asyncScheduler),
+        expand((x) => of(x + 1), math.huge, asyncScheduler),
         take(10),
         toArray()
       )

@@ -8,7 +8,7 @@ const { getPrototypeOf, prototype: objectProto, keys: getKeys } = Object;
  * property.
  */
 export function argsArgArrayOrObject<T, O extends Record<string, T>>(args: T[] | [O] | [T[]]): { args: T[]; keys: string[] | null } {
-  if (args.length === 1) {
+  if (args.size() === 1) {
     const first = args[0];
     if (isArray(first)) {
       return { args: first, keys: null };

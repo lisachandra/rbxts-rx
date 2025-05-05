@@ -78,7 +78,7 @@ export function onErrorResumeNext<A extends readonly unknown[]>(
   return new Observable((subscriber) => {
     let sourceIndex = 0;
     const subscribeNext = () => {
-      if (sourceIndex < nextSources.length) {
+      if (sourceIndex < nextSources.size()) {
         let nextSource: Observable<A[number]>;
         try {
           nextSource = innerFrom(nextSources[sourceIndex++]);

@@ -328,7 +328,7 @@ describe('shareReplay', () => {
 
     result.subscribe({
       next(n: any) {
-        expect(expected.length).to.be.greaterThan(0);
+        expect(expected.size()).to.be.greaterThan(0);
         expect(n).to.equal(expected.shift());
       },
       error() {

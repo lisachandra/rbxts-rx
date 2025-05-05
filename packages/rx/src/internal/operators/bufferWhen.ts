@@ -28,7 +28,7 @@ import { innerFrom } from '../observable/innerFrom';
  *
  * const clicks = fromEvent(document, 'click');
  * const buffered = clicks.pipe(
- *   bufferWhen(() => interval(1000 + Math.random() * 4000))
+ *   bufferWhen(() => interval(1000 + math.random() * 4000))
  * );
  * buffered.subscribe(x => console.log(x));
  * ```

@@ -260,7 +260,7 @@ describe('debounce', () => {
 
       expectObservable(e1.pipe(debounce(() => selector.shift()!))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let i = 0; i < selectorSubs.length; i++) {
+      for (let i = 0; i < selectorSubs.size(); i++) {
         expectSubscriptions(selector[i].subscriptions).toBe(selectorSubs[i]);
       }
     });
@@ -288,7 +288,7 @@ describe('debounce', () => {
 
       expectObservable(e1.pipe(debounce(() => selector.shift()!))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let i = 0; i < selectorSubs.length; i++) {
+      for (let i = 0; i < selectorSubs.size(); i++) {
         expectSubscriptions(selector[i].subscriptions).toBe(selectorSubs[i]);
       }
     });
@@ -312,7 +312,7 @@ describe('debounce', () => {
 
       expectObservable(e1.pipe(debounce(() => selector.shift()!))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let i = 0; i < selectorSubs.length; i++) {
+      for (let i = 0; i < selectorSubs.size(); i++) {
         expectSubscriptions(selector[i].subscriptions).toBe(selectorSubs[i]);
       }
     });
@@ -338,7 +338,7 @@ describe('debounce', () => {
 
       expectObservable(e1.pipe(debounce(() => selector.shift()!))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let i = 0; i < selectorSubs.length; i++) {
+      for (let i = 0; i < selectorSubs.size(); i++) {
         expectSubscriptions(selector[i].subscriptions).toBe(selectorSubs[i]);
       }
     });
@@ -370,7 +370,7 @@ describe('debounce', () => {
 
       expectObservable(e1.pipe(debounce(selectorFunction as any))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let i = 0; i < selectorSubs.length; i++) {
+      for (let i = 0; i < selectorSubs.size(); i++) {
         expectSubscriptions(selector[i].subscriptions).toBe(selectorSubs[i]);
       }
     });
@@ -424,7 +424,7 @@ describe('debounce', () => {
 
       expectObservable(e1.pipe(debounce(() => selector.shift()!))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let i = 0; i < selectorSubs.length; i++) {
+      for (let i = 0; i < selectorSubs.size(); i++) {
         expectSubscriptions(selector[i].subscriptions).toBe(selectorSubs[i]);
       }
     });
@@ -452,7 +452,7 @@ describe('debounce', () => {
 
       expectObservable(e1.pipe(debounce(() => selector.shift()!))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let i = 0; i < selectorSubs.length; i++) {
+      for (let i = 0; i < selectorSubs.size(); i++) {
         expectSubscriptions(selector[i].subscriptions).toBe(selectorSubs[i]);
       }
     });
@@ -476,7 +476,7 @@ describe('debounce', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         done();
       },
     });
@@ -505,7 +505,7 @@ describe('debounce', () => {
       },
       error: (err: any) => {
         expect(err).to.be.an('error', 'error');
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         done();
       },
       complete: () => {

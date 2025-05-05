@@ -134,7 +134,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     const actual: TestMessage[] = [];
     const flushTest: FlushableTest = { actual, ready: false };
     const subscriptionParsed = TestScheduler.parseMarblesAsSubscriptions(subscriptionMarbles, this.runMode);
-    const subscriptionFrame = subscriptionParsed.subscribedFrame === Infinity ? 0 : subscriptionParsed.subscribedFrame;
+    const subscriptionFrame = subscriptionParsed.subscribedFrame === math.huge ? 0 : subscriptionParsed.subscribedFrame;
     const unsubscriptionFrame = subscriptionParsed.unsubscribedFrame;
     let subscription: Subscription;
 
@@ -154,7 +154,7 @@ export class TestScheduler extends VirtualTimeScheduler {
       });
     }, subscriptionFrame);
 
-    if (unsubscriptionFrame !== Infinity) {
+    if (unsubscriptionFrame !== math.huge) {
       this.schedule(() => subscription.unsubscribe(), unsubscriptionFrame);
     }
 
@@ -198,14 +198,14 @@ export class TestScheduler extends VirtualTimeScheduler {
         flushTest.ready = true;
         flushTest.expected = marblesArray
           .map((marbles) => TestScheduler.parseMarblesAsSubscriptions(marbles, runMode))
-          .filter((marbles) => marbles.subscribedFrame !== Infinity);
+          .filter((marbles) => marbles.subscribedFrame !== math.huge);
       },
     };
   }
 
   flush() {
     const hotObservables = this.hotObservables;
-    while (hotObservables.length > 0) {
+    while (hotObservables.size() > 0) {
       hotObservables.shift()!.setup();
     }
 
@@ -222,15 +222,15 @@ export class TestScheduler extends VirtualTimeScheduler {
 
   static parseMarblesAsSubscriptions(marbles: string | null, runMode = false): SubscriptionLog {
     if (typeof marbles !== 'string') {
-      return new SubscriptionLog(Infinity);
+      return new SubscriptionLog(math.huge);
     }
     // Spreading the marbles into an array leverages ES2015's support for emoji
     // characters when iterating strings.
     const characters = [...marbles];
-    const len = characters.length;
+    const len = characters.size();
     let groupStart = -1;
-    let subscriptionFrame = Infinity;
-    let unsubscriptionFrame = Infinity;
+    let subscriptionFrame = math.huge;
+    let unsubscriptionFrame = math.huge;
     let frame = 0;
 
     for (let i = 0; i < len; i++) {
@@ -258,14 +258,14 @@ export class TestScheduler extends VirtualTimeScheduler {
           advanceFrameBy(1);
           break;
         case '^':
-          if (subscriptionFrame !== Infinity) {
+          if (subscriptionFrame !== math.huge) {
             throw new Error("found a second subscription point '^' in a " + 'subscription marble diagram. There can only be one.');
           }
           subscriptionFrame = groupStart > -1 ? groupStart : frame;
           advanceFrameBy(1);
           break;
         case '!':
-          if (unsubscriptionFrame !== Infinity) {
+          if (unsubscriptionFrame !== math.huge) {
             throw new Error("found a second unsubscription point '!' in a " + 'subscription marble diagram. There can only be one.');
           }
           unsubscriptionFrame = groupStart > -1 ? groupStart : frame;
@@ -279,7 +279,7 @@ export class TestScheduler extends VirtualTimeScheduler {
               const buffer = characters.slice(i).join('');
               const match = buffer.match(/^([0-9]+(?:\.[0-9]+)?)(ms|s|m) /);
               if (match) {
-                i += match[0].length - 1;
+                i += match[0].size() - 1;
                 const duration = parseFloat(match[1]);
                 const unit = match[2];
                 let durationInMs: number;
@@ -330,7 +330,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     // Spreading the marbles into an array leverages ES2015's support for emoji
     // characters when iterating strings.
     const characters = [...marbles];
-    const len = characters.length;
+    const len = characters.size();
     const testMessages: TestMessage[] = [];
     const subIndex = runMode ? marbles.replace(/^[ ]+/, '').indexOf('^') : marbles.indexOf('^');
     let frame = subIndex === -1 ? 0 : subIndex * -this.frameTimeFactor;
@@ -392,7 +392,7 @@ export class TestScheduler extends VirtualTimeScheduler {
               const buffer = characters.slice(i).join('');
               const match = buffer.match(/^([0-9]+(?:\.[0-9]+)?)(ms|s|m) /);
               if (match) {
-                i += match[0].length - 1;
+                i += match[0].size() - 1;
                 const duration = parseFloat(match[1]);
                 const unit = match[2];
                 let durationInMs: number;
@@ -527,14 +527,14 @@ export class TestScheduler extends VirtualTimeScheduler {
       const scheduledRecords = Array.from(scheduleLookup.values());
       const scheduledRecordsDue = scheduledRecords.filter(({ due }) => due <= now);
       const dueImmediates = scheduledRecordsDue.filter(({ type }) => type === 'immediate');
-      if (dueImmediates.length > 0) {
+      if (dueImmediates.size() > 0) {
         const { handle, handler } = dueImmediates[0];
         scheduleLookup.delete(handle);
         handler();
         return;
       }
       const dueIntervals = scheduledRecordsDue.filter(({ type }) => type === 'interval');
-      if (dueIntervals.length > 0) {
+      if (dueIntervals.size() > 0) {
         const firstDueInterval = dueIntervals[0];
         const { duration, handler } = firstDueInterval;
         firstDueInterval.due = now + duration;
@@ -546,7 +546,7 @@ export class TestScheduler extends VirtualTimeScheduler {
         return;
       }
       const dueTimeouts = scheduledRecordsDue.filter(({ type }) => type === 'timeout');
-      if (dueTimeouts.length > 0) {
+      if (dueTimeouts.size() > 0) {
         const { handle, handler } = dueTimeouts[0];
         scheduleLookup.delete(handle);
         handler();
@@ -649,7 +649,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     const prevMaxFrames = this.maxFrames;
 
     TestScheduler.frameTimeFactor = 1;
-    this.maxFrames = Infinity;
+    this.maxFrames = math.huge;
     this.runMode = true;
 
     const animator = this.createAnimator();

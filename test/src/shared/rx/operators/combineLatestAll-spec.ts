@@ -537,7 +537,7 @@ describe('combineLatestAll operator', () => {
           expect(vals).to.deep.equal(expected.shift());
         },
         complete: () => {
-          expect(expected.length).to.equal(0);
+          expect(expected.size()).to.equal(0);
           done();
         },
       });
@@ -563,7 +563,7 @@ describe('combineLatestAll operator', () => {
           expect(vals).to.deep.equal(r.shift());
         },
         complete: () => {
-          expect(r.length).to.equal(0);
+          expect(r.size()).to.equal(0);
           done();
         },
       });

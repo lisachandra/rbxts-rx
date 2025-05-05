@@ -44,7 +44,7 @@ export function mergeInternals<T, R>(
     // If the outer has completed, and nothing is left in the buffer,
     // and we don't have any active inner subscriptions, then we can
     // Emit the state and complete.
-    if (isComplete && !buffer.length && !active) {
+    if (isComplete && !buffer.size() && !active) {
       subscriber.complete();
     }
   };
@@ -110,7 +110,7 @@ export function mergeInternals<T, R>(
               // Note that this call will increment `active` ahead of the
               // next conditional, if there were any more inner subscriptions
               // to start.
-              while (buffer.length && active < concurrent) {
+              while (buffer.size() && active < concurrent) {
                 const bufferedValue = buffer.shift()!;
                 // Particularly for `expand`, we need to check to see if a scheduler was provided
                 // for when we want to start our inner subscription. Otherwise, we just start

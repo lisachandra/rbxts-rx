@@ -11,10 +11,6 @@ export class BehaviorSubject<T> extends Subject<T> {
     super();
   }
 
-  get value(): T {
-    return this.getValue();
-  }
-
   /** @internal */
   protected _subscribe(subscriber: Subscriber<T>): Subscription {
     const subscription = super._subscribe(subscriber);

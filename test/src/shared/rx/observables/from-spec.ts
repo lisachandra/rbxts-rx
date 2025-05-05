@@ -196,7 +196,7 @@ describe('from', () => {
       const clone = [...values];
       return {
         next: () => ({
-          done: clone.length <= 0,
+          done: clone.size() <= 0,
           value: clone.shift(),
         }),
       };
@@ -236,7 +236,7 @@ describe('from', () => {
           return {
             next() {
               const index = i++;
-              if (index < values.length) {
+              if (index < values.size()) {
                 return Promise.resolve({ done: false, value: values[index] });
               } else {
                 return Promise.resolve({ done: true });
@@ -369,10 +369,10 @@ describe('from', () => {
 
     const readableStream = new ReadableStream({
       pull(controller) {
-        if (input.length > 0) {
+        if (input.size() > 0) {
           controller.enqueue(input.shift());
 
-          if (input.length === 0) {
+          if (input.size() === 0) {
             controller.close();
           }
         }
@@ -398,10 +398,10 @@ describe('from', () => {
 
     const readableStream = new ReadableStream({
       pull(controller) {
-        if (input.length > 0) {
+        if (input.size() > 0) {
           controller.enqueue(input.shift());
 
-          if (input.length === 0) {
+          if (input.size() === 0) {
             controller.close();
           }
         }

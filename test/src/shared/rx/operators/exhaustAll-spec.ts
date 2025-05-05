@@ -244,7 +244,7 @@ describe('exhaust', () => {
           expect(x).to.equal(expected.shift());
         },
         complete: () => {
-          expect(expected.length).to.equal(0);
+          expect(expected.size()).to.equal(0);
           done();
         },
       });

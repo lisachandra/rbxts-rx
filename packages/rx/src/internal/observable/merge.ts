@@ -87,12 +87,12 @@ export function merge<A extends readonly unknown[]>(
  */
 export function merge(...args: (ObservableInput<unknown> | number | SchedulerLike)[]): Observable<unknown> {
   const scheduler = popScheduler(args);
-  const concurrent = popNumber(args, Infinity);
+  const concurrent = popNumber(args, math.huge);
   const sources = args as ObservableInput<unknown>[];
-  return !sources.length
+  return !sources.size()
     ? // No source provided
       EMPTY
-    : sources.length === 1
+    : sources.size() === 1
     ? // One source? Just return it.
       innerFrom(sources[0])
     : // Merge all sources

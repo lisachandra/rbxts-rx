@@ -81,7 +81,7 @@ export function mergeMap<T, R, O extends ObservableInput<any>>(
 export function mergeMap<T, R, O extends ObservableInput<any>>(
   project: (value: T, index: number) => O,
   resultSelector?: ((outerValue: T, innerValue: ObservedValueOf<O>, outerIndex: number, innerIndex: number) => R) | number,
-  concurrent: number = Infinity
+  concurrent: number = math.huge
 ): OperatorFunction<T, ObservedValueOf<O> | R> {
   if (isFunction(resultSelector)) {
     // DEPRECATED PATH

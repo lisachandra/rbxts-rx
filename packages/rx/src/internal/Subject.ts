@@ -61,7 +61,7 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
       this._throwIfClosed();
       if (!this.isStopped) {
         if (!this.currentObservers) {
-          this.currentObservers = Array.from(this.observers);
+          this.currentObservers = table.clone(this.observers);
         }
         for (const observer of this.currentObservers) {
           observer.next(value);
@@ -77,7 +77,7 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
         this.hasError = this.isStopped = true;
         this.thrownError = err;
         const { observers } = this;
-        while (observers.length) {
+        while (observers.size()) {
           observers.shift()!.error(err);
         }
       }
@@ -90,7 +90,7 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
       if (!this.isStopped) {
         this.isStopped = true;
         const { observers } = this;
-        while (observers.length) {
+        while (observers.size()) {
           observers.shift()!.complete();
         }
       }
@@ -102,8 +102,8 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
     this.observers = this.currentObservers = null!;
   }
 
-  get observed() {
-    return this.observers?.length > 0;
+  getObserved() {
+    return this.observers?.size() > 0;
   }
 
   /** @internal */

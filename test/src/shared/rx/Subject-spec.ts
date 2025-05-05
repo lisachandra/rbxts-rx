@@ -71,7 +71,7 @@ describe('Subject', () => {
       }, complete: done }
     );
 
-    expect(subject.observers.length).to.equal(2);
+    expect(subject.observers.size()).to.equal(2);
     subject.next('foo');
     subject.next('bar');
     subject.complete();
@@ -385,11 +385,11 @@ describe('Subject', () => {
       //noop
     });
 
-    expect(subject.observers.length).to.equal(2);
+    expect(subject.observers.size()).to.equal(2);
     sub1.unsubscribe();
-    expect(subject.observers.length).to.equal(1);
+    expect(subject.observers.size()).to.equal(1);
     sub2.unsubscribe();
-    expect(subject.observers.length).to.equal(0);
+    expect(subject.observers.size()).to.equal(0);
     done();
   });
 
@@ -667,7 +667,7 @@ describe('Subject', () => {
         expect(err.message).to.equal('Boom!');
         done();
       };
-      
+
       const source = new Subject<number>();
       source.subscribe();
       source.subscribe(() => {
@@ -759,7 +759,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
     }).to.throw(Error, 'lol');
   });
 
-  
+
   it('should throw an error when notifying an error with a catchError that errors synchronously', () => {
     const subject = new Subject<string>();
     subject.pipe(catchError(() => {
@@ -821,7 +821,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
     const subject = new Subject();
 
     subject.subscribe();
-    
+
     expect(() => {
       subject.error(new Error('one'));
     }).to.throw(Error, 'one');
@@ -835,7 +835,7 @@ describe('useDeprecatedSynchronousErrorHandling', () => {
     const subject = new Subject();
 
     subject.pipe(mergeMap(x => [x])).subscribe();
-    
+
     expect(() => {
       subject.error(new Error('one'));
     }).to.throw(Error, 'one');

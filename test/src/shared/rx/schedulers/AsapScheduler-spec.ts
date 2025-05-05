@@ -160,10 +160,10 @@ describe('Scheduler.asap', () => {
     const action1 = asap.schedule(() => { asapExec1 = true; });
     const action2 = asap.schedule(() => { asapExec2 = true; });
     expect(asap._scheduled).to.exist;
-    expect(asap.actions.length).to.equal(2);
+    expect(asap.actions.size()).to.equal(2);
     action1.unsubscribe();
     action2.unsubscribe();
-    expect(asap.actions.length).to.equal(0);
+    expect(asap.actions.size()).to.equal(0);
     expect(asap._scheduled).to.equal(undefined);
     asap.schedule(() => {
       expect(asapExec1).to.equal(false);
@@ -277,16 +277,16 @@ describe('Scheduler.asap', () => {
     let c: Subscription;
 
     a = asapScheduler.schedule(() => {
-      expect(asapScheduler.actions).to.have.length(1);
+      expect(asapScheduler.actions).to.have.size()(1);
       c = asapScheduler.schedule(() => {
         done(new Error('Unexpected execution of c'));
       });
-      expect(asapScheduler.actions).to.have.length(2);
+      expect(asapScheduler.actions).to.have.size()(2);
       // What we're testing here is that the unsubscription of action c effects
       // the cancellation of the microtask in a scenario in which the actions
       // queue is not empty - it contains action b.
       c.unsubscribe();
-      expect(asapScheduler.actions).to.have.length(1);
+      expect(asapScheduler.actions).to.have.size()(1);
       expect(clearImmediateStub).to.have.callCount(1);
     });
     b = asapScheduler.schedule(() => {

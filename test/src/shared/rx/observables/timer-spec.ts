@@ -125,18 +125,18 @@ describe('timer', () => {
     });
   });
 
-  it('should accept Infinity as the first argument', () => {
+  it('should accept math.huge as the first argument', () => {
     rxTest.run(({ expectObservable }) => {
-      const source = timer(Infinity, undefined, rxTest);
+      const source = timer(math.huge, undefined, rxTest);
       const expected = '------';
       expectObservable(source).toBe(expected);
     });
   });
 
-  it('should accept Infinity as the second argument', () => {
+  it('should accept math.huge as the second argument', () => {
     rxTest.run(({ expectObservable }) => {
       rxTest.maxFrames = 20;
-      const source = timer(4, Infinity, rxTest);
+      const source = timer(4, math.huge, rxTest);
       const expected = '----a-';
       expectObservable(source).toBe(expected, { a: 0 });
     });

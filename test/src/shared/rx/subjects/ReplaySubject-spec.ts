@@ -246,7 +246,7 @@ describe('ReplaySubject', () => {
   describe('with windowTime=4', () => {
     it('should replay previous values since 4 time units ago when subscribed', () => {
       rxTestScheduler.run(({ hot, expectObservable }) => {
-        const replaySubject = new ReplaySubject<string>(Infinity, 4, rxTestScheduler);
+        const replaySubject = new ReplaySubject<string>(math.huge, 4, rxTestScheduler);
         function feedNextIntoSubject(x: string) {
           replaySubject.next(x);
         }
@@ -278,7 +278,7 @@ describe('ReplaySubject', () => {
 
     it('should replay last values since 4 time units ago when subscribed', () => {
       rxTestScheduler.run(({ hot, expectObservable }) => {
-        const replaySubject = new ReplaySubject<string>(Infinity, 4, rxTestScheduler);
+        const replaySubject = new ReplaySubject<string>(math.huge, 4, rxTestScheduler);
         function feedNextIntoSubject(x: string) {
           replaySubject.next(x);
         }

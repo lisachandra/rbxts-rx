@@ -59,7 +59,7 @@ export function takeLast<T>(count: number): MonoTypeOperatorFunction<T> {
               buffer.push(value);
               // If our buffer is now larger than the number of values we
               // want to take, we remove the oldest value from the buffer.
-              count < buffer.length && buffer.shift();
+              count < buffer.size() && buffer.shift();
             },
             () => {
               // The source completed, we now know what are last values

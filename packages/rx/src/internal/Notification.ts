@@ -4,6 +4,7 @@ import { EMPTY } from './observable/empty';
 import { of } from './observable/of';
 import { throwError } from './observable/throwError';
 import { isFunction } from './util/isFunction';
+import { Error } from '@rbxts/luau-polyfill';
 
 // TODO: When this enum is removed, replace it with a type alias. See #4556.
 /**
@@ -61,7 +62,11 @@ export class Notification<T> {
    * @deprecated Internal implementation detail. Use {@link Notification#createComplete createComplete} instead.
    */
   constructor(kind: 'C');
-  constructor(public readonly kind: 'N' | 'E' | 'C', public readonly value?: T, public readonly error?: any) {
+  constructor(
+    public readonly kind: 'N' | 'E' | 'C',
+    public readonly value?: T,
+    public readonly error?: any
+  ) {
     this.hasValue = kind === 'N';
   }
 
@@ -162,20 +167,20 @@ export class Notification<T> {
         ? // Next kind. Return an observable of that value.
           of(value!)
         : //
-        kind === 'E'
-        ? // Error kind. Return an observable that emits the error.
-          throwError(() => error)
-        : //
-        kind === 'C'
-        ? // Completion kind. Kind is "C", return an observable that just completes.
-          EMPTY
-        : // Unknown kind, return falsy, so we error below.
-          0;
+          kind === 'E'
+          ? // Error kind. Return an observable that emits the error.
+            throwError(() => error)
+          : //
+            kind === 'C'
+            ? // Completion kind. Kind is "C", return an observable that just completes.
+              EMPTY
+            : // Unknown kind, return falsy, so we error below.
+              0;
     if (!result) {
       // TODO: consider removing this check. The only way to cause this would be to
       // use the Notification constructor directly in a way that is not type-safe.
       // and direct use of the Notification constructor is deprecated.
-      throw new TypeError(`Unexpected notification kind ${kind}`);
+      throw new Error(`Unexpected notification kind ${kind}`);
     }
     return result;
   }
@@ -231,8 +236,8 @@ export class Notification<T> {
  */
 export function observeNotification<T>(notification: ObservableNotification<T>, observer: PartialObserver<T>) {
   const { kind, value, error } = notification as any;
-  if (typeof kind !== 'string') {
-    throw new TypeError('Invalid notification, missing "kind"');
+  if (!typeIs(kind, 'string')) {
+    throw new Error('Invalid notification, missing "kind"');
   }
-  kind === 'N' ? observer.next?.(value!) : kind === 'E' ? observer.error?.(error) : observer.complete?.();
+  kind === 'N' ? observer.next?.(value) : kind === 'E' ? observer.error?.(error) : observer.complete?.();
 }

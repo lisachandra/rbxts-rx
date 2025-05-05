@@ -426,7 +426,7 @@ describe('mergeMapTo', () => {
         expect(x).to.equal(expected.shift());
       },
       complete: () => {
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         completed = true;
       },
     });
@@ -445,7 +445,7 @@ describe('mergeMapTo', () => {
         expect(x).to.equal(expected.shift());
       },
       complete: () => {
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         completed = true;
       },
     });

@@ -18,7 +18,7 @@ if (global && !(typeof window !== 'undefined')) {
 /**
  * mocha creates own global context per each test suite, simple patching to global won't deliver its context into test cases.
  * this custom interface is just mimic of existing one amending test scheduler behavior previously test-helper does via global patching.
- * 
+ *
  * @deprecated This ui is no longer actively used. Will be removed after migrating remaining tests uses this.
  */
 module.exports = function (suite: any) {
@@ -134,7 +134,7 @@ module.exports = function (suite: any) {
       context.rxTestScheduler = null;
       let modified = fn;
 
-      if (fn && fn.length === 0) {
+      if (fn && fn.size() === 0) {
         modified = function () {
           context.rxTestScheduler = new TestScheduler(observableMatcher);
 

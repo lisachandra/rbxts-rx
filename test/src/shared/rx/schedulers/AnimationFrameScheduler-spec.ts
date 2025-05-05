@@ -104,10 +104,10 @@ describe('Scheduler.animationFrame', () => {
     const action1 = animationFrame.schedule(() => { animationFrameExec1 = true; });
     const action2 = animationFrame.schedule(() => { animationFrameExec2 = true; });
     expect(animationFrame._scheduled).to.exist;
-    expect(animationFrame.actions.length).to.equal(2);
+    expect(animationFrame.actions.size()).to.equal(2);
     action1.unsubscribe();
     action2.unsubscribe();
-    expect(animationFrame.actions.length).to.equal(0);
+    expect(animationFrame.actions.size()).to.equal(0);
     expect(animationFrame._scheduled).to.equal(undefined);
     animationFrame.schedule(() => {
       expect(animationFrameExec1).to.equal(false);
@@ -267,16 +267,16 @@ describe('Scheduler.animationFrame', () => {
     let c: Subscription;
 
     a = animationFrameScheduler.schedule(() => {
-      expect(animationFrameScheduler.actions).to.have.length(1);
+      expect(animationFrameScheduler.actions).to.have.size()(1);
       c = animationFrameScheduler.schedule(() => {
         done(new Error('Unexpected execution of c'));
       });
-      expect(animationFrameScheduler.actions).to.have.length(2);
+      expect(animationFrameScheduler.actions).to.have.size()(2);
       // What we're testing here is that the unsubscription of action c effects
       // the cancellation of the animation frame in a scenario in which the
       // actions queue is not empty - it contains action b.
       c.unsubscribe();
-      expect(animationFrameScheduler.actions).to.have.length(1);
+      expect(animationFrameScheduler.actions).to.have.size()(1);
       expect(cancelAnimationFrameStub).to.have.callCount(1);
     });
     b = animationFrameScheduler.schedule(() => {

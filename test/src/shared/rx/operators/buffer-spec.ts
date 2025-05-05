@@ -337,7 +337,7 @@ describe('Observable.prototype.buffer', () => {
       },
       error: () => done(new Error('should not be called')),
       complete: () => {
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         done();
       },
     });

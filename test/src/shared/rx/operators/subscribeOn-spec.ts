@@ -110,12 +110,12 @@ describe('subscribeOn', () => {
     });
   });
 
-  it('should properly support a delayTime of Infinity', () => {
+  it('should properly support a delayTime of math.huge', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const e1 = hot('  --a--b--|');
       const expected = '---------';
 
-      const result = e1.pipe(subscribeOn(testScheduler, Infinity));
+      const result = e1.pipe(subscribeOn(testScheduler, math.huge));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe([]);

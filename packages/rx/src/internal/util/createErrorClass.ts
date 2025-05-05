@@ -1,3 +1,5 @@
+import { Error, Object } from "@rbxts/luau-polyfill";
+
 /**
  * Used to create Error subclasses until the community moves away from ES5.
  *
@@ -9,12 +11,18 @@
  */
 export function createErrorClass<T>(createImpl: (_super: any) => any): T {
   const _super = (instance: any) => {
-    Error.call(instance);
-    instance.stack = new Error().stack;
+    const err = new Error()
+    Object.assign(instance, err)
+    setmetatable(instance, Error as never)
   };
 
   const ctorFunc = createImpl(_super);
-  ctorFunc.prototype = Object.create(Error.prototype);
-  ctorFunc.prototype.constructor = ctorFunc;
-  return ctorFunc;
+
+  class ErrorSubclass {
+    constructor(...args: any[]) {
+      ctorFunc(this, ...args)
+    }
+  }
+
+  return ErrorSubclass as T;
 }

@@ -81,7 +81,7 @@ export function retry<T>(config: RetryConfig): MonoTypeOperatorFunction<T>;
  * @return A function that returns an Observable that will resubscribe to the
  * source stream when the source stream errors, at most `count` times.
  */
-export function retry<T>(configOrCount: number | RetryConfig = Infinity): MonoTypeOperatorFunction<T> {
+export function retry<T>(configOrCount: number | RetryConfig = math.huge): MonoTypeOperatorFunction<T> {
   let config: RetryConfig;
   if (configOrCount && typeof configOrCount === 'object') {
     config = configOrCount;
@@ -90,7 +90,7 @@ export function retry<T>(configOrCount: number | RetryConfig = Infinity): MonoTy
       count: configOrCount as number,
     };
   }
-  const { count = Infinity, delay, resetOnSuccess: resetOnSuccess = false } = config;
+  const { count = math.huge, delay, resetOnSuccess: resetOnSuccess = false } = config;
 
   return count <= 0
     ? identity

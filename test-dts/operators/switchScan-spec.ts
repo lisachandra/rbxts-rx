@@ -18,7 +18,7 @@ it('should support a projector that takes an index', () => {
 });
 
 it('should support projecting to union types', () => {
-  const o = of(Math.random()).pipe(switchScan(n => n > 0.5 ? of(123) : of('test'), 0)); // $ExpectType Observable<string | number>
+  const o = of(math.random()).pipe(switchScan(n => n > 0.5 ? of(123) : of('test'), 0)); // $ExpectType Observable<string | number>
 });
 
 it('should use the inferred accumulator return type over the seed type', () => {

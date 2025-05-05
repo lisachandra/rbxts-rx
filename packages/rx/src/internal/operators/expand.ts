@@ -72,10 +72,10 @@ export function expand<T, O extends ObservableInput<unknown>>(
  */
 export function expand<T, O extends ObservableInput<unknown>>(
   project: (value: T, index: number) => O,
-  concurrent = Infinity,
+  concurrent = math.huge,
   scheduler?: SchedulerLike
 ): OperatorFunction<T, ObservedValueOf<O>> {
-  concurrent = (concurrent || 0) < 1 ? Infinity : concurrent;
+  concurrent = (concurrent || 0) < 1 ? math.huge : concurrent;
   return operate((source, subscriber) =>
     mergeInternals(
       // General merge params

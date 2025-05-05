@@ -21,7 +21,7 @@ it('should accept an Observable', () => {
 });
 
 it('should accept union types', () => {
-  const o = from(Math.random() > 0.5 ? of(123) : of('test')); // $ExpectType Observable<string | number>
+  const o = from(math.random() > 0.5 ? of(123) : of('test')); // $ExpectType Observable<string | number>
 });
 
 it('should accept Observable<Observable<number>>', () => {

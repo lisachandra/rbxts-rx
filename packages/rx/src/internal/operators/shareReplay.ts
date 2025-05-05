@@ -160,9 +160,9 @@ export function shareReplay<T>(
   let bufferSize: number;
   let refCount = false;
   if (configOrBufferSize && typeof configOrBufferSize === 'object') {
-    ({ bufferSize = Infinity, windowTime = Infinity, refCount = false, scheduler } = configOrBufferSize);
+    ({ bufferSize = math.huge, windowTime = math.huge, refCount = false, scheduler } = configOrBufferSize);
   } else {
-    bufferSize = (configOrBufferSize ?? Infinity) as number;
+    bufferSize = (configOrBufferSize ?? math.huge) as number;
   }
   return share<T>({
     connector: () => new ReplaySubject(bufferSize, windowTime, scheduler),

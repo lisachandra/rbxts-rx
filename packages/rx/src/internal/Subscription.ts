@@ -1,7 +1,8 @@
 import { isFunction } from './util/isFunction';
 import { UnsubscriptionError } from './util/UnsubscriptionError';
-import { SubscriptionLike, TeardownLogic, Unsubscribable } from './types';
+import type { SubscriptionLike, TeardownLogic, Unsubscribable } from './types';
 import { arrRemove } from './util/arrRemove';
+import { Array } from '@rbxts/luau-polyfill';
 
 /**
  * Represents a disposable resource, such as the execution of an Observable. A
@@ -68,7 +69,7 @@ export class Subscription implements SubscriptionLike {
         try {
           initialFinalizer();
         } catch (e) {
-          errors = e instanceof UnsubscriptionError ? e.errors : [e];
+          errors = e instanceof UnsubscriptionError ? (e as UnsubscriptionError).errors : [e];
         }
       }
 
@@ -81,7 +82,7 @@ export class Subscription implements SubscriptionLike {
           } catch (err) {
             errors = errors ?? [];
             if (err instanceof UnsubscriptionError) {
-              errors = [...errors, ...err.errors];
+              errors = [...errors, ...(err as UnsubscriptionError).errors];
             } else {
               errors.push(err);
             }

@@ -21,7 +21,7 @@ export function merge<T, A extends readonly unknown[]>(
 
 export function merge<T>(...args: unknown[]): OperatorFunction<T, unknown> {
   const scheduler = popScheduler(args);
-  const concurrent = popNumber(args, Infinity);
+  const concurrent = popNumber(args, math.huge);
 
   return operate((source, subscriber) => {
     mergeAll(concurrent)(from([source, ...(args as ObservableInput<T>[])], scheduler)).subscribe(subscriber);

@@ -32,7 +32,7 @@ import { identity } from '../util/identity';
 export function raceWith<T, A extends readonly unknown[]>(
   ...otherSources: [...ObservableInputTuple<A>]
 ): OperatorFunction<T, T | A[number]> {
-  return !otherSources.length
+  return !otherSources.size()
     ? identity
     : operate((source, subscriber) => {
         raceInit<T | A[number]>([source, ...otherSources])(subscriber);

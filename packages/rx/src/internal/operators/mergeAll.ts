@@ -61,6 +61,6 @@ import { OperatorFunction, ObservableInput, ObservedValueOf } from '../types';
  * @return A function that returns an Observable that emits values coming from
  * all the inner Observables emitted by the source Observable.
  */
-export function mergeAll<O extends ObservableInput<any>>(concurrent: number = Infinity): OperatorFunction<O, ObservedValueOf<O>> {
+export function mergeAll<O extends ObservableInput<any>>(concurrent: number = math.huge): OperatorFunction<O, ObservedValueOf<O>> {
   return mergeMap(identity, concurrent);
 }

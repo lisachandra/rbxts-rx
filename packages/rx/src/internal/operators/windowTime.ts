@@ -106,7 +106,7 @@ export function windowTime<T>(
 export function windowTime<T>(windowTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, Observable<T>> {
   const scheduler = popScheduler(otherArgs) ?? asyncScheduler;
   const windowCreationInterval = (otherArgs[0] as number) ?? null;
-  const maxWindowSize = (otherArgs[1] as number) || Infinity;
+  const maxWindowSize = (otherArgs[1] as number) || math.huge;
 
   return operate((source, subscriber) => {
     // The active windows, their related subscriptions, and removal functions.

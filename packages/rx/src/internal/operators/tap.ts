@@ -112,7 +112,7 @@ export function tap<T>(
  * ```ts
  * import { of, tap, map } from 'rxjs';
  *
- * of(Math.random()).pipe(
+ * of(math.random()).pipe(
  *   tap(console.log),
  *   map(n => n > 0.5 ? 'big' : 'small')
  * ).subscribe(console.log);
@@ -147,7 +147,7 @@ export function tap<T>(
  *
  * of(1, 2, 3).pipe(
  *   concatMap(n => interval(1000).pipe(
- *     take(Math.round(Math.random() * 10)),
+ *     take(math.round(math.random() * 10)),
  *     map(() => 'X'),
  *     tap({ complete: () => console.log(`Done with ${ n }`) })
  *   ))

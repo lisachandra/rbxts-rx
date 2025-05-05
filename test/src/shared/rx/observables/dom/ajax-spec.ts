@@ -1601,7 +1601,7 @@ class MockXMLHttpRequest extends MockXHREventTarget {
 
   static clearRequest(): void {
     MockXMLHttpRequest.noResponseProp = false;
-    MockXMLHttpRequest.requests.length = 0;
+    MockXMLHttpRequest.requests.size() = 0;
     MockXMLHttpRequest.recentRequest = null!;
   }
 

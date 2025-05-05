@@ -232,7 +232,7 @@ describe('debounceTime', () => {
     const subscription = NEVER.pipe(startWith(1), debounceTime(0, scheduler)).subscribe();
 
     expect(scheduler._scheduled).to.exist;
-    expect(scheduler.actions.length).to.equal(1);
+    expect(scheduler.actions.size()).to.equal(1);
 
     subscription.unsubscribe();
 

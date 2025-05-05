@@ -8,7 +8,7 @@ import { timer } from '../observable/timer';
 
 export interface RepeatConfig {
   /**
-   * The number of times to repeat the source. Defaults to `Infinity`.
+   * The number of times to repeat the source. Defaults to `math.huge`.
    */
   count?: number;
 
@@ -102,7 +102,7 @@ export interface RepeatConfig {
  *    // *Then* repeat forever, but with an exponential step-back
  *    // maxing out at 1 minute.
  *    repeat({
- *      delay: (count) => timer(Math.min(60000, 2 ^ count * 1000))
+ *      delay: (count) => timer(math.min(60000, 2 ^ count * 1000))
  *    })
  * )
  * ```
@@ -114,12 +114,12 @@ export interface RepeatConfig {
  * (a count of 0 will yield an empty Observable) or a {@link RepeatConfig} object.
  */
 export function repeat<T>(countOrConfig?: number | RepeatConfig): MonoTypeOperatorFunction<T> {
-  let count = Infinity;
+  let count = math.huge;
   let delay: RepeatConfig['delay'];
 
   if (countOrConfig != null) {
     if (typeof countOrConfig === 'object') {
-      ({ count = Infinity, delay } = countOrConfig);
+      ({ count = math.huge, delay } = countOrConfig);
     } else {
       count = countOrConfig;
     }

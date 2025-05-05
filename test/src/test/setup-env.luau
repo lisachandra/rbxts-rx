@@ -46,7 +46,7 @@ afterEach(function()
 			--[[
 			error(
 				table.concat({
-					`console.${method} was called unexpectedly ${calls.length} times without observing its calls with \`expect(console.${method}).toMatchMockCallsInlineSnapshot()\`.`,
+					`console.${method} was called unexpectedly ${calls.size()} times without observing its calls with \`expect(console.${method}).toMatchMockCallsInlineSnapshot()\`.`,
 					`You can check the observed calls above.`,
 				}, " ")
 			);

@@ -351,7 +351,7 @@ describe('delayWhen', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         done();
       },
     });
@@ -368,7 +368,7 @@ describe('delayWhen', () => {
       },
       error: (err: any) => {
         expect(err).to.be.an('error');
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         done();
       },
       complete: () => {

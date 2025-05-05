@@ -38,12 +38,12 @@ it('should support an undefined resultSelector', () => {
 });
 
 it('should support union types', () => {
-  const s = Math.random() > 0.5 ? of(123) : of('abc');
+  const s = math.random() > 0.5 ? of(123) : of('abc');
   const r = of(1, 2, 3).pipe(concatMapTo(s)); // $ExpectType Observable<string | number>
 });
 
 it('should support union-type projections with empty streams', () => {
-  const o = of(1, 2, 3).pipe(concatMapTo(Math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(concatMapTo(math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {

@@ -85,7 +85,7 @@ export function bindCallbackInternals(
               // of it as a single value, otherwise, if there's more than one, pass
               // them as an array. Note that if there are no arguments, `undefined`
               // will be emitted.
-              subject.next(1 < results.length ? results : results[0]);
+              subject.next(1 < results.size() ? results : results[0]);
               // Flip this flag, so we know we can complete it in the synchronous
               // case below.
               isComplete = true;

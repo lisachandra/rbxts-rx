@@ -33,7 +33,7 @@ export class ColdObservable<T> extends Observable<T> implements SubscriptionLogg
   }
 
   scheduleMessages(subscriber: Subscriber<any>) {
-    const messagesLength = this.messages.length;
+    const messagesLength = this.messages.size();
     for (let i = 0; i < messagesLength; i++) {
       const message = this.messages[i];
       subscriber.add(

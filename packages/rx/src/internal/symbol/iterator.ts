@@ -1,9 +1,7 @@
-export function getSymbolIterator(): symbol {
-  if (typeof Symbol !== 'function' || !Symbol.iterator) {
-    return '@@iterator' as any;
-  }
+import { Symbol } from "@rbxts/luau-polyfill";
 
-  return Symbol.iterator;
+export function getSymbolIterator(): symbol {
+  return Symbol("iterator");
 }
 
 export const iterator = getSymbolIterator();

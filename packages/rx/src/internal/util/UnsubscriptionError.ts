@@ -1,3 +1,4 @@
+import { Error } from '@rbxts/luau-polyfill';
 import { createErrorClass } from './createErrorClass';
 
 export interface UnsubscriptionError extends Error {
@@ -21,8 +22,8 @@ export const UnsubscriptionError: UnsubscriptionErrorCtor = createErrorClass(
     function UnsubscriptionErrorImpl(this: any, errors: (Error | string)[]) {
       _super(this);
       this.message = errors
-        ? `${errors.length} errors occurred during unsubscription:
-${errors.map((err, i) => `${i + 1}) ${err.toString()}`).join('\n  ')}`
+        ? `${errors.size()} errors occurred during unsubscription:
+${errors.map((err, i) => `${i + 1}) ${err}`).join('\n  ')}`
         : '';
       this.name = 'UnsubscriptionError';
       this.errors = errors;

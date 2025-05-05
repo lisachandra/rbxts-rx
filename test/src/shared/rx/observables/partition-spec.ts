@@ -14,7 +14,7 @@ describe('partition', () => {
   });
 
   function expectObservableArray(result: Observable<string>[], expected: string[]) {
-    for (let idx = 0; idx < result.length; idx++) {
+    for (let idx = 0; idx < result.size(); idx++) {
       rxTestScheduler.expectObservable(result[idx]).toBe(expected[idx]);
     }
   }
@@ -305,7 +305,7 @@ describe('partition', () => {
       }
       const result = partition(e1, predicate);
 
-      for (let idx = 0; idx < result.length; idx++) {
+      for (let idx = 0; idx < result.size(); idx++) {
         expectObservable(result[idx], unsub).toBe(expected[idx]);
       }
       expectSubscriptions(e1.subscriptions).toBe([e1subs, e1subs]);

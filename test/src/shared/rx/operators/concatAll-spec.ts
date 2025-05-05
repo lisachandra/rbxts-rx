@@ -117,7 +117,7 @@ describe('concatAll operator', () => {
         res.push(x);
       },
       error: (err) => {
-        expect(res.length).to.equal(1);
+        expect(res.size()).to.equal(1);
         expect(err).to.equal(1);
         done();
       },

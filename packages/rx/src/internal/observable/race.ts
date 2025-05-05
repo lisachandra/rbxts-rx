@@ -51,7 +51,7 @@ export function race<T extends readonly unknown[]>(...inputs: [...ObservableInpu
 export function race<T>(...sources: (ObservableInput<T> | ObservableInput<T>[])[]): Observable<any> {
   sources = argsOrArgArray(sources);
   // If only one source was passed, just return it. Otherwise return the race.
-  return sources.length === 1 ? innerFrom(sources[0] as ObservableInput<T>) : new Observable<T>(raceInit(sources as ObservableInput<T>[]));
+  return sources.size() === 1 ? innerFrom(sources[0] as ObservableInput<T>) : new Observable<T>(raceInit(sources as ObservableInput<T>[]));
 }
 
 /**
@@ -67,14 +67,14 @@ export function raceInit<T>(sources: ObservableInput<T>[]) {
     // Is is an array of all actively "racing" subscriptions, and it is `null` after the
     // race has been won. So, if we have racer that synchronously "wins", this loop will
     // stop before it subscribes to any more.
-    for (let i = 0; subscriptions && !subscriber.closed && i < sources.length; i++) {
+    for (let i = 0; subscriptions && !subscriber.closed && i < sources.size(); i++) {
       subscriptions.push(
         innerFrom(sources[i] as ObservableInput<T>).subscribe(
           createOperatorSubscriber(subscriber, (value) => {
             if (subscriptions) {
               // We're still racing, but we won! So unsubscribe
               // all other subscriptions that we have, except this one.
-              for (let s = 0; s < subscriptions.length; s++) {
+              for (let s = 0; s < subscriptions.size(); s++) {
                 s !== i && subscriptions[s].unsubscribe();
               }
               subscriptions = null!;

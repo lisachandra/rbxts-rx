@@ -31,7 +31,7 @@ import { innerFrom } from '../observable/innerFrom';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(
- *   windowWhen(() => interval(1000 + Math.random() * 4000)),
+ *   windowWhen(() => interval(1000 + math.random() * 4000)),
  *   map(win => win.pipe(take(2))), // take at most 2 emissions from each window
  *   mergeAll()                     // flatten the Observable-of-Observables
  * );

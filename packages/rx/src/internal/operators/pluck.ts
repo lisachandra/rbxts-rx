@@ -87,7 +87,7 @@ export function pluck<T>(...properties: string[]): OperatorFunction<T, unknown>;
  * @deprecated Use {@link map} and optional chaining: `pluck('foo', 'bar')` is `map(x => x?.foo?.bar)`. Will be removed in v8.
  */
 export function pluck<T, R>(...properties: Array<string | number | symbol>): OperatorFunction<T, R> {
-  const length = properties.length;
+  const length = properties.size();
   if (length === 0) {
     throw new Error('list of properties cannot be empty.');
   }

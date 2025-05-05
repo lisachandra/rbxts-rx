@@ -60,7 +60,7 @@ export function withLatestFrom<T, R>(...inputs: any[]): OperatorFunction<T, R | 
   const project = popResultSelector(inputs) as ((...args: any[]) => R) | undefined;
 
   return operate((source, subscriber) => {
-    const len = inputs.length;
+    const len = inputs.size();
     const otherValues = new Array(len);
     // An array of whether or not the other sources have emitted. Matched with them by index.
     // TODO: At somepoint, we should investigate the performance implications here, and look

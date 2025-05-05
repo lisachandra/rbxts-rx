@@ -7,7 +7,7 @@ export function scheduleArray<T>(input: ArrayLike<T>, scheduler: SchedulerLike) 
     let i = 0;
     // Start iterating over the array like on a schedule.
     return scheduler.schedule(function () {
-      if (i === input.length) {
+      if (i === input.size()) {
         // If we have hit the end of the array like in the
         // previous job, we can complete.
         subscriber.complete();

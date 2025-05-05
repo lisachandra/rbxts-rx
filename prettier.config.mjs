@@ -3,18 +3,23 @@
  * @see https://prettier.io/docs/configuration
  */
 const config = {
-	arrowParens: "avoid",
-	jsdocPreferCodeFences: true,
-	jsdocPrintWidth: 80,
-	plugins: ["prettier-plugin-jsdoc"],
-	printWidth: 100,
-	quoteProps: "consistent",
-	semi: true,
-	singleQuote: false,
-	tabWidth: 4,
-	trailingComma: "all",
-	tsdoc: true,
-	useTabs: true,
+	"trailingComma": "es5",
+	"singleQuote": true,
+	"printWidth": 140,
+	"overrides": [
+		{
+			"files": ["test/**/*.ts", "test-dtslint/**/*.ts"],
+			"options": {
+				"requirePragma": true
+			}
+		},
+		{
+			"files": ["test/operators/**/*.ts", "test/subjects/**/*.ts"],
+			"options": {
+				"requirePragma": false
+			}
+		}
+	]
 };
 
 export default config;

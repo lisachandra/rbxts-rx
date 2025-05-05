@@ -84,14 +84,14 @@ describe('interval', () => {
         done(e);
       },
       complete() {
-        expect(asapScheduler.actions.length).to.equal(0);
+        expect(asapScheduler.actions.size()).to.equal(0);
         expect(asapScheduler._scheduled).to.equal(undefined);
         sandbox.restore();
         done();
       },
     });
     let i = -1,
-      n = events.length;
+      n = events.size();
     while (++i < n) {
       fakeTimer.tick(period);
     }
@@ -112,14 +112,14 @@ describe('interval', () => {
         done(e);
       },
       complete() {
-        expect(queueScheduler.actions.length).to.equal(0);
+        expect(queueScheduler.actions.size()).to.equal(0);
         expect(queueScheduler._scheduled).to.equal(undefined);
         sandbox.restore();
         done();
       },
     });
     let i = -1,
-      n = events.length;
+      n = events.size();
     while (++i < n) {
       fakeTimer.tick(period);
     }
@@ -140,14 +140,14 @@ describe('interval', () => {
         done(e);
       },
       complete() {
-        expect(animationFrameScheduler.actions.length).to.equal(0);
+        expect(animationFrameScheduler.actions.size()).to.equal(0);
         expect(animationFrameScheduler._scheduled).to.equal(undefined);
         sandbox.restore();
         done();
       },
     });
     let i = -1,
-      n = events.length;
+      n = events.size();
     while (++i < n) {
       fakeTimer.tick(period);
     }

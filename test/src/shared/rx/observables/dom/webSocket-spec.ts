@@ -110,10 +110,10 @@ describe('webSocket', () => {
       subject.subscribe();
 
       socket = MockWebSocket.lastSocket;
-      expect(socket.sent.length).to.equal(0);
+      expect(socket.sent.size()).to.equal(0);
 
       socket.open();
-      expect(socket.sent.length).to.equal(expected.length);
+      expect(socket.sent.size()).to.equal(expected.size());
 
       subject.unsubscribe();
     });
@@ -463,10 +463,10 @@ describe('webSocket', () => {
       let socket = MockWebSocket.lastSocket;
       socket.open();
 
-      expect(closes.length).to.equal(0);
+      expect(closes.size()).to.equal(0);
 
       socket.triggerClose(expected[0]);
-      expect(closes.length).to.equal(1);
+      expect(closes.size()).to.equal(1);
 
       subject.subscribe({ error: function (err) {
         expect(err).to.equal(expected[1]);
@@ -476,7 +476,7 @@ describe('webSocket', () => {
       socket.open();
 
       socket.triggerClose(expected[1]);
-      expect(closes.length).to.equal(2);
+      expect(closes.size()).to.equal(2);
 
       expect(closes[0]).to.equal(expected[0]);
       expect(closes[1]).to.equal(expected[1]);
@@ -768,12 +768,12 @@ class MockWebSocket {
   static sockets: Array<MockWebSocket> = [];
   static get lastSocket(): MockWebSocket {
     const socket = MockWebSocket.sockets;
-    const length = socket.length;
+    const length = socket.size();
     return length > 0 ? socket[length - 1] : undefined!;
   }
 
   static clearSockets(): void {
-    MockWebSocket.sockets.length = 0;
+    MockWebSocket.sockets.size() = 0;
   }
 
   sent: string[] = [];
@@ -793,7 +793,7 @@ class MockWebSocket {
 
   get lastMessageSent(): string {
     const sent = this.sent;
-    const length = sent.length;
+    const length = sent.size();
     return length > 0 ? sent[length - 1] : undefined!;
   }
 
@@ -833,7 +833,7 @@ class MockWebSocket {
 
     const lookup = this.handlers[name];
     if (lookup) {
-      for (let i = 0; i < lookup.length; i++) {
+      for (let i = 0; i < lookup.size(); i++) {
         lookup[i](e);
       }
     }

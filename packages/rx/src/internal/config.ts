@@ -1,5 +1,5 @@
-import { Subscriber } from './Subscriber';
-import { ObservableNotification } from './types';
+import type { Subscriber } from './Subscriber';
+import type { ObservableNotification } from './types';
 
 /**
  * The {@link GlobalConfig} object for RxJS. It is used to configure things
@@ -50,7 +50,7 @@ export interface GlobalConfig {
    * Promise constructor. If you need a Promise implementation other than native promises,
    * please polyfill/patch Promise as you see appropriate. Will be removed in v8.
    */
-  Promise?: PromiseConstructorLike;
+  Promise?: PromiseConstructor;
 
   /**
    * If true, turns on synchronous error rethrowing, which is a deprecated behavior

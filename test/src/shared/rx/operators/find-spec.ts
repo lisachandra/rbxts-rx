@@ -249,7 +249,7 @@ describe('find', () => {
       // This type guard will narrow a `string | number` to a string in the examples below
       const isString = (x: string | number): x is string => typeof x === 'string';
 
-      xs.pipe(find(isString)).subscribe((s) => s!.length); // s is string
+      xs.pipe(find(isString)).subscribe((s) => s!.size()); // s is string
 
       // In contrast, this type of regular boolean predicate still maintains the original type
       xs.pipe(find((x) => typeof x === 'number')).subscribe((x) => x); // x is still string | number

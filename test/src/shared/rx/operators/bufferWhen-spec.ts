@@ -82,7 +82,7 @@ describe('bufferWhen operator', () => {
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(subs);
-      for (let j = 0; j < closings.length; j++) {
+      for (let j = 0; j < closings.size(); j++) {
         expectSubscriptions(closings[j].obs.subscriptions).toBe(closings[j].sub);
       }
     });
@@ -376,7 +376,7 @@ describe('bufferWhen operator', () => {
       .subscribe({
         next: (val: any) => {
           expect(Array.isArray(val)).to.be.true;
-          expect(val.length).to.equal(0);
+          expect(val.size()).to.equal(0);
         },
         error: (err: any) => {
           done(new Error('should not be called'));

@@ -55,7 +55,7 @@ export function zip(...args: unknown[]): Observable<unknown> {
 
   const sources = argsOrArgArray(args) as Observable<unknown>[];
 
-  return sources.length
+  return sources.size()
     ? new Observable<unknown[]>((subscriber) => {
         // A collection of buffers of values from each source.
         // Keyed by the same index with which the sources were passed in.
@@ -74,7 +74,7 @@ export function zip(...args: unknown[]): Observable<unknown> {
         // Loop over our sources and subscribe to each one. The index `i` is
         // especially important here, because we use it in closures below to
         // access the related buffers and completion properties
-        for (let sourceIndex = 0; !subscriber.closed && sourceIndex < sources.length; sourceIndex++) {
+        for (let sourceIndex = 0; !subscriber.closed && sourceIndex < sources.size(); sourceIndex++) {
           innerFrom(sources[sourceIndex]).subscribe(
             createOperatorSubscriber(
               subscriber,
@@ -83,14 +83,14 @@ export function zip(...args: unknown[]): Observable<unknown> {
                 // if every buffer has at least one value in it, then we
                 // can shift out the oldest value from each buffer and emit
                 // them as an array.
-                if (buffers.every((buffer) => buffer.length)) {
+                if (buffers.every((buffer) => buffer.size())) {
                   const result: any = buffers.map((buffer) => buffer.shift()!);
                   // Emit the array. If theres' a result selector, use that.
                   subscriber.next(resultSelector ? resultSelector(...result) : result);
                   // If any one of the sources is both complete and has an empty buffer
                   // then we complete the result. This is because we cannot possibly have
                   // any more values to zip together.
-                  if (buffers.some((buffer, i) => !buffer.length && completed[i])) {
+                  if (buffers.some((buffer, i) => !buffer.size() && completed[i])) {
                     subscriber.complete();
                   }
                 }
@@ -102,7 +102,7 @@ export function zip(...args: unknown[]): Observable<unknown> {
                 // But, if this complete source has nothing in its buffer, then we
                 // can complete the result, because we can't possibly have any more
                 // values from this to zip together with the other values.
-                !buffers[sourceIndex].length && subscriber.complete();
+                !buffers[sourceIndex].size() && subscriber.complete();
               }
             )
           );

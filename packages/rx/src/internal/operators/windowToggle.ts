@@ -61,7 +61,7 @@ export function windowToggle<T, O>(
     const windows: Subject<T>[] = [];
 
     const handleError = (err: any) => {
-      while (0 < windows.length) {
+      while (0 < windows.size()) {
         windows.shift()!.error(err);
       }
       subscriber.error(err);
@@ -110,7 +110,7 @@ export function windowToggle<T, O>(
         },
         () => {
           // Complete all of our windows before we complete.
-          while (0 < windows.length) {
+          while (0 < windows.size()) {
             windows.shift()!.complete();
           }
           subscriber.complete();
@@ -122,7 +122,7 @@ export function windowToggle<T, O>(
           // to a window *after* the outer subscription has been unsubscribed,
           // they will get an error, instead of waiting forever to
           // see if a value arrives.
-          while (0 < windows.length) {
+          while (0 < windows.size()) {
             windows.shift()!.unsubscribe();
           }
         }

@@ -1,7 +1,7 @@
-import { Operator } from './Operator';
+import type { Operator } from './Operator';
 import { SafeSubscriber, Subscriber } from './Subscriber';
 import { isSubscription, Subscription } from './Subscription';
-import { TeardownLogic, OperatorFunction, Subscribable, Observer } from './types';
+import type { TeardownLogic, OperatorFunction, Subscribable, Observer } from './types';
 import { observable as Symbol_observable } from './symbol/observable';
 import { pipeFromArray } from './util/pipe';
 import { config } from './config';
@@ -216,13 +216,13 @@ export class Observable<T> implements Subscribable<T> {
             // operator chain to one of our lifted operators.
             operator.call(subscriber, source)
           : source
-          ? // If `source` has a value, but `operator` does not, something that
-            // had intimate knowledge of our API, like our `Subject`, must have
-            // set it. We're going to just call `_subscribe` directly.
-            this._subscribe(subscriber)
-          : // In all other cases, we're likely wrapping a user-provided initializer
-            // function, so we need to catch errors and handle them appropriately.
-            this._trySubscribe(subscriber)
+            ? // If `source` has a value, but `operator` does not, something that
+              // had intimate knowledge of our API, like our `Subject`, must have
+              // set it. We're going to just call `_subscribe` directly.
+              this._subscribe(subscriber)
+            : // In all other cases, we're likely wrapping a user-provided initializer
+              // function, so we need to catch errors and handle them appropriately.
+              this._trySubscribe(subscriber)
       );
     });
 
@@ -298,9 +298,9 @@ export class Observable<T> implements Subscribable<T> {
    * polyfill Promise, or you create an adapter to convert the returned native promise
    * to whatever promise implementation you wanted. Will be removed in v8.
    */
-  forEach(next: (value: T) => void, promiseCtor: PromiseConstructorLike): Promise<void>;
+  forEach(next: (value: T) => void, promiseCtor: PromiseConstructor): Promise<void>;
 
-  forEach(next: (value: T) => void, promiseCtor?: PromiseConstructorLike): Promise<void> {
+  forEach(next: (value: T) => void, promiseCtor?: PromiseConstructor): Promise<void> {
     promiseCtor = getPromiseCtor(promiseCtor);
 
     return new promiseCtor<void>((resolve, reject) => {
@@ -317,7 +317,7 @@ export class Observable<T> implements Subscribable<T> {
         complete: resolve,
       });
       this.subscribe(subscriber);
-    }) as Promise<void>;
+    });
   }
 
   /** @internal */
@@ -433,7 +433,7 @@ export class Observable<T> implements Subscribable<T> {
   /** @deprecated Replaced with {@link firstValueFrom} and {@link lastValueFrom}. Will be removed in v8. Details: https://rxjs.dev/deprecations/to-promise */
   toPromise(PromiseCtor: typeof Promise): Promise<T | undefined>;
   /** @deprecated Replaced with {@link firstValueFrom} and {@link lastValueFrom}. Will be removed in v8. Details: https://rxjs.dev/deprecations/to-promise */
-  toPromise(PromiseCtor: PromiseConstructorLike): Promise<T | undefined>;
+  toPromise(PromiseCtor: PromiseConstructor): Promise<T | undefined>;
   /* tslint:enable:max-line-length */
 
   /**
@@ -453,7 +453,7 @@ export class Observable<T> implements Subscribable<T> {
    * resolves with undefined.
    * @deprecated Replaced with {@link firstValueFrom} and {@link lastValueFrom}. Will be removed in v8. Details: https://rxjs.dev/deprecations/to-promise
    */
-  toPromise(promiseCtor?: PromiseConstructorLike): Promise<T | undefined> {
+  toPromise(promiseCtor?: PromiseConstructor): Promise<T | undefined> {
     promiseCtor = getPromiseCtor(promiseCtor);
 
     return new promiseCtor((resolve, reject) => {
@@ -463,7 +463,7 @@ export class Observable<T> implements Subscribable<T> {
         (err: any) => reject(err),
         () => resolve(value)
       );
-    }) as Promise<T | undefined>;
+    });
   }
 }
 
@@ -474,7 +474,7 @@ export class Observable<T> implements Subscribable<T> {
  * an error.
  * @param promiseCtor The optional promise constructor to passed by consuming code
  */
-function getPromiseCtor(promiseCtor: PromiseConstructorLike | undefined) {
+function getPromiseCtor(promiseCtor: PromiseConstructor | undefined) {
   return promiseCtor ?? config.Promise ?? Promise;
 }
 

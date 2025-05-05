@@ -2,7 +2,7 @@
 import tseslint from "typescript-eslint";
 import tsparser from "@typescript-eslint/parser"
 import eslint from "@eslint/js";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import eslintPluginPrettier from "eslint-plugin-prettier";
 import eslintPluginRoblox from "isentinel-eslint-plugin-roblox-ts";
 import prettierConfig from "./prettier.config.mjs";
 import * as eslintPluginImportX from "eslint-plugin-import-x"
@@ -30,15 +30,16 @@ export default tseslint.config(
 	},
 	eslint.configs.recommended,
 	...tseslint.configs.recommendedTypeChecked,
-	eslintPluginPrettierRecommended,
 	eslintPluginImportX.flatConfigs.recommended,
 	eslintPluginImportX.flatConfigs.typescript,
 	{
 		plugins: {
 			"roblox-ts": eslintPluginRoblox,
+			"prettier": eslintPluginPrettier,
 		},
 		rules: {
 			...eslintPluginRoblox.configs.recommended.rules,
+			"prettier/prettier": ["warn", prettierConfig],
 			"roblox-ts/lua-truthiness": "off",
 			"roblox-ts/no-null": "off",
 			"import-x/no-cycle": "error",
@@ -46,7 +47,7 @@ export default tseslint.config(
 	},
 	{
 		rules: {
-			"prettier/prettier": ["warn", prettierConfig],
+
 			"@typescript-eslint/no-empty-object-type": [
 				"error",
 				{
@@ -61,6 +62,7 @@ export default tseslint.config(
 			"@typescript-eslint/no-unsafe-member-access": "off",
 			"@typescript-eslint/no-unsafe-return": "off",
 			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/no-unused-expressions": "off",
 			/*
 			"@typescript-eslint/no-unused-vars": [
 				"error",
@@ -97,12 +99,6 @@ export default tseslint.config(
 			"@typescript-eslint/no-floating-promises": "off",
 			"@typescript-eslint/no-unnecessary-type-assertion": "off",
 			"no-empty-pattern": "off",
-		},
-	},
-	{
-		files: ["packages/event-target/**"],
-		rules: {
-			"@typescript-eslint/no-unsafe-enum-comparison": "off",
 		},
 	},
 );

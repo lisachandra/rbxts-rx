@@ -68,7 +68,7 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
     if (this.isStopped) {
       handleStoppedNotification(nextNotification(value), this);
     } else {
-      this._next(value!);
+      this._next(value);
     }
   }
 
@@ -134,12 +134,13 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
  * This bind is captured here because we want to be able to have
  * compatibility with monoid libraries that tend to use a method named
  * `bind`. In particular, a library called Monio requires this.
- */
+
 const _bind = Function.prototype.bind;
 
 function bind<Fn extends (...args: any[]) => any>(fn: Fn, thisArg: any): Fn {
   return _bind.call(fn, thisArg);
 }
+*/
 
 /**
  * Internal optimization only, DO NOT EXPOSE.
@@ -208,12 +209,12 @@ export class SafeSubscriber<T> extends Subscriber<T> {
         // This is a deprecated path that made `this.unsubscribe()` available in
         // next handler functions passed to subscribe. This only exists behind a flag
         // now, as it is *very* slow.
-        context = Object.create(observerOrNext);
+        context = table.clone(observerOrNext);
         context.unsubscribe = () => this.unsubscribe();
         partialObserver = {
-          next: observerOrNext.next && bind(observerOrNext.next, context),
-          error: observerOrNext.error && bind(observerOrNext.error, context),
-          complete: observerOrNext.complete && bind(observerOrNext.complete, context),
+          next: observerOrNext.next && observerOrNext.next,
+          error: observerOrNext.error && observerOrNext.error,
+          complete: observerOrNext.complete && observerOrNext.complete,
         };
       } else {
         // The "normal" path. Just use the partial observer directly.

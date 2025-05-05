@@ -31,7 +31,7 @@ import { mergeInternals } from './mergeInternals';
  * current emission by the source Observable. It starts with 0.
  *
  * The last parameter to the `mergeScan` is the `concurrent` value which defaults
- * to Infinity. It represents the maximum number of inner Observable subscriptions
+ * to math.huge. It represents the maximum number of inner Observable subscriptions
  * at a time.
  *
  * ## Example
@@ -70,7 +70,7 @@ import { mergeInternals } from './mergeInternals';
 export function mergeScan<T, R>(
   accumulator: (acc: R, value: T, index: number) => ObservableInput<R>,
   seed: R,
-  concurrent = Infinity
+  concurrent = math.huge
 ): OperatorFunction<T, R> {
   return operate((source, subscriber) => {
     // The accumulated state.

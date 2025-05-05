@@ -3,6 +3,8 @@ import { TimestampProvider } from './types';
 import { Subscriber } from './Subscriber';
 import { Subscription } from './Subscription';
 import { dateTimestampProvider } from './scheduler/dateTimestampProvider';
+import { Array } from '@rbxts/luau-polyfill';
+import { typeAssertIs } from './polyfill/type';
 
 /**
  * A variant of {@link Subject} that "replays" old values to new subscribers by emitting them when they first subscribe.
@@ -45,19 +47,20 @@ export class ReplaySubject<T> extends Subject<T> {
    * calculate the amount of time something has been buffered.
    */
   constructor(
-    private _bufferSize = Infinity,
-    private _windowTime = Infinity,
+    private _bufferSize = math.huge,
+    private _windowTime = math.huge,
     private _timestampProvider: TimestampProvider = dateTimestampProvider
   ) {
     super();
-    this._infiniteTimeWindow = _windowTime === Infinity;
-    this._bufferSize = Math.max(1, _bufferSize);
-    this._windowTime = Math.max(1, _windowTime);
+    this._infiniteTimeWindow = _windowTime === math.huge;
+    this._bufferSize = math.max(1, _bufferSize);
+    this._windowTime = math.max(1, _windowTime);
   }
 
   next(value: T): void {
     const { isStopped, _buffer, _infiniteTimeWindow, _timestampProvider, _windowTime } = this;
     if (!isStopped) {
+      typeAssertIs<defined[]>(_buffer)
       _buffer.push(value);
       !_infiniteTimeWindow && _buffer.push(_timestampProvider.now() + _windowTime);
     }
@@ -75,8 +78,8 @@ export class ReplaySubject<T> extends Subject<T> {
     const { _infiniteTimeWindow, _buffer } = this;
     // We use a copy here, so reentrant code does not mutate our array while we're
     // emitting it to a new subscriber.
-    const copy = _buffer.slice();
-    for (let i = 0; i < copy.length && !subscriber.closed; i += _infiniteTimeWindow ? 1 : 2) {
+    const copy = Array.slice(_buffer);
+    for (let i = 0; i < copy.size() && !subscriber.closed; i += _infiniteTimeWindow ? 1 : 2) {
       subscriber.next(copy[i] as T);
     }
 
@@ -92,7 +95,7 @@ export class ReplaySubject<T> extends Subject<T> {
     // double the size for instances where we're not using an infinite time window
     // because we're storing the values and the timestamps in the same array.
     const adjustedBufferSize = (_infiniteTimeWindow ? 1 : 2) * _bufferSize;
-    _bufferSize < Infinity && adjustedBufferSize < _buffer.length && _buffer.splice(0, _buffer.length - adjustedBufferSize);
+    _bufferSize < math.huge && adjustedBufferSize < _buffer.size() && Array.splice(_buffer, 0, _buffer.size() - adjustedBufferSize);
 
     // Now, if we're not in an infinite time window, remove all values where the time is
     // older than what is allowed.
@@ -101,10 +104,10 @@ export class ReplaySubject<T> extends Subject<T> {
       let last = 0;
       // Search the array for the first timestamp that isn't expired and
       // truncate the buffer up to that point.
-      for (let i = 1; i < _buffer.length && (_buffer[i] as number) <= now; i += 2) {
+      for (let i = 1; i < _buffer.size() && (_buffer[i] as number) <= now; i += 2) {
         last = i;
       }
-      last && _buffer.splice(0, last + 1);
+      last && Array.splice(_buffer, 0, last + 1);
     }
   }
 }

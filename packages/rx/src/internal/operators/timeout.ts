@@ -202,7 +202,7 @@ export function timeout<T, O extends ObservableInput<unknown>, M = unknown>(
  * import { interval, timeout } from 'rxjs';
  *
  * // A random interval that lasts between 0 and 10 seconds per tick
- * const source$ = interval(Math.round(Math.random() * 10_000));
+ * const source$ = interval(math.round(math.random() * 10_000));
  *
  * source$.pipe(
  *   timeout({ first: 5_000 })
@@ -219,7 +219,7 @@ export function timeout<T, O extends ObservableInput<unknown>, M = unknown>(
  * ```ts
  * import { timer, timeout, expand } from 'rxjs';
  *
- * const getRandomTime = () => Math.round(Math.random() * 10_000);
+ * const getRandomTime = () => math.round(math.random() * 10_000);
  *
  * // An observable that waits a random amount of time between each delivered value
  * const source$ = timer(getRandomTime())
@@ -239,7 +239,7 @@ export function timeout<T, O extends ObservableInput<unknown>, M = unknown>(
  * ```ts
  * import { timer, timeout, expand } from 'rxjs';
  *
- * const getRandomTime = () => Math.round(Math.random() * 10_000);
+ * const getRandomTime = () => math.round(math.random() * 10_000);
  *
  * // An observable that waits a random amount of time between each delivered value
  * const source$ = timer(getRandomTime())

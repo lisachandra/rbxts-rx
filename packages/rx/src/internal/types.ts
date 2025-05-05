@@ -1,8 +1,8 @@
 // https://github.com/microsoft/TypeScript/issues/40462#issuecomment-689879308
 /// <reference lib="esnext.asynciterable" />
 
-import { Observable } from './Observable';
-import { Subscription } from './Subscription';
+import type { Observable } from './Observable';
+import type { Subscription } from './Subscription';
 
 /**
  * Note: This will add Symbol.observable globally for all TypeScript users,
@@ -327,6 +327,7 @@ export type ValueFromNotification<T> = T extends { kind: 'N' | 'E' | 'C' }
  * `NaN` is "falsy" however, it is not and cannot be typed via TypeScript. See
  * comments here: https://github.com/microsoft/TypeScript/issues/28682#issuecomment-707142417
  */
+// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
 export type Falsy = null | undefined | false | 0 | -0 | 0n | '';
 
 export type TruthyTypesOf<T> = T extends Falsy ? never : T;

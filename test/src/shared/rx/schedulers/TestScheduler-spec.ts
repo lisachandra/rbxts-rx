@@ -120,7 +120,7 @@ describe('TestScheduler', () => {
     it('should parse a subscription marble string with an unsubscription', () => {
       const result = TestScheduler.parseMarblesAsSubscriptions('---^-');
       expect(result.subscribedFrame).to.equal(30);
-      expect(result.unsubscribedFrame).to.equal(Infinity);
+      expect(result.unsubscribedFrame).to.equal(math.huge);
     });
 
     it('should parse a subscription marble string with a synchronous unsubscription', () => {
@@ -190,7 +190,7 @@ describe('TestScheduler', () => {
         expect(x).to.equal(expected.shift());
       });
       scheduler.flush();
-      expect(expected.length).to.equal(0);
+      expect(expected.size()).to.equal(0);
     });
   });
 
@@ -204,7 +204,7 @@ describe('TestScheduler', () => {
         expect(x).to.equal(expected.shift());
       });
       scheduler.flush();
-      expect(expected.length).to.equal(0);
+      expect(expected.size()).to.equal(0);
     });
   });
 
@@ -227,7 +227,7 @@ describe('TestScheduler', () => {
         source.subscribe({ next: (x: number) => {
           expect(x).to.equal(expected.shift());
         }, complete: () => {
-          expect(expected.length).to.equal(0);
+          expect(expected.size()).to.equal(0);
         } });
         expectObservable(source).toBe('-a-b-|', { a: 1, b: 2 });
       });
@@ -269,7 +269,7 @@ describe('TestScheduler', () => {
 
       it('should append to flushTests array', () => {
         expectObservable(EMPTY);
-        expect((<any>rxTestScheduler).flushTests.length).to.equal(1);
+        expect((<any>rxTestScheduler).flushTests.size()).to.equal(1);
       });
 
       it('should handle empty', () => {
@@ -308,7 +308,7 @@ describe('TestScheduler', () => {
 
       it('should append to flushTests array', () => {
         expectSubscriptions([]);
-        expect((<any>rxTestScheduler).flushTests.length).to.equal(1);
+        expect((<any>rxTestScheduler).flushTests.size()).to.equal(1);
       });
 
       it('should assert subscriptions of a cold observable', () => {
@@ -461,12 +461,12 @@ describe('TestScheduler', () => {
         const expected = '   -- 9ms a 9ms b 9ms (c|)';
         expectObservable(output).toBe(expected);
 
-        expect(testScheduler['flushTests'].length).to.equal(1);
-        expect(testScheduler['actions'].length).to.equal(1);
+        expect(testScheduler['flushTests'].size()).to.equal(1);
+        expect(testScheduler['actions'].size()).to.equal(1);
       });
 
-      expect(testScheduler['flushTests'].length).to.equal(0);
-      expect(testScheduler['actions'].length).to.equal(0);
+      expect(testScheduler['flushTests'].size()).to.equal(0);
+      expect(testScheduler['actions'].size()).to.equal(0);
     });
 
     it('should support explicit flushing', () => {
@@ -481,17 +481,17 @@ describe('TestScheduler', () => {
         const expected = '   -- 9ms a 9ms b 9ms (c|)';
         expectObservable(output).toBe(expected);
 
-        expect(testScheduler['flushTests'].length).to.equal(1);
-        expect(testScheduler['actions'].length).to.equal(1);
+        expect(testScheduler['flushTests'].size()).to.equal(1);
+        expect(testScheduler['actions'].size()).to.equal(1);
 
         flush();
 
-        expect(testScheduler['flushTests'].length).to.equal(0);
-        expect(testScheduler['actions'].length).to.equal(0);
+        expect(testScheduler['flushTests'].size()).to.equal(0);
+        expect(testScheduler['actions'].size()).to.equal(0);
       });
 
-      expect(testScheduler['flushTests'].length).to.equal(0);
-      expect(testScheduler['actions'].length).to.equal(0);
+      expect(testScheduler['flushTests'].size()).to.equal(0);
+      expect(testScheduler['actions'].size()).to.equal(0);
     });
 
     it('should pass-through return values, e.g. Promises', (done) => {

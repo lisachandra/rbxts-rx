@@ -30,7 +30,7 @@ it('should support an undefined resultSelector', () => {
 });
 
 it('should support union-type projections with empty streams', () => {
-  const o = of(1, 2, 3).pipe(switchMap(n => Math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(switchMap(n => math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {
@@ -42,7 +42,7 @@ it('should enforce the return type', () => {
 });
 
 it('should support projecting to union types', () => {
-  const o = of(Math.random()).pipe(switchMap(n => n > 0.5 ? of(123) : of('test'))); // $ExpectType Observable<string | number>
+  const o = of(math.random()).pipe(switchMap(n => n > 0.5 ? of(123) : of('test'))); // $ExpectType Observable<string | number>
 });
 
 it('should produce `Observable<never>` when mapping to an `ObservableInput<never>`', () => {

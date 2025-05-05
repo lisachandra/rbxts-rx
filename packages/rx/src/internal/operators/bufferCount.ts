@@ -84,7 +84,7 @@ export function bufferCount<T>(bufferSize: number, startBufferEvery: number | nu
             // If we emitted it now and removed it, it would
             // mutate the `buffers` array while we're looping
             // over it.
-            if (bufferSize <= buffer.length) {
+            if (bufferSize <= buffer.size()) {
               toEmit = toEmit ?? [];
               toEmit.push(buffer);
             }

@@ -6,5 +6,5 @@ it('should infer with a simple factory', () => {
 });
 
 it('should infer with a factory that returns a union', () => {
-  const o = using(() => {}, () => Math.random() < 0.5 ? a$ : b$); // $ExpectType Observable<A | B>
+  const o = using(() => {}, () => math.random() < 0.5 ? a$ : b$); // $ExpectType Observable<A | B>
 });

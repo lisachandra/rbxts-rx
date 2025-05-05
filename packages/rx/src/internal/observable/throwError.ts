@@ -52,7 +52,7 @@ import { isFunction } from '../util/isFunction';
  * ```ts
  * import { of, concatMap, timer, throwError } from 'rxjs';
  *
- * const delays$ = of(1000, 2000, Infinity, 3000);
+ * const delays$ = of(1000, 2000, math.huge, 3000);
  *
  * delays$.pipe(
  *   concatMap(ms => {
@@ -75,7 +75,7 @@ import { isFunction } from '../util/isFunction';
  * ```ts
  * import { of, concatMap, timer } from 'rxjs';
  *
- * const delays$ = of(1000, 2000, Infinity, 3000);
+ * const delays$ = of(1000, 2000, math.huge, 3000);
  *
  * delays$.pipe(
  *   concatMap(ms => {

@@ -309,7 +309,7 @@ describe('withLatestFrom', () => {
         result.push(x);
       });
 
-    expect(result.length).to.equal(3);
+    expect(result.size()).to.equal(3);
     expect(result[0]).to.deep.equal([1, 5]);
     expect(result[1]).to.deep.equal([2, 5]);
     expect(result[2]).to.deep.equal([3, 5]);

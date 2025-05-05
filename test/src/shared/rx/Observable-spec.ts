@@ -151,7 +151,7 @@ describe('Observable', () => {
           },
           (err) => {
             results.push(err);
-            // The error should unsubscribe from the source, meaning we 
+            // The error should unsubscribe from the source, meaning we
             // should not see the number 4.
             expect(results).to.deep.equal([1, 2, 3, expected]);
           }
@@ -198,7 +198,7 @@ describe('Observable', () => {
         results.push(value);
       }
       next.bind = () => { /* lol */};
-      
+
       const complete = function () {
         results.push('done');
       }
@@ -825,7 +825,7 @@ describe('Observable', () => {
         expect(() => {
           of(1, 2, 3).pipe(
             map(x => x + x),
-            map(x => Math.log(x))
+            map(x => math.log(x))
           )
           .subscribe();
         }).not.to.throw();

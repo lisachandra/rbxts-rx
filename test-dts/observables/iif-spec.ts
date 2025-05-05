@@ -1,7 +1,7 @@
 import { a$, b$ } from 'helpers';
 import { iif, EMPTY } from 'rxjs';
 
-const randomBoolean = () => Math.random() > 0.5;
+const randomBoolean = () => math.random() > 0.5;
 
 it('should error for insufficient parameters', () => {
   const r0 = iif(randomBoolean); // $ExpectError

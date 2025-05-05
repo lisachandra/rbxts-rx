@@ -369,7 +369,7 @@ describe('retry', () => {
         },
         error(err: any) {
           expect(err).to.equal('bad!');
-          expect(expected.length).to.equal(0);
+          expect(expected.size()).to.equal(0);
           done();
         },
         complete() {

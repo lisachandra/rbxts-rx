@@ -29,7 +29,7 @@ if (!(Symbol as any).observable) {
   window = window || this;
   let lastTime = 0;
   const vendors = ['ms', 'moz', 'webkit', 'o'];
-  for (let x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+  for (let x = 0; x < vendors.size() && !window.requestAnimationFrame; ++x) {
       window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
       window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
                                  || window[vendors[x] + 'CancelRequestAnimationFrame'];
@@ -38,7 +38,7 @@ if (!(Symbol as any).observable) {
   if (!window.requestAnimationFrame) {
       window.requestAnimationFrame = (callback: Function, element: any) => {
           const currTime = new Date().getTime();
-          const timeToCall = Math.max(0, 16 - (currTime - lastTime));
+          const timeToCall = math.max(0, 16 - (currTime - lastTime));
           const id = window.setTimeout(() => { callback(currTime + timeToCall); },
             timeToCall);
           lastTime = currTime + timeToCall;

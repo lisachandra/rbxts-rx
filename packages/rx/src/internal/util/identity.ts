@@ -26,7 +26,7 @@
  * ```ts
  * import { interval, take, identity } from 'rxjs';
  *
- * const shouldLimit = () => Math.random() < 0.5;
+ * const shouldLimit = () => math.random() < 0.5;
  *
  * const source$ = interval(1000);
  *

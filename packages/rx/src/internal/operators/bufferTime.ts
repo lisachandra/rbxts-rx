@@ -75,7 +75,7 @@ export function bufferTime<T>(
 export function bufferTime<T>(bufferTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, T[]> {
   const scheduler = popScheduler(otherArgs) ?? asyncScheduler;
   const bufferCreationInterval = (otherArgs[0] as number) ?? null;
-  const maxBufferSize = (otherArgs[1] as number) || Infinity;
+  const maxBufferSize = (otherArgs[1] as number) || math.huge;
 
   return operate((source, subscriber) => {
     // The active buffers, their related subscriptions, and removal functions.
@@ -141,13 +141,13 @@ export function bufferTime<T>(bufferTimeSpan: number, ...otherArgs: any[]): Oper
           const { buffer } = record;
           buffer.push(value);
           // If the buffer is over the max size, we need to emit it.
-          maxBufferSize <= buffer.length && emit(record);
+          maxBufferSize <= buffer.size() && emit(record);
         }
       },
       () => {
         // The source completed, emit all of the active
         // buffers we have before we complete.
-        while (bufferRecords?.length) {
+        while (bufferRecords?.size()) {
           subscriber.next(bufferRecords.shift()!.buffer);
         }
         bufferTimeSubscriber?.unsubscribe();

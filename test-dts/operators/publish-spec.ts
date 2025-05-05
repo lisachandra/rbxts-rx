@@ -19,5 +19,5 @@ it('should enforce type on selector', () => {
 });
 
 it('should support union types in selector', () => {
-  const a = of(1, 2, 3).pipe(publish(() => Math.random() > 0.5 ? of(123) : of('test'))); // $ExpectType Observable<string | number>
+  const a = of(1, 2, 3).pipe(publish(() => math.random() > 0.5 ? of(123) : of('test'))); // $ExpectType Observable<string | number>
 });

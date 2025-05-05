@@ -62,7 +62,7 @@ export function mergeMapTo<T, R, O extends ObservableInput<unknown>>(
 export function mergeMapTo<T, R, O extends ObservableInput<unknown>>(
   innerObservable: O,
   resultSelector?: ((outerValue: T, innerValue: ObservedValueOf<O>, outerIndex: number, innerIndex: number) => R) | number,
-  concurrent: number = Infinity
+  concurrent: number = math.huge
 ): OperatorFunction<T, ObservedValueOf<O> | R> {
   if (isFunction(resultSelector)) {
     return mergeMap(() => innerObservable, resultSelector, concurrent);

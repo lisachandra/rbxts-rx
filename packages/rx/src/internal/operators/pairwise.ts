@@ -32,7 +32,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  *     const y0 = first.clientY;
  *     const x1 = second.clientX;
  *     const y1 = second.clientY;
- *     return Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
+ *     return math.sqrt(math.pow(x0 - x1, 2) + math.pow(y0 - y1, 2));
  *   })
  * );
  *

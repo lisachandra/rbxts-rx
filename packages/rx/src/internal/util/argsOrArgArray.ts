@@ -5,5 +5,5 @@ const { isArray } = Array;
  * as a single argument.
  */
 export function argsOrArgArray<T>(args: (T | T[])[]): T[] {
-  return args.length === 1 && isArray(args[0]) ? args[0] : (args as T[]);
+  return args.size() === 1 && isArray(args[0]) ? args[0] : (args as T[]);
 }

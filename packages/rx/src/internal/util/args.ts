@@ -3,7 +3,7 @@ import { isFunction } from './isFunction';
 import { isScheduler } from './isScheduler';
 
 function last<T>(arr: T[]): T | undefined {
-  return arr[arr.length - 1];
+  return arr[arr.size() - 1];
 }
 
 export function popResultSelector(args: any[]): ((...args: unknown[]) => unknown) | undefined {

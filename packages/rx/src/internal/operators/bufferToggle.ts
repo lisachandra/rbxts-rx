@@ -91,7 +91,7 @@ export function bufferToggle<T, O>(
         },
         () => {
           // Source complete. Emit all pending buffers.
-          while (buffers.length > 0) {
+          while (buffers.size() > 0) {
             subscriber.next(buffers.shift()!);
           }
           subscriber.complete();

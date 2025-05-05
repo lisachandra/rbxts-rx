@@ -104,7 +104,7 @@ describe('defer', () => {
   it('should create an observable when factory does not throw', () => {
     rxTestScheduler.run(({ hot, cold, expectObservable, expectSubscriptions }) => {
       const e1 = defer(() => {
-        if (1 !== Infinity) {
+        if (1 !== math.huge) {
           throw 'error';
         }
         return of();

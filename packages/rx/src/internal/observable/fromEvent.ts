@@ -292,7 +292,7 @@ export function fromEvent<T>(
     // The handler we are going to register. Forwards the event object, by itself, or
     // an array of arguments to the event handler, if there is more than one argument,
     // to the consumer.
-    const handler = (...args: any[]) => subscriber.next(1 < args.length ? args : args[0]);
+    const handler = (...args: any[]) => subscriber.next(1 < args.size() ? args : args[0]);
     // Do the work of adding the handler to the target.
     add(handler);
     // When we finalize, we want to remove the handler and free up memory.

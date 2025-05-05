@@ -8,7 +8,7 @@ export class SubscriptionLoggable {
 
   logSubscribedFrame(): number {
     this.subscriptions.push(new SubscriptionLog(this.scheduler.now()));
-    return this.subscriptions.length - 1;
+    return this.subscriptions.size() - 1;
   }
 
   logUnsubscribedFrame(index: number) {

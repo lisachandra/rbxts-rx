@@ -247,7 +247,7 @@ describe('throttle', () => {
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let j = 0; j < e2.length; j++) {
+      for (let j = 0; j < e2.size(); j++) {
         expectSubscriptions(e2[j].subscriptions).toBe(e2subs[j]);
       }
     });
@@ -274,7 +274,7 @@ describe('throttle', () => {
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let j = 0; j < e2.length; j++) {
+      for (let j = 0; j < e2.size(); j++) {
         expectSubscriptions(e2[j].subscriptions).toBe(e2subs[j]);
       }
     });

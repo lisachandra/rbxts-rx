@@ -74,7 +74,7 @@ export function fromArrayLike<T>(array: ArrayLike<T>) {
     //    This is a known issue, but considered an edge case. The alternative would
     //    be to copy the array before executing the loop, but this has
     //    performance implications.
-    for (let i = 0; i < array.length && !subscriber.closed; i++) {
+    for (let i = 0; i < array.size() && !subscriber.closed; i++) {
       subscriber.next(array[i]);
     }
     subscriber.complete();

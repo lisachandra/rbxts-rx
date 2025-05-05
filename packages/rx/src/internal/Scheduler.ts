@@ -1,4 +1,4 @@
-import { Action } from './scheduler/Action';
+import type { Action } from './scheduler/Action';
 import { Subscription } from './Subscription';
 import { SchedulerLike, SchedulerAction } from './types';
 import { dateTimestampProvider } from './scheduler/dateTimestampProvider';
@@ -24,7 +24,10 @@ import { dateTimestampProvider } from './scheduler/dateTimestampProvider';
 export class Scheduler implements SchedulerLike {
   public static now: () => number = dateTimestampProvider.now;
 
-  constructor(private schedulerActionCtor: typeof Action, now: () => number = Scheduler.now) {
+  constructor(
+    private schedulerActionCtor: typeof Action,
+    now: () => number = Scheduler.now
+  ) {
     this.now = now;
   }
 

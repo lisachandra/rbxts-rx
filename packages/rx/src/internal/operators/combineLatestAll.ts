@@ -28,7 +28,7 @@ export function combineLatestAll<R>(project: (...values: Array<any>) => R): Oper
  *
  * const clicks = fromEvent(document, 'click');
  * const higherOrder = clicks.pipe(
- *   map(() => interval(Math.random() * 2000).pipe(take(3))),
+ *   map(() => interval(math.random() * 2000).pipe(take(3))),
  *   take(2)
  * );
  * const result = higherOrder.pipe(combineLatestAll());

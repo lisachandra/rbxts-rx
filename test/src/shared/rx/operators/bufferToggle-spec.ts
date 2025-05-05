@@ -121,7 +121,7 @@ describe('bufferToggle operator', () => {
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(subs);
-      for (let j = 0; j < closings.length; j++) {
+      for (let j = 0; j < closings.size(); j++) {
         expectSubscriptions(closings[j].obs.subscriptions).toBe(closings[j].sub);
       }
     });
@@ -440,7 +440,7 @@ describe('bufferToggle operator', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.length).to.be.equal(0);
+        expect(expected.size()).to.be.equal(0);
         done();
       },
     });
@@ -494,7 +494,7 @@ describe('bufferToggle operator', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.length).to.be.equal(0);
+        expect(expected.size()).to.be.equal(0);
         done();
       },
     });

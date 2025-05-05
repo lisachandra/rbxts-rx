@@ -108,13 +108,13 @@ export function windowCount<T>(windowSize: number, startWindowEvery: number = 0)
           }
         },
         () => {
-          while (windows.length > 0) {
+          while (windows.size() > 0) {
             windows.shift()!.complete();
           }
           subscriber.complete();
         },
         (err) => {
-          while (windows.length > 0) {
+          while (windows.size() > 0) {
             windows.shift()!.error(err);
           }
           subscriber.error(err);

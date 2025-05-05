@@ -83,7 +83,7 @@ export function first<T, D>(
   predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | null,
   defaultValue?: D
 ): OperatorFunction<T, T | D> {
-  const hasDefaultValue = arguments.length >= 2;
+  const hasDefaultValue = arguments.size() >= 2;
   return (source: Observable<T>) =>
     source.pipe(
       predicate ? filter((v, i) => predicate(v, i, source)) : identity,

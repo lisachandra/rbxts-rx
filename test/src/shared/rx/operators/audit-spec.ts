@@ -257,7 +257,7 @@ describe('audit operator', () => {
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let j = 0; j < e2.length; j++) {
+      for (let j = 0; j < e2.size(); j++) {
         expectSubscriptions(e2[j].subscriptions).toBe(e2subs[j]);
       }
     });
@@ -284,7 +284,7 @@ describe('audit operator', () => {
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let j = 0; j < e2.length; j++) {
+      for (let j = 0; j < e2.size(); j++) {
         expectSubscriptions(e2[j].subscriptions).toBe(e2subs[j]);
       }
     });
@@ -318,7 +318,7 @@ describe('audit operator', () => {
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
-      for (let j = 0; j < e2subs.length; j++) {
+      for (let j = 0; j < e2subs.size(); j++) {
         expectSubscriptions(e2[j].subscriptions).toBe(e2subs[j]);
       }
     });
@@ -406,7 +406,7 @@ describe('audit operator', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         done();
       },
     });
@@ -435,7 +435,7 @@ describe('audit operator', () => {
       },
       error: (err: any) => {
         expect(err).to.be.an('error', 'error');
-        expect(expected.length).to.equal(0);
+        expect(expected.size()).to.equal(0);
         done();
       },
       complete: () => {

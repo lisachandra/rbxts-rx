@@ -86,7 +86,7 @@ export function sequenceEqual<T>(
         subscriber,
         (a: T) => {
           const { buffer, complete } = otherState;
-          if (buffer.length === 0) {
+          if (buffer.size() === 0) {
             // If there's no values in the other buffer
             // and the other stream is complete, we know
             // this isn't a match, because we got one more value.
@@ -109,7 +109,7 @@ export function sequenceEqual<T>(
           // still stuff left in their buffer, it doesn't match, if their
           // buffer is empty, then it does match. This is because we can't
           // possibly get more values here anymore.
-          complete && emit(buffer.length === 0);
+          complete && emit(buffer.size() === 0);
           // Be sure to clean up our stream as soon as possible if we can.
           sequenceEqualSubscriber?.unsubscribe();
         }

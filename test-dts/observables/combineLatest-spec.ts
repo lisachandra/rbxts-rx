@@ -31,8 +31,8 @@ it('should result in Observable<unknown> for 7 or more params', () => {
 });
 
 it('should accept union types', () => {
-  const u1: typeof a$ | typeof b$ = Math.random() > 0.5 ? a$ : b$;
-  const u2: typeof c$ | typeof d$ = Math.random() > 0.5 ? c$ : d$;
+  const u1: typeof a$ | typeof b$ = math.random() > 0.5 ? a$ : b$;
+  const u2: typeof c$ | typeof d$ = math.random() > 0.5 ? c$ : d$;
   const o = combineLatest(u1, u2); // $ExpectType Observable<[A | B, C | D]>
 });
 

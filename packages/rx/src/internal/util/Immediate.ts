@@ -40,6 +40,6 @@ export const Immediate = {
  */
 export const TestTools = {
   pending() {
-    return Object.keys(activeHandles).length;
+    return Object.keys(activeHandles).size();
   }
 };

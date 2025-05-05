@@ -6,6 +6,7 @@ runs:
           run: |
               pnpm build:packages
               pnpm build:test
+              pnpm build:test-dts
           shell: bash
 
         - name: ESLint

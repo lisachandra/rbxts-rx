@@ -33,7 +33,7 @@ export class AsapAction<T> extends AsyncAction<T> {
     // cancel the requested microtask and set the scheduled flag to undefined
     // so the next AsapAction will request its own.
     const { actions } = scheduler;
-    if (id != null && actions[actions.length - 1]?.id !== id) {
+    if (id != null && actions[actions.size() - 1]?.id !== id) {
       immediateProvider.clearImmediate(id);
       if (scheduler._scheduled === id) {
         scheduler._scheduled = undefined;

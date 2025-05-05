@@ -126,7 +126,7 @@ describe('SafeSubscriber', () => {
     subscriber.complete();
     expect(isUnsubscribed).to.be.true;
     expect(subscriber.closed).to.be.true;
-    expect(getRegisteredFinalizers(subscriber).length).to.equal(0);
+    expect(getRegisteredFinalizers(subscriber).size()).to.equal(0);
   });
 
   it('should close, unsubscribe, and unregister all finalizers after error', () => {
@@ -142,7 +142,7 @@ describe('SafeSubscriber', () => {
     subscriber.error(new Error('test'));
     expect(isTornDown).to.be.true;
     expect(subscriber.closed).to.be.true;
-    expect(getRegisteredFinalizers(subscriber).length).to.equal(0);
+    expect(getRegisteredFinalizers(subscriber).size()).to.equal(0);
   });
 });
 
@@ -153,7 +153,7 @@ describe('Subscriber', () => {
     subscriber.add(() => { isTornDown = true });
     subscriber.complete();
     expect(isTornDown).to.be.true;
-    expect(getRegisteredFinalizers(subscriber).length).to.equal(0);
+    expect(getRegisteredFinalizers(subscriber).size()).to.equal(0);
   });
 
   it('should NOT break this context on next methods from unfortunate consumers', () => {
