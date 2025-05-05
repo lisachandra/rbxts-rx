@@ -1,6 +1,7 @@
 import { SchedulerLike } from '../types';
 import { Observable } from '../Observable';
 import { executeSchedule } from '../util/executeSchedule';
+import { Error } from '@rbxts/luau-polyfill';
 
 export function scheduleAsyncIterable<T>(input: AsyncIterable<T>, scheduler: SchedulerLike) {
   if (!input) {
@@ -13,6 +14,7 @@ export function scheduleAsyncIterable<T>(input: AsyncIterable<T>, scheduler: Sch
         subscriber,
         scheduler,
         () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           iterator.next().then((result) => {
             if (result.done) {
               // This will remove the subscriptions from
