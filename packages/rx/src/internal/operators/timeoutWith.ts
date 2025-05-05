@@ -102,7 +102,7 @@ export function timeoutWith<T, R>(
     throw new TypeError('No observable provided to switch to');
   }
 
-  if (first == null && each == null) {
+  if (first === undefined && each === undefined) {
     // Ensure timeout was provided at runtime.
     throw new TypeError('No timeout provided.');
   }

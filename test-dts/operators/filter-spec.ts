@@ -72,7 +72,7 @@ it('should support inference from a return type with Boolean as a predicate', ()
 it('should support inference from a generic return type of the predicate', () => {
   function isDefined<T>() {
     return (value: T | undefined | null): value is T => {
-      return value !== undefined && value !== null;
+      return value !== undefined && value !== undefined;
     };
   }
 

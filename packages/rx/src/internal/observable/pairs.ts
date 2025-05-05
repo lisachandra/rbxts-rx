@@ -1,3 +1,4 @@
+import { Object } from '@rbxts/luau-polyfill';
 import { Observable } from '../Observable';
 import { SchedulerLike } from '../types';
 import { from } from './from';

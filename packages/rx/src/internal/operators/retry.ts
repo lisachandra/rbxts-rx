@@ -124,7 +124,7 @@ export function retry<T>(configOrCount: number | RetryConfig = math.huge): MonoT
                     }
                   };
 
-                  if (delay != null) {
+                  if (delay !== undefined) {
                     // The user specified a retry delay.
                     // They gave us a number, use a timer, otherwise, it's a function,
                     // and we're going to call it to get a notifier.

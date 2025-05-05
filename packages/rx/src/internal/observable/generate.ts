@@ -345,7 +345,14 @@ export function generate<T, S>(
 
   // TODO: Remove this as we move away from deprecated signatures
   // and move towards a configuration object argument.
-  if (arguments.size() === 1) {
+  // if (arguments.size() === 1) {
+  if (
+    initialStateOrOptions !== undefined &&
+    condition === undefined &&
+    iterate === undefined &&
+    resultSelectorOrScheduler === undefined &&
+    scheduler === undefined
+  ) {
     // If we only have one argument, we can assume it is a configuration object.
     // Note that folks not using TypeScript may trip over this.
     ({
@@ -363,7 +370,7 @@ export function generate<T, S>(
       resultSelector = identity as ResultFunc<S, T>;
       scheduler = resultSelectorOrScheduler as SchedulerLike;
     } else {
-      resultSelector = resultSelectorOrScheduler as ResultFunc<S, T>;
+      resultSelector = resultSelectorOrScheduler;
     }
   }
 
@@ -379,7 +386,7 @@ export function generate<T, S>(
     (scheduler
       ? // If a scheduler was provided, use `scheduleIterable` to ensure that iteration/generation
         // happens on the scheduler.
-        () => scheduleIterable(gen(), scheduler!)
+        () => scheduleIterable(gen(), scheduler)
       : // Otherwise, if there's no scheduler, we can just use the generator function directly in
         // `defer` and executing it will return the generator (which is iterable).
         gen) as () => ObservableInput<T>

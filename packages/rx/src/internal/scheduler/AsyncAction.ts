@@ -52,7 +52,7 @@ export class AsyncAction<T> extends Action<T> {
     // different delay, the interval will be canceled after scheduled callback
     // execution.
     //
-    if (id != null) {
+    if (id !== undefined) {
       this.id = this.recycleAsyncId(scheduler, id, delay);
     }
 
@@ -73,12 +73,12 @@ export class AsyncAction<T> extends Action<T> {
 
   protected recycleAsyncId(_scheduler: AsyncScheduler, id?: TimerHandle, delay: number | null = 0): TimerHandle | undefined {
     // If this action is rescheduled with the same delay time, don't clear the interval id.
-    if (delay != null && this.delay === delay && this.pending === false) {
+    if (delay !== undefined && this.delay === delay && this.pending === false) {
       return id;
     }
     // Otherwise, if the action's delay time is different from the current delay,
     // or the action has been rescheduled before it's executed, clear the interval id
-    if (id != null) {
+    if (id !== undefined) {
       intervalProvider.clearInterval(id);
     }
 
@@ -97,7 +97,7 @@ export class AsyncAction<T> extends Action<T> {
     const error = this._execute(state, delay);
     if (error) {
       return error;
-    } else if (this.pending === false && this.id != null) {
+    } else if (this.pending === false && this.id !== undefined) {
       // Dequeue if the action didn't reschedule itself. Don't call
       // unsubscribe(), because the action could reschedule later.
       // For example:
@@ -142,7 +142,7 @@ export class AsyncAction<T> extends Action<T> {
       this.pending = false;
 
       arrRemove(actions, this);
-      if (id != null) {
+      if (id !== undefined) {
         this.id = this.recycleAsyncId(scheduler, id, null);
       }
 

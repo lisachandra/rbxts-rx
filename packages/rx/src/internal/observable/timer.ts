@@ -139,7 +139,7 @@ export function timer(
   // interval was specified at all, we start with a negative number.
   let intervalDuration = -1;
 
-  if (intervalOrScheduler != null) {
+  if (intervalOrScheduler !== undefined) {
     // If we have a second argument, and it's a scheduler,
     // override the scheduler we had defaulted. Otherwise,
     // it must be an interval.

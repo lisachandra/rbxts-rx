@@ -1,4 +1,4 @@
-import { ConnectableObservable } from '../observable/ConnectableObservable';
+import type { ConnectableObservable } from '../observable/ConnectableObservable';
 import { Subscription } from '../Subscription';
 import { MonoTypeOperatorFunction } from '../types';
 import { operate } from '../util/lift';

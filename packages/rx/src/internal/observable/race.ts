@@ -69,7 +69,7 @@ export function raceInit<T>(sources: ObservableInput<T>[]) {
     // stop before it subscribes to any more.
     for (let i = 0; subscriptions && !subscriber.closed && i < sources.size(); i++) {
       subscriptions.push(
-        innerFrom(sources[i] as ObservableInput<T>).subscribe(
+        innerFrom(sources[i]).subscribe(
           createOperatorSubscriber(subscriber, (value) => {
             if (subscriptions) {
               // We're still racing, but we won! So unsubscribe

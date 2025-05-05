@@ -31,7 +31,7 @@ export class QueueAction<T> extends AsyncAction<T> {
     // action wasn't rescheduled) but was originally scheduled as an async
     // action, then recycle as an async action.
 
-    if ((delay != null && delay > 0) || (delay == null && this.delay > 0)) {
+    if ((delay !== undefined && delay > 0) || (delay === undefined && this.delay > 0)) {
       return super.requestAsyncId(scheduler, id, delay);
     }
 

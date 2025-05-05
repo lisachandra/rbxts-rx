@@ -53,7 +53,7 @@ export function range(start: number, count: number | undefined, scheduler: Sched
  * @return An Observable of numbers that emits a finite range of sequential integers.
  */
 export function range(start: number, count?: number, scheduler?: SchedulerLike): Observable<number> {
-  if (count == null) {
+  if (count === undefined) {
     // If one argument was passed, it's the count, not the start.
     count = start;
     start = 0;

@@ -89,7 +89,7 @@ export interface SubscriptionLike extends Unsubscribable {
 /**
  * @deprecated Do not use. Most likely you want to use `ObservableInput`. Will be removed in v8.
  */
-export type SubscribableOrPromise<T> = Subscribable<T> | Subscribable<never> | PromiseLike<T> | InteropObservable<T>;
+export type SubscribableOrPromise<T> = Subscribable<T> | Subscribable<never> | Promise<T> | InteropObservable<T>;
 
 /** OBSERVABLE INTERFACES */
 
@@ -104,7 +104,7 @@ export type ObservableInput<T> =
   | Observable<T>
   | InteropObservable<T>
   | AsyncIterable<T>
-  | PromiseLike<T>
+  | Promise<T>
   | ArrayLike<T>
   | Iterable<T>
   | ReadableStreamLike<T>;
@@ -279,7 +279,7 @@ export type ObservedValueTupleFromArray<X> = { [K in keyof X]: ObservedValueOf<X
 
 /**
  * Used to infer types from arguments to functions like {@link forkJoin}.
- * So that you can have `forkJoin([Observable<A>, PromiseLike<B>]): Observable<[A, B]>`
+ * So that you can have `forkJoin([Observable<A>, Promise<B>]): Observable<[A, B]>`
  * et al.
  */
 export type ObservableInputTuple<T> = {
@@ -338,7 +338,7 @@ interface ReadableStreamDefaultReaderLike<T> {
   // HACK: As of TS 4.2.2, The provided types for the iterator results of a `ReadableStreamDefaultReader`
   // are significantly different enough from `IteratorResult` as to cause compilation errors.
   // The type at the time is `ReadableStreamDefaultReadResult`.
-  read(): PromiseLike<
+  read(): Promise<
     | {
         done: false;
         value: T;
@@ -370,3 +370,10 @@ export interface Connectable<T> extends Observable<T> {
    */
   connect(): Subscription;
 }
+
+export type SignalLike<T extends Callback = Callback> =
+  | { Connect(callback: T): ConnectionLike }
+  | { connect(callback: T): ConnectionLike }
+  | { subscribe(callback: T): ConnectionLike };
+
+export type ConnectionLike = (() => void) | { Disconnect(): void } | { disconnect(): void };

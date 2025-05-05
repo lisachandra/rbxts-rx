@@ -11,13 +11,14 @@ import { Subscriber } from '../Subscriber';
 import { isFunction } from '../util/isFunction';
 import { reportUnhandledError } from '../util/reportUnhandledError';
 import { observable as Symbol_observable } from '../symbol/observable';
+import { Error } from '@rbxts/luau-polyfill';
 
 export function innerFrom<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
   if (input instanceof Observable) {
     return input;
   }
-  if (input != null) {
+  if (input !== undefined) {
     if (isInteropObservable(input)) {
       return fromInteropObservable(input);
     }
@@ -52,7 +53,7 @@ export function fromInteropObservable<T>(obj: any) {
       return obs.subscribe(subscriber);
     }
     // Should be caught by observable subscribe function error handling.
-    throw new TypeError('Provided object does not correctly implement Symbol.observable');
+    throw new Error('Provided object does not correctly implement Symbol.observable');
   });
 }
 
@@ -81,7 +82,7 @@ export function fromArrayLike<T>(array: ArrayLike<T>) {
   });
 }
 
-export function fromPromise<T>(promise: PromiseLike<T>) {
+export function fromPromise<T>(promise: Promise<T>) {
   return new Observable((subscriber: Subscriber<T>) => {
     promise
       .then(
@@ -93,7 +94,7 @@ export function fromPromise<T>(promise: PromiseLike<T>) {
         },
         (err: any) => subscriber.error(err)
       )
-      .then(null, reportUnhandledError);
+      .then(undefined, reportUnhandledError);
   });
 }
 

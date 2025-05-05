@@ -20,7 +20,7 @@ export function bindCallbackInternals(
       return function (this: any, ...args: any[]) {
         return (bindCallbackInternals(isNodeStyle, callbackFunc, scheduler) as any)
           .apply(this, args)
-          .pipe(mapOneOrManyArgs(resultSelector as any));
+          .pipe(mapOneOrManyArgs(resultSelector));
       };
     }
   }
@@ -29,9 +29,7 @@ export function bindCallbackInternals(
   // to compose that behavior for the user.
   if (scheduler) {
     return function (this: any, ...args: any[]) {
-      return (bindCallbackInternals(isNodeStyle, callbackFunc) as any)
-        .apply(this, args)
-        .pipe(subscribeOn(scheduler!), observeOn(scheduler!));
+      return (bindCallbackInternals(isNodeStyle, callbackFunc) as any).apply(this, args).pipe(subscribeOn(scheduler), observeOn(scheduler));
     };
   }
 
@@ -74,7 +72,7 @@ export function bindCallbackInternals(
                 // results and check it, as it is the error argument. By shifting,
                 // we leave only the argument(s) we want to pass to the consumer.
                 const err = results.shift();
-                if (err != null) {
+                if (err !== undefined) {
                   subject.error(err);
                   // If we've errored, we can stop processing this function
                   // as there's nothing else to do. Just return to escape.

@@ -5,6 +5,7 @@ import { argsOrArgArray } from '../util/argsOrArgArray';
 import { EMPTY } from './empty';
 import { createOperatorSubscriber } from '../operators/OperatorSubscriber';
 import { popResultSelector } from '../util/args';
+import { typeAssertIs } from 'internal/polyfill/type';
 
 export function zip<A extends readonly unknown[]>(sources: [...ObservableInputTuple<A>]): Observable<A>;
 export function zip<A extends readonly unknown[], R>(
@@ -79,11 +80,12 @@ export function zip(...args: unknown[]): Observable<unknown> {
             createOperatorSubscriber(
               subscriber,
               (value) => {
-                buffers[sourceIndex].push(value);
+                typeAssertIs<defined[][]>(buffers);
+                buffers[sourceIndex].push(value as defined);
                 // if every buffer has at least one value in it, then we
                 // can shift out the oldest value from each buffer and emit
                 // them as an array.
-                if (buffers.every((buffer) => buffer.size())) {
+                if (buffers.every((buffer) => !!buffer.size())) {
                   const result: any = buffers.map((buffer) => buffer.shift()!);
                   // Emit the array. If theres' a result selector, use that.
                   subscriber.next(resultSelector ? resultSelector(...result) : result);

@@ -117,7 +117,7 @@ export function bufferTime<T>(bufferTimeSpan: number, ...otherArgs: any[]): Oper
       }
     };
 
-    if (bufferCreationInterval !== null && bufferCreationInterval >= 0) {
+    if (bufferCreationInterval !== undefined && bufferCreationInterval >= 0) {
       // The user passed both a bufferTimeSpan (required), and a creation interval
       // That means we need to start new buffers on the interval, and those buffers need
       // to wait the required time span before emitting.

@@ -8,8 +8,10 @@
 // tslint:disable: no-reference
 // It's tempting to add references to all of the deep-import locations, but
 // adding references to those that require DOM types breaks Node projects.
+/*
 /// <reference path="./operators/index.ts" />
 /// <reference path="./testing/index.ts" />
+*/
 // tslint:enable: no-reference
 
 /* Observable */
@@ -18,7 +20,7 @@ export { ConnectableObservable } from './internal/observable/ConnectableObservab
 export { GroupedObservable } from './internal/operators/groupBy';
 export { Operator } from './internal/Operator';
 export { observable } from './internal/symbol/observable';
-export { animationFrames } from './internal/observable/dom/animationFrames';
+// export { animationFrames } from './internal/observable/dom/animationFrames';
 
 /* Subjects */
 export { Subject } from './internal/Subject';
@@ -72,6 +74,7 @@ export { forkJoin } from './internal/observable/forkJoin';
 export { from } from './internal/observable/from';
 export { fromEvent } from './internal/observable/fromEvent';
 export { fromEventPattern } from './internal/observable/fromEventPattern';
+export { fromSignal } from './internal/observable/fromSignal';
 export { generate } from './internal/observable/generate';
 export { iif } from './internal/observable/iif';
 export { interval } from './internal/observable/interval';

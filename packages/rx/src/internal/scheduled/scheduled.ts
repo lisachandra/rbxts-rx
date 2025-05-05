@@ -26,7 +26,7 @@ import { scheduleReadableStreamLike } from './scheduleReadableStreamLike';
  * the returned observable.
  */
 export function scheduled<T>(input: ObservableInput<T>, scheduler: SchedulerLike): Observable<T> {
-  if (input != null) {
+  if (input !== undefined) {
     if (isInteropObservable(input)) {
       return scheduleObservable(input, scheduler);
     }

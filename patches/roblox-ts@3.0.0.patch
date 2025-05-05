@@ -36,7 +36,7 @@ index eafbe133dc7b6ea49d3aceaa9f72843315b1b94d..48dc31ae2a26cd1ce51a4148a6bcb7a7
 +        return rojo;
 +    });
      const nodeModulesPathMapping = (0, createNodeModulesPathMapping_1.createNodeModulesPathMapping)(compilerOptions.typeRoots);
-     const projectType = (_a = data.projectOptions.type) !== null && _a !== void 0 ? _a : inferProjectType(data, rojoResolver);
+     const projectType = (_a = data.projectOptions.type) !== undefined && _a !== void 0 ? _a : inferProjectType(data, rojoResolver);
      if (projectType !== constants_1.ProjectType.Package && data.rojoConfigPath === undefined) {
 diff --git a/out/TSTransformer/util/createImportExpression.js b/out/TSTransformer/util/createImportExpression.js
 index cb6cbf00b5d7902021d4d33b7057fb7eccea32ca..90843f019b455cb7e7123bee3dc3941f5706c49c 100644

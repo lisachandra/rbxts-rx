@@ -315,7 +315,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     meta = null!,
   } = (isValidDate(config) ? { first: config } : typeof config === 'number' ? { each: config } : config) as TimeoutConfig<T, O, M>;
 
-  if (first == null && each == null) {
+  if (first === undefined && each === undefined) {
     // Ensure timeout was provided at runtime.
     throw new TypeError('No timeout provided.');
   }
@@ -389,7 +389,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     // If `first` was provided, and it's a number, then use it.
     // If `first` was provided and it's not a number, it's a Date, and we get the difference between it and "now".
     // If `first` was not provided at all, then our first timer will be the value from `each`.
-    !seen && startTimer(first != null ? (typeof first === 'number' ? first : +first - scheduler!.now()) : each!);
+    !seen && startTimer(first !== undefined ? (typeof first === 'number' ? first : +first - scheduler!.now()) : each!);
   });
 }
 

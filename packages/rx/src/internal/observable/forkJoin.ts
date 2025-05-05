@@ -146,7 +146,7 @@ export function forkJoin(...args: any[]): Observable<any> {
   const resultSelector = popResultSelector(args);
   const { args: sources, keys } = argsArgArrayOrObject(args);
   const result = new Observable((subscriber) => {
-    const { length } = sources;
+    const length = sources.size();
     if (!length) {
       subscriber.complete();
       return;

@@ -4,6 +4,7 @@ import { mergeMap } from '../operators/mergeMap';
 import { isArrayLike } from '../util/isArrayLike';
 import { isFunction } from '../util/isFunction';
 import { mapOneOrManyArgs } from '../util/mapOneOrManyArgs';
+import { Error } from '@rbxts/luau-polyfill';
 
 // These constants are used to create handler registry functions using array mapping below.
 const nodeEventEmitterMethods = ['addListener', 'removeListener'] as const;
@@ -285,7 +286,7 @@ export function fromEvent<T>(
   // If add is falsy and we made it here, it's because we didn't
   // match any valid target objects above.
   if (!add) {
-    throw new TypeError('Invalid event target');
+    throw new Error('Invalid event target');
   }
 
   return new Observable<T>((subscriber) => {
@@ -296,7 +297,7 @@ export function fromEvent<T>(
     // Do the work of adding the handler to the target.
     add(handler);
     // When we finalize, we want to remove the handler and free up memory.
-    return () => remove!(handler);
+    return () => remove(handler);
   });
 }
 

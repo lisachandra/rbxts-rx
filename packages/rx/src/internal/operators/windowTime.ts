@@ -143,7 +143,7 @@ export function windowTime<T>(windowTimeSpan: number, ...otherArgs: any[]): Oper
       }
     };
 
-    if (windowCreationInterval !== null && windowCreationInterval >= 0) {
+    if (windowCreationInterval !== undefined && windowCreationInterval >= 0) {
       // The user passed both a windowTimeSpan (required), and a creation interval
       // That means we need to start new window on the interval, and those windows need
       // to wait the required time span before completing.

@@ -14,7 +14,7 @@ export class AsapAction<T> extends AsyncAction<T> {
 
   protected requestAsyncId(scheduler: AsapScheduler, id?: TimerHandle, delay: number = 0): TimerHandle {
     // If delay is greater than 0, request as an async action.
-    if (delay !== null && delay > 0) {
+    if (delay !== undefined && delay > 0) {
       return super.requestAsyncId(scheduler, id, delay);
     }
     // Push the action to the end of the scheduler queue.
@@ -29,14 +29,14 @@ export class AsapAction<T> extends AsyncAction<T> {
     // If delay exists and is greater than 0, or if the delay is null (the
     // action wasn't rescheduled) but was originally scheduled as an async
     // action, then recycle as an async action.
-    if (delay != null ? delay > 0 : this.delay > 0) {
+    if (delay !== undefined ? delay > 0 : this.delay > 0) {
       return super.recycleAsyncId(scheduler, id, delay);
     }
     // If the scheduler queue has no remaining actions with the same async id,
     // cancel the requested microtask and set the scheduled flag to undefined
     // so the next AsapAction will request its own.
     const { actions } = scheduler;
-    if (id != null && actions[actions.size() - 1]?.id !== id) {
+    if (id !== undefined && actions[actions.size() - 1]?.id !== id) {
       immediateProvider.clearImmediate(id);
       if (scheduler._scheduled === id) {
         scheduler._scheduled = undefined;

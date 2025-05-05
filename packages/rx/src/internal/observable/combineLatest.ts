@@ -11,6 +11,7 @@ import { createObject } from '../util/createObject';
 import { createOperatorSubscriber } from '../operators/OperatorSubscriber';
 import { AnyCatcher } from '../AnyCatcher';
 import { executeSchedule } from '../util/executeSchedule';
+import { Array } from '@rbxts/luau-polyfill';
 
 // combineLatest(any)
 // We put this first because we need to catch cases where the user has supplied
@@ -233,9 +234,9 @@ export function combineLatestInit(
     maybeSchedule(
       scheduler,
       () => {
-        const { length } = observables;
+        const length = observables.size();
         // A store for the values each observable has emitted so far. We match observable to value on index.
-        const values = new Array(length);
+        const values = table.create(length);
         // The number of currently active subscriptions, as they complete, we decrement this number to see if
         // we are all done combining values, so we can complete the result.
         let active = length;
@@ -265,7 +266,7 @@ export function combineLatestInit(
                     if (!remainingFirstValues) {
                       // We're not waiting for any more
                       // first values, so we can emit!
-                      subscriber.next(valueTransform(values.slice()));
+                      subscriber.next(valueTransform(Array.slice(values)));
                     }
                   },
                   () => {
