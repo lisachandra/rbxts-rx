@@ -3,6 +3,7 @@ import { Subscription } from '../Subscription';
 import { AsyncScheduler } from './AsyncScheduler';
 import { SchedulerAction } from '../types';
 import { TimerHandle } from './timerHandle';
+import { Array, Number } from '@rbxts/luau-polyfill';
 
 export class VirtualTimeScheduler extends AsyncScheduler {
   /** @deprecated Not used in VirtualTimeScheduler directly. Will be removed in v8. */
@@ -99,7 +100,7 @@ export class VirtualAction<T> extends AsyncAction<T> {
     this.delay = scheduler.frame + delay;
     const { actions } = scheduler;
     actions.push(this);
-    (actions as Array<VirtualAction<T>>).sort(VirtualAction.sortActions);
+    Array.sort(actions as Array<VirtualAction<T>>, VirtualAction.sortActions);
     return 1;
   }
 

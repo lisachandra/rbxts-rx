@@ -1,3 +1,4 @@
+import { cancelAnimationFrame, FrameRequestCallback, requestAnimationFrame } from 'internal/types';
 import { Subscription } from '../Subscription';
 
 interface AnimationFrameProvider {

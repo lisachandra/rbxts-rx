@@ -1,5 +1,5 @@
 import { InteropObservable } from '../types';
-import { observable as Symbol_observable } from '../symbol/observable';
+import { symbolObservable as Symbol_observable } from '../symbol/observable';
 import { isFunction } from './isFunction';
 
 /** Identifies an input as being Observable (but not necessary an Rx Observable) */

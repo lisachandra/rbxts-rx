@@ -1,6 +1,6 @@
 import { Scheduler } from '../Scheduler';
 import { Action } from './Action';
-import { AsyncAction } from './AsyncAction';
+import type { AsyncAction } from './AsyncAction';
 import { TimerHandle } from './timerHandle';
 
 export class AsyncScheduler extends Scheduler {

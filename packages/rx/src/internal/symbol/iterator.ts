@@ -1,7 +1,7 @@
 import { Symbol } from '@rbxts/luau-polyfill';
 
-export function getSymbolIterator(): symbol {
+export function getSymbolIterator() {
   return Symbol('iterator');
 }
 
-export const iterator = getSymbolIterator();
+export const symbolIterator: unique symbol = getSymbolIterator() as never;

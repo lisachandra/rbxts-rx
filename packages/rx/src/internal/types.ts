@@ -4,15 +4,12 @@
 import { Boolean } from '@rbxts/luau-polyfill';
 import type { Observable } from './Observable';
 import type { Subscription } from './Subscription';
+import { symbolObservable } from './symbol/observable';
 
-/**
- * Note: This will add Symbol.observable globally for all TypeScript users,
- * however, we are no longer polyfilling Symbol.observable
- */
-declare global {
-  interface SymbolConstructor {
-    readonly observable: symbol;
-  }
+export declare function cancelAnimationFrame(handle: number): void;
+export declare function requestAnimationFrame(callback: FrameRequestCallback): number;
+export interface FrameRequestCallback {
+  (time: number): void;
 }
 
 /* OPERATOR INTERFACES */
@@ -119,7 +116,7 @@ export type ObservableLike<T> = InteropObservable<T>;
  * An object that implements the `Symbol.observable` interface.
  */
 export interface InteropObservable<T> {
-  [Symbol.observable]: () => Subscribable<T>;
+  [symbolObservable]: () => Subscribable<T>;
 }
 
 /* NOTIFICATIONS */

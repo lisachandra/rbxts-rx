@@ -1,3 +1,4 @@
+import { clearInterval, setInterval } from '@rbxts/luau-polyfill';
 import type { TimerHandle } from './timerHandle';
 type SetIntervalFunction = (handler: () => void, timeout?: number, ...args: any[]) => TimerHandle;
 type ClearIntervalFunction = (handle: TimerHandle) => void;
@@ -16,12 +17,12 @@ interface IntervalProvider {
 export const intervalProvider: IntervalProvider = {
   // When accessing the delegate, use the variable rather than `this` so that
   // the functions can be called without being bound to the provider.
-  setInterval(handler: () => void, timeout?: number, ...args) {
+  setInterval(handler: () => void, timeout?: number, ...args: any[]) {
     const { delegate } = intervalProvider;
     if (delegate?.setInterval) {
       return delegate.setInterval(handler, timeout, ...args);
     }
-    return setInterval(handler, timeout, ...args);
+    return setInterval<any[]>(handler, timeout, ...args);
   },
   clearInterval(handle) {
     const { delegate } = intervalProvider;

@@ -10,7 +10,7 @@ import { isReadableStreamLike, readableStreamLikeToAsyncGenerator } from '../uti
 import { Subscriber } from '../Subscriber';
 import { isFunction } from '../util/isFunction';
 import { reportUnhandledError } from '../util/reportUnhandledError';
-import { observable as Symbol_observable } from '../symbol/observable';
+import { symbolObservable as Symbol_observable } from '../symbol/observable';
 import { Error } from '@rbxts/luau-polyfill';
 
 export function innerFrom<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;

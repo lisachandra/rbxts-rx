@@ -1,6 +1,6 @@
 import { Observable } from '../Observable';
 import { SchedulerLike } from '../types';
-import { iterator as Symbol_iterator } from '../symbol/iterator';
+import { symbolIterator as Symbol_iterator } from '../symbol/iterator';
 import { isFunction } from '../util/isFunction';
 import { executeSchedule } from '../util/executeSchedule';
 

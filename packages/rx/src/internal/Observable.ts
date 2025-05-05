@@ -2,7 +2,7 @@ import type { Operator } from './Operator';
 import { SafeSubscriber, Subscriber } from './Subscriber';
 import { isSubscription, Subscription } from './Subscription';
 import type { TeardownLogic, OperatorFunction, Subscribable, Observer } from './types';
-import { observable as Symbol_observable } from './symbol/observable';
+import { symbolObservable as Symbol_observable } from './symbol/observable';
 import { pipeFromArray } from './util/pipe';
 import { config } from './config';
 import { isFunction } from './util/isFunction';

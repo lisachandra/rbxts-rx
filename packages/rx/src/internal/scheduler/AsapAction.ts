@@ -3,6 +3,7 @@ import { AsapScheduler } from './AsapScheduler';
 import { SchedulerAction } from '../types';
 import { immediateProvider } from './immediateProvider';
 import { TimerHandle } from './timerHandle';
+import { bind } from 'internal/polyfill/bind';
 
 export class AsapAction<T> extends AsyncAction<T> {
   constructor(
@@ -22,7 +23,10 @@ export class AsapAction<T> extends AsyncAction<T> {
     // If a microtask has already been scheduled, don't schedule another
     // one. If a microtask hasn't been scheduled yet, schedule one now. Return
     // the current scheduled microtask id.
-    return scheduler._scheduled || (scheduler._scheduled = immediateProvider.setImmediate(scheduler.flush.bind(scheduler, undefined)));
+    return (
+      scheduler._scheduled ||
+      (scheduler._scheduled = immediateProvider.setImmediate(bind(true, scheduler['flush'] as never, scheduler, undefined)))
+    );
   }
 
   protected recycleAsyncId(scheduler: AsapScheduler, id?: TimerHandle, delay: number = 0): TimerHandle | undefined {

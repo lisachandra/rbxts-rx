@@ -5,6 +5,8 @@ import { AsyncScheduler } from './AsyncScheduler';
 import { intervalProvider } from './intervalProvider';
 import { arrRemove } from '../util/arrRemove';
 import { TimerHandle } from './timerHandle';
+import { Error } from '@rbxts/luau-polyfill';
+import { bind } from 'internal/polyfill/bind';
 
 export class AsyncAction<T> extends Action<T> {
   public id: TimerHandle | undefined;
@@ -68,7 +70,7 @@ export class AsyncAction<T> extends Action<T> {
   }
 
   protected requestAsyncId(scheduler: AsyncScheduler, _id?: TimerHandle, delay: number = 0): TimerHandle {
-    return intervalProvider.setInterval(scheduler.flush.bind(scheduler, this), delay);
+    return intervalProvider.setInterval(bind(true, scheduler['flush' as never], scheduler, this), delay);
   }
 
   protected recycleAsyncId(_scheduler: AsyncScheduler, id?: TimerHandle, delay: number | null = 0): TimerHandle | undefined {
