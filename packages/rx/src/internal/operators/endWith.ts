@@ -1,4 +1,3 @@
-/** prettier */
 import { Observable } from '../Observable';
 import { concat } from '../observable/concat';
 import { of } from '../observable/of';

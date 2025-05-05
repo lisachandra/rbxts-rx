@@ -1,4 +1,4 @@
-import { Falsy, MonoTypeOperatorFunction, OperatorFunction } from '../types';
+import { BooleanConstructor, Falsy, MonoTypeOperatorFunction, OperatorFunction } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 

@@ -47,5 +47,5 @@ it('should enforce scheduler type', () => {
 });
 
 it('should support union types', () => {
-  const o = of(1).pipe(expand((x) => (typeof x === 'string' ? of(123) : of('test')))); // $ExpectType Observable<string | number>
+  const o = of(1).pipe(expand((x) => (typeIs(x, 'string') ? of(123) : of('test')))); // $ExpectType Observable<string | number>
 });

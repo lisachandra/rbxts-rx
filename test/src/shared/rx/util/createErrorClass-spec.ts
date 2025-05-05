@@ -1,4 +1,3 @@
-/** @prettier */
 import { createErrorClass } from 'rxjs/internal/util/createErrorClass';
 import { expect } from 'chai';
 
@@ -6,7 +5,7 @@ describe('createErrorClass', () => {
   it('should create a class that subclasses error and has the right properties', () => {
     const MySpecialError: any = createErrorClass(
       (_super) =>
-        function MySpecialError(this: any, arg1: number, arg2: string) {
+        function (this: any, arg1: number, arg2: string) {
           _super(this);
           this.message = 'Super special error!';
           this.arg1 = arg1;

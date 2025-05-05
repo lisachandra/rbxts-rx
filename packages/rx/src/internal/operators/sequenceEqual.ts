@@ -60,7 +60,7 @@ import { innerFrom } from '../observable/innerFrom';
  * value representing whether or not the values emitted by the source
  * Observable and provided `ObservableInput` were equal in sequence.
  */
-export function sequenceEqual<T>(
+export function sequenceEqual<T extends defined>(
   compareTo: ObservableInput<T>,
   comparator: (a: T, b: T) => boolean = (a, b) => a === b
 ): OperatorFunction<T, boolean> {

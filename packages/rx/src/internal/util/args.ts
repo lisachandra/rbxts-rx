@@ -15,5 +15,5 @@ export function popScheduler(args: any[]): SchedulerLike | undefined {
 }
 
 export function popNumber(args: any[], defaultValue: number): number {
-  return typeof last(args) === 'number' ? args.pop()! : defaultValue;
+  return typeIs(last(args), 'number') ? args.pop()! : defaultValue;
 }

@@ -8,6 +8,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
 import { arrRemove } from '../util/arrRemove';
 import { popScheduler } from '../util/args';
 import { executeSchedule } from '../util/executeSchedule';
+import { Array } from '@rbxts/luau-polyfill';
 
 export function windowTime<T>(windowTimeSpan: number, scheduler?: SchedulerLike): OperatorFunction<T, Observable<T>>;
 export function windowTime<T>(
@@ -160,7 +161,7 @@ export function windowTime<T>(windowTimeSpan: number, ...otherArgs: any[]): Oper
      * The reason we copy the array is that reentrant code could mutate the array while
      * we are iterating over it.
      */
-    const loop = (cb: (record: WindowRecord<T>) => void) => windowRecords!.slice().forEach(cb);
+    const loop = (cb: (record: WindowRecord<T>) => void) => Array.slice(windowRecords!).forEach(cb);
 
     /**
      * Used to notify all of the windows and the subscriber in the same way

@@ -1,5 +1,5 @@
 import { Observable } from '../Observable';
-import { Falsy, OperatorFunction } from '../types';
+import { BooleanConstructor, Falsy, OperatorFunction } from '../types';
 import { operate } from '../util/lift';
 import { createFind } from './find';
 
@@ -50,8 +50,8 @@ export function findIndex<T>(predicate: (value: T, index: number, source: Observ
  * @see {@link take}
  *
  * @param predicate A function called with each item to test for condition matching.
- * @param thisArg An optional argument to determine the value of `this` in the
- * `predicate` function.
+ * @param @deprecated thisArg An optional argument to determine the value of `this` in the
+ * `predicate` function. Unused for now.
  * @return A function that returns an Observable that emits the index of the
  * first item that matches the condition.
  */

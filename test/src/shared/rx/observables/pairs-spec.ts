@@ -1,4 +1,3 @@
-/** @prettier */
 import { expect } from 'chai';
 import { TestScheduler } from 'rxjs/testing';
 import { pairs } from 'rxjs';
@@ -25,7 +24,7 @@ describe('pairs', () => {
   });
 
   it('should create an observable without scheduler', (done) => {
-    let expected = [
+    const expected = [
       ['a', 1],
       ['b', 2],
       ['c', 3],

@@ -3,7 +3,7 @@ import * as sinon from 'sinon';
 import { webSocket } from 'rxjs/webSocket';
 import { map, retry, take, repeat, takeWhile } from 'rxjs/operators';
 
-const root: any = (typeof globalThis !== 'undefined' && globalThis) || (typeof self !== 'undefined' && self) || global;
+const root: any = (!typeIs(globalThis !== 'undefined' && globalThis) || (typeof self, 'nil') && self) || global;
 
 enum WebSocketState {
   CONNECTING = 0,

@@ -18,7 +18,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * @param innerSubScheduler A scheduler to use to schedule inner subscriptions,
  * this is to support the expand strategy, mostly, and should be deprecated
  */
-export function mergeInternals<T, R>(
+export function mergeInternals<T extends defined, R>(
   source: Observable<T>,
   subscriber: Subscriber<R>,
   project: (value: T, index: number) => ObservableInput<R>,

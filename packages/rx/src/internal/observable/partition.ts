@@ -71,8 +71,8 @@ export function partition<T>(source: ObservableInput<T>, predicate: (value: T, i
  * in the returned array, if `false` the value is emitted on the second Observable
  * in the array. The `index` parameter is the number `i` for the i-th source
  * emission that has happened since the subscription, starting from the number `0`.
- * @param thisArg An optional argument to determine the value of `this` in the
- * `predicate` function.
+ * @param @deprecated thisArg An optional argument to determine the value of `this` in the
+ * `predicate` function. Unused for now.
  * @return An array with two Observables: one with values that passed the
  * predicate, and another with values that did not pass the predicate.
  */

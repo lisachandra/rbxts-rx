@@ -49,7 +49,7 @@ import { arrRemove } from '../util/arrRemove';
  * and cleared.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferToggle<T, O>(
+export function bufferToggle<T extends defined, O>(
   openings: ObservableInput<O>,
   closingSelector: (value: O) => ObservableInput<any>
 ): OperatorFunction<T, T[]> {

@@ -1,4 +1,4 @@
-import { OperatorFunction, MonoTypeOperatorFunction, TruthyTypesOf } from '../types';
+import { OperatorFunction, MonoTypeOperatorFunction, TruthyTypesOf, BooleanConstructor } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 
@@ -53,8 +53,8 @@ export function filter<T>(predicate: (value: T, index: number) => boolean): Mono
  * Observable. The `index` parameter is the number `i` for the i-th source
  * emission that has happened since the subscription, starting from the number
  * `0`.
- * @param thisArg An optional argument to determine the value of `this`
- * in the `predicate` function.
+ * @param @deprecated thisArg An optional argument to determine the value of `this`
+ * in the `predicate` function. Unused for now.
  * @return A function that returns an Observable that emits items from the
  * source Observable that satisfy the specified `predicate`.
  */
@@ -69,7 +69,7 @@ export function filter<T>(predicate: (value: T, index: number) => boolean, thisA
       // Call the predicate with the appropriate `this` context,
       // if the predicate returns `true`, then send the value
       // to the consumer.
-      createOperatorSubscriber(subscriber, (value) => predicate.call(thisArg, value, index++) && subscriber.next(value))
+      createOperatorSubscriber(subscriber, (value) => predicate(value, index++) && subscriber.next(value))
     );
   });
 }

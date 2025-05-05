@@ -9,7 +9,7 @@ const escapeRe = require('escape-string-regexp');
 
 declare const module: any, global: any, Suite: any, Test: any;
 
-if (global && !(typeof window !== 'undefined')) {
+if (global && !(!typeIs(window, 'nil'))) {
   global.mocha = require('mocha'); // tslint:disable-line:no-require-imports no-var-requires
   global.Suite = global.mocha.Suite;
   global.Test = global.mocha.Test;

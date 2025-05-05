@@ -1,4 +1,3 @@
-/** @prettier */
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import { ajax, AjaxConfig, AjaxResponse, AjaxError, AjaxTimeoutError } from 'rxjs/ajax';
@@ -6,9 +5,9 @@ import { TestScheduler } from 'rxjs/testing';
 import { noop } from 'rxjs';
 import * as nodeFormData from 'form-data';
 
-const root: any = (typeof globalThis !== 'undefined' && globalThis) || (typeof self !== 'undefined' && self) || global;
+const root: any = (!typeIs(globalThis !== 'undefined' && globalThis) || (typeof self, 'nil') && self) || global;
 
-if (typeof root.FormData === 'undefined') {
+if (typeIs(root.FormData, 'nil')) {
   root.FormData = nodeFormData as any;
 }
 
@@ -1591,11 +1590,11 @@ class MockXMLHttpRequest extends MockXHREventTarget {
   private static requests: Array<MockXMLHttpRequest> = [];
   private static recentRequest: MockXMLHttpRequest;
 
-  static get mostRecent(): MockXMLHttpRequest {
+  static getmostRecent(): MockXMLHttpRequest {
     return MockXMLHttpRequest.recentRequest;
   }
 
-  static get allRequests(): Array<MockXMLHttpRequest> {
+  static getallRequests(): Array<MockXMLHttpRequest> {
     return MockXMLHttpRequest.requests;
   }
 

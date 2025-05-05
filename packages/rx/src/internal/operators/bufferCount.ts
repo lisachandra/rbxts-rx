@@ -54,7 +54,7 @@ import { arrRemove } from '../util/arrRemove';
  * beginning of the source by default.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferCount<T>(bufferSize: number, startBufferEvery: number | null = null): OperatorFunction<T, T[]> {
+export function bufferCount<T extends defined>(bufferSize: number, startBufferEvery: number | null = null): OperatorFunction<T, T[]> {
   // If no `startBufferEvery` value was supplied, then we're
   // opening and closing on the bufferSize itself.
   startBufferEvery = startBufferEvery ?? bufferSize;
@@ -72,7 +72,7 @@ export function bufferCount<T>(bufferSize: number, startBufferEvery: number | nu
           // Check to see if we need to start a buffer.
           // This will start one at the first value, and then
           // a new one every N after that.
-          if (count++ % startBufferEvery! === 0) {
+          if (count++ % startBufferEvery === 0) {
             buffers.push([]);
           }
 

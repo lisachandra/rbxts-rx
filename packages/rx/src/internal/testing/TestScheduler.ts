@@ -194,7 +194,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     const { runMode } = this;
     return {
       toBe(marblesOrMarblesArray: string | string[]) {
-        const marblesArray: string[] = typeof marblesOrMarblesArray === 'string' ? [marblesOrMarblesArray] : marblesOrMarblesArray;
+        const marblesArray: string[] = typeIs(marblesOrMarblesArray, 'string') ? [marblesOrMarblesArray] : marblesOrMarblesArray;
         flushTest.ready = true;
         flushTest.expected = marblesArray
           .map((marbles) => TestScheduler.parseMarblesAsSubscriptions(marbles, runMode))
@@ -221,7 +221,7 @@ export class TestScheduler extends VirtualTimeScheduler {
   }
 
   static parseMarblesAsSubscriptions(marbles: string | null, runMode = false): SubscriptionLog {
-    if (typeof marbles !== 'string') {
+    if (!typeIs(marbles, 'string')) {
       return new SubscriptionLog(math.huge);
     }
     // Spreading the marbles into an array leverages ES2015's support for emoji
@@ -335,7 +335,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     const subIndex = runMode ? marbles.replace(/^[ ]+/, '').indexOf('^') : marbles.indexOf('^');
     let frame = subIndex === -1 ? 0 : subIndex * -this.frameTimeFactor;
     const getValue =
-      typeof values !== 'object'
+      !typeIs(values, 'table')
         ? (x: any) => x
         : (x: any) => {
             // Support Observable-of-Observables

@@ -26,5 +26,5 @@ export function argsArgArrayOrObject<T, O extends Record<string, T>>(args: T[] |
 }
 
 function isPOJO(obj: any): obj is object {
-  return obj && typeof obj === 'object' && getPrototypeOf(obj) === objectProto;
+  return obj && typeIs(obj, 'table') && getPrototypeOf(obj) === objectProto;
 }

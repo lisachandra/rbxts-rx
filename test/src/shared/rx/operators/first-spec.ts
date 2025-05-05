@@ -294,7 +294,7 @@ describe('first', () => {
       const xs: Observable<string | number> = from([1, 'aaa', 3, 'bb']);
 
       // This type guard will narrow a `string | number` to a string in the examples below
-      const isString = (x: string | number): x is string => typeof x === 'string';
+      const isString = (x: string | number): x is string => typeIs(x, 'string');
 
       // missing predicate preserves the type
       xs.pipe(first()).subscribe((x) => x); // x is still string | number
@@ -309,7 +309,7 @@ describe('first', () => {
       xs.pipe(first(isString)).subscribe((s) => s.size()); // s is string
 
       // boolean predicates preserve the type
-      xs.pipe(first((x) => typeof x === 'string')).subscribe((x) => x); // x is still string | number
+      xs.pipe(first((x) => typeIs(x, 'string'))).subscribe((x) => x); // x is still string | number
     }
 
     // tslint:disable enable

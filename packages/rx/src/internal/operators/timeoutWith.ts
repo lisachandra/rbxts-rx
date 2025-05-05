@@ -2,10 +2,11 @@ import { async } from '../scheduler/async';
 import { isValidDate } from '../util/isDate';
 import { ObservableInput, OperatorFunction, SchedulerLike } from '../types';
 import { timeout } from './timeout';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @deprecated Replaced with {@link timeout}. Instead of `timeoutWith(someDate, a$, scheduler)`, use the configuration object
  * `timeout({ first: someDate, with: () => a$, scheduler })`. Will be removed in v8. */
-export function timeoutWith<T, R>(dueBy: Date, switchTo: ObservableInput<R>, scheduler?: SchedulerLike): OperatorFunction<T, T | R>;
+export function timeoutWith<T, R>(dueBy: DateTime, switchTo: ObservableInput<R>, scheduler?: SchedulerLike): OperatorFunction<T, T | R>;
 /** @deprecated Replaced with {@link timeout}. Instead of `timeoutWith(100, a$, scheduler)`, use the configuration object
  *  `timeout({ each: 100, with: () => a$, scheduler })`. Will be removed in v8. */
 export function timeoutWith<T, R>(waitFor: number, switchTo: ObservableInput<R>, scheduler?: SchedulerLike): OperatorFunction<T, T | R>;
@@ -81,30 +82,30 @@ export function timeoutWith<T, R>(waitFor: number, switchTo: ObservableInput<R>,
  * with the configuration object: `timeout({ first: someDate, with: () => a$, scheduler })`. Will be removed in v8.
  */
 export function timeoutWith<T, R>(
-  due: number | Date,
+  due: number | DateTime,
   withObservable: ObservableInput<R>,
   scheduler?: SchedulerLike
 ): OperatorFunction<T, T | R> {
-  let first: number | Date | undefined;
+  let first: number | DateTime | undefined;
   let each: number | undefined;
   let _with: () => ObservableInput<R>;
   scheduler = scheduler ?? async;
 
   if (isValidDate(due)) {
     first = due;
-  } else if (typeof due === 'number') {
+  } else if (typeIs(due, 'number')) {
     each = due;
   }
 
   if (withObservable) {
     _with = () => withObservable;
   } else {
-    throw new TypeError('No observable provided to switch to');
+    throw new Error('No observable provided to switch to');
   }
 
   if (first === undefined && each === undefined) {
     // Ensure timeout was provided at runtime.
-    throw new TypeError('No timeout provided.');
+    throw new Error('No timeout provided.');
   }
 
   return timeout<T, ObservableInput<R>>({

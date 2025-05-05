@@ -49,7 +49,7 @@ export function defaultIfEmpty<T, R>(defaultValue: R): OperatorFunction<T, T | R
         },
         () => {
           if (!hasValue) {
-            subscriber.next(defaultValue!);
+            subscriber.next(defaultValue);
           }
           subscriber.complete();
         }

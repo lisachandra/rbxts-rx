@@ -8,6 +8,7 @@ import { innerFrom } from '../observable/innerFrom';
 import { createErrorClass } from '../util/createErrorClass';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 import { executeSchedule } from '../util/executeSchedule';
+import { Error } from '@rbxts/luau-polyfill';
 
 export interface TimeoutConfig<T, O extends ObservableInput<unknown> = ObservableInput<T>, M = unknown> {
   /**
@@ -19,7 +20,7 @@ export interface TimeoutConfig<T, O extends ObservableInput<unknown> = Observabl
    * The relative time as a `number` in milliseconds, or a specific time as a `Date` object,
    * by which the first value must arrive from the source before timeout is triggered.
    */
-  first?: number | Date;
+  first?: number | DateTime;
 
   /**
    * The scheduler to use with time-related operations within this operator. Defaults to {@link asyncScheduler}
@@ -85,7 +86,7 @@ export interface TimeoutErrorCtor {
  */
 export const TimeoutError: TimeoutErrorCtor = createErrorClass(
   (_super) =>
-    function TimeoutErrorImpl(this: any, info: TimeoutInfo<any> | null = null) {
+    function (this: any, info: TimeoutInfo<any> | null = null) {
       _super(this);
       this.message = 'Timeout has occurred';
       this.name = 'TimeoutError';
@@ -267,7 +268,7 @@ export function timeout<T, M = unknown>(config: Omit<TimeoutConfig<T, any, M>, '
  * does not emit at least one value.
  * @param scheduler The scheduler to use. Defaults to {@link asyncScheduler}.
  */
-export function timeout<T>(first: Date, scheduler?: SchedulerLike): MonoTypeOperatorFunction<T>;
+export function timeout<T>(first: DateTime, scheduler?: SchedulerLike): MonoTypeOperatorFunction<T>;
 
 /**
  * Returns an observable that will error if the source does not push a value within the specified time in milliseconds.
@@ -297,7 +298,7 @@ export function timeout<T>(each: number, scheduler?: SchedulerLike): MonoTypeOpe
  * source Observable, unless timeout happens when it throws an error.
  */
 export function timeout<T, O extends ObservableInput<any>, M>(
-  config: number | Date | TimeoutConfig<T, O, M>,
+  config: number | DateTime | TimeoutConfig<T, O, M>,
   schedulerArg?: SchedulerLike
 ): OperatorFunction<T, T | ObservedValueOf<O>> {
   // Intentionally terse code.
@@ -313,11 +314,11 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     with: _with = timeoutErrorFactory,
     scheduler = schedulerArg ?? asyncScheduler,
     meta = null!,
-  } = (isValidDate(config) ? { first: config } : typeof config === 'number' ? { each: config } : config) as TimeoutConfig<T, O, M>;
+  } = isValidDate(config) ? { first: config } : typeIs(config, 'number') ? { each: config } : config;
 
   if (first === undefined && each === undefined) {
     // Ensure timeout was provided at runtime.
-    throw new TypeError('No timeout provided.');
+    throw new Error('No timeout provided.');
   }
 
   return operate((source, subscriber) => {
@@ -326,7 +327,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     // because if there is a `with` observable to fail over to,
     // we want to unsubscribe from our original subscription, and
     // hand of the subscription to that one.
-    let originalSourceSubscription: Subscription;
+    let originalSourceSubscription: Subscription = undefined as never;
     // The subscription for our timeout timer. This changes
     // every time we get a new value.
     let timerSubscription: Subscription;
@@ -344,7 +345,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
           try {
             originalSourceSubscription.unsubscribe();
             innerFrom(
-              _with!({
+              _with({
                 meta,
                 lastValue,
                 seen,
@@ -389,7 +390,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     // If `first` was provided, and it's a number, then use it.
     // If `first` was provided and it's not a number, it's a Date, and we get the difference between it and "now".
     // If `first` was not provided at all, then our first timer will be the value from `each`.
-    !seen && startTimer(first !== undefined ? (typeof first === 'number' ? first : +first - scheduler!.now()) : each!);
+    !seen && startTimer(first !== undefined ? (typeIs(first, 'number') ? first : first.UnixTimestampMillis - scheduler.now()) : each!);
   });
 }
 

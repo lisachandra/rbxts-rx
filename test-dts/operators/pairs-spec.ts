@@ -1,4 +1,3 @@
-/** @prettier */
 import { pairs, asyncScheduler } from 'rxjs';
 
 describe('pairs', () => {

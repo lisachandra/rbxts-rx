@@ -1,4 +1,3 @@
-/** @prettier */
 import { onErrorResumeNext, of } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { expect } from 'chai';
@@ -75,7 +74,7 @@ describe('onErrorResumeNext', () => {
   });
 
   it('should call finalize after each sync observable', () => {
-    let results: any[] = [];
+    const results: any[] = [];
 
     onErrorResumeNext(
       of(1).pipe(finalize(() => results.push('finalize 1'))),

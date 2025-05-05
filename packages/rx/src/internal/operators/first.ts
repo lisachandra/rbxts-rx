@@ -1,6 +1,6 @@
 import { Observable } from '../Observable';
 import { EmptyError } from '../util/EmptyError';
-import { OperatorFunction, TruthyTypesOf } from '../types';
+import { BooleanConstructor, OperatorFunction, TruthyTypesOf } from '../types';
 import { filter } from './filter';
 import { take } from './take';
 import { defaultIfEmpty } from './defaultIfEmpty';
@@ -83,7 +83,7 @@ export function first<T, D>(
   predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | null,
   defaultValue?: D
 ): OperatorFunction<T, T | D> {
-  const hasDefaultValue = arguments.size() >= 2;
+  const hasDefaultValue = defaultValue !== undefined;
   return (source: Observable<T>) =>
     source.pipe(
       predicate ? filter((v, i) => predicate(v, i, source)) : identity,

@@ -5,7 +5,7 @@
 import * as chai from 'chai';
 import * as sinonChai from 'sinon-chai';
 
-if (typeof Symbol !== 'function') {
+if (!typeIs(Symbol, 'function')) {
   let id = 0;
   const symbolFn: any = (description: string) => `Symbol_${id++} ${description} (RxJS Testing Polyfill)`;
 

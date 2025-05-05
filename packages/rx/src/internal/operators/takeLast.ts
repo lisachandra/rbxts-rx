@@ -42,7 +42,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * @return A function that returns an Observable that emits at most the last
  * `count` values emitted by the source Observable.
  */
-export function takeLast<T>(count: number): MonoTypeOperatorFunction<T> {
+export function takeLast<T extends defined>(count: number): MonoTypeOperatorFunction<T> {
   return count <= 0
     ? () => EMPTY
     : operate((source, subscriber) => {

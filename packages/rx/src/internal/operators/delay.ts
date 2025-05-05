@@ -59,7 +59,7 @@ import { timer } from '../observable/timer';
  * @return A function that returns an Observable that delays the emissions of
  * the source Observable by the specified timeout or Date.
  */
-export function delay<T>(due: number | Date, scheduler: SchedulerLike = asyncScheduler): MonoTypeOperatorFunction<T> {
+export function delay<T>(due: number | DateTime, scheduler: SchedulerLike = asyncScheduler): MonoTypeOperatorFunction<T> {
   const duration = timer(due, scheduler);
   return delayWhen(() => duration);
 }

@@ -1,4 +1,3 @@
-/** @prettier */
 import { expect } from 'chai';
 import { TestScheduler } from 'rxjs/testing';
 import { asyncScheduler, of, from, Observer, observable, Subject, noop, Subscription } from 'rxjs';
@@ -177,7 +176,7 @@ describe('from', () => {
   });
 
   const fakeArrayObservable = <T>(...values: T[]) => {
-    let arr: any = ['bad array!'];
+    const arr: any = ['bad array!'];
     arr[observable] = () => {
       return {
         subscribe: (observer: Observer<T>) => {

@@ -80,7 +80,7 @@ export function publishReplay<T, O extends ObservableInput<any>>(
  * behaviors.
  * Details: https://rxjs.dev/deprecations/multicasting
  */
-export function publishReplay<T, R>(
+export function publishReplay<T extends defined, R>(
   bufferSize?: number,
   windowTime?: number,
   selectorOrScheduler?: TimestampProvider | OperatorFunction<T, R>,

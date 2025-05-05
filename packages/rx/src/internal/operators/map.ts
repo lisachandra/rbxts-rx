@@ -39,8 +39,8 @@ export function map<T, R, A>(project: (this: A, value: T, index: number) => R, t
  * @param project The function to apply to each `value` emitted by the source
  * Observable. The `index` parameter is the number `i` for the i-th emission
  * that has happened since the subscription, starting from the number `0`.
- * @param thisArg An optional argument to define what `this` is in the
- * `project` function.
+ * @param @deprecated thisArg An optional argument to define what `this` is in the
+ * `project` function. Unused for now.
  * @return A function that returns an Observable that emits the values from the
  * source Observable transformed by the given `project` function.
  */
@@ -54,7 +54,7 @@ export function map<T, R>(project: (value: T, index: number) => R, thisArg?: any
       createOperatorSubscriber(subscriber, (value: T) => {
         // Call the projection function with the appropriate this context,
         // and send the resulting value to the consumer.
-        subscriber.next(project.call(thisArg, value, index++));
+        subscriber.next(project(value, index++));
       })
     );
   });

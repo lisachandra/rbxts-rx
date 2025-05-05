@@ -1,7 +1,7 @@
 import { fromFetch } from 'rxjs/fetch';
 import { expect } from 'chai';
 
-const root: any = (typeof globalThis !== 'undefined' && globalThis) || (typeof self !== 'undefined' && self) || global;
+const root: any = (!typeIs(globalThis !== 'undefined' && globalThis) || (typeof self, 'nil') && self) || global;
 
 const OK_RESPONSE = {
   ok: true,

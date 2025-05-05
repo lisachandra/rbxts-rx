@@ -43,7 +43,7 @@ import { innerFrom } from '../observable/innerFrom';
  * Observable that signals buffer closure.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferWhen<T>(closingSelector: () => ObservableInput<any>): OperatorFunction<T, T[]> {
+export function bufferWhen<T extends defined>(closingSelector: () => ObservableInput<any>): OperatorFunction<T, T[]> {
   return operate((source, subscriber) => {
     // The buffer we keep and emit.
     let buffer: T[] | null = null;

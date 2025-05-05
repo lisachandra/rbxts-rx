@@ -152,17 +152,17 @@ export function shareReplay<T>(bufferSize?: number, windowTime?: number, schedul
  * elements of a sequence produced by multicasting the source sequence within a
  * selector function.
  */
-export function shareReplay<T>(
+export function shareReplay<T extends defined>(
   configOrBufferSize?: ShareReplayConfig | number,
   windowTime?: number,
   scheduler?: SchedulerLike
 ): MonoTypeOperatorFunction<T> {
   let bufferSize: number;
   let refCount = false;
-  if (configOrBufferSize && typeof configOrBufferSize === 'object') {
+  if (configOrBufferSize && typeIs(configOrBufferSize, 'table')) {
     ({ bufferSize = math.huge, windowTime = math.huge, refCount = false, scheduler } = configOrBufferSize);
   } else {
-    bufferSize = (configOrBufferSize ?? math.huge) as number;
+    bufferSize = (configOrBufferSize ?? math.huge);
   }
   return share<T>({
     connector: () => new ReplaySubject(bufferSize, windowTime, scheduler),

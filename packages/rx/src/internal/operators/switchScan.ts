@@ -39,6 +39,7 @@ export function switchScan<T, R, O extends ObservableInput<any>>(
       (value: T, index) => accumulator(state, value, index),
       // Using the deprecated result selector here as a dirty trick
       // to update our state with the flattened value.
+      // eslint-disable-next-line no-sequences
       (_, innerValue) => ((state = innerValue), innerValue)
     )(source).subscribe(subscriber);
 

@@ -1,4 +1,3 @@
-/** @prettier */
 import { Observable, ConnectableObservable, connectable, of, AsyncSubject, BehaviorSubject, ReplaySubject, Subject, merge } from 'rxjs';
 import { connect, share, multicast, publish, publishReplay, publishBehavior, publishLast, refCount, repeat, retry } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';

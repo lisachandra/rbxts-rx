@@ -1,6 +1,7 @@
 // https://github.com/microsoft/TypeScript/issues/40462#issuecomment-689879308
 /// <reference lib="esnext.asynciterable" />
 
+import { Boolean } from '@rbxts/luau-polyfill';
 import type { Observable } from './Observable';
 import type { Subscription } from './Subscription';
 
@@ -377,3 +378,5 @@ export type SignalLike<T extends Callback = Callback> =
   | { subscribe(callback: T): ConnectionLike };
 
 export type ConnectionLike = (() => void) | { Disconnect(): void } | { disconnect(): void };
+
+export type BooleanConstructor = typeof Boolean.toJSBoolean;

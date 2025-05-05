@@ -146,7 +146,7 @@ export function groupBy<T, K, R>(
 ): OperatorFunction<T, GroupedObservable<K, R>> {
   return operate((source, subscriber) => {
     let element: ((value: any) => any) | void;
-    if (!elementOrOptions || typeof elementOrOptions === 'function') {
+    if (!elementOrOptions || typeIs(elementOrOptions, 'function')) {
       element = elementOrOptions as (value: any) => any;
     } else {
       ({ duration, element, connector } = elementOrOptions);

@@ -2,6 +2,7 @@ import { reduce } from './reduce';
 import { OperatorFunction } from '../types';
 import { operate } from '../util/lift';
 
+// eslint-disable-next-line no-sequences
 const arrReducer = (arr: any[], value: any) => (arr.push(value), arr);
 
 /**

@@ -86,7 +86,7 @@ export function mergeMap<T, R, O extends ObservableInput<any>>(
   if (isFunction(resultSelector)) {
     // DEPRECATED PATH
     return mergeMap((a, i) => map((b: any, ii: number) => resultSelector(a, b, i, ii))(innerFrom(project(a, i))), concurrent);
-  } else if (typeof resultSelector === 'number') {
+  } else if (typeIs(resultSelector, 'number')) {
     concurrent = resultSelector;
   }
 

@@ -58,7 +58,7 @@ export function elementAt<T, D = T>(index: number, defaultValue?: D): OperatorFu
   if (index < 0) {
     throw new ArgumentOutOfRangeError();
   }
-  const hasDefaultValue = arguments.size() >= 2;
+  const hasDefaultValue = defaultValue !== undefined;
   return (source: Observable<T>) =>
     source.pipe(
       filter((v, i) => i === index),

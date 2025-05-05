@@ -1,4 +1,3 @@
-/** @prettier */
 import { expect } from 'chai';
 import { TestScheduler } from 'rxjs/testing';
 import { throwError } from 'rxjs';
@@ -44,7 +43,7 @@ describe('throwError', () => {
 
   it('should accept a factory function', () => {
     let calls = 0;
-    let errors: any[] = [];
+    const errors: any[] = [];
 
     const source = throwError(() => ({
       call: ++calls,

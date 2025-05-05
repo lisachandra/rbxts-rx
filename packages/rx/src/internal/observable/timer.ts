@@ -81,7 +81,7 @@ import { isValidDate } from '../util/isDate';
  * If a `Date`, the exact time at which to emit.
  * @param scheduler The scheduler to use to schedule the delay. Defaults to {@link asyncScheduler}.
  */
-export function timer(due: number | Date, scheduler?: SchedulerLike): Observable<0>;
+export function timer(due: number | DateTime, scheduler?: SchedulerLike): Observable<0>;
 
 /**
  * Creates an observable that starts an interval after a specified delay, emitting incrementing numbers -- starting at `0` --
@@ -123,15 +123,15 @@ export function timer(due: number | Date, scheduler?: SchedulerLike): Observable
  * no `intervalDuration` was passed at all.
  * @param scheduler The scheduler to use to schedule the delay. Defaults to {@link asyncScheduler}.
  */
-export function timer(startDue: number | Date, intervalDuration: number, scheduler?: SchedulerLike): Observable<number>;
+export function timer(startDue: number | DateTime, intervalDuration: number, scheduler?: SchedulerLike): Observable<number>;
 
 /**
  * @deprecated The signature allowing `undefined` to be passed for `intervalDuration` will be removed in v8. Use the `timer(dueTime, scheduler?)` signature instead.
  */
-export function timer(dueTime: number | Date, unused: undefined, scheduler?: SchedulerLike): Observable<0>;
+export function timer(dueTime: number | DateTime, unused: undefined, scheduler?: SchedulerLike): Observable<0>;
 
 export function timer(
-  dueTime: number | Date = 0,
+  dueTime: number | DateTime = 0,
   intervalOrScheduler?: number | SchedulerLike,
   scheduler: SchedulerLike = asyncScheduler
 ): Observable<number> {
@@ -156,7 +156,7 @@ export function timer(
     // If a valid date is passed, calculate how long to wait before
     // executing the first value... otherwise, if it's a number just schedule
     // that many milliseconds (or scheduler-specified unit size) in the future.
-    let due = isValidDate(dueTime) ? +dueTime - scheduler!.now() : dueTime;
+    let due = isValidDate(dueTime) ? dueTime.UnixTimestampMillis - scheduler.now() : dueTime;
 
     if (due < 0) {
       // Ensure we don't schedule in the future.

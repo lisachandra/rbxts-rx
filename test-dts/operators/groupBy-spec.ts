@@ -123,7 +123,7 @@ it('should enforce types of subject selector', () => {
 
 it('should support a user-defined type guard', () => {
   function isNumber(value: string | number): value is number {
-    return typeof value === 'number';
+    return typeIs(value, 'number');
   }
   const o = of('a', 1, 'b', 2).pipe(
     groupBy(isNumber),
@@ -142,7 +142,7 @@ it('should support a user-defined type guard', () => {
 
 it('should support an inline user-defined type guard', () => {
   const o = of('a', 1, 'b', 2).pipe(
-    groupBy((value): value is number => typeof value === 'number'),
+    groupBy((value): value is number => typeIs(value, 'number')),
     mergeMap((group) => {
       if (group.key) {
         const inferred = group; // $ExpectType GroupedObservable<true, number>

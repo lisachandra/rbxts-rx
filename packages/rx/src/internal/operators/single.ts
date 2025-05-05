@@ -1,7 +1,7 @@
 import { Observable } from '../Observable';
 import { EmptyError } from '../util/EmptyError';
 
-import { MonoTypeOperatorFunction, OperatorFunction, TruthyTypesOf } from '../types';
+import { BooleanConstructor, MonoTypeOperatorFunction, OperatorFunction, TruthyTypesOf } from '../types';
 import { SequenceError } from '../util/SequenceError';
 import { NotFoundError } from '../util/NotFoundError';
 import { operate } from '../util/lift';

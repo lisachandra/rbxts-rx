@@ -1,5 +1,6 @@
 import { map } from './map';
 import { OperatorFunction } from '../types';
+import { Error } from '@rbxts/luau-polyfill';
 
 /* tslint:disable:max-line-length */
 /** @deprecated Use {@link map} and optional chaining: `pluck('foo', 'bar')` is `map(x => x?.foo?.bar)`. Will be removed in v8. */
@@ -95,7 +96,7 @@ export function pluck<T, R>(...properties: Array<string | number | symbol>): Ope
     let currentProp: any = x;
     for (let i = 0; i < length; i++) {
       const p = currentProp?.[properties[i]];
-      if (typeof p !== 'undefined') {
+      if (!typeIs(p, 'nil')) {
         currentProp = p;
       } else {
         return undefined;

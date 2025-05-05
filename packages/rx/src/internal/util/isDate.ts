@@ -5,6 +5,6 @@
  * `instanceof Date`, however it cannot be converted to a
  * number.
  */
-export function isValidDate(value: any): value is Date {
-  return value instanceof Date && !isNaN(value as any);
+export function isValidDate(value: any): value is DateTime {
+  return typeIs(value, 'DateTime');
 }

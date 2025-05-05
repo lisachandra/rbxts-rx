@@ -20,6 +20,7 @@ export function joinAllInternals<T, R>(joinFn: (sources: ObservableInput<T>[]) =
   return pipe(
     // Collect all inner sources into an array, and emit them when the
     // source completes.
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     toArray() as OperatorFunction<ObservableInput<T>, ObservableInput<T>[]>,
     // Run the join function on the collected array of inner sources.
     mergeMap((sources) => joinFn(sources)),

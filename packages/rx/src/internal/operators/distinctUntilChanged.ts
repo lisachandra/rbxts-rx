@@ -160,7 +160,7 @@ export function distinctUntilChanged<T, K>(
         // If it's the first value, we always emit it.
         // Otherwise, we compare this key to the previous key, and
         // if the comparer returns false, we emit.
-        if (first || !comparator!(previousKey, currentKey)) {
+        if (first || !comparator(previousKey, currentKey)) {
           // Update our state *before* we emit the value
           // as emission can be the source of re-entrant code
           // in functional libraries like this. We only really

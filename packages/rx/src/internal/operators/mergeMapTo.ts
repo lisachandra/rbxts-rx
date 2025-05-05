@@ -67,7 +67,7 @@ export function mergeMapTo<T, R, O extends ObservableInput<unknown>>(
   if (isFunction(resultSelector)) {
     return mergeMap(() => innerObservable, resultSelector, concurrent);
   }
-  if (typeof resultSelector === 'number') {
+  if (typeIs(resultSelector, 'number')) {
     concurrent = resultSelector;
   }
   return mergeMap(() => innerObservable, concurrent);

@@ -16,7 +16,7 @@ export function scanInternals<V, A, S>(
   seed: S,
   hasSeed: boolean,
   emitOnNext: boolean,
-  emitBeforeComplete?: undefined | true
+  emitBeforeComplete?: true
 ) {
   return (source: Observable<V>, subscriber: Subscriber<any>) => {
     // Whether or not we have state yet. This will only be

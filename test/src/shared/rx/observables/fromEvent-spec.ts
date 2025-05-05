@@ -1,4 +1,3 @@
-/** @prettier */
 import { expect } from 'chai';
 import { fromEvent, NEVER, timer } from 'rxjs';
 import { mapTo, take, concat } from 'rxjs/operators';

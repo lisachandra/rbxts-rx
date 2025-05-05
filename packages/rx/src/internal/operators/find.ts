@@ -1,6 +1,6 @@
 import { Observable } from '../Observable';
 import { Subscriber } from '../Subscriber';
-import { OperatorFunction, TruthyTypesOf } from '../types';
+import { BooleanConstructor, OperatorFunction, TruthyTypesOf } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 
@@ -56,8 +56,8 @@ export function find<T>(predicate: (value: T, index: number, source: Observable<
  * @see {@link take}
  *
  * @param predicate A function called with each item to test for condition matching.
- * @param thisArg An optional argument to determine the value of `this` in the
- * `predicate` function.
+ * @param @deprecated thisArg An optional argument to determine the value of `this` in the
+ * `predicate` function. Unused for now.
  * @return A function that returns an Observable that emits the first item that
  * matches the condition.
  */
@@ -81,7 +81,7 @@ export function createFind<T>(
         subscriber,
         (value) => {
           const i = index++;
-          if (predicate.call(thisArg, value, i, source)) {
+          if (predicate(value, i, source)) {
             subscriber.next(findIndex ? i : value);
             subscriber.complete();
           }

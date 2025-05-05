@@ -1,4 +1,3 @@
-/** @prettier */
 import { onErrorResumeNext } from 'rxjs';
 import { a$, b$, c$, d$, e$, f$, g$, h$, i$, j$ } from '../helpers';
 

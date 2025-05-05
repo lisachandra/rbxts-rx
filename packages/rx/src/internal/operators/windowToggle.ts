@@ -7,6 +7,7 @@ import { innerFrom } from '../observable/innerFrom';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 import { noop } from '../util/noop';
 import { arrRemove } from '../util/arrRemove';
+import { Array } from '@rbxts/luau-polyfill';
 
 /**
  * Branch out the source Observable values as a nested Observable starting from
@@ -103,7 +104,7 @@ export function windowToggle<T, O>(
         (value: T) => {
           // Copy the windows array before we emit to
           // make sure we don't have issues with reentrant code.
-          const windowsCopy = windows.slice();
+          const windowsCopy = Array.slice(windows);
           for (const window of windowsCopy) {
             window.next(value);
           }

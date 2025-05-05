@@ -6,6 +6,7 @@ import { arrRemove } from '../util/arrRemove';
 import { asyncScheduler } from '../scheduler/async';
 import { popScheduler } from '../util/args';
 import { executeSchedule } from '../util/executeSchedule';
+import { Array } from '@rbxts/luau-polyfill';
 
 export function bufferTime<T>(bufferTimeSpan: number, scheduler?: SchedulerLike): OperatorFunction<T, T[]>;
 export function bufferTime<T>(
@@ -72,7 +73,7 @@ export function bufferTime<T>(
  * - `scheduler` - the scheduler on which to schedule the intervals that determine buffer boundaries.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferTime<T>(bufferTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, T[]> {
+export function bufferTime<T extends defined>(bufferTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, T[]> {
   const scheduler = popScheduler(otherArgs) ?? asyncScheduler;
   const bufferCreationInterval = (otherArgs[0] as number) ?? null;
   const maxBufferSize = (otherArgs[1] as number) || math.huge;
@@ -135,7 +136,7 @@ export function bufferTime<T>(bufferTimeSpan: number, ...otherArgs: any[]): Oper
         // don't mutate the array. It's hard, but not impossible to
         // set up a buffer time that could mutate the array and
         // cause issues here.
-        const recordsCopy = bufferRecords!.slice();
+        const recordsCopy = Array.slice(bufferRecords!);
         for (const record of recordsCopy) {
           // Loop over all buffers and
           const { buffer } = record;

@@ -28,10 +28,10 @@ describe('publishBehavior operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publishBehavior(1)) as ConnectableObservable<number>;
-    expect(typeof (<any>source)._subscribe === 'function').to.be.true;
-    expect(typeof (<any>source).getSubject === 'function').to.be.true;
-    expect(typeof source.connect === 'function').to.be.true;
-    expect(typeof source.refCount === 'function').to.be.true;
+    expect(typeIs((<any>source)._subscribe, 'function')).to.be.true;
+    expect(typeIs((<any>source).getSubject, 'function')).to.be.true;
+    expect(typeIs(source.connect, 'function')).to.be.true;
+    expect(typeIs(source.refCount, 'function')).to.be.true;
   });
 
   it('should only emit default value if connect is not called, despite subscriptions', () => {

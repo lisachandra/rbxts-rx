@@ -42,7 +42,7 @@ import { innerFrom } from '../observable/innerFrom';
  * @return A function that returns an Observable of buffers, which are arrays
  * of values.
  */
-export function buffer<T>(closingNotifier: ObservableInput<any>): OperatorFunction<T, T[]> {
+export function buffer<T extends defined>(closingNotifier: ObservableInput<any>): OperatorFunction<T, T[]> {
   return operate((source, subscriber) => {
     // The current buffered values.
     let currentBuffer: T[] = [];

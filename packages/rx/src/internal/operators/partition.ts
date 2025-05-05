@@ -46,7 +46,7 @@ import { UnaryFunction } from '../types';
  * in the returned array, if `false` the value is emitted on the second Observable
  * in the array. The `index` parameter is the number `i` for the i-th source
  * emission that has happened since the subscription, starting from the number `0`.
- * @param thisArg An optional argument to determine the value of `this` in the
+ * @param @deprecated thisArg An optional argument to determine the value of `this` in the
  * `predicate` function.
  * @return A function that returns an array with two Observables: one with
  * values that passed the predicate, and another with values that did not pass

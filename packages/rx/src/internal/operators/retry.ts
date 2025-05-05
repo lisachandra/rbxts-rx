@@ -83,11 +83,11 @@ export function retry<T>(config: RetryConfig): MonoTypeOperatorFunction<T>;
  */
 export function retry<T>(configOrCount: number | RetryConfig = math.huge): MonoTypeOperatorFunction<T> {
   let config: RetryConfig;
-  if (configOrCount && typeof configOrCount === 'object') {
+  if (configOrCount && typeIs(configOrCount, 'table')) {
     config = configOrCount;
   } else {
     config = {
-      count: configOrCount as number,
+      count: configOrCount,
     };
   }
   const { count = math.huge, delay, resetOnSuccess: resetOnSuccess = false } = config;
@@ -128,7 +128,7 @@ export function retry<T>(configOrCount: number | RetryConfig = math.huge): MonoT
                     // The user specified a retry delay.
                     // They gave us a number, use a timer, otherwise, it's a function,
                     // and we're going to call it to get a notifier.
-                    const notifier = typeof delay === 'number' ? timer(delay) : innerFrom(delay(err, soFar));
+                    const notifier = typeIs(delay, 'number') ? timer(delay) : innerFrom(delay(err, soFar));
                     const notifierSubscriber = createOperatorSubscriber(
                       subscriber,
                       () => {

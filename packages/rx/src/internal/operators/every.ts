@@ -1,5 +1,5 @@
 import { Observable } from '../Observable';
-import { Falsy, OperatorFunction } from '../types';
+import { BooleanConstructor, Falsy, OperatorFunction } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 
@@ -37,7 +37,7 @@ export function every<T>(predicate: (value: T, index: number, source: Observable
  * ```
  *
  * @param predicate A function for determining if an item meets a specified condition.
- * @param thisArg Optional object to use for `this` in the callback.
+ * @param @deprecated thisArg Optional object to use for `this` in the callback. Unused for now.
  * @return A function that returns an Observable of booleans that determines if
  * all items of the source Observable meet the condition specified.
  */
@@ -51,7 +51,7 @@ export function every<T>(
       createOperatorSubscriber(
         subscriber,
         (value) => {
-          if (!predicate.call(thisArg, value, index++, source)) {
+          if (!predicate(value, index++, source)) {
             subscriber.next(false);
             subscriber.complete();
           }
