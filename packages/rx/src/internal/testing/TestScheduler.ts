@@ -5,7 +5,7 @@ import { TestMessage } from './TestMessage';
 import { SubscriptionLog } from './SubscriptionLog';
 import { Subscription } from '../Subscription';
 import { VirtualTimeScheduler, VirtualAction } from '../scheduler/VirtualTimeScheduler';
-import { ObservableNotification } from '../types';
+import { FrameRequestCallback, ObservableNotification } from '../types';
 import { COMPLETE_NOTIFICATION, errorNotification, nextNotification } from '../NotificationFactories';
 import { dateTimestampProvider } from '../scheduler/dateTimestampProvider';
 import { performanceTimestampProvider } from '../scheduler/performanceTimestampProvider';
@@ -14,6 +14,9 @@ import type { TimerHandle } from '../scheduler/timerHandle';
 import { immediateProvider } from '../scheduler/immediateProvider';
 import { intervalProvider } from '../scheduler/intervalProvider';
 import { timeoutProvider } from '../scheduler/timeoutProvider';
+import { Array, Error, Number, Object, String } from '@rbxts/luau-polyfill';
+import { bind } from 'internal/polyfill/bind';
+import RegExp from '@rbxts/regexp';
 
 const defaultMaxFrame: number = 750;
 
@@ -74,7 +77,7 @@ export class TestScheduler extends VirtualTimeScheduler {
   }
 
   createTime(marbles: string): number {
-    const indexOf = this.runMode ? marbles.trim().indexOf('|') : marbles.indexOf('|');
+    const indexOf = this.runMode ? String.indexOf(String.trim(marbles), '|') : String.indexOf(marbles, '|');
     if (indexOf === -1) {
       throw new Error('marble diagram for time should have a completion marker "|"');
     }
@@ -87,10 +90,10 @@ export class TestScheduler extends VirtualTimeScheduler {
    * @param error The error to use for the `#` marble (if present).
    */
   createColdObservable<T = string>(marbles: string, values?: { [marble: string]: T }, error?: any): ColdObservable<T> {
-    if (marbles.indexOf('^') !== -1) {
+    if (String.indexOf(marbles, '^') !== -1) {
       throw new Error('cold observable cannot have subscription offset "^"');
     }
-    if (marbles.indexOf('!') !== -1) {
+    if (String.indexOf(marbles, '!') !== -1) {
       throw new Error('cold observable cannot have unsubscription marker "!"');
     }
     const messages = TestScheduler.parseMarbles(marbles, values, error, undefined, this.runMode);
@@ -105,7 +108,7 @@ export class TestScheduler extends VirtualTimeScheduler {
    * @param error The error to use for the `#` marble (if present).
    */
   createHotObservable<T = string>(marbles: string, values?: { [marble: string]: T }, error?: any): HotObservable<T> {
-    if (marbles.indexOf('!') !== -1) {
+    if (String.indexOf(marbles, '!') !== -1) {
       throw new Error('hot observable cannot have unsubscription marker "!"');
     }
     const messages = TestScheduler.parseMarbles(marbles, values, error, undefined, this.runMode);
@@ -271,16 +274,15 @@ export class TestScheduler extends VirtualTimeScheduler {
           unsubscriptionFrame = groupStart > -1 ? groupStart : frame;
           break;
         default:
-          // time progression syntax
-          if (runMode && c.match(/^[0-9]$/)) {
+          if (runMode && RegExp('^[0-9]$').exec(c)?.size()) {
             // Time progression must be preceded by at least one space
             // if it's not at the beginning of the diagram
             if (i === 0 || characters[i - 1] === ' ') {
-              const buffer = characters.slice(i).join('');
-              const match = buffer.match(/^([0-9]+(?:\.[0-9]+)?)(ms|s|m) /);
-              if (match) {
+              const buffer = Array.slice(characters, i).join('');
+              const match = RegExp('^([0-9]+(?:\\.[0-9]+)?)(ms|s|m) ').exec(buffer);
+              if (match?.size()) {
                 i += match[0].size() - 1;
-                const duration = parseFloat(match[1]);
+                const duration = tonumber(match[1])!;
                 const unit = match[2];
                 let durationInMs: number;
 
@@ -324,7 +326,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     materializeInnerObservables: boolean = false,
     runMode = false
   ): TestMessage[] {
-    if (marbles.indexOf('!') !== -1) {
+    if (String.indexOf(marbles, '!') !== -1) {
       throw new Error('conventional marble diagrams cannot have the ' + 'unsubscription marker "!"');
     }
     // Spreading the marbles into an array leverages ES2015's support for emoji
@@ -332,18 +334,17 @@ export class TestScheduler extends VirtualTimeScheduler {
     const characters = [...marbles];
     const len = characters.size();
     const testMessages: TestMessage[] = [];
-    const subIndex = runMode ? marbles.replace(/^[ ]+/, '').indexOf('^') : marbles.indexOf('^');
+    const subIndex = runMode ? String.indexOf(marbles.gsub('^[ ]+', '')[0], '^') : String.indexOf(marbles, '^');
     let frame = subIndex === -1 ? 0 : subIndex * -this.frameTimeFactor;
-    const getValue =
-      !typeIs(values, 'table')
-        ? (x: any) => x
-        : (x: any) => {
-            // Support Observable-of-Observables
-            if (materializeInnerObservables && values[x] instanceof ColdObservable) {
-              return values[x].messages;
-            }
-            return values[x];
-          };
+    const getValue = !typeIs(values, 'table')
+      ? (x: any) => x
+      : (x: string) => {
+          // Support Observable-of-Observables
+          if (materializeInnerObservables && (values as { [K in any]: unknown })[x] instanceof ColdObservable) {
+            return (values as { [K in any]: ColdObservable<unknown> })[x].messages;
+          }
+          return (values as { [K in any]: unknown })[x];
+        };
     let groupStart = -1;
 
     for (let i = 0; i < len; i++) {
@@ -385,15 +386,15 @@ export class TestScheduler extends VirtualTimeScheduler {
           break;
         default:
           // Might be time progression syntax, or a value literal
-          if (runMode && c.match(/^[0-9]$/)) {
+          if (runMode && RegExp('^[0-9]$').exec(c)?.size()) {
             // Time progression must be preceded by at least one space
             // if it's not at the beginning of the diagram
             if (i === 0 || characters[i - 1] === ' ') {
-              const buffer = characters.slice(i).join('');
-              const match = buffer.match(/^([0-9]+(?:\.[0-9]+)?)(ms|s|m) /);
-              if (match) {
+              const buffer = Array.slice(characters, i).join('');
+              const match = RegExp('^([0-9]+(?:\\.[0-9]+)?)(ms|s|m) ').exec(buffer);
+              if (match?.size()) {
                 i += match[0].size() - 1;
-                const duration = parseFloat(match[1]);
+                const duration = tonumber(match[1])!;
                 const unit = match[2];
                 let durationInMs: number;
 
@@ -469,7 +470,7 @@ export class TestScheduler extends VirtualTimeScheduler {
       if (map) {
         throw new Error('animate() must not be called more than once within run()');
       }
-      if (/[|#]/.test(marbles)) {
+      if (RegExp('[|#]').test(marbles)) {
         throw new Error('animate() must not complete or error');
       }
       map = new Map<number, FrameRequestCallback>();
@@ -482,7 +483,7 @@ export class TestScheduler extends VirtualTimeScheduler {
           // reschedule themselves. (And, yeah, we're using a Map to represent
           // the queue, but the values are guaranteed to be returned in
           // insertion order, so it's all good. Trust me, I've read the docs.)
-          const callbacks = Array.from(map!.values());
+          const callbacks = table.clone(Object.values(map!));
           map!.clear();
           for (const callback of callbacks) {
             callback(now);
@@ -524,16 +525,16 @@ export class TestScheduler extends VirtualTimeScheduler {
       // or interval action - with immediate actions being prioritized over
       // interval and timeout actions.
       const now = this.now();
-      const scheduledRecords = Array.from(scheduleLookup.values());
-      const scheduledRecordsDue = scheduledRecords.filter(({ due }) => due <= now);
-      const dueImmediates = scheduledRecordsDue.filter(({ type }) => type === 'immediate');
+      const scheduledRecords = table.clone(Object.values(scheduleLookup));
+      const scheduledRecordsDue = scheduledRecords.filter(({ due }: { due: number }) => due <= now);
+      const dueImmediates = scheduledRecordsDue.filter(({ type }: { type: unknown }) => type === 'immediate');
       if (dueImmediates.size() > 0) {
         const { handle, handler } = dueImmediates[0];
         scheduleLookup.delete(handle);
         handler();
         return;
       }
-      const dueIntervals = scheduledRecordsDue.filter(({ type }) => type === 'interval');
+      const dueIntervals = scheduledRecordsDue.filter(({ type }: { type: unknown }) => type === 'interval');
       if (dueIntervals.size() > 0) {
         const firstDueInterval = dueIntervals[0];
         const { duration, handler } = firstDueInterval;
@@ -545,7 +546,7 @@ export class TestScheduler extends VirtualTimeScheduler {
         handler();
         return;
       }
-      const dueTimeouts = scheduledRecordsDue.filter(({ type }) => type === 'timeout');
+      const dueTimeouts = scheduledRecordsDue.filter(({ type }: { type: unknown }) => type === 'timeout');
       if (dueTimeouts.size() > 0) {
         const { handle, handler } = dueTimeouts[0];
         scheduleLookup.delete(handle);
@@ -663,12 +664,12 @@ export class TestScheduler extends VirtualTimeScheduler {
     performanceTimestampProvider.delegate = this;
 
     const helpers: RunHelpers = {
-      cold: this.createColdObservable.bind(this),
-      hot: this.createHotObservable.bind(this),
-      flush: this.flush.bind(this),
-      time: this.createTime.bind(this),
-      expectObservable: this.expectObservable.bind(this),
-      expectSubscriptions: this.expectSubscriptions.bind(this),
+      cold: bind(true, this['createColdObservable' as never], this),
+      hot: bind(true, this['createHotObservable' as never], this),
+      flush: bind(true, this['flush' as never], this),
+      time: bind(true, this['createTime' as never], this),
+      expectObservable: bind(true, this['expectObservable' as never], this),
+      expectSubscriptions: bind(true, this['expectSubscriptions' as never], this),
       animate: animator.animate,
     };
     try {
