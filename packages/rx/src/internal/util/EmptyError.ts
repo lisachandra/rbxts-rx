@@ -1,3 +1,4 @@
+import { Error } from '@rbxts/luau-polyfill';
 import { createErrorClass } from './createErrorClass';
 
 export interface EmptyError extends Error {}
@@ -22,7 +23,7 @@ export interface EmptyErrorCtor {
  */
 export const EmptyError: EmptyErrorCtor = createErrorClass(
   (_super) =>
-    function EmptyErrorImpl(this: any) {
+    function (this: any) {
       _super(this);
       this.name = 'EmptyError';
       this.message = 'no elements in sequence';

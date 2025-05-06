@@ -1,3 +1,4 @@
+import { Error } from '@rbxts/luau-polyfill';
 import { createErrorClass } from './createErrorClass';
 
 export interface NotFoundError extends Error {}
@@ -18,7 +19,7 @@ export interface NotFoundErrorCtor {
  */
 export const NotFoundError: NotFoundErrorCtor = createErrorClass(
   (_super) =>
-    function NotFoundErrorImpl(this: any, message: string) {
+    function (this: any, message: string) {
       _super(this);
       this.name = 'NotFoundError';
       this.message = message;

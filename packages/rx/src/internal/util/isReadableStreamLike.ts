@@ -9,7 +9,7 @@ export async function* readableStreamLikeToAsyncGenerator<T>(readableStream: Rea
       if (done) {
         return;
       }
-      yield value!;
+      yield value;
     }
   } finally {
     reader.releaseLock();

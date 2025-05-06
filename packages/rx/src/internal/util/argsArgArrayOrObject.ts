@@ -1,5 +1,7 @@
+import { Array, Object } from '@rbxts/luau-polyfill';
+
 const { isArray } = Array;
-const { getPrototypeOf, prototype: objectProto, keys: getKeys } = Object;
+const { /* getPrototypeOf, prototype: objectProto, */ keys: getKeys } = Object;
 
 /**
  * Used in functions where either a list of arguments, a single array of arguments, or a
@@ -16,8 +18,8 @@ export function argsArgArrayOrObject<T, O extends Record<string, T>>(args: T[] |
     if (isPOJO(first)) {
       const keys = getKeys(first);
       return {
-        args: keys.map((key) => first[key]),
-        keys,
+        args: (keys as defined[]).map((key) => first[key as string]),
+        keys: keys as never,
       };
     }
   }
@@ -26,5 +28,5 @@ export function argsArgArrayOrObject<T, O extends Record<string, T>>(args: T[] |
 }
 
 function isPOJO(obj: any): obj is object {
-  return obj && typeIs(obj, 'table') && getPrototypeOf(obj) === objectProto;
+  return obj && typeIs(obj, 'table'); // && getPrototypeOf(obj) === objectProto;
 }

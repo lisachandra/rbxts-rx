@@ -1,5 +1,6 @@
 import { OperatorFunction } from '../types';
 import { map } from '../operators/map';
+import { Array } from '@rbxts/luau-polyfill';
 
 const { isArray } = Array;
 

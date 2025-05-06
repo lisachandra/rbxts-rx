@@ -1,3 +1,4 @@
+import { Error } from '@rbxts/luau-polyfill';
 import { createErrorClass } from './createErrorClass';
 
 export interface SequenceError extends Error {}
@@ -18,7 +19,7 @@ export interface SequenceErrorCtor {
  */
 export const SequenceError: SequenceErrorCtor = createErrorClass(
   (_super) =>
-    function SequenceErrorImpl(this: any, message: string) {
+    function (this: any, message: string) {
       _super(this);
       this.name = 'SequenceError';
       this.message = message;

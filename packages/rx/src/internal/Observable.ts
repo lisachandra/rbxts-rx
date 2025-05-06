@@ -214,7 +214,7 @@ export class Observable<T> implements Subscribable<T> {
         operator
           ? // We're dealing with a subscription in the
             // operator chain to one of our lifted operators.
-            operator.call(subscriber, source)
+            operator(subscriber, source)
           : source
             ? // If `source` has a value, but `operator` does not, something that
               // had intimate knowledge of our API, like our `Subject`, must have

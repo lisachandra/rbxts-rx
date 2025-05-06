@@ -1,3 +1,5 @@
+import { Object } from '@rbxts/luau-polyfill';
+
 let nextHandle = 1;
 // The promise needs to be created lazily otherwise it won't be patched by Zones
 let resolved: Promise<any>;
@@ -23,9 +25,11 @@ export const Immediate = {
   setImmediate(cb: () => void): number {
     const handle = nextHandle++;
     activeHandles[handle] = true;
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     if (!resolved) {
       resolved = Promise.resolve();
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     resolved.then(() => findAndClearHandle(handle) && cb());
     return handle;
   },

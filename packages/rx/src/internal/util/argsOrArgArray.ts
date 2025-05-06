@@ -1,3 +1,5 @@
+import { Array } from '@rbxts/luau-polyfill';
+
 const { isArray } = Array;
 
 /**

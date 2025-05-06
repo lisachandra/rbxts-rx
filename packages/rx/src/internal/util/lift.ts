@@ -1,3 +1,4 @@
+import { Error } from '@rbxts/luau-polyfill';
 import { Observable } from '../Observable';
 import { Subscriber } from '../Subscriber';
 import { OperatorFunction } from '../types';
@@ -19,14 +20,14 @@ export function operate<T, R>(
 ): OperatorFunction<T, R> {
   return (source: Observable<T>) => {
     if (hasLift(source)) {
-      return source.lift(function (this: Subscriber<R>, liftedSource: Observable<T>) {
+      return source.lift(function (subber: Subscriber<R>, liftedSource: Observable<T>) {
         try {
-          return init(liftedSource, this);
+          return init(liftedSource, subber);
         } catch (err) {
-          this.error(err);
+          subber.error(err);
         }
       });
     }
-    throw new TypeError('Unable to lift unknown Observable type');
+    throw new Error('Unable to lift unknown Observable type');
   };
 }

@@ -19,7 +19,7 @@ export interface UnsubscriptionErrorCtor {
  */
 export const UnsubscriptionError: UnsubscriptionErrorCtor = createErrorClass(
   (_super) =>
-    function UnsubscriptionErrorImpl(this: any, errors: (Error | string)[]) {
+    function (this: any, errors: (Error | string)[]) {
       _super(this);
       this.message = errors
         ? `${errors.size()} errors occurred during unsubscription:
