@@ -3,12 +3,12 @@ import { OperatorFunction, SchedulerLike, ValueFromArray } from '../types';
 import { popScheduler } from '../util/args';
 import { operate } from '../util/lift';
 
-// Devs are more likely to pass null or undefined than they are a scheduler
+// Devs are more likely to pass undefined or undefined than they are a scheduler
 // without accompanying values. To make things easier for (naughty) devs who
 // use the `strictNullChecks: false` TypeScript compiler option, these
-// overloads with explicit null and undefined values are included.
+// overloads with explicit undefined and undefined values are included.
 
-export function startWith<T>(value: null): OperatorFunction<T, T | null>;
+export function startWith<T>(value: undefined): OperatorFunction<T, T | undefined>;
 export function startWith<T>(value: undefined): OperatorFunction<T, T | undefined>;
 
 /** @deprecated The `scheduler` parameter will be removed in v8. Use `scheduled` and `concatAll`. Details: https://rxjs.dev/deprecations/scheduler-argument */

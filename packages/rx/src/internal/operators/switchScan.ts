@@ -45,7 +45,7 @@ export function switchScan<T, R, O extends ObservableInput<any>>(
 
     return () => {
       // Release state on finalization
-      state = null!;
+      state = undefined!;
     };
   });
 }

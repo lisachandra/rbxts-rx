@@ -46,11 +46,11 @@ import { innerFrom } from '../observable/innerFrom';
 export function bufferWhen<T extends defined>(closingSelector: () => ObservableInput<any>): OperatorFunction<T, T[]> {
   return operate((source, subscriber) => {
     // The buffer we keep and emit.
-    let buffer: T[] | null = null;
+    let buffer: T[] | undefined = undefined;
     // A reference to the subscriber used to subscribe to
     // the closing notifier. We need to hold this so we can
     // end the subscription after the first notification.
-    let closingSubscriber: Subscriber<T> | null = null;
+    let closingSubscriber: Subscriber<T> | undefined = undefined;
 
     // Ends the previous closing notifier subscription, so it
     // terminates after the first emission, then emits
@@ -87,7 +87,7 @@ export function bufferWhen<T extends defined>(closingSelector: () => ObservableI
         // Pass all errors through to consumer.
         undefined,
         // Release memory on finalization
-        () => (buffer = closingSubscriber = null!)
+        () => (buffer = closingSubscriber = undefined!)
       )
     );
   });

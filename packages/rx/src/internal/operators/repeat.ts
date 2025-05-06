@@ -129,11 +129,11 @@ export function repeat<T>(countOrConfig?: number | RepeatConfig): MonoTypeOperat
     ? () => EMPTY
     : operate((source, subscriber) => {
         let soFar = 0;
-        let sourceSub: Subscription | null;
+        let sourceSub: Subscription | undefined;
 
         const resubscribe = () => {
           sourceSub?.unsubscribe();
-          sourceSub = null;
+          sourceSub = undefined;
           if (delay !== undefined) {
             const notifier = typeIs(delay, 'number') ? timer(delay) : innerFrom(delay(soFar));
             const notifierSubscriber = createOperatorSubscriber(subscriber, () => {

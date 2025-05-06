@@ -238,9 +238,9 @@ describe('pluck', () => {
     });
   });
 
-  it('should not break on null values', () => {
+  it('should not break on undefined values', () => {
     testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
-      const inputs = { x: null };
+      const inputs = { x: undefined };
       const e1 = cold(' --x--|', inputs);
       const e1subs = '  ^----!';
       const expected = '--y--|';

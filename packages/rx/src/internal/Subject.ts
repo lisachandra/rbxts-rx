@@ -17,7 +17,7 @@ import { errorContext } from './util/errorContext';
 export class Subject<T> extends Observable<T> implements SubscriptionLike {
   closed = false;
 
-  private currentObservers: Observer<T>[] | null = null;
+  private currentObservers: Observer<T>[] | undefined = undefined;
 
   /** @deprecated Internal implementation detail, do not use directly. Will be made internal in v8. */
   observers: Observer<T>[] = [];
@@ -26,7 +26,7 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
   /** @deprecated Internal implementation detail, do not use directly. Will be made internal in v8. */
   hasError = false;
   /** @deprecated Internal implementation detail, do not use directly. Will be made internal in v8. */
-  thrownError: any = null;
+  thrownError: any = undefined;
 
   /**
    * Creates a "subject" by basically gluing an observer to an observable.
@@ -99,7 +99,7 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
 
   unsubscribe() {
     this.isStopped = this.closed = true;
-    this.observers = this.currentObservers = null!;
+    this.observers = this.currentObservers = undefined!;
   }
 
   getObserved() {
@@ -125,10 +125,10 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
     if (hasError || isStopped) {
       return EMPTY_SUBSCRIPTION;
     }
-    this.currentObservers = null;
+    this.currentObservers = undefined;
     observers.push(subscriber);
     return new Subscription(() => {
-      this.currentObservers = null;
+      this.currentObservers = undefined;
       arrRemove(observers, subscriber);
     });
   }

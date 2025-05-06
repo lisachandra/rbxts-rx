@@ -14,12 +14,12 @@ describe('BehaviorSubject', () => {
   });
 
   it('should extend Subject', () => {
-    const subject = new BehaviorSubject(null);
+    const subject = new BehaviorSubject(undefined);
     expect(subject).to.be.instanceof(Subject);
   });
 
   it('should throw if it has received an error and getValue() is called', () => {
-    const subject = new BehaviorSubject(null);
+    const subject = new BehaviorSubject(undefined);
     subject.error(new Error('derp'));
     expect(() => {
       subject.getValue();

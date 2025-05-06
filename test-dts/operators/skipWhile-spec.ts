@@ -24,8 +24,8 @@ it('should enforce predicate return type', () => {
 
 it('should handle Boolean constructor properly', () => {
   // this one is a bit odd, but probably okay.
-  const a = of(null, undefined, 0 as const, -0 as const, '' as const, 0n as const, false as const).pipe(skipWhile(Boolean)); // $ExpectType Observable<false | "" | 0 | 0n | null | undefined>
-  const b = of(null, 0 as const, -0 as const, '' as const, 0n as const, false as const).pipe(skipWhile(Boolean)); // $ExpectType Observable<false | "" | 0 | 0n | null>
+  const a = of(undefined, undefined, 0 as const, -0 as const, '' as const, 0n as const, false as const).pipe(skipWhile(Boolean)); // $ExpectType Observable<false | "" | 0 | 0n | undefined | undefined>
+  const b = of(undefined, 0 as const, -0 as const, '' as const, 0n as const, false as const).pipe(skipWhile(Boolean)); // $ExpectType Observable<false | "" | 0 | 0n | undefined>
   const c = of(1, 2, 3, '' as const, 0n as const, false as const, 4).pipe(skipWhile(Boolean)); // $ExpectType Observable<number | false | "" | 0n>
   const d = of(true as const, 123 as const, 'HI' as const, {}, []).pipe(skipWhile(Boolean)); // $ExpectType Observable<never>
 });

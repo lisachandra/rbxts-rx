@@ -28,7 +28,7 @@ describe('last', () => {
       const e1subs = '     ^----!';
       const expected = '   -----#';
 
-      expectObservable(e1.pipe(last())).toBe(expected, null, new EmptyError());
+      expectObservable(e1.pipe(last())).toBe(expected, undefined, new EmptyError());
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -39,7 +39,7 @@ describe('last', () => {
       const e1subs = '  (^!)';
       const expected = '#   ';
 
-      expectObservable(e1.pipe(last())).toBe(expected, null, new EmptyError());
+      expectObservable(e1.pipe(last())).toBe(expected, undefined, new EmptyError());
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -113,7 +113,7 @@ describe('last', () => {
       const e1subs = '  (^!)';
       const expected = '(a|)';
 
-      expectObservable(e1.pipe(last(null, 'a'))).toBe(expected);
+      expectObservable(e1.pipe(last(undefined, 'a'))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -124,7 +124,7 @@ describe('last', () => {
       const e1subs = '      ^---------------!   ';
       const expected = '    ----------------(d|)';
 
-      expectObservable(e1.pipe(last(null, 'x'))).toBe(expected);
+      expectObservable(e1.pipe(last(undefined, 'x'))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -213,8 +213,8 @@ describe('last', () => {
       // missing predicate preserves the type
       xs.pipe(last()).subscribe((x) => x); // x is still string | number
 
-      // null predicate preserves the type
-      xs.pipe(last(null)).subscribe((x) => x); // x is still string | number
+      // undefined predicate preserves the type
+      xs.pipe(last(undefined)).subscribe((x) => x); // x is still string | number
 
       // undefined predicate preserves the type
       xs.pipe(last(undefined)).subscribe((x) => x); // x is still string | number

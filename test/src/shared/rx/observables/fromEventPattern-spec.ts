@@ -82,7 +82,7 @@ describe('fromEventPattern', () => {
     let target: any;
     const trigger = function (...args: any[]) {
       if (target) {
-        target.apply(null, arguments);
+        target.apply(undefined, arguments);
       }
     };
 
@@ -90,7 +90,7 @@ describe('fromEventPattern', () => {
       target = handler;
     };
     const removeHandler = (handler: any) => {
-      target = null;
+      target = undefined;
     };
     const selector = (a: any, b: any) => {
       return a + b + '!';
@@ -125,7 +125,7 @@ describe('fromEventPattern', () => {
       target = handler;
     };
     const removeHandler = (handler: any) => {
-      target = null;
+      target = undefined;
     };
     const selector = (x: any) => {
       throw 'bad';

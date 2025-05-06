@@ -295,7 +295,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'shazbot!');
+      expectObservable(result).toBe(expected, undefined, 'shazbot!');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -311,7 +311,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'too bad, honk');
+      expectObservable(result).toBe(expected, undefined, 'too bad, honk');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -327,7 +327,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'bazinga');
+      expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -343,7 +343,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'bazinga');
+      expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -359,7 +359,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'bazinga');
+      expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -375,7 +375,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'flurp');
+      expectObservable(result).toBe(expected, undefined, 'flurp');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -391,7 +391,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'flurp');
+      expectObservable(result).toBe(expected, undefined, 'flurp');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -407,7 +407,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'wokka wokka');
+      expectObservable(result).toBe(expected, undefined, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -423,7 +423,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(e1, e2, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'wokka wokka');
+      expectObservable(result).toBe(expected, undefined, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -471,7 +471,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(left, right, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'bad things');
+      expectObservable(result).toBe(expected, undefined, 'bad things');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
       expectSubscriptions(right.subscriptions).toBe(rightSubs);
     });
@@ -487,7 +487,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(left, right, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'bad things');
+      expectObservable(result).toBe(expected, undefined, 'bad things');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
       expectSubscriptions(right.subscriptions).toBe(rightSubs);
     });
@@ -535,7 +535,7 @@ describe('static combineLatest', () => {
 
       const result = combineLatest(left, right, (x, y) => x + y);
 
-      expectObservable(result).toBe(expected, null, 'jenga');
+      expectObservable(result).toBe(expected, undefined, 'jenga');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
       expectSubscriptions(right.subscriptions).toBe(rightSubs);
     });
@@ -569,7 +569,7 @@ describe('static combineLatest', () => {
         throw 'ha ha ' + x + ', ' + y;
       });
 
-      expectObservable(result).toBe(expected, null, 'ha ha 2, 4');
+      expectObservable(result).toBe(expected, undefined, 'ha ha 2, 4');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });

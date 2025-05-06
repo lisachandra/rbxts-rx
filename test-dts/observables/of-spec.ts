@@ -6,7 +6,7 @@ it('should infer never with 0 params', () => {
 });
 
 it('forced generic should not cause an issue', () => {
-  const x: any = null;
+  const x: any = undefined;
   const res = of<string>(); // $ExpectType Observable<string>
   const res2 = of<string>(x); // $ExpectType Observable<string>
 });
@@ -137,8 +137,8 @@ it('should deprecate correctly', () => {
   of(a, b, c, d); // $ExpectNoDeprecation
 });
 
-it('should handle null and undefined properly', () => {
+it('should handle undefined and undefined properly', () => {
   const a = of(undefined); // $ExpectType Observable<undefined>
-  const b = of(null); // $ExpectType Observable<null>
+  const b = of(undefined); // $ExpectType Observable<undefined>
   const c = [of(1), of(2), of(undefined), of(3)] as const;
 });

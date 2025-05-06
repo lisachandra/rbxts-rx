@@ -86,7 +86,7 @@ export function mergeScan<T, R>(
       },
       false,
       undefined,
-      () => (state = null!)
+      () => (state = undefined!)
     );
   });
 }

@@ -24,7 +24,7 @@ export function cold(marbles: string, values?: any, error?: any): ColdObservable
   return global.rxTestScheduler.createColdObservable.apply(global.rxTestScheduler, arguments);
 }
 
-export function expectObservable(observable: Observable<any>, unsubscriptionMarbles: string | null = null): { toBe: observableToBeFn } {
+export function expectObservable(observable: Observable<any>, unsubscriptionMarbles: string | undefined = undefined): { toBe: observableToBeFn } {
   if (!global.rxTestScheduler) {
     throw 'tried to use expectObservable() in async test';
   }

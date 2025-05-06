@@ -105,7 +105,7 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
     if (!this.closed) {
       this.isStopped = true;
       super.unsubscribe();
-      this.destination = null!;
+      this.destination = undefined!;
     }
   }
 
@@ -187,9 +187,9 @@ class ConsumerObserver<T> implements Observer<T> {
 
 export class SafeSubscriber<T> extends Subscriber<T> {
   constructor(
-    observerOrNext?: Partial<Observer<T>> | ((value: T) => void) | null,
-    error?: ((e?: any) => void) | null,
-    complete?: (() => void) | null
+    observerOrNext?: Partial<Observer<T>> | ((value: T) => void) | undefined,
+    error?: ((e?: any) => void) | undefined,
+    complete?: (() => void) | undefined
   ) {
     super();
 

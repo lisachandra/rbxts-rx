@@ -176,7 +176,7 @@ describe('mergeScan', () => {
       })
     );
 
-    of(null)
+    of(undefined)
       .pipe(
         mergeScan(() => synchronousObservable, 0),
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect

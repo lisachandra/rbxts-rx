@@ -68,7 +68,7 @@ describe('map', () => {
         })
       );
 
-      expectObservable(result).toBe(expected, null, 'too bad');
+      expectObservable(result).toBe(expected, undefined, 'too bad');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

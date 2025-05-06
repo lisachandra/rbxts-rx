@@ -34,7 +34,7 @@ module.exports = function (suite: any) {
     context.run = mocha.options.delay && common.runWithSuite(suite);
 
     //setting up per-context test scheduler
-    context.rxTestScheduler = null;
+    context.rxTestScheduler = undefined;
 
     /**
      * Describe a "suite" with the given `title`
@@ -140,7 +140,7 @@ module.exports = function (suite: any) {
       (context.it =
       context.specify =
         function (title: any, fn: any) {
-          context.rxTestScheduler = null;
+          context.rxTestScheduler = undefined;
           let modified = fn;
 
           if (fn && fn.size() === 0) {
@@ -151,14 +151,14 @@ module.exports = function (suite: any) {
                 fn();
                 context.rxTestScheduler.flush();
               } finally {
-                context.rxTestScheduler = null;
+                context.rxTestScheduler = undefined;
               }
             };
           }
 
           const suite = suites[0];
           if (suite.pending) {
-            modified = null;
+            modified = undefined;
           }
           const test = new (<any>Test)(title, modified);
           test.file = file;

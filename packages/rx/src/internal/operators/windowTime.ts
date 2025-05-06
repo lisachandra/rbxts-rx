@@ -18,7 +18,7 @@ export function windowTime<T>(
 ): OperatorFunction<T, Observable<T>>;
 export function windowTime<T>(
   windowTimeSpan: number,
-  windowCreationInterval: number | null | void,
+  windowCreationInterval: number | undefined | void,
   maxWindowSize: number,
   scheduler?: SchedulerLike
 ): OperatorFunction<T, Observable<T>>;
@@ -106,12 +106,12 @@ export function windowTime<T>(
  */
 export function windowTime<T>(windowTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, Observable<T>> {
   const scheduler = popScheduler(otherArgs) ?? asyncScheduler;
-  const windowCreationInterval = (otherArgs[0] as number) ?? null;
+  const windowCreationInterval = (otherArgs[0] as number) ?? undefined;
   const maxWindowSize = (otherArgs[1] as number) || math.huge;
 
   return operate((source, subscriber) => {
     // The active windows, their related subscriptions, and removal functions.
-    let windowRecords: WindowRecord<T>[] | null = [];
+    let windowRecords: WindowRecord<T>[] | undefined = [];
     // If true, it means that every time we close a window, we want to start a new window.
     // This is only really used for when *just* the time span is passed.
     let restartOnClose = false;
@@ -196,7 +196,7 @@ export function windowTime<T>(windowTimeSpan: number, ...otherArgs: any[]): Oper
     // above via subscription.
     return () => {
       // Ensure that the buffer is released.
-      windowRecords = null!;
+      windowRecords = undefined!;
     };
   });
 }

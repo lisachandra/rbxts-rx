@@ -9,11 +9,11 @@ const { /* getPrototypeOf, prototype: objectProto, */ keys: getKeys } = Object;
  * the arguments in an array, if it is a dictionary, it will also return the `keys` in another
  * property.
  */
-export function argsArgArrayOrObject<T, O extends Record<string, T>>(args: T[] | [O] | [T[]]): { args: T[]; keys: string[] | null } {
+export function argsArgArrayOrObject<T, O extends Record<string, T>>(args: T[] | [O] | [T[]]): { args: T[]; keys: string[] | undefined } {
   if (args.size() === 1) {
     const first = args[0];
     if (isArray(first)) {
-      return { args: first, keys: null };
+      return { args: first, keys: undefined };
     }
     if (isPOJO(first)) {
       const keys = getKeys(first);
@@ -24,7 +24,7 @@ export function argsArgArrayOrObject<T, O extends Record<string, T>>(args: T[] |
     }
   }
 
-  return { args: args as T[], keys: null };
+  return { args: args as T[], keys: undefined };
 }
 
 function isPOJO(obj: any): obj is object {

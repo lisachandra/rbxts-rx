@@ -679,7 +679,7 @@ describe('zipAll operator', () => {
       const bsubs = '   ^-----!';
       const expected = '------#';
 
-      expectObservable(of(a, b).pipe(zipAll())).toBe(expected, null, 'too bad');
+      expectObservable(of(a, b).pipe(zipAll())).toBe(expected, undefined, 'too bad');
       expectSubscriptions(a.subscriptions).toBe(asubs);
       expectSubscriptions(b.subscriptions).toBe(bsubs);
     });

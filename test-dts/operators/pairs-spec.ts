@@ -8,7 +8,7 @@ describe('pairs', () => {
     const o4 = pairs('blah'); // $ExpectType Observable<[string, string]>
     const o5 = pairs({}); // $ExpectType Observable<[never, never]>
     const o6 = pairs(true); // $ExpectType Observable<[never, never]>
-    const o7 = pairs(null); // $ExpectError
+    const o7 = pairs(undefined); // $ExpectError
     const o8 = pairs(undefined); // $ExpectError
   });
 
@@ -19,7 +19,7 @@ describe('pairs', () => {
     const o4 = pairs('blah', asyncScheduler); // $ExpectType Observable<[string, string]>
     const o5 = pairs({}, asyncScheduler); // $ExpectType Observable<[never, never]>
     const o6 = pairs(true, asyncScheduler); // $ExpectType Observable<[never, never]>
-    const o7 = pairs(null, asyncScheduler); // $ExpectError
+    const o7 = pairs(undefined, asyncScheduler); // $ExpectError
     const o8 = pairs(undefined, asyncScheduler); // $ExpectError
   });
 });

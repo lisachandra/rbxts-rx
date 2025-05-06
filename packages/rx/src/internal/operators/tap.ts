@@ -74,9 +74,9 @@ export interface TapObserver<T> extends Observer<T> {
 export function tap<T>(observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void)): MonoTypeOperatorFunction<T>;
 /** @deprecated Instead of passing separate callback arguments, use an observer argument. Signatures taking separate callback arguments will be removed in v8. Details: https://rxjs.dev/deprecations/subscribe-arguments */
 export function tap<T>(
-  next?: ((value: T) => void) | null,
-  error?: ((error: any) => void) | null,
-  complete?: (() => void) | null
+  next?: ((value: T) => void) | undefined,
+  error?: ((error: any) => void) | undefined,
+  complete?: (() => void) | undefined
 ): MonoTypeOperatorFunction<T>;
 
 /**
@@ -165,13 +165,13 @@ export function tap<T>(
  * runs the specified Observer or callback(s) for each item.
  */
 export function tap<T>(
-  observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void) | null,
-  error?: ((e: any) => void) | null,
-  complete?: (() => void) | null
+  observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void) | undefined,
+  error?: ((e: any) => void) | undefined,
+  complete?: (() => void) | undefined
 ): MonoTypeOperatorFunction<T> {
   // We have to check to see not only if next is a function,
   // but if error or complete were passed. This is because someone
-  // could technically call tap like `tap(null, fn)` or `tap(null, null, fn)`.
+  // could technically call tap like `tap(undefined, fn)` or `tap(undefined, undefined, fn)`.
   const tapObserver =
     isFunction(observerOrNext) || error || complete
       ? // tslint:disable-next-line: no-object-literal-type-assertion
@@ -209,7 +209,7 @@ export function tap<T>(
         );
       })
     : // Tap was called with no valid tap observer or handler
-      // (e.g. `tap(null, null, null)` or `tap(null)` or `tap()`)
+      // (e.g. `tap(undefined, undefined, undefined)` or `tap(undefined)` or `tap()`)
       // so we're going to just mirror the source.
       identity;
 }

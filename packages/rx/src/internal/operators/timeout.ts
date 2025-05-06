@@ -49,7 +49,7 @@ export interface TimeoutInfo<T, M = unknown> {
   /** The number of messages seen before the timeout */
   readonly seen: number;
   /** The last message seen */
-  readonly lastValue: T | null;
+  readonly lastValue: T | undefined;
 }
 
 /**
@@ -58,12 +58,12 @@ export interface TimeoutInfo<T, M = unknown> {
 export interface TimeoutError<T = unknown, M = unknown> extends Error {
   /**
    * The information provided to the error by the timeout
-   * operation that created the error. Will be `null` if
+   * operation that created the error. Will be `undefined` if
    * used directly in non-RxJS code with an empty constructor.
    * (Note that using this constructor directly is not recommended,
    * you should create your own errors)
    */
-  info: TimeoutInfo<T, M> | null;
+  info: TimeoutInfo<T, M> | undefined;
 }
 
 export interface TimeoutErrorCtor {
@@ -86,7 +86,7 @@ export interface TimeoutErrorCtor {
  */
 export const TimeoutError: TimeoutErrorCtor = createErrorClass(
   (_super) =>
-    function (this: any, info: TimeoutInfo<any> | null = null) {
+    function (this: any, info: TimeoutInfo<any> | undefined = undefined) {
       _super(this);
       this.message = 'Timeout has occurred';
       this.name = 'TimeoutError';
@@ -313,7 +313,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     each,
     with: _with = timeoutErrorFactory,
     scheduler = schedulerArg ?? asyncScheduler,
-    meta = null!,
+    meta = undefined!,
   } = isValidDate(config) ? { first: config } : typeIs(config, 'number') ? { each: config } : config;
 
   if (first === undefined && each === undefined) {
@@ -333,7 +333,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     let timerSubscription: Subscription;
     // A bit of state we pass to our with and error factories to
     // tell what the last value we saw was.
-    let lastValue: T | null = null;
+    let lastValue: T | undefined = undefined;
     // A bit of state we pass to the with and error factories to
     // tell how many values we have seen so far.
     let seen = 0;
@@ -368,7 +368,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
           seen++;
           // Emit
           subscriber.next((lastValue = value));
-          // null | undefined are both < 0. Thanks, JavaScript.
+          // undefined | undefined are both < 0. Thanks, JavaScript.
           each! > 0 && startTimer(each!);
         },
         undefined,
@@ -379,7 +379,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
           }
           // Be sure not to hold the last value in memory after unsubscription
           // it could be quite large.
-          lastValue = null;
+          lastValue = undefined;
         }
       )
     );

@@ -87,7 +87,7 @@ export function switchMap<T, R, O extends ObservableInput<any>>(
   resultSelector?: (outerValue: T, innerValue: ObservedValueOf<O>, outerIndex: number, innerIndex: number) => R
 ): OperatorFunction<T, ObservedValueOf<O> | R> {
   return operate((source, subscriber) => {
-    let innerSubscriber: Subscriber<ObservedValueOf<O>> | null = null;
+    let innerSubscriber: Subscriber<ObservedValueOf<O>> | undefined = undefined;
     let index = 0;
     // Whether or not the source subscription has completed
     let isComplete = false;
@@ -116,7 +116,7 @@ export function switchMap<T, R, O extends ObservableInput<any>>(
                 // The inner has completed. Null out the inner subscriber to
                 // free up memory and to signal that we have no inner subscription
                 // currently.
-                innerSubscriber = null!;
+                innerSubscriber = undefined!;
                 checkComplete();
               }
             ))

@@ -15,7 +15,7 @@ import { arrRemove } from '../util/arrRemove';
  * Buffers a number of values from the source Observable by `bufferSize` then
  * emits the buffer and clears it, and starts a new buffer each
  * `startBufferEvery` values. If `startBufferEvery` is not provided or is
- * `null`, then new buffers are started immediately at the start of the source
+ * `undefined`, then new buffers are started immediately at the start of the source
  * and when each buffer closes and is emitted.
  *
  * ## Examples
@@ -54,7 +54,7 @@ import { arrRemove } from '../util/arrRemove';
  * beginning of the source by default.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferCount<T extends defined>(bufferSize: number, startBufferEvery: number | null = null): OperatorFunction<T, T[]> {
+export function bufferCount<T extends defined>(bufferSize: number, startBufferEvery: number | undefined = undefined): OperatorFunction<T, T[]> {
   // If no `startBufferEvery` value was supplied, then we're
   // opening and closing on the bufferSize itself.
   startBufferEvery = startBufferEvery ?? bufferSize;
@@ -67,7 +67,7 @@ export function bufferCount<T extends defined>(bufferSize: number, startBufferEv
       createOperatorSubscriber(
         subscriber,
         (value) => {
-          let toEmit: T[][] | null = null;
+          let toEmit: T[][] | undefined = undefined;
 
           // Check to see if we need to start a buffer.
           // This will start one at the first value, and then
@@ -112,7 +112,7 @@ export function bufferCount<T extends defined>(bufferSize: number, startBufferEv
         undefined,
         () => {
           // Clean up our memory when we finalize
-          buffers = null!;
+          buffers = undefined!;
         }
       )
     );

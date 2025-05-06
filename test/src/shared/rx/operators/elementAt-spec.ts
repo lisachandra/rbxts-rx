@@ -144,7 +144,7 @@ describe('elementAt', () => {
       const e1subs = '  ^----!';
       const expected = '-----#';
 
-      expectObservable(e1.pipe(elementAt(3))).toBe(expected, null, new ArgumentOutOfRangeError());
+      expectObservable(e1.pipe(elementAt(3))).toBe(expected, undefined, new ArgumentOutOfRangeError());
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

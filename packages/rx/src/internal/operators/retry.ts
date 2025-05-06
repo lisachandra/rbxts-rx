@@ -96,7 +96,7 @@ export function retry<T>(configOrCount: number | RetryConfig = math.huge): MonoT
     ? identity
     : operate((source, subscriber) => {
         let soFar = 0;
-        let innerSub: Subscription | null;
+        let innerSub: Subscription | undefined;
         const subscribeForRetry = () => {
           let syncUnsub = false;
           innerSub = source.subscribe(
@@ -117,7 +117,7 @@ export function retry<T>(configOrCount: number | RetryConfig = math.huge): MonoT
                   const resub = () => {
                     if (innerSub) {
                       innerSub.unsubscribe();
-                      innerSub = null;
+                      innerSub = undefined;
                       subscribeForRetry();
                     } else {
                       syncUnsub = true;
@@ -159,7 +159,7 @@ export function retry<T>(configOrCount: number | RetryConfig = math.huge): MonoT
           );
           if (syncUnsub) {
             innerSub.unsubscribe();
-            innerSub = null;
+            innerSub = undefined;
             subscribeForRetry();
           }
         };

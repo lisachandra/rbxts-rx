@@ -233,7 +233,7 @@ describe('switchMap', () => {
       })
     );
 
-    of(null)
+    of(undefined)
       .pipe(
         switchMap(() => synchronousObservable),
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect

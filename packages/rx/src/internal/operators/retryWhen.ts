@@ -66,7 +66,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  */
 export function retryWhen<T>(notifier: (errors: Observable<any>) => ObservableInput<any>): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
-    let innerSub: Subscription | null;
+    let innerSub: Subscription | undefined;
     let syncResub = false;
     let errors$: Subject<any>;
 
@@ -99,7 +99,7 @@ export function retryWhen<T>(notifier: (errors: Observable<any>) => ObservableIn
         // If we don't do this here, all inner subscriptions will not be
         // torn down until the entire observable is done.
         innerSub.unsubscribe();
-        innerSub = null;
+        innerSub = undefined;
         // We may need to do this multiple times, so reset the flag.
         syncResub = false;
         // Resubscribe

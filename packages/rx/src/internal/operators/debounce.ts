@@ -66,21 +66,21 @@ import { innerFrom } from '../observable/innerFrom';
 export function debounce<T>(durationSelector: (value: T) => ObservableInput<any>): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
     let hasValue = false;
-    let lastValue: T | null = null;
+    let lastValue: T | undefined = undefined;
     // The subscriber/subscription for the current debounce, if there is one.
-    let durationSubscriber: Subscriber<any> | null = null;
+    let durationSubscriber: Subscriber<any> | undefined = undefined;
 
     const emit = () => {
       // Unsubscribe any current debounce subscription we have,
       // we only cared about the first notification from it, and we
       // want to clean that subscription up as soon as possible.
       durationSubscriber?.unsubscribe();
-      durationSubscriber = null;
+      durationSubscriber = undefined;
       if (hasValue) {
         // We have a value! Free up memory first, then emit the value.
         hasValue = false;
         const value = lastValue!;
-        lastValue = null;
+        lastValue = undefined;
         subscriber.next(value);
       }
     };
@@ -90,7 +90,7 @@ export function debounce<T>(durationSelector: (value: T) => ObservableInput<any>
         subscriber,
         (value: T) => {
           // Cancel any pending debounce duration. We don't
-          // need to null it out here yet tho, because we're just going
+          // need to undefined it out here yet tho, because we're just going
           // to create another one in a few lines.
           durationSubscriber?.unsubscribe();
           hasValue = true;
@@ -111,7 +111,7 @@ export function debounce<T>(durationSelector: (value: T) => ObservableInput<any>
         undefined,
         () => {
           // Finalization.
-          lastValue = durationSubscriber = null;
+          lastValue = durationSubscriber = undefined;
         }
       )
     );

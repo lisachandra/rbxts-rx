@@ -143,7 +143,7 @@ describe('count', () => {
       const e1subs = '   ^--------!';
       const expected = ' ---------#';
 
-      expectObservable(e1.pipe(count())).toBe(expected, null, 'too bad');
+      expectObservable(e1.pipe(count())).toBe(expected, undefined, 'too bad');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

@@ -140,7 +140,7 @@ export function distinctUntilChanged<T, K>(
   comparator?: (previous: K, current: K) => boolean,
   keySelector: (value: T) => K = identity as (value: T) => K
 ): MonoTypeOperatorFunction<T> {
-  // We've been allowing `null` do be passed as the `compare`, so we can't do
+  // We've been allowing `undefined` do be passed as the `compare`, so we can't do
   // a default value for the parameter, because that will only work
   // for `undefined`.
   comparator = comparator ?? defaultCompare;

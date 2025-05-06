@@ -38,8 +38,8 @@ it('should expect function parameter', () => {
 });
 
 it('should handle the Boolean constructor', () => {
-  const a = of(0 as const, '' as const, false as const, null, undefined, -0 as const, 0n as const).pipe(every(Boolean)); // $ExpectType Observable<false>
-  const b = of(0 as const, '' as const, 'hi there' as const, false as const, null, undefined, -0 as const, 0n as const).pipe(
+  const a = of(0 as const, '' as const, false as const, undefined, undefined, -0 as const, 0n as const).pipe(every(Boolean)); // $ExpectType Observable<false>
+  const b = of(0 as const, '' as const, 'hi there' as const, false as const, undefined, undefined, -0 as const, 0n as const).pipe(
     every(Boolean)
   ); // $ExpectType Observable<boolean>
   const c = of('test' as const, true as const, 1 as const, [], {}).pipe(every(Boolean)); // $ExpectType Observable<boolean>

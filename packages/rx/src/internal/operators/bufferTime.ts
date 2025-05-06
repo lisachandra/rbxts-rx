@@ -11,12 +11,12 @@ import { Array } from '@rbxts/luau-polyfill';
 export function bufferTime<T>(bufferTimeSpan: number, scheduler?: SchedulerLike): OperatorFunction<T, T[]>;
 export function bufferTime<T>(
   bufferTimeSpan: number,
-  bufferCreationInterval: number | null | undefined,
+  bufferCreationInterval: number | undefined,
   scheduler?: SchedulerLike
 ): OperatorFunction<T, T[]>;
 export function bufferTime<T>(
   bufferTimeSpan: number,
-  bufferCreationInterval: number | null | undefined,
+  bufferCreationInterval: number | undefined,
   maxBufferSize: number,
   scheduler?: SchedulerLike
 ): OperatorFunction<T, T[]>;
@@ -75,12 +75,12 @@ export function bufferTime<T>(
  */
 export function bufferTime<T extends defined>(bufferTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, T[]> {
   const scheduler = popScheduler(otherArgs) ?? asyncScheduler;
-  const bufferCreationInterval = (otherArgs[0] as number) ?? null;
+  const bufferCreationInterval = (otherArgs[0] as number) ?? undefined;
   const maxBufferSize = (otherArgs[1] as number) || math.huge;
 
   return operate((source, subscriber) => {
     // The active buffers, their related subscriptions, and removal functions.
-    let bufferRecords: { buffer: T[]; subs: Subscription }[] | null = [];
+    let bufferRecords: { buffer: T[]; subs: Subscription }[] | undefined = [];
     // If true, it means that every time we emit a buffer, we want to start a new buffer
     // this is only really used for when *just* the buffer time span is passed.
     let restartOnEmit = false;
@@ -158,7 +158,7 @@ export function bufferTime<T extends defined>(bufferTimeSpan: number, ...otherAr
       // Pass all errors through to consumer.
       undefined,
       // Clean up
-      () => (bufferRecords = null)
+      () => (bufferRecords = undefined)
     );
 
     source.subscribe(bufferTimeSubscriber);

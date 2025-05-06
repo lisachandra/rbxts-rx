@@ -64,7 +64,7 @@ export function raceInit<T>(sources: ObservableInput<T>[]) {
     let subscriptions: Subscription[] = [];
 
     // Subscribe to all of the sources. Note that we are checking `subscriptions` here
-    // Is is an array of all actively "racing" subscriptions, and it is `null` after the
+    // Is is an array of all actively "racing" subscriptions, and it is `undefined` after the
     // race has been won. So, if we have racer that synchronously "wins", this loop will
     // stop before it subscribes to any more.
     for (let i = 0; subscriptions && !subscriber.closed && i < sources.size(); i++) {
@@ -77,7 +77,7 @@ export function raceInit<T>(sources: ObservableInput<T>[]) {
               for (let s = 0; s < subscriptions.size(); s++) {
                 s !== i && subscriptions[s].unsubscribe();
               }
-              subscriptions = null!;
+              subscriptions = undefined!;
             }
             subscriber.next(value);
           })

@@ -26,13 +26,13 @@ export class Subscription implements SubscriptionLike {
    */
   public closed = false;
 
-  private _parentage: Subscription[] | Subscription | null = null;
+  private _parentage: Subscription[] | Subscription | undefined = undefined;
 
   /**
    * The list of registered finalizers to execute upon unsubscription. Adding and removing from this
    * list occurs in the {@link #add} and {@link #remove} methods.
    */
-  private _finalizers: Exclude<TeardownLogic, void>[] | null = null;
+  private _finalizers: Exclude<TeardownLogic, void>[] | undefined = undefined;
 
   /**
    * @param initialTeardown A function executed first as part of the finalization
@@ -54,7 +54,7 @@ export class Subscription implements SubscriptionLike {
       // Remove this from it's parents.
       const { _parentage } = this;
       if (_parentage) {
-        this._parentage = null;
+        this._parentage = undefined;
         if (Array.isArray(_parentage)) {
           for (const parent of _parentage) {
             parent.remove(this);
@@ -75,7 +75,7 @@ export class Subscription implements SubscriptionLike {
 
       const { _finalizers } = this;
       if (_finalizers) {
-        this._finalizers = null;
+        this._finalizers = undefined;
         for (const finalizer of _finalizers) {
           try {
             execFinalizer(finalizer);
@@ -105,7 +105,7 @@ export class Subscription implements SubscriptionLike {
    * Closed Subscriptions cannot be added as finalizers to any subscription. Adding a closed
    * subscription to a any subscription will result in no operation. (A noop).
    *
-   * Adding a subscription to itself, or adding `null` or `undefined` will not perform any
+   * Adding a subscription to itself, or adding `undefined` or `undefined` will not perform any
    * operation at all. (A noop).
    *
    * `Subscription` instances that are added to this instance will automatically remove themselves
@@ -165,7 +165,7 @@ export class Subscription implements SubscriptionLike {
   private _removeParent(parent: Subscription) {
     const { _parentage } = this;
     if (_parentage === parent) {
-      this._parentage = null;
+      this._parentage = undefined;
     } else if (Array.isArray(_parentage)) {
       arrRemove(_parentage, parent);
     }

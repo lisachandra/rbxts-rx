@@ -40,12 +40,12 @@ export interface EventListenerObject<E> {
 export interface HasEventTargetAddRemove<E> {
   addEventListener(
     type: string,
-    listener: ((evt: E) => void) | EventListenerObject<E> | null,
+    listener: ((evt: E) => void) | EventListenerObject<E> | undefined,
     options?: boolean | AddEventListenerOptions
   ): void;
   removeEventListener(
     type: string,
-    listener: ((evt: E) => void) | EventListenerObject<E> | null,
+    listener: ((evt: E) => void) | EventListenerObject<E> | undefined,
     options?: EventListenerOptions | boolean
   ): void;
 }

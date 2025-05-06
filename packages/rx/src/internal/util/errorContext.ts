@@ -1,6 +1,6 @@
 import { config } from '../config';
 
-let context: { errorThrown: boolean; error: any } | null = null;
+let context: { errorThrown: boolean; error: any } | undefined = undefined;
 
 /**
  * Handles dealing with errors for super-gross mode. Creates a context, in which
@@ -13,12 +13,12 @@ export function errorContext(cb: () => void) {
   if (config.useDeprecatedSynchronousErrorHandling) {
     const isRoot = !context;
     if (isRoot) {
-      context = { errorThrown: false, error: null };
+      context = { errorThrown: false, error: undefined };
     }
     cb();
     if (isRoot) {
       const { errorThrown, error } = context!;
-      context = null;
+      context = undefined;
       if (errorThrown) {
         throw error;
       }

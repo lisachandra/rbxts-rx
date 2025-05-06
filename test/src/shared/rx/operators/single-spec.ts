@@ -18,7 +18,7 @@ describe('single operator', () => {
       const e1subs = '  ^----!      ';
       const expected = '-----#      ';
 
-      expectObservable(e1.pipe(single())).toBe(expected, null, new SequenceError('Too many matching values'));
+      expectObservable(e1.pipe(single())).toBe(expected, undefined, new SequenceError('Too many matching values'));
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -29,7 +29,7 @@ describe('single operator', () => {
       const e1subs = '     ^--!';
       const expected = '   ---#';
 
-      expectObservable(e1.pipe(single())).toBe(expected, null, new EmptyError());
+      expectObservable(e1.pipe(single())).toBe(expected, undefined, new EmptyError());
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -134,7 +134,7 @@ describe('single operator', () => {
       const e1subs = '  ^----------!      ';
       const expected = '-----------#      ';
 
-      expectObservable(e1.pipe(single((v) => v === 'b'))).toBe(expected, null, new SequenceError('Too many matching values'));
+      expectObservable(e1.pipe(single((v) => v === 'b'))).toBe(expected, undefined, new SequenceError('Too many matching values'));
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -145,7 +145,7 @@ describe('single operator', () => {
       const e1subs = '     ^--!';
       const expected = '   ---#';
 
-      expectObservable(e1.pipe(single((v) => v === 'a'))).toBe(expected, null, new EmptyError());
+      expectObservable(e1.pipe(single((v) => v === 'a'))).toBe(expected, undefined, new EmptyError());
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

@@ -39,7 +39,7 @@ const DEFAULT_CONFIG: ConnectableConfig<unknown> = {
  */
 export function connectable<T>(source: ObservableInput<T>, config: ConnectableConfig<T> = DEFAULT_CONFIG): Connectable<T> {
   // The subscription representing the connection.
-  let connection: Subscription | null = null;
+  let connection: Subscription | undefined = undefined;
   const { connector, resetOnDisconnect = true } = config;
   let subject = connector();
 

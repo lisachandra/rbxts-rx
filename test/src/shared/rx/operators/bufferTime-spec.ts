@@ -25,7 +25,7 @@ describe('bufferTime operator', () => {
         z: [] as string[],
       };
 
-      const result = e1.pipe(bufferTime(t, null, math.huge, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, math.huge, testScheduler));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(subs);
@@ -43,7 +43,7 @@ describe('bufferTime operator', () => {
         z: [] as string[],
       };
 
-      const result = e1.pipe(bufferTime(t, null, math.huge, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, math.huge, testScheduler));
 
       expectObservable(result).toBe(expected, values);
     });
@@ -65,7 +65,7 @@ describe('bufferTime operator', () => {
         z: ['g'],
       };
 
-      const result = e1.pipe(bufferTime(t, null, 2, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, 2, testScheduler));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(subs);
@@ -114,7 +114,7 @@ describe('bufferTime operator', () => {
         z: [] as string[],
       };
 
-      const result = e1.pipe(bufferTime(t, null, 3, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, 3, testScheduler));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(subs);
@@ -280,7 +280,7 @@ describe('bufferTime operator', () => {
       const values = { b: [] as string[] };
       const t = time('----------|');
 
-      const result = e1.pipe(bufferTime(t, null, math.huge, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, math.huge, testScheduler));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -294,7 +294,7 @@ describe('bufferTime operator', () => {
       const t = time('  ----------|                                  ');
       const expected = '----------a---------a---------a---------a----';
 
-      const result = e1.pipe(bufferTime(t, null, math.huge, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, math.huge, testScheduler));
 
       expectObservable(result, unsub).toBe(expected, { a: [] });
     });
@@ -306,7 +306,7 @@ describe('bufferTime operator', () => {
       const expected = '#';
       const t = time('----------|');
 
-      const result = e1.pipe(bufferTime(t, null, math.huge, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, math.huge, testScheduler));
 
       expectObservable(result).toBe(expected, undefined, new Error('haha'));
     });
@@ -322,7 +322,7 @@ describe('bufferTime operator', () => {
         w: ['a', 'b'],
       };
 
-      const result = e1.pipe(bufferTime(t, null, math.huge, testScheduler));
+      const result = e1.pipe(bufferTime(t, undefined, math.huge, testScheduler));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -363,7 +363,7 @@ describe('bufferTime operator', () => {
         x: ['c', 'd', 'e'],
       };
 
-      const result = e1.pipe(bufferTime(t, null, math.huge, testScheduler), take(2));
+      const result = e1.pipe(bufferTime(t, undefined, math.huge, testScheduler), take(2));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(subs);
@@ -383,7 +383,7 @@ describe('bufferTime operator', () => {
         e: [19, 20, 21, 22, 23],
       };
 
-      const source = interval(tick, testScheduler).pipe(bufferTime(buffTime, null, 10, testScheduler), take(5));
+      const source = interval(tick, testScheduler).pipe(bufferTime(buffTime, undefined, 10, testScheduler), take(5));
 
       expectObservable(source).toBe(expected, values);
     });

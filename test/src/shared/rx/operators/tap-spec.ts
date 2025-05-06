@@ -30,7 +30,7 @@ describe('tap', () => {
   });
 
   it('should next with a callback', () => {
-    let value = null;
+    let value = undefined;
     of(42)
       .pipe(
         tap(function (x) {
@@ -43,7 +43,7 @@ describe('tap', () => {
   });
 
   it('should error with a callback', () => {
-    let err = null;
+    let err = undefined;
     throwError(() => 'bad')
       .pipe(
         tap({
@@ -159,7 +159,7 @@ describe('tap', () => {
   });
 
   it('should handle next with observer', () => {
-    let value = null;
+    let value = undefined;
 
     of('hi')
       .pipe(

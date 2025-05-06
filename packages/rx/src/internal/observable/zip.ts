@@ -69,7 +69,7 @@ export function zip(...args: unknown[]): Observable<unknown> {
 
         // When everything is done, release the arrays above.
         subscriber.add(() => {
-          buffers = completed = null!;
+          buffers = completed = undefined!;
         });
 
         // Loop over our sources and subscribe to each one. The index `i` is
@@ -112,7 +112,7 @@ export function zip(...args: unknown[]): Observable<unknown> {
 
         // When everything is done, release the arrays above.
         return () => {
-          buffers = completed = null!;
+          buffers = completed = undefined!;
         };
       })
     : EMPTY;

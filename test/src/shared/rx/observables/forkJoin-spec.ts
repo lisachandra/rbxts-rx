@@ -80,17 +80,17 @@ describe('forkJoin', () => {
       });
     });
 
-    it('should allow emit null or undefined', () => {
+    it('should allow emit undefined or undefined', () => {
       rxTestScheduler.run(({ hot, expectObservable }) => {
         const e2 = forkJoin([
-          hot('            --a--b--c--d--|', { d: null }),
+          hot('            --a--b--c--d--|', { d: undefined }),
           hot('            (b|)'),
           hot('            --1--2--3--|'),
           hot('            -----r--t--u--|', { u: undefined }),
         ]);
         const expected2 = '--------------(x|)';
 
-        expectObservable(e2).toBe(expected2, { x: [null, 'b', '3', undefined] });
+        expectObservable(e2).toBe(expected2, { x: [undefined, 'b', '3', undefined] });
       });
     });
 
@@ -332,17 +332,17 @@ describe('forkJoin', () => {
       });
     });
 
-    it('should allow emit null or undefined', () => {
+    it('should allow emit undefined or undefined', () => {
       rxTestScheduler.run(({ hot, expectObservable }) => {
         const e2 = forkJoin({
-          foo: hot('       --a--b--c--d--|', { d: null }),
+          foo: hot('       --a--b--c--d--|', { d: undefined }),
           bar: hot('       (b|)'),
           baz: hot('       --1--2--3--|'),
           qux: hot('       -----r--t--u--|', { u: undefined }),
         });
         const expected2 = '--------------(x|)';
 
-        expectObservable(e2).toBe(expected2, { x: { foo: null, bar: 'b', baz: '3', qux: undefined } });
+        expectObservable(e2).toBe(expected2, { x: { foo: undefined, bar: 'b', baz: '3', qux: undefined } });
       });
     });
 
@@ -483,14 +483,14 @@ describe('forkJoin', () => {
     });
 
     // TODO(benlesh): this is the wrong behavior, it should probably throw right away.
-    it('should have same v5/v6 throwing behavior full argument of null', (done) => {
+    it('should have same v5/v6 throwing behavior full argument of undefined', (done) => {
       rxTestScheduler.run(() => {
-        // It doesn't throw when you pass null
-        expect(() => forkJoin(null as any)).not.to.throw();
+        // It doesn't throw when you pass undefined
+        expect(() => forkJoin(undefined as any)).not.to.throw();
 
-        // It doesn't even throw if you subscribe to forkJoin(null).
+        // It doesn't even throw if you subscribe to forkJoin(undefined).
         expect(() =>
-          forkJoin(null as any).subscribe({
+          forkJoin(undefined as any).subscribe({
             // It sends the error to the subscription.
             error: () => done(),
           })

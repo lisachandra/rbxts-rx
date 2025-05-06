@@ -47,7 +47,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
 export function sample<T>(notifier: ObservableInput<any>): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
     let hasValue = false;
-    let lastValue: T | null = null;
+    let lastValue: T | undefined = undefined;
     source.subscribe(
       createOperatorSubscriber(subscriber, (value) => {
         hasValue = true;
@@ -61,7 +61,7 @@ export function sample<T>(notifier: ObservableInput<any>): MonoTypeOperatorFunct
           if (hasValue) {
             hasValue = false;
             const value = lastValue!;
-            lastValue = null;
+            lastValue = undefined;
             subscriber.next(value);
           }
         },

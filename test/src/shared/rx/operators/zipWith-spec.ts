@@ -410,7 +410,7 @@ describe('zipWith', () => {
       const bsubs = '   ^-----!';
       const expected = '------#';
 
-      expectObservable(a.pipe(zipWith(b))).toBe(expected, null, 'too bad');
+      expectObservable(a.pipe(zipWith(b))).toBe(expected, undefined, 'too bad');
       expectSubscriptions(a.subscriptions).toBe(asubs);
       expectSubscriptions(b.subscriptions).toBe(bsubs);
     });

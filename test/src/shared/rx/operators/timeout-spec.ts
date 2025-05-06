@@ -23,7 +23,7 @@ describe('timeout operator', () => {
 
       const result = e1.pipe(timeout(t, rxTestScheduler));
 
-      expectObservable(result).toBe(expected, null, defaultTimeoutError);
+      expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -50,8 +50,8 @@ describe('timeout operator', () => {
       expect(error).to.have.property('name', 'TimeoutError');
       expect(error!.info).to.deep.equal({
         seen: 0,
-        meta: null,
-        lastValue: null,
+        meta: undefined,
+        lastValue: undefined,
       });
     });
   });
@@ -82,8 +82,8 @@ describe('timeout operator', () => {
       expect(error).to.have.property('name', 'TimeoutError');
       expect(error!.info).to.deep.equal({
         seen: 0,
-        meta: null,
-        lastValue: null,
+        meta: undefined,
+        lastValue: undefined,
       });
     });
   });
@@ -173,7 +173,7 @@ describe('timeout operator', () => {
       // Start time is zero
       const result = e1.pipe(timeout(new Date(t), rxTestScheduler));
 
-      expectObservable(result).toBe(expected, null, defaultTimeoutError);
+      expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -198,7 +198,7 @@ describe('timeout operator', () => {
           })
         );
 
-        expectObservable(result).toBe(expected, null, defaultTimeoutError);
+        expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
         expectSubscriptions(e1.subscriptions).toBe(e1subs);
       });
     });
@@ -225,8 +225,8 @@ describe('timeout operator', () => {
         expect(error).to.have.property('name', 'TimeoutError');
         expect(error!.info).to.deep.equal({
           seen: 0,
-          meta: null,
-          lastValue: null,
+          meta: undefined,
+          lastValue: undefined,
         });
       });
     });
@@ -257,8 +257,8 @@ describe('timeout operator', () => {
         expect(error).to.have.property('name', 'TimeoutError');
         expect(error!.info).to.deep.equal({
           seen: 0,
-          meta: null,
-          lastValue: null,
+          meta: undefined,
+          lastValue: undefined,
         });
       });
     });
@@ -345,7 +345,7 @@ describe('timeout operator', () => {
         // Start time is zero
         const result = e1.pipe(timeout({ first: new Date(t) }));
 
-        expectObservable(result).toBe(expected, null, defaultTimeoutError);
+        expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
         expectSubscriptions(e1.subscriptions).toBe(e1subs);
       });
     });

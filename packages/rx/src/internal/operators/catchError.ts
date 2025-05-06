@@ -106,7 +106,7 @@ export function catchError<T, O extends ObservableInput<any>>(
   selector: (err: any, caught: Observable<T>) => O
 ): OperatorFunction<T, T | ObservedValueOf<O>> {
   return operate((source, subscriber) => {
-    let innerSub: Subscription | null = null;
+    let innerSub: Subscription | undefined = undefined;
     let syncUnsub = false;
     let handledResult: Observable<ObservedValueOf<O>>;
 
@@ -115,7 +115,7 @@ export function catchError<T, O extends ObservableInput<any>>(
         handledResult = innerFrom(selector(err, catchError(selector)(source)));
         if (innerSub) {
           innerSub.unsubscribe();
-          innerSub = null;
+          innerSub = undefined;
           handledResult.subscribe(subscriber);
         } else {
           // We don't have an innerSub yet, that means the error was synchronous
@@ -132,7 +132,7 @@ export function catchError<T, O extends ObservableInput<any>>(
       // time between the source error and the subscription to the
       // next observable.
       innerSub.unsubscribe();
-      innerSub = null;
+      innerSub = undefined;
       handledResult!.subscribe(subscriber);
     }
   });

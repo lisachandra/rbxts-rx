@@ -518,7 +518,7 @@ describe('debounce', () => {
     const results: number[] = [];
     const source = new Subject<number>();
 
-    source.pipe(debounce(() => of(null))).subscribe((value) => {
+    source.pipe(debounce(() => of(undefined))).subscribe((value) => {
       results.push(value);
 
       if (value === 1) {

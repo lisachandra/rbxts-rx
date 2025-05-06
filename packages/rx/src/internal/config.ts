@@ -6,8 +6,8 @@ import type { ObservableNotification } from './types';
  * like how to react on unhandled errors.
  */
 export const config: GlobalConfig = {
-  onUnhandledError: null,
-  onStoppedNotification: null,
+  onUnhandledError: undefined,
+  onStoppedNotification: undefined,
   Promise: undefined,
   useDeprecatedSynchronousErrorHandling: false,
   useDeprecatedNextContext: false,
@@ -28,7 +28,7 @@ export interface GlobalConfig {
    * we do not want errors thrown in this user-configured handler to interfere with the
    * behavior of the library.
    */
-  onUnhandledError: ((err: any) => void) | null;
+  onUnhandledError: ((err: any) => void) | undefined;
 
   /**
    * A registration point for notifications that cannot be sent to subscribers because they
@@ -40,7 +40,7 @@ export interface GlobalConfig {
    * we do not want errors thrown in this user-configured handler to interfere with the
    * behavior of the library.
    */
-  onStoppedNotification: ((notification: ObservableNotification<any>, subscriber: Subscriber<any>) => void) | null;
+  onStoppedNotification: ((notification: ObservableNotification<any>, subscriber: Subscriber<any>) => void) | undefined;
 
   /**
    * The promise constructor used by default for {@link Observable#toPromise toPromise} and {@link Observable#forEach forEach}

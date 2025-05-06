@@ -87,7 +87,7 @@ export function withLatestFrom<T, R>(...inputs: any[]): OperatorFunction<T, R | 
               // If all of our other observables have emitted, set `ready` to `true`,
               // so we know we can start emitting values, then clean up the `hasValue` array,
               // because we don't need it anymore.
-              (ready = hasValue.every(identity)) && (hasValue = null!);
+              (ready = hasValue.every(identity)) && (hasValue = undefined!);
             }
           },
           // Completing one of the other sources has

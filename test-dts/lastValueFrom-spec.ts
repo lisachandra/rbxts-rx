@@ -7,7 +7,7 @@ describe('lastValueFrom', () => {
   });
 
   it('should infer the element type from a default value', () => {
-    const r = lastValueFrom(a$, { defaultValue: null }); // $ExpectType Promise<A | null>
+    const r = lastValueFrom(a$, { defaultValue: undefined }); // $ExpectType Promise<A | undefined>
   });
 
   it('should require an argument', () => {

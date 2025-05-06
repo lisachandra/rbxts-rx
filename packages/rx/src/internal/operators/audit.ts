@@ -53,24 +53,24 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
 export function audit<T>(durationSelector: (value: T) => ObservableInput<any>): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
     let hasValue = false;
-    let lastValue: T | null = null;
-    let durationSubscriber: Subscriber<any> | null = null;
+    let lastValue: T | undefined = undefined;
+    let durationSubscriber: Subscriber<any> | undefined = undefined;
     let isComplete = false;
 
     const endDuration = () => {
       durationSubscriber?.unsubscribe();
-      durationSubscriber = null;
+      durationSubscriber = undefined;
       if (hasValue) {
         hasValue = false;
         const value = lastValue!;
-        lastValue = null;
+        lastValue = undefined;
         subscriber.next(value);
       }
       isComplete && subscriber.complete();
     };
 
     const cleanupDuration = () => {
-      durationSubscriber = null;
+      durationSubscriber = undefined;
       isComplete && subscriber.complete();
     };
 

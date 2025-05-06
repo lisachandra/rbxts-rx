@@ -237,7 +237,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'shazbot!');
+      expectObservable(result).toBe(expected, undefined, 'shazbot!');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -256,7 +256,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'too bad, honk');
+      expectObservable(result).toBe(expected, undefined, 'too bad, honk');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -275,7 +275,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'bazinga');
+      expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -294,7 +294,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'bazinga');
+      expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -313,7 +313,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'bazinga');
+      expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -332,7 +332,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'flurp');
+      expectObservable(result).toBe(expected, undefined, 'flurp');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -351,7 +351,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'flurp');
+      expectObservable(result).toBe(expected, undefined, 'flurp');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -370,7 +370,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'wokka wokka');
+      expectObservable(result).toBe(expected, undefined, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -389,7 +389,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'wokka wokka');
+      expectObservable(result).toBe(expected, undefined, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
       expectSubscriptions(e2.subscriptions).toBe(e2subs);
     });
@@ -446,7 +446,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'bad things');
+      expectObservable(result).toBe(expected, undefined, 'bad things');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
       expectSubscriptions(right.subscriptions).toBe(rightSubs);
     });
@@ -465,7 +465,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'bad things');
+      expectObservable(result).toBe(expected, undefined, 'bad things');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
       expectSubscriptions(right.subscriptions).toBe(rightSubs);
     });
@@ -522,7 +522,7 @@ describe('combineLatestWith', () => {
         map(([x, y]) => x + y)
       );
 
-      expectObservable(result).toBe(expected, null, 'jenga');
+      expectObservable(result).toBe(expected, undefined, 'jenga');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
       expectSubscriptions(right.subscriptions).toBe(rightSubs);
     });

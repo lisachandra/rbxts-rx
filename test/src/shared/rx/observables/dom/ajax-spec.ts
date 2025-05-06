@@ -28,8 +28,8 @@ describe('ajax', () => {
     MockXMLHttpRequest.clearRequest();
 
     root.XMLHttpRequest = rXHR;
-    root.XDomainRequest = null;
-    root.ActiveXObject = null;
+    root.XDomainRequest = undefined;
+    root.ActiveXObject = undefined;
   });
 
   it('should create default XMLHttpRequest for non CORS', () => {
@@ -43,8 +43,8 @@ describe('ajax', () => {
   });
 
   it('should raise an error if not able to create XMLHttpRequest', () => {
-    root.XMLHttpRequest = null;
-    root.ActiveXObject = null;
+    root.XMLHttpRequest = undefined;
+    root.ActiveXObject = undefined;
 
     const obj: AjaxConfig = {
       url: '/',
@@ -67,8 +67,8 @@ describe('ajax', () => {
   });
 
   it('should raise an error if not able to create CORS request', () => {
-    root.XMLHttpRequest = null;
-    root.XDomainRequest = null;
+    root.XMLHttpRequest = undefined;
+    root.XDomainRequest = undefined;
 
     const obj: AjaxConfig = {
       url: '/',
@@ -451,8 +451,8 @@ describe('ajax', () => {
     expect(error instanceof AjaxError).to.be.true;
     // The default behavior of XHR if you get something back that you can't
     // parse as JSON, but you have a requestType of "json" is to
-    // have `response` set to `null`.
-    expect(error.response).to.be.null;
+    // have `response` set to `undefined`.
+    expect(error.response).to.be.undefined;
   });
 
   it('should succeed no settings', () => {
@@ -753,10 +753,10 @@ describe('ajax', () => {
         responseText: '',
       });
 
-      // Response will get set to null by the browser XHR
+      // Response will get set to undefined by the browser XHR
       // This is sort of arbitrarily determined by our test harness
       // but we want to be as accurate as possible.
-      expect(result).to.be.null;
+      expect(result).to.be.undefined;
       expect(complete).to.be.true;
     });
 
@@ -850,8 +850,8 @@ describe('ajax', () => {
 
       // Since the default setting for `responseType` is "json",
       // and our `responseText` is an empty string (which isn't parsable as JSON),
-      // response should be `null` here.
-      expect(result!.response).to.be.null;
+      // response should be `undefined` here.
+      expect(result!.response).to.be.undefined;
       expect(complete).to.be.true;
     });
 
@@ -994,7 +994,7 @@ describe('ajax', () => {
   });
 
   it('should error if aborted early', () => {
-    let thrown: any = null;
+    let thrown: any = undefined;
 
     ajax({
       method: 'GET',
@@ -1009,7 +1009,7 @@ describe('ajax', () => {
     });
 
     const mockXHR = MockXMLHttpRequest.mostRecent;
-    expect(thrown).to.be.null;
+    expect(thrown).to.be.undefined;
 
     mockXHR.triggerEvent('abort', { type: 'abort' });
     expect(thrown).to.be.an.instanceOf(AjaxError);
@@ -1601,7 +1601,7 @@ class MockXMLHttpRequest extends MockXHREventTarget {
   static clearRequest(): void {
     MockXMLHttpRequest.noResponseProp = false;
     MockXMLHttpRequest.requests.size() = 0;
-    MockXMLHttpRequest.recentRequest = null!;
+    MockXMLHttpRequest.recentRequest = undefined!;
   }
 
   protected responseType: string = '';
@@ -1740,7 +1740,7 @@ class MockXMLHttpRequest extends MockXHREventTarget {
           // response somehow, where responseType is "json" but the responseText
           // is not JSON. In truth, we need to invert these tests to just use
           // response, because `responseText` is a legacy path.
-          this.response = null;
+          this.response = undefined;
         }
         break;
       case 'arraybuffer':

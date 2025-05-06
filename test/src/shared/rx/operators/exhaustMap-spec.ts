@@ -276,7 +276,7 @@ describe('exhaustMap', () => {
       })
     );
 
-    of(null)
+    of(undefined)
       .pipe(
         exhaustMap(() => synchronousObservable),
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect

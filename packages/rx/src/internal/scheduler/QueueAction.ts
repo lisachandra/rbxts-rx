@@ -27,7 +27,7 @@ export class QueueAction<T> extends AsyncAction<T> {
   }
 
   protected requestAsyncId(scheduler: QueueScheduler, id?: TimerHandle, delay: number = 0): TimerHandle {
-    // If delay exists and is greater than 0, or if the delay is null (the
+    // If delay exists and is greater than 0, or if the delay is undefined (the
     // action wasn't rescheduled) but was originally scheduled as an async
     // action, then recycle as an async action.
 

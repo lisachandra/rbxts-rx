@@ -19,7 +19,7 @@ describe('firstValueFrom', () => {
 
   it('should support an undefined config', async () => {
     const source = EMPTY;
-    let error: any = null;
+    let error: any = undefined;
     try {
       await firstValueFrom(source, undefined as any);
     } catch (err) {
@@ -30,7 +30,7 @@ describe('firstValueFrom', () => {
 
   it('should error for empty observables', async () => {
     const source = EMPTY;
-    let error: any = null;
+    let error: any = undefined;
     try {
       await firstValueFrom(source);
     } catch (err) {
@@ -41,7 +41,7 @@ describe('firstValueFrom', () => {
 
   it('should error for errored observables', async () => {
     const source = throwError(() => new Error('blorp!'));
-    let error: any = null;
+    let error: any = undefined;
     try {
       await firstValueFrom(source);
     } catch (err) {

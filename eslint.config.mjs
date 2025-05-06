@@ -36,7 +36,6 @@ export default tseslint.config(
 			...eslintPluginRoblox.configs.recommended.rules,
 			"prettier/prettier": ["warn", prettierConfig],
 			"roblox-ts/lua-truthiness": "off",
-			"roblox-ts/no-null": "off",
 			"import-x/no-cycle": "error",
 		},
 	},

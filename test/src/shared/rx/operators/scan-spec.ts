@@ -60,7 +60,7 @@ describe('scan', () => {
       .pipe(
         scan((_: any, __, i) => {
           expect(i).to.equal(expected.shift());
-          return null;
+          return undefined;
         })
       )
       .subscribe();

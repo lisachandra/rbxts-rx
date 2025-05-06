@@ -91,8 +91,8 @@ describe('from (fromPromise)', () => {
     class CustomPromise<T> implements PromiseLike<T> {
       constructor(private promise: PromiseLike<T>) {}
       then<TResult1 = T, TResult2 = T>(
-        onFulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+        onFulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | undefined,
+        onRejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | undefined
       ): PromiseLike<TResult1 | TResult2> {
         return new CustomPromise(this.promise.then(onFulfilled, onRejected));
       }

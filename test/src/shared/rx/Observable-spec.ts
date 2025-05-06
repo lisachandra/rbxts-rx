@@ -913,7 +913,7 @@ describe('Observable', () => {
     config.onStoppedNotification = (notification) => {
       expect(notification.kind).to.equal('E');
       expect(notification).to.have.property('error', 'bad');
-      config.onStoppedNotification = null;
+      config.onStoppedNotification = undefined;
       done();
     };
 

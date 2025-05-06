@@ -133,7 +133,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     return messages;
   }
 
-  expectObservable<T>(observable: Observable<T>, subscriptionMarbles: string | null = null) {
+  expectObservable<T>(observable: Observable<T>, subscriptionMarbles: string | undefined = undefined) {
     const actual: TestMessage[] = [];
     const flushTest: FlushableTest = { actual, ready: false };
     const subscriptionParsed = TestScheduler.parseMarblesAsSubscriptions(subscriptionMarbles, this.runMode);
@@ -223,7 +223,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     });
   }
 
-  static parseMarblesAsSubscriptions(marbles: string | null, runMode = false): SubscriptionLog {
+  static parseMarblesAsSubscriptions(marbles: string | undefined, runMode = false): SubscriptionLog {
     if (!typeIs(marbles, 'string')) {
       return new SubscriptionLog(math.huge);
     }

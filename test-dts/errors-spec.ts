@@ -11,7 +11,7 @@ import {
 
 it('should deprecate error construction', () => {
   let error: Error;
-  error = new AjaxError('message', null!, null!); // $ExpectDeprecation
+  error = new AjaxError('message', undefined!, undefined!); // $ExpectDeprecation
   error = new ArgumentOutOfRangeError(); // $ExpectDeprecation
   error = new EmptyError(); // $ExpectDeprecation
   error = new NotFoundError('message'); // $ExpectDeprecation

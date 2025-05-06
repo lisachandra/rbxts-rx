@@ -32,8 +32,8 @@ it('should enforce predicate return type', () => {
 });
 
 it('should support Boolean constructor', () => {
-  const a = of(0 as const, -0 as const, null, undefined, false as const, '' as const).pipe(findIndex(Boolean)); // $ExpectType Observable<-1>
-  const b = of(0 as const, -0 as const, null, 'hi there' as const, undefined, false as const, '' as const).pipe(findIndex(Boolean)); // $ExpectType Observable<number>
+  const a = of(0 as const, -0 as const, undefined, undefined, false as const, '' as const).pipe(findIndex(Boolean)); // $ExpectType Observable<-1>
+  const b = of(0 as const, -0 as const, undefined, 'hi there' as const, undefined, false as const, '' as const).pipe(findIndex(Boolean)); // $ExpectType Observable<number>
 });
 
 it('should support inference from a predicate that returns any', () => {

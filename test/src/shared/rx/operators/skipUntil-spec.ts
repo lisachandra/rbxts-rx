@@ -342,7 +342,7 @@ describe('skipUntil', () => {
         return of(3);
       })
     );
-    of(null)
+    of(undefined)
       .pipe(skipUntil(synchronousNotifier))
       .subscribe(() => {
         /* noop */

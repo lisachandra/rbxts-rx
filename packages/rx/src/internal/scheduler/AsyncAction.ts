@@ -73,7 +73,7 @@ export class AsyncAction<T> extends Action<T> {
     return intervalProvider.setInterval(bind(true, scheduler['flush' as never], scheduler, this), delay);
   }
 
-  protected recycleAsyncId(_scheduler: AsyncScheduler, id?: TimerHandle, delay: number | null = 0): TimerHandle | undefined {
+  protected recycleAsyncId(_scheduler: AsyncScheduler, id?: TimerHandle, delay: number | undefined = 0): TimerHandle | undefined {
     // If this action is rescheduled with the same delay time, don't clear the interval id.
     if (delay !== undefined && this.delay === delay && this.pending === false) {
       return id;
@@ -113,7 +113,7 @@ export class AsyncAction<T> extends Action<T> {
       //   }, 100);
       // }, 1000);
       // ```
-      this.id = this.recycleAsyncId(this.scheduler, this.id, null);
+      this.id = this.recycleAsyncId(this.scheduler, this.id, undefined);
     }
   }
 
@@ -140,15 +140,15 @@ export class AsyncAction<T> extends Action<T> {
       const { id, scheduler } = this;
       const { actions } = scheduler;
 
-      this.work = this.state = this.scheduler = null!;
+      this.work = this.state = this.scheduler = undefined!;
       this.pending = false;
 
       arrRemove(actions, this);
       if (id !== undefined) {
-        this.id = this.recycleAsyncId(scheduler, id, null);
+        this.id = this.recycleAsyncId(scheduler, id, undefined);
       }
 
-      this.delay = null!;
+      this.delay = undefined!;
       super.unsubscribe();
     }
   }

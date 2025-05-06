@@ -64,13 +64,13 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  */
 export function refCount<T>(): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
-    let connection: Subscription | null = null;
+    let connection: Subscription | undefined = undefined;
 
     (source as any)._refCount++;
 
     const refCounter = createOperatorSubscriber(subscriber, undefined, undefined, undefined, () => {
       if (!source || (source as any)._refCount <= 0 || 0 < --(source as any)._refCount) {
-        connection = null;
+        connection = undefined;
         return;
       }
 
@@ -101,7 +101,7 @@ export function refCount<T>(): MonoTypeOperatorFunction<T> {
 
       const sharedConnection = (source as any)._connection;
       const conn = connection;
-      connection = null;
+      connection = undefined;
 
       if (sharedConnection && (!conn || sharedConnection === conn)) {
         sharedConnection.unsubscribe();

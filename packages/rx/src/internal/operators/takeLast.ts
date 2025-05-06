@@ -73,7 +73,7 @@ export function takeLast<T extends defined>(count: number): MonoTypeOperatorFunc
             undefined,
             () => {
               // During finalization release the values in our buffer.
-              buffer = null!;
+              buffer = undefined!;
             }
           )
         );

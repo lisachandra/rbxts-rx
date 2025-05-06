@@ -398,8 +398,8 @@ describe('fromEvent', () => {
     send(1, 2, 3);
   });
 
-  it('should not throw an exception calling toString on obj with a null prototype', (done) => {
-    // NOTE: Can not test with Object.create(null) or `class Foo extends null`
+  it('should not throw an exception calling toString on obj with a undefined prototype', (done) => {
+    // NOTE: Can not test with Object.create(undefined) or `class Foo extends undefined`
     // due to TypeScript bug. https://github.com/Microsoft/TypeScript/issues/1108
     class NullProtoEventTarget {
       on() {
@@ -409,7 +409,7 @@ describe('fromEvent', () => {
         /*noop*/
       }
     }
-    NullProtoEventTarget.prototype.toString = null!;
+    NullProtoEventTarget.prototype.toString = undefined!;
     const obj: NullProtoEventTarget = new NullProtoEventTarget();
 
     expect(() => {
@@ -427,8 +427,8 @@ describe('fromEvent', () => {
         removeEventListener(...args: any[]) {
           this._removeEventListenerArgs = args;
         },
-        _addEventListenerArgs: null as any,
-        _removeEventListenerArgs: null as any,
+        _addEventListenerArgs: undefined as any,
+        _removeEventListenerArgs: undefined as any,
       },
       [1]: {
         addEventListener(...args: any[]) {
@@ -437,8 +437,8 @@ describe('fromEvent', () => {
         removeEventListener(...args: any[]) {
           this._removeEventListenerArgs = args;
         },
-        _addEventListenerArgs: null as any,
-        _removeEventListenerArgs: null as any,
+        _addEventListenerArgs: undefined as any,
+        _removeEventListenerArgs: undefined as any,
       },
       length: 2,
     };
@@ -455,8 +455,8 @@ describe('fromEvent', () => {
     expect(nodeList[1]._addEventListenerArgs[1]).to.be.a('function');
     expect(nodeList[1]._addEventListenerArgs[2]).to.equal(options);
 
-    expect(nodeList[0]._removeEventListenerArgs).to.be.null;
-    expect(nodeList[1]._removeEventListenerArgs).to.be.null;
+    expect(nodeList[0]._removeEventListenerArgs).to.be.undefined;
+    expect(nodeList[1]._removeEventListenerArgs).to.be.undefined;
 
     subscription.unsubscribe();
 

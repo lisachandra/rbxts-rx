@@ -137,7 +137,7 @@ describe('min', () => {
       const e1subs = '   ^--------!';
       const expected = ' ---------#';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected, null, 'too bad');
+      expectObservable((<any>e1).pipe(min())).toBe(expected, undefined, 'too bad');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

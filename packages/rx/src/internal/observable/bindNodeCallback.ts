@@ -87,7 +87,7 @@ export function bindNodeCallback<A extends readonly unknown[], R extends readonl
  *
  * ```ts
  * someFunction((err, a, b) => {
- *   console.log(err); // null
+ *   console.log(err); // undefined
  *   console.log(a); // 5
  *   console.log(b); // "some string"
  * });

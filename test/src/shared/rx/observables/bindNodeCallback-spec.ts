@@ -15,7 +15,7 @@ describe('bindNodeCallback', () => {
   describe('when not scheduled', () => {
     it('should emit undefined when callback is called without success arguments', () => {
       function callback(cb: Function) {
-        cb(null);
+        cb(undefined);
       }
 
       const boundCallback = bindNodeCallback(callback);
@@ -35,7 +35,7 @@ describe('bindNodeCallback', () => {
 
     it('should a resultSelector', () => {
       function callback(cb: (err: any, n: number) => any) {
-        cb(null, 42);
+        cb(undefined, 42);
       }
 
       const boundCallback = bindNodeCallback(callback, (x: number) => x + 1);
@@ -55,7 +55,7 @@ describe('bindNodeCallback', () => {
 
     it('should emit one value from a callback', () => {
       function callback(datum: number, cb: (err: any, n: number) => void) {
-        cb(null, datum);
+        cb(undefined, datum);
       }
       const boundCallback = bindNodeCallback(callback);
       const results: Array<number | string> = [];
@@ -74,7 +74,7 @@ describe('bindNodeCallback', () => {
 
     it('should set context of callback to context of boundCallback', () => {
       function callback(this: { datum: number }, cb: (err: any, n: number) => void) {
-        cb(null, this.datum);
+        cb(undefined, this.datum);
       }
       const boundCallback = bindNodeCallback(callback);
       const results: Array<number | string> = [];
@@ -117,7 +117,7 @@ describe('bindNodeCallback', () => {
       function callback(datum: number, cb: (err: any, n: number) => void) {
         // Need to cb async in order for the unsub to trigger
         timeout = setTimeout(() => {
-          cb(null, datum);
+          cb(undefined, datum);
         }, 0);
       }
       const subscription = bindNodeCallback(callback)(42).subscribe({ next: nextSpy, error: throwSpy, complete: completeSpy });
@@ -135,7 +135,7 @@ describe('bindNodeCallback', () => {
 
     it('should create a separate internal subject for each call', () => {
       function callback(datum: number, cb: (err: any, n: number) => void) {
-        cb(null, datum);
+        cb(undefined, datum);
       }
       const boundCallback = bindNodeCallback(callback);
       const results: Array<number | string> = [];
@@ -164,7 +164,7 @@ describe('bindNodeCallback', () => {
   describe('when scheduled', () => {
     it('should emit undefined when callback is called without success arguments', () => {
       function callback(cb: Function) {
-        cb(null);
+        cb(undefined);
       }
 
       const boundCallback = bindNodeCallback(callback, rxTestScheduler);
@@ -186,7 +186,7 @@ describe('bindNodeCallback', () => {
 
     it('should emit one value from a callback', () => {
       function callback(datum: number, cb: (err: any, n: number) => void) {
-        cb(null, datum);
+        cb(undefined, datum);
       }
       const boundCallback = bindNodeCallback(callback, rxTestScheduler);
       const results: Array<number | string> = [];
@@ -207,7 +207,7 @@ describe('bindNodeCallback', () => {
 
     it('should set context of callback to context of boundCallback', () => {
       function callback(this: { datum: number }, cb: (err: any, n: number) => void) {
-        cb(null, this.datum);
+        cb(undefined, this.datum);
       }
       const boundCallback = bindNodeCallback(callback, rxTestScheduler);
       const results: Array<number | string> = [];
@@ -271,7 +271,7 @@ describe('bindNodeCallback', () => {
 
   it('should pass multiple inner arguments as an array', () => {
     function callback(datum: number, cb: (err: any, a: number, b: number, c: number, d: number) => void) {
-      cb(null, datum, 1, 2, 3);
+      cb(undefined, datum, 1, 2, 3);
     }
     const boundCallback = bindNodeCallback(callback, rxTestScheduler);
     const results: Array<number[] | string> = [];
@@ -294,7 +294,7 @@ describe('bindNodeCallback', () => {
     let calls = 0;
     function callback(datum: number, cb: (err: any, n: number) => void) {
       calls++;
-      cb(null, datum);
+      cb(undefined, datum);
     }
     const boundCallback = bindNodeCallback(callback, rxTestScheduler);
     const results1: Array<number | string> = [];
@@ -329,7 +329,7 @@ describe('bindNodeCallback', () => {
 
   it('should emit post callback errors', () => {
     function badFunction(callback: (error: Error, answer: number) => void): void {
-      callback(null as any, 42);
+      callback(undefined as any, 42);
       throw 'kaboom';
     }
     let receivedError: any;
@@ -359,7 +359,7 @@ describe('bindNodeCallback', () => {
     source$.subscribe((value) => (result2 = value));
 
     expect(calls).to.equal(1);
-    executeCallback(null, 'test');
+    executeCallback(undefined, 'test');
     expect(result1).to.equal('test');
     expect(result2).to.equal('test');
     expect(calls).to.equal(1);
@@ -369,7 +369,7 @@ describe('bindNodeCallback', () => {
     let calls = 0;
     function callback(datum: number, cb: Function) {
       calls++;
-      cb(null, datum);
+      cb(undefined, datum);
     }
     const boundCallback = bindNodeCallback(callback, rxTestScheduler);
     const results1: Array<number | string> = [];

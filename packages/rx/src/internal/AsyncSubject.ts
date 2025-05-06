@@ -6,7 +6,7 @@ import { Subscriber } from './Subscriber';
  * its latest value to all its observers on completion.
  */
 export class AsyncSubject<T> extends Subject<T> {
-  private _value: T | null = null;
+  private _value: T | undefined = undefined;
   private _hasValue = false;
   private _isComplete = false;
 

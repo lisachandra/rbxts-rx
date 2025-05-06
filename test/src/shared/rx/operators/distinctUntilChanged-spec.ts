@@ -258,7 +258,7 @@ describe('distinctUntilChanged', () => {
       const expected = '--a-----|';
       const keySelector = (x: number) => x % 2;
 
-      expectObservable(e1.pipe(distinctUntilChanged(null!, keySelector))).toBe(expected, { a: 2 });
+      expectObservable(e1.pipe(distinctUntilChanged(undefined!, keySelector))).toBe(expected, { a: 2 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -275,7 +275,7 @@ describe('distinctUntilChanged', () => {
         return x;
       };
 
-      expectObservable(e1.pipe(distinctUntilChanged(null as any, keySelector))).toBe(expected);
+      expectObservable(e1.pipe(distinctUntilChanged(undefined as any, keySelector))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

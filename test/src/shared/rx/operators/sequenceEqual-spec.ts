@@ -209,7 +209,7 @@ describe('sequenceEqual', () => {
   it('should error if the comparator function errors', () => {
     rxTestScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const values: { [key: string]: any } = {
-        a: null,
+        a: undefined,
         b: { value: 'bees knees' },
         c: { value: 'carpy dumb' },
         d: { value: 'derp' },
@@ -243,7 +243,7 @@ describe('sequenceEqual', () => {
   it('should use the provided comparator function', () => {
     rxTestScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const values: { [key: string]: any } = {
-        a: null,
+        a: undefined,
         b: { value: 'bees knees' },
         c: { value: 'carpy dumb' },
         d: { value: 'derp' },

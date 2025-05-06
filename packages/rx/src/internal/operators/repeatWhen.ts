@@ -43,7 +43,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  */
 export function repeatWhen<T>(notifier: (notifications: Observable<void>) => ObservableInput<any>): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
-    let innerSub: Subscription | null;
+    let innerSub: Subscription | undefined;
     let syncResub = false;
     let completions$: Subject<void>;
     let isNotifierComplete = false;
@@ -108,10 +108,10 @@ export function repeatWhen<T>(notifier: (notifications: Observable<void>) => Obs
         // If we don't do this here, all inner subscriptions will not be
         // torn down until the entire observable is done.
         innerSub.unsubscribe();
-        // It is important to null this out. Not only to free up memory, but
+        // It is important to undefined this out. Not only to free up memory, but
         // to make sure code above knows we are in a subscribing state to
         // handle synchronous resubscription.
-        innerSub = null;
+        innerSub = undefined;
         // We may need to do this multiple times, so reset the flags.
         syncResub = false;
         // Resubscribe

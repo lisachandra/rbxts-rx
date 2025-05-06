@@ -3,12 +3,12 @@ import { Observable } from '../Observable';
 import { popScheduler } from '../util/args';
 import { from } from './from';
 
-// Devs are more likely to pass null or undefined than they are a scheduler
+// Devs are more likely to pass undefined or undefined than they are a scheduler
 // without accompanying values. To make things easier for (naughty) devs who
 // use the `strictNullChecks: false` TypeScript compiler option, these
-// overloads with explicit null and undefined values are included.
+// overloads with explicit undefined and undefined values are included.
 
-export function of(value: null): Observable<null>;
+export function of(value: undefined): Observable<undefined>;
 export function of(value: undefined): Observable<undefined>;
 
 /** @deprecated The `scheduler` parameter will be removed in v8. Use `scheduled`. Details: https://rxjs.dev/deprecations/scheduler-argument */

@@ -75,7 +75,7 @@ export function buffer<T extends defined>(closingNotifier: ObservableInput<any>)
 
     return () => {
       // Ensure buffered values are released on finalization.
-      currentBuffer = null!;
+      currentBuffer = undefined!;
     };
   });
 }

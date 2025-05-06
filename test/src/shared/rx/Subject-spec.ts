@@ -690,7 +690,7 @@ describe('Subject', () => {
 
   describe('error thrown scenario', () => {
     afterEach(() => {
-      config.onUnhandledError = null;
+      config.onUnhandledError = undefined;
     });
 
     it('should not synchronously error when nexted into', (done) => {
@@ -725,7 +725,7 @@ describe('AnonymousSubject', () => {
     let subscribed = false;
 
     const subject = Subject.create(
-      null,
+      undefined,
       new Observable((observer: Observer<any>) => {
         subscribed = true;
         const subscription = of('x').subscribe(observer);

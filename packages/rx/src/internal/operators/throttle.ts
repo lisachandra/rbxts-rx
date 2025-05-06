@@ -85,13 +85,13 @@ export function throttle<T>(durationSelector: (value: T) => ObservableInput<any>
   return operate((source, subscriber) => {
     const { leading = true, trailing = false } = config ?? {};
     let hasValue = false;
-    let sendValue: T | null = null;
-    let throttled: Subscription | null = null;
+    let sendValue: T | undefined = undefined;
+    let throttled: Subscription | undefined = undefined;
     let isComplete = false;
 
     const endThrottling = () => {
       throttled?.unsubscribe();
-      throttled = null;
+      throttled = undefined;
       if (trailing) {
         send();
         isComplete && subscriber.complete();
@@ -99,7 +99,7 @@ export function throttle<T>(durationSelector: (value: T) => ObservableInput<any>
     };
 
     const cleanupThrottling = () => {
-      throttled = null;
+      throttled = undefined;
       isComplete && subscriber.complete();
     };
 
@@ -113,7 +113,7 @@ export function throttle<T>(durationSelector: (value: T) => ObservableInput<any>
         // issues here.
         hasValue = false;
         const value = sendValue!;
-        sendValue = null;
+        sendValue = undefined;
         // Emit the value.
         subscriber.next(value);
         !isComplete && startThrottle(value);

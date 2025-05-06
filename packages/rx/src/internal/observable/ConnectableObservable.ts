@@ -14,9 +14,9 @@ import { hasLift } from '../util/lift';
  * Details: https://rxjs.dev/deprecations/multicasting
  */
 export class ConnectableObservable<T> extends Observable<T> {
-  protected _subject: Subject<T> | null = null;
+  protected _subject: Subject<T> | undefined = undefined;
   protected _refCount: number = 0;
-  protected _connection: Subscription | null = null;
+  protected _connection: Subscription | undefined = undefined;
 
   /**
    * @param source The source observable
@@ -58,7 +58,7 @@ export class ConnectableObservable<T> extends Observable<T> {
   protected _teardown() {
     this._refCount = 0;
     const { _connection } = this;
-    this._subject = this._connection = null;
+    this._subject = this._connection = undefined;
     _connection?.unsubscribe();
   }
 
@@ -90,7 +90,7 @@ export class ConnectableObservable<T> extends Observable<T> {
       );
 
       if (connection.closed) {
-        this._connection = null;
+        this._connection = undefined;
         connection = Subscription.EMPTY;
       }
     }

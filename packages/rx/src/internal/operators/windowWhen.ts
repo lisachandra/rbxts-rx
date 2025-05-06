@@ -53,7 +53,7 @@ import { innerFrom } from '../observable/innerFrom';
  */
 export function windowWhen<T>(closingSelector: () => ObservableInput<any>): OperatorFunction<T, Observable<T>> {
   return operate((source, subscriber) => {
-    let window: Subject<T> | null;
+    let window: Subject<T> | undefined;
     let closingSubscriber: Subscriber<any> | undefined;
 
     /**
@@ -117,7 +117,7 @@ export function windowWhen<T>(closingSelector: () => ObservableInput<any>): Oper
           // Be sure to clean up our closing subscription
           // when this tears down.
           closingSubscriber?.unsubscribe();
-          window = null!;
+          window = undefined!;
         }
       )
     );

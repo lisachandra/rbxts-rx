@@ -120,8 +120,8 @@ export function windowCount<T>(windowSize: number, startWindowEvery: number = 0)
           subscriber.error(err);
         },
         () => {
-          starts = null!;
-          windows = null!;
+          starts = undefined!;
+          windows = undefined!;
         }
       )
     );

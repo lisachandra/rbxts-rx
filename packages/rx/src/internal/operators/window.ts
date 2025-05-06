@@ -92,7 +92,7 @@ export function window<T>(windowBoundaries: ObservableInput<any>): OperatorFunct
       // a reference to this window that tries to use it after it can
       // no longer get values from the source will get an ObjectUnsubscribedError.
       windowSubject?.unsubscribe();
-      windowSubject = null!;
+      windowSubject = undefined!;
     };
   });
 }

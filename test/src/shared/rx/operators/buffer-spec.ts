@@ -123,7 +123,7 @@ describe('Observable.prototype.buffer', () => {
       const a = hot('---^--a--');
       const b = throwError(() => new Error('too bad'));
       const expected = '#';
-      expectObservable(a.pipe(buffer(b))).toBe(expected, null, new Error('too bad'));
+      expectObservable(a.pipe(buffer(b))).toBe(expected, undefined, new Error('too bad'));
     });
   });
 
@@ -132,7 +132,7 @@ describe('Observable.prototype.buffer', () => {
       const a = throwError(() => new Error('too bad'));
       const b = hot('---^--a--');
       const expected = '#';
-      expectObservable(a.pipe(buffer(b))).toBe(expected, null, new Error('too bad'));
+      expectObservable(a.pipe(buffer(b))).toBe(expected, undefined, new Error('too bad'));
     });
   });
 
@@ -141,7 +141,7 @@ describe('Observable.prototype.buffer', () => {
       const a = hot('---^-------#', undefined, new Error('too bad'));
       const b = hot('---^--------');
       const expected = '--------#';
-      expectObservable(a.pipe(buffer(b))).toBe(expected, null, new Error('too bad'));
+      expectObservable(a.pipe(buffer(b))).toBe(expected, undefined, new Error('too bad'));
     });
   });
 
@@ -251,7 +251,7 @@ describe('Observable.prototype.buffer', () => {
       const a = hot('--1--2--^--3--4--5---6----7--8--9---0---|');
       const b = hot('--------^----------------#', undefined, new Error('too bad'));
       const expected = '     -----------------#';
-      expectObservable(a.pipe(buffer(b))).toBe(expected, null, new Error('too bad'));
+      expectObservable(a.pipe(buffer(b))).toBe(expected, undefined, new Error('too bad'));
     });
   });
 

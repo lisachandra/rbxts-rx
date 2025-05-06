@@ -74,7 +74,7 @@ describe('takeWhile', () => {
       const e1subs = '    ^-!            ';
       const expected = '  --|            ';
 
-      const result = e1.pipe(takeWhile(() => null as any));
+      const result = e1.pipe(takeWhile(() => undefined as any));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);

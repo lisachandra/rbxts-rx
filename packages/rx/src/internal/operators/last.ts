@@ -9,7 +9,7 @@ import { identity } from '../util/identity';
 
 export function last<T>(predicate: BooleanConstructor): OperatorFunction<T, TruthyTypesOf<T>>;
 export function last<T, D>(predicate: BooleanConstructor, defaultValue: D): OperatorFunction<T, TruthyTypesOf<T> | D>;
-export function last<T, D = T>(predicate?: null, defaultValue?: D): OperatorFunction<T, T | D>;
+export function last<T, D = T>(predicate?: undefined, defaultValue?: D): OperatorFunction<T, T | D>;
 export function last<T, S extends T>(
   predicate: (value: T, index: number, source: Observable<T>) => value is S,
   defaultValue?: S
@@ -78,7 +78,7 @@ export function last<T, D = T>(
  * with an `EmptyError` object if no such items are emitted.
  */
 export function last<T, D>(
-  predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | null,
+  predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | undefined,
   defaultValue?: D
 ): OperatorFunction<T, T | D> {
   const hasDefaultValue = defaultValue !== undefined;

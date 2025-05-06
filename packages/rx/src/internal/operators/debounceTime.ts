@@ -62,17 +62,17 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  */
 export function debounceTime<T>(dueTime: number, scheduler: SchedulerLike = asyncScheduler): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
-    let activeTask: Subscription | null = null;
-    let lastValue: T | null = null;
-    let lastTime: number | null = null;
+    let activeTask: Subscription | undefined = undefined;
+    let lastValue: T | undefined = undefined;
+    let lastTime: number | undefined = undefined;
 
     const emit = () => {
       if (activeTask) {
         // We have a value! Free up memory first, then emit the value.
         activeTask.unsubscribe();
-        activeTask = null;
+        activeTask = undefined;
         const value = lastValue!;
-        lastValue = null;
+        lastValue = undefined;
         subscriber.next(value);
       }
     };
@@ -115,7 +115,7 @@ export function debounceTime<T>(dueTime: number, scheduler: SchedulerLike = asyn
         undefined,
         () => {
           // Finalization.
-          lastValue = activeTask = null;
+          lastValue = activeTask = undefined;
         }
       )
     );

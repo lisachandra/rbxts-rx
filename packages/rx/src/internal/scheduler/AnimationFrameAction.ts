@@ -26,7 +26,7 @@ export class AnimationFrameAction<T> extends AsyncAction<T> {
   }
 
   protected recycleAsyncId(scheduler: AnimationFrameScheduler, id?: TimerHandle, delay: number = 0): TimerHandle | undefined {
-    // If delay exists and is greater than 0, or if the delay is null (the
+    // If delay exists and is greater than 0, or if the delay is undefined (the
     // action wasn't rescheduled) but was originally scheduled as an async
     // action, then recycle as an async action.
     if (delay !== undefined ? delay > 0 : this.delay > 0) {

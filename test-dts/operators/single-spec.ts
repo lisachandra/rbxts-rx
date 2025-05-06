@@ -34,8 +34,8 @@ it('should enforce source type', () => {
 });
 
 it('should handle Boolean constructor properly', () => {
-  const a = of(null, undefined, 0 as const, -0 as const, 0n as const, '' as const).pipe(single(Boolean)); // $ExpectType Observable<never>
-  const b = of(null, undefined, 0 as const, 'test' as const, -0 as const, 0n as const, '' as const).pipe(single(Boolean)); // $ExpectType Observable<"test">
+  const a = of(undefined, undefined, 0 as const, -0 as const, 0n as const, '' as const).pipe(single(Boolean)); // $ExpectType Observable<never>
+  const b = of(undefined, undefined, 0 as const, 'test' as const, -0 as const, 0n as const, '' as const).pipe(single(Boolean)); // $ExpectType Observable<"test">
 });
 
 it('should handle predicates that always return false properly', () => {

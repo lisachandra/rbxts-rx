@@ -128,7 +128,7 @@ describe('dematerialize', () => {
       const e1subs = '  (^!)';
       const expected = '#   ';
 
-      expectObservable(e1.pipe(dematerialize())).toBe(expected, null, error);
+      expectObservable(e1.pipe(dematerialize())).toBe(expected, undefined, error);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

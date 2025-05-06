@@ -226,7 +226,7 @@ describe('delay', () => {
 
   it('should unsubscribe scheduled actions after execution', () => {
     testScheduler.run(({ cold, time, expectObservable, expectSubscriptions }) => {
-      let subscribeSpy: any = null;
+      let subscribeSpy: any = undefined;
       const counts: number[] = [];
 
       const e1 = cold(' a|      ');

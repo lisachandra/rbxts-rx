@@ -26,7 +26,7 @@ export function executeSchedule(
   const scheduleSubscription = scheduler.schedule(function (this: SchedulerAction<any>) {
     work();
     if (repeat) {
-      parentSubscription.add(this.schedule(null, delay));
+      parentSubscription.add(this.schedule(undefined, delay));
     } else {
       this.unsubscribe();
     }

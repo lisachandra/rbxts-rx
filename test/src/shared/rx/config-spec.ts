@@ -11,11 +11,11 @@ describe('config', () => {
 
   describe('onUnhandledError', () => {
     afterEach(() => {
-      config.onUnhandledError = null;
+      config.onUnhandledError = undefined;
     });
 
-    it('should default to null', () => {
-      expect(config.onUnhandledError).to.be.null;
+    it('should default to undefined', () => {
+      expect(config.onUnhandledError).to.be.undefined;
     });
 
     it('should call asynchronously if an error is emitted and not handled by the consumer observer', (done) => {
@@ -115,11 +115,11 @@ describe('config', () => {
 
   describe('onStoppedNotification', () => {
     afterEach(() => {
-      config.onStoppedNotification = null;
+      config.onStoppedNotification = undefined;
     });
 
-    it('should default to null', () => {
-      expect(config.onStoppedNotification).to.be.null;
+    it('should default to undefined', () => {
+      expect(config.onStoppedNotification).to.be.undefined;
     });
 
     it('should be called asynchronously if a subscription setup errors after the subscription is closed by an error', (done) => {

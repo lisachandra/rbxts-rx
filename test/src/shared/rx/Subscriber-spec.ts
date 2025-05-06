@@ -86,7 +86,7 @@ describe('SafeSubscriber', () => {
   });
 
   it('should call complete observer without any arguments', () => {
-    let argument: Array<any> | null = null;
+    let argument: Array<any> | undefined = undefined;
 
     const observer = {
       complete: (...args: Array<any>) => {

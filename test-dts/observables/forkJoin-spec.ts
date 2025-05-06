@@ -118,7 +118,7 @@ describe('forkJoin([])', () => {
   });
 
   it('should return unknown for argument of any', () => {
-    const arg: any = null;
+    const arg: any = undefined;
     const res = forkJoin(arg); // $ExpectType Observable<unknown>
   });
 });

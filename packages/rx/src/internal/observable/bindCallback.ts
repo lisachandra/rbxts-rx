@@ -107,7 +107,7 @@ export function bindCallback<A extends readonly unknown[], R extends readonly un
  * }
  *
  * const boundSyncFn = bindCallback(iCallMyCallbackSynchronously);
- * const boundAsyncFn = bindCallback(iCallMyCallbackSynchronously, null, asyncScheduler);
+ * const boundAsyncFn = bindCallback(iCallMyCallbackSynchronously, undefined, asyncScheduler);
  *
  * boundSyncFn().subscribe(() => console.log('I was sync!'));
  * boundAsyncFn().subscribe(() => console.log('I was async!'));

@@ -21,8 +21,8 @@ import { AnyCatcher } from '../AnyCatcher';
  */
 export function forkJoin<T extends AnyCatcher>(arg: T): Observable<unknown>;
 
-// forkJoin(null | undefined)
-export function forkJoin(scheduler: null | undefined): Observable<never>;
+// forkJoin(undefined | undefined)
+export function forkJoin(scheduler: undefined | undefined): Observable<never>;
 
 // forkJoin([a, b, c])
 export function forkJoin(sources: readonly []): Observable<never>;

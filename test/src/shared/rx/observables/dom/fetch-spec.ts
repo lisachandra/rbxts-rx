@@ -21,7 +21,7 @@ function mockFetchImpl(input: string | Request, init?: RequestInit): Promise<Res
         });
       }
     }
-    Promise.resolve(null).then(() => {
+    Promise.resolve(undefined).then(() => {
       resolve((mockFetchImpl as any).respondWith);
     });
   });

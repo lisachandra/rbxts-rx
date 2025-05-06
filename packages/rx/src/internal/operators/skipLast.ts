@@ -89,7 +89,7 @@ export function skipLast<T>(skipCount: number): MonoTypeOperatorFunction<T> {
 
         return () => {
           // Release our values in memory
-          ring = null!;
+          ring = undefined!;
         };
       });
 }

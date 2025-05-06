@@ -5,7 +5,7 @@ import { Error } from '@rbxts/luau-polyfill';
 
 export function scheduleAsyncIterable<T>(input: AsyncIterable<T>, scheduler: SchedulerLike) {
   if (!input) {
-    throw new Error('Iterable cannot be null');
+    throw new Error('Iterable cannot be undefined');
   }
   return new Observable<T>((subscriber) => {
     executeSchedule(subscriber, scheduler, () => {

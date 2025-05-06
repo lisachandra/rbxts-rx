@@ -19,11 +19,11 @@ it('should enforce types', () => {
 });
 
 it('should enforce scheduler types', () => {
-  const o = of(1, 2, 3).pipe(throttleTime(47, null)); // $ExpectError
+  const o = of(1, 2, 3).pipe(throttleTime(47, undefined)); // $ExpectError
 });
 
 it('should enforce config types', () => {
   const o = of(1, 2, 3).pipe(throttleTime(47, asyncScheduler, { x: 1 })); // $ExpectError
   const p = of(1, 2, 3).pipe(throttleTime(47, asyncScheduler, { leading: 1, trailing: 1 })); // $ExpectError
-  const q = of(1, 2, 3).pipe(throttleTime(47, asyncScheduler, null)); // $ExpectError
+  const q = of(1, 2, 3).pipe(throttleTime(47, asyncScheduler, undefined)); // $ExpectError
 });

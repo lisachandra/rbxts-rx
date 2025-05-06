@@ -227,7 +227,7 @@ describe('delayWhen', () => {
         }))
       );
 
-      expectObservable(result).toBe(expected, null, err);
+      expectObservable(result).toBe(expected, undefined, err);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

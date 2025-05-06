@@ -66,7 +66,7 @@ export class Observable<T> implements Subscribable<T> {
 
   subscribe(observerOrNext?: Partial<Observer<T>> | ((value: T) => void)): Subscription;
   /** @deprecated Instead of passing separate callback arguments, use an observer argument. Signatures taking separate callback arguments will be removed in v8. Details: https://rxjs.dev/deprecations/subscribe-arguments */
-  subscribe(next?: ((value: T) => void) | null, error?: ((error: any) => void) | null, complete?: (() => void) | null): Subscription;
+  subscribe(next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined): Subscription;
   /**
    * Invokes an execution of an Observable and registers Observer handlers for notifications it will emit.
    *
@@ -96,7 +96,7 @@ export class Observable<T> implements Subscribable<T> {
    * The second way is to give up on Observer object altogether and simply provide callback functions in place of its methods.
    * This means you can provide three functions as arguments to `subscribe`, where the first function is equivalent
    * of a `next` method, the second of an `error` method and the third of a `complete` method. Just as in case of an Observer,
-   * if you do not need to listen for something, you can omit a function by passing `undefined` or `null`,
+   * if you do not need to listen for something, you can omit a function by passing `undefined` or `undefined`,
    * since `subscribe` recognizes these functions by where they were placed in function call. When it comes
    * to the `error` function, as with an Observer, if not provided, errors emitted by an Observable will be thrown asynchronously.
    *
@@ -202,9 +202,9 @@ export class Observable<T> implements Subscribable<T> {
    * @return A subscription reference to the registered handlers.
    */
   subscribe(
-    observerOrNext?: Partial<Observer<T>> | ((value: T) => void) | null,
-    error?: ((error: any) => void) | null,
-    complete?: (() => void) | null
+    observerOrNext?: Partial<Observer<T>> | ((value: T) => void) | undefined,
+    error?: ((error: any) => void) | undefined,
+    complete?: (() => void) | undefined
   ): Subscription {
     const subscriber = isSubscriber(observerOrNext) ? observerOrNext : new SafeSubscriber(observerOrNext, error, complete);
 

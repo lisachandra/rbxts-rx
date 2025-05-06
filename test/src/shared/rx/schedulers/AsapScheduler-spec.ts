@@ -183,7 +183,7 @@ describe('Scheduler.asap', () => {
 
   it('should execute the rest of the scheduled actions if the first action is canceled', (done) => {
     let actionHappened = false;
-    let secondSubscription: Subscription | null = null;
+    let secondSubscription: Subscription | undefined = undefined;
 
     const firstSubscription = asap.schedule(() => {
       actionHappened = true;

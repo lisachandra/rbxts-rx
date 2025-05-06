@@ -36,7 +36,7 @@ it('Check info argument to factory', () => {
         const i = info; // $ExpectType TimeoutInfo<string, A>
         const m = info.meta; // $ExpectType A
         const s = info.seen; // $ExpectType number
-        const l = info.lastValue; // $ExpectType string | null
+        const l = info.lastValue; // $ExpectType string | undefined
         // These should be readonly
         info.meta = new A(); // $ExpectError
         info.seen = 12; // $ExpectError
