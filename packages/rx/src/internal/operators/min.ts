@@ -50,5 +50,5 @@ import { isFunction } from '../util/isFunction';
  * smallest value.
  */
 export function min<T>(comparer?: (x: T, y: T) => number): MonoTypeOperatorFunction<T> {
-  return reduce(isFunction(comparer) ? (x, y) => (comparer(x, y) < 0 ? x : y) : (x, y) => (x < y ? x : y));
+  return reduce(isFunction(comparer) ? (x, y) => (comparer(x, y) < 0 ? x : y) : (x, y) => ((x as number) < (y as number) ? x : y));
 }

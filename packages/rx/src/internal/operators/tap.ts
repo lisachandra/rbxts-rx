@@ -73,11 +73,7 @@ export interface TapObserver<T> extends Observer<T> {
 }
 export function tap<T>(observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void)): MonoTypeOperatorFunction<T>;
 /** @deprecated Instead of passing separate callback arguments, use an observer argument. Signatures taking separate callback arguments will be removed in v8. Details: https://rxjs.dev/deprecations/subscribe-arguments */
-export function tap<T>(
-  next?: ((value: T) => void) | undefined,
-  error?: ((error: any) => void) | undefined,
-  complete?: (() => void) | undefined
-): MonoTypeOperatorFunction<T>;
+export function tap<T>(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): MonoTypeOperatorFunction<T>;
 
 /**
  * Used to perform side-effects for notifications from the source observable
@@ -159,23 +155,25 @@ export function tap<T>(
  * @see {@link TapObserver}
  *
  * @param observerOrNext A next handler or partial observer
- * @param error An error handler
+ * @param err An error handler
  * @param complete A completion handler
  * @return A function that returns an Observable identical to the source, but
  * runs the specified Observer or callback(s) for each item.
  */
 export function tap<T>(
-  observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void) | undefined,
-  error?: ((e: any) => void) | undefined,
-  complete?: (() => void) | undefined
+  observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void),
+  err?: (e: any) => void,
+  complete?: () => void
 ): MonoTypeOperatorFunction<T> {
   // We have to check to see not only if next is a function,
   // but if error or complete were passed. This is because someone
   // could technically call tap like `tap(undefined, fn)` or `tap(undefined, undefined, fn)`.
   const tapObserver =
-    isFunction(observerOrNext) || error || complete
+    isFunction(observerOrNext) || err || complete
       ? // tslint:disable-next-line: no-object-literal-type-assertion
-        ({ next: observerOrNext as Exclude<typeof observerOrNext, Partial<TapObserver<T>>>, error, complete } as Partial<TapObserver<T>>)
+        ({ next: observerOrNext as Exclude<typeof observerOrNext, Partial<TapObserver<T>>>, error: err, complete } as Partial<
+          TapObserver<T>
+        >)
       : observerOrNext;
 
   return tapObserver

@@ -41,6 +41,8 @@ export class Notification<T> {
    */
   readonly hasValue: boolean;
 
+  readonly error?: any;
+
   /**
    * Creates a "Next" notification object.
    * @param kind Always `'N'`
@@ -65,8 +67,9 @@ export class Notification<T> {
   constructor(
     public readonly kind: 'N' | 'E' | 'C',
     public readonly value?: T,
-    public readonly error?: any
+    err?: any
   ) {
+    this.error = err;
     this.hasValue = kind === 'N';
   }
 
@@ -107,8 +110,8 @@ export class Notification<T> {
    */
   do(next: (value: T) => void): void;
   do(nextHandler: (value: T) => void, errorHandler?: (err: any) => void, completeHandler?: () => void): void {
-    const { kind, value, error } = this;
-    return kind === 'N' ? nextHandler?.(value!) : kind === 'E' ? errorHandler?.(error) : completeHandler?.();
+    const { kind, value, error: err } = this;
+    return kind === 'N' ? nextHandler?.(value!) : kind === 'E' ? errorHandler?.(err) : completeHandler?.();
   }
 
   /**
@@ -146,10 +149,10 @@ export class Notification<T> {
    * @deprecated Replaced with {@link Notification#observe observe}. Will be removed in v8.
    */
   accept(observer: PartialObserver<T>): void;
-  accept(nextOrObserver: PartialObserver<T> | ((value: T) => void), error?: (err: any) => void, complete?: () => void) {
-    return isFunction((nextOrObserver as any)?.next)
+  accept(nextOrObserver: PartialObserver<T> | ((value: T) => void), err?: (err: any) => void, complete?: () => void) {
+    return typeIs(nextOrObserver, 'table') && isFunction((nextOrObserver as object as { [K: string]: unknown })?.next)
       ? this.observe(nextOrObserver as PartialObserver<T>)
-      : this.do(nextOrObserver as (value: T) => void, error as any, complete as any);
+      : this.do(nextOrObserver as (value: T) => void, err as any, complete as any);
   }
 
   /**
@@ -160,7 +163,7 @@ export class Notification<T> {
    * use {@link of} and {@link dematerialize}: `of(notification).pipe(dematerialize())`.
    */
   toObservable(): Observable<T> {
-    const { kind, value, error } = this;
+    const { kind, value, error: err } = this;
     // Select the observable to return by `kind`
     const result =
       kind === 'N'
@@ -169,7 +172,7 @@ export class Notification<T> {
         : //
           kind === 'E'
           ? // Error kind. Return an observable that emits the error.
-            throwError(() => error)
+            throwError(() => err)
           : //
             kind === 'C'
             ? // Completion kind. Kind is "C", return an observable that just completes.
@@ -235,9 +238,9 @@ export class Notification<T> {
  * @param observer The observer to notify.
  */
 export function observeNotification<T>(notification: ObservableNotification<T>, observer: PartialObserver<T>) {
-  const { kind, value, error } = notification as any;
+  const { kind, value, error: err } = notification as Notification<any>;
   if (!typeIs(kind, 'string')) {
     throw new Error('Invalid notification, missing "kind"');
   }
-  kind === 'N' ? observer.next?.(value) : kind === 'E' ? observer.error?.(error) : observer.complete?.();
+  kind === 'N' ? observer.next?.(value) : kind === 'E' ? observer.error?.(err) : observer.complete?.();
 }

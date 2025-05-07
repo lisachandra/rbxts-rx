@@ -93,15 +93,15 @@ export function pluck<T, R>(...properties: Array<string | number | symbol>): Ope
     throw new Error('list of properties cannot be empty.');
   }
   return map((x) => {
-    let currentProp: any = x;
+    let currentProp: { [K: string]: unknown } = x as never;
     for (let i = 0; i < length; i++) {
-      const p = currentProp?.[properties[i]];
+      const p = currentProp?.[properties[i] as string];
       if (!typeIs(p, 'nil')) {
-        currentProp = p;
+        currentProp = p as never;
       } else {
         return undefined;
       }
     }
-    return currentProp;
+    return currentProp as any;
   });
 }

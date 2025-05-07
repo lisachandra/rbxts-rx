@@ -12,8 +12,8 @@ export const COMPLETE_NOTIFICATION = (() => createNotification('C', undefined, u
  * as other notifications.
  * @internal
  */
-export function errorNotification(error: any): ErrorNotification {
-  return createNotification('E', undefined, error) as any;
+export function errorNotification(err: any): ErrorNotification {
+  return createNotification('E', undefined, err) as any;
 }
 
 /**
@@ -31,10 +31,10 @@ export function nextNotification<T>(value: T) {
  * TODO: This is only exported to support a crazy legacy test in `groupBy`.
  * @internal
  */
-export function createNotification(kind: 'N' | 'E' | 'C', value: any, error: any) {
+export function createNotification(kind: 'N' | 'E' | 'C', value: any, err: any) {
   return {
     kind,
     value,
-    error,
+    error: err,
   };
 }

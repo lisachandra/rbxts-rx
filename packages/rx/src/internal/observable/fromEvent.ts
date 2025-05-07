@@ -5,6 +5,7 @@ import { isArrayLike } from '../util/isArrayLike';
 import { isFunction } from '../util/isFunction';
 import { mapOneOrManyArgs } from '../util/mapOneOrManyArgs';
 import { Error } from '@rbxts/luau-polyfill';
+import { is } from 'internal/polyfill/type';
 
 // These constants are used to create handler registry functions using array mapping below.
 const nodeEventEmitterMethods = ['addListener', 'removeListener'] as const;
@@ -293,7 +294,7 @@ export function fromEvent<T>(
     // The handler we are going to register. Forwards the event object, by itself, or
     // an array of arguments to the event handler, if there is more than one argument,
     // to the consumer.
-    const handler = (...args: any[]) => subscriber.next(1 < args.size() ? args : args[0]);
+    const handler = (...args: defined[]) => subscriber.next((1 < args.size() ? args : args[0]) as T);
     // Do the work of adding the handler to the target.
     add(handler);
     // When we finalize, we want to remove the handler and free up memory.
@@ -308,8 +309,8 @@ export function fromEvent<T>(
  * @param target The target we're calling methods on
  * @param eventName The event name for the event we're creating register or unregister functions for
  */
-function toCommonHandlerRegistry(target: any, eventName: string) {
-  return (methodName: string) => (handler: any) => target[methodName](eventName, handler);
+function toCommonHandlerRegistry(target: object, eventName: string) {
+  return (methodName: string) => (handler: any) => (target as { [K: string]: Callback })[methodName](eventName, handler);
 }
 
 /**
@@ -317,8 +318,10 @@ function toCommonHandlerRegistry(target: any, eventName: string) {
  * for adding and removing event handlers.
  * @param target the object to check
  */
-function isNodeStyleEventEmitter(target: any): target is NodeStyleEventEmitter {
-  return isFunction(target.addListener) && isFunction(target.removeListener);
+function isNodeStyleEventEmitter(target: unknown): target is NodeStyleEventEmitter {
+  return (
+    typeIs(target, 'table') && is<{ [K: string]: unknown }>(target) && isFunction(target.addListener) && isFunction(target.removeListener)
+  );
 }
 
 /**
@@ -326,8 +329,8 @@ function isNodeStyleEventEmitter(target: any): target is NodeStyleEventEmitter {
  * for adding and removing event handlers.
  * @param target the object to check
  */
-function isJQueryStyleEventEmitter(target: any): target is JQueryStyleEventEmitter<any, any> {
-  return isFunction(target.on) && isFunction(target.off);
+function isJQueryStyleEventEmitter(target: unknown): target is JQueryStyleEventEmitter<any, any> {
+  return typeIs(target, 'table') && is<{ [K: string]: unknown }>(target) && isFunction(target.on) && isFunction(target.off);
 }
 
 /**
@@ -335,6 +338,11 @@ function isJQueryStyleEventEmitter(target: any): target is JQueryStyleEventEmitt
  * for adding and removing event handlers.
  * @param target the object to check
  */
-function isEventTarget(target: any): target is HasEventTargetAddRemove<any> {
-  return isFunction(target.addEventListener) && isFunction(target.removeEventListener);
+function isEventTarget(target: unknown): target is HasEventTargetAddRemove<any> {
+  return (
+    typeIs(target, 'table') &&
+    is<{ [K: string]: unknown }>(target) &&
+    isFunction(target.addEventListener) &&
+    isFunction(target.removeEventListener)
+  );
 }

@@ -19,7 +19,7 @@ export class AsyncScheduler extends Scheduler {
    */
   public _scheduled: TimerHandle | undefined;
 
-  constructor(SchedulerAction: typeof Action, now: () => number = Scheduler.now) {
+  constructor(SchedulerAction: typeof Action, now: () => number = Scheduler['now' as never]) {
     super(SchedulerAction, now);
   }
 
@@ -31,22 +31,22 @@ export class AsyncScheduler extends Scheduler {
       return;
     }
 
-    let error: any;
+    let err: unknown;
     this._active = true;
 
     do {
-      if ((error = action.execute(action.state, action.delay))) {
+      if ((err = action.execute(action.state, action.delay) as unknown)) {
         break;
       }
     } while ((action = actions.shift()!)); // exhaust the scheduler queue
 
     this._active = false;
 
-    if (error) {
+    if (err) {
       while ((action = actions.shift()!)) {
         action.unsubscribe();
       }
-      throw error;
+      throw err;
     }
   }
 }

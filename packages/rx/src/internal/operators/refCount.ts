@@ -1,3 +1,4 @@
+import { typeAssertIs } from 'internal/polyfill/type';
 import type { ConnectableObservable } from '../observable/ConnectableObservable';
 import { Subscription } from '../Subscription';
 import { MonoTypeOperatorFunction } from '../types';
@@ -66,10 +67,11 @@ export function refCount<T>(): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
     let connection: Subscription | undefined = undefined;
 
-    (source as any)._refCount++;
+    typeAssertIs<typeof source & { _refCount: number; _connection: Subscription }>(source);
+    source._refCount++;
 
     const refCounter = createOperatorSubscriber(subscriber, undefined, undefined, undefined, () => {
-      if (!source || (source as any)._refCount <= 0 || 0 < --(source as any)._refCount) {
+      if (!source || source._refCount <= 0 || 0 < --source._refCount) {
         connection = undefined;
         return;
       }
@@ -99,7 +101,7 @@ export function refCount<T>(): MonoTypeOperatorFunction<T> {
       //      to the shared connection Subscription
       ///
 
-      const sharedConnection = (source as any)._connection;
+      const sharedConnection = source._connection;
       const conn = connection;
       connection = undefined;
 
@@ -113,7 +115,7 @@ export function refCount<T>(): MonoTypeOperatorFunction<T> {
     source.subscribe(refCounter);
 
     if (!refCounter.closed) {
-      connection = (source as ConnectableObservable<T>).connect();
+      connection = (source as never as ConnectableObservable<T>).connect();
     }
   });
 }

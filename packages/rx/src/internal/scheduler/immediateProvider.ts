@@ -19,11 +19,11 @@ interface ImmediateProvider {
 export const immediateProvider: ImmediateProvider = {
   // When accessing the delegate, use the variable rather than `this` so that
   // the functions can be called without being bound to the provider.
-  setImmediate(...args) {
+  setImmediate(this: void, ...args: Parameters<typeof setImmediate>) {
     const { delegate } = immediateProvider;
     return (delegate?.setImmediate || setImmediate)(...args);
   },
-  clearImmediate(handle) {
+  clearImmediate(this: void, handle) {
     const { delegate } = immediateProvider;
     return (delegate?.clearImmediate || clearImmediate)(handle as any);
   },

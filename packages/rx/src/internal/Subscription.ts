@@ -3,6 +3,7 @@ import { UnsubscriptionError } from './util/UnsubscriptionError';
 import type { SubscriptionLike, TeardownLogic, Unsubscribable } from './types';
 import { arrRemove } from './util/arrRemove';
 import { Array } from '@rbxts/luau-polyfill';
+import { is } from './polyfill/type';
 
 /**
  * Represents a disposable resource, such as the execution of an Observable. A
@@ -46,7 +47,7 @@ export class Subscription implements SubscriptionLike {
    * started when the Subscription was created.
    */
   unsubscribe(): void {
-    let errors: any[] | undefined;
+    let errors: defined[] | undefined;
 
     if (!this.closed) {
       this.closed = true;
@@ -84,7 +85,7 @@ export class Subscription implements SubscriptionLike {
             if (err instanceof UnsubscriptionError) {
               errors = [...errors, ...(err as UnsubscriptionError).errors];
             } else {
-              errors.push(err);
+              errors.push(err as defined);
             }
           }
         }
@@ -197,10 +198,15 @@ export class Subscription implements SubscriptionLike {
 
 export const EMPTY_SUBSCRIPTION = Subscription.EMPTY;
 
-export function isSubscription(value: any): value is Subscription {
+export function isSubscription(value: unknown): value is Subscription {
   return (
     value instanceof Subscription ||
-    (value && 'closed' in value && isFunction(value.remove) && isFunction(value.add) && isFunction(value.unsubscribe))
+    (typeIs(value, 'table') &&
+      is<{ [K in string]: any }>(value) &&
+      'closed' in value &&
+      isFunction(value.remove) &&
+      isFunction(value.add) &&
+      isFunction(value.unsubscribe))
   );
 }
 

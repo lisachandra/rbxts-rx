@@ -2,8 +2,7 @@ import { reduce } from './reduce';
 import { OperatorFunction } from '../types';
 import { operate } from '../util/lift';
 
-// eslint-disable-next-line no-sequences
-const arrReducer = (arr: any[], value: any) => (arr.push(value), arr);
+const arrReducer = (arr: any[], value: any) => ((arr as defined[]).push(value), arr as unknown) as any;
 
 /**
  * Collects all source emissions and emits them as an array when the source completes.

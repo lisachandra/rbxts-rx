@@ -22,22 +22,22 @@ export class AnimationFrameScheduler extends AsyncScheduler {
     }
 
     const { actions } = this;
-    let error: any;
+    let err: unknown;
     action = action || actions.shift()!;
 
     do {
-      if ((error = action.execute(action.state, action.delay))) {
+      if ((err = action.execute(action.state, action.delay) as unknown)) {
         break;
       }
     } while ((action = actions[0]) && action.id === flushId && actions.shift());
 
     this._active = false;
 
-    if (error) {
+    if (err) {
       while ((action = actions[0]) && action.id === flushId && actions.shift()) {
         action.unsubscribe();
       }
-      throw error;
+      throw err;
     }
   }
 }

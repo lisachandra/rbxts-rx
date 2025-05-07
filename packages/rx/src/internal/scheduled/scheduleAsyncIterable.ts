@@ -2,6 +2,7 @@ import { SchedulerLike } from '../types';
 import { Observable } from '../Observable';
 import { executeSchedule } from '../util/executeSchedule';
 import { Error } from '@rbxts/luau-polyfill';
+import { getAsyncIterator } from 'internal/polyfill/iterable';
 
 export function scheduleAsyncIterable<T>(input: AsyncIterable<T>, scheduler: SchedulerLike) {
   if (!input) {
@@ -9,7 +10,7 @@ export function scheduleAsyncIterable<T>(input: AsyncIterable<T>, scheduler: Sch
   }
   return new Observable<T>((subscriber) => {
     executeSchedule(subscriber, scheduler, () => {
-      const iterator = input[Symbol.asyncIterator]();
+      const iterator = getAsyncIterator(input);
       executeSchedule(
         subscriber,
         scheduler,

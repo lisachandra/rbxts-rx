@@ -22,11 +22,11 @@ import { dateTimestampProvider } from './scheduler/dateTimestampProvider';
  * {@link SchedulerLike}. Will be made internal in v8.
  */
 export class Scheduler implements SchedulerLike {
-  public static now: () => number = dateTimestampProvider.now;
+  public static now: (this: any) => number = dateTimestampProvider['now' as never];
 
   constructor(
     private schedulerActionCtor: typeof Action,
-    now: () => number = Scheduler.now
+    now: () => number = Scheduler['now' as never]
   ) {
     this.now = now;
   }
@@ -39,7 +39,7 @@ export class Scheduler implements SchedulerLike {
    * have a relation to wall-clock time. May or may not refer to a time unit
    * (e.g. milliseconds).
    */
-  public now: () => number;
+  public now: (this: any) => number;
 
   /**
    * Schedules a function, `work`, for execution. May happen at some point in

@@ -43,23 +43,23 @@ export class VirtualTimeScheduler extends AsyncScheduler {
    */
   public flush(): void {
     const { actions, maxFrames } = this;
-    let error: any;
+    let err: unknown;
     let action: AsyncAction<any> | undefined;
 
     while ((action = actions[0]) && action.delay <= maxFrames) {
       actions.shift();
       this.frame = action.delay;
 
-      if ((error = action.execute(action.state, action.delay))) {
+      if ((err = action.execute(action.state, action.delay) as unknown)) {
         break;
       }
     }
 
-    if (error) {
+    if (err) {
       while ((action = actions.shift())) {
         action.unsubscribe();
       }
-      throw error;
+      throw err;
     }
   }
 }
@@ -86,7 +86,7 @@ export class VirtualAction<T> extends AsyncAction<T> {
       // pushing it to the end of the scheduler queue, and recycling the action.
       // But since the VirtualTimeScheduler is used for testing, VirtualActions
       // must be immutable so they can be inspected later.
-      const action = new VirtualAction(this.scheduler, this.work);
+      const action = new VirtualAction(this.scheduler, this['work' as never]);
       this.add(action);
       return action.schedule(state, delay);
     } else {
@@ -114,7 +114,7 @@ export class VirtualAction<T> extends AsyncAction<T> {
     }
   }
 
-  private static sortActions<T>(a: VirtualAction<T>, b: VirtualAction<T>) {
+  private static sortActions<T>(this: void, a: VirtualAction<T>, b: VirtualAction<T>) {
     if (a.delay === b.delay) {
       if (a.index === b.index) {
         return 0;

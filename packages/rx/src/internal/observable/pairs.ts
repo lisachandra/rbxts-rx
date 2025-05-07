@@ -6,19 +6,19 @@ import { from } from './from';
 /**
  * @deprecated Use `from(Object.entries(obj))` instead. Will be removed in v8.
  */
-export function pairs<T>(arr: readonly T[], scheduler?: SchedulerLike): Observable<[string, T]>;
+export function rxPairs<T>(arr: readonly T[], scheduler?: SchedulerLike): Observable<[string, T]>;
 /**
  * @deprecated Use `from(Object.entries(obj))` instead. Will be removed in v8.
  */
-export function pairs<O extends Record<string, unknown>>(obj: O, scheduler?: SchedulerLike): Observable<[keyof O, O[keyof O]]>;
+export function rxPairs<O extends Record<string, unknown>>(obj: O, scheduler?: SchedulerLike): Observable<[keyof O, O[keyof O]]>;
 /**
  * @deprecated Use `from(Object.entries(obj))` instead. Will be removed in v8.
  */
-export function pairs<T>(iterable: Iterable<T>, scheduler?: SchedulerLike): Observable<[string, T]>;
+export function rxPairs<T>(iterable: Iterable<T>, scheduler?: SchedulerLike): Observable<[string, T]>;
 /**
  * @deprecated Use `from(Object.entries(obj))` instead. Will be removed in v8.
  */
-export function pairs(
+export function rxPairs(
   n: number | bigint | boolean | ((...args: any[]) => any) | symbol,
   scheduler?: SchedulerLike
 ): Observable<[never, never]>;
@@ -76,6 +76,6 @@ export function pairs(
  * @returns An observable sequence of [key, value] pairs from the object.
  * @deprecated Use `from(Object.entries(obj))` instead. Will be removed in v8.
  */
-export function pairs(obj: any, scheduler?: SchedulerLike) {
+export function rxPairs(obj: any, scheduler?: SchedulerLike) {
   return from(Object.entries(obj), scheduler as any);
 }

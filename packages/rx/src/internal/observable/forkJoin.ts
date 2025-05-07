@@ -22,7 +22,7 @@ import { AnyCatcher } from '../AnyCatcher';
 export function forkJoin<T extends AnyCatcher>(arg: T): Observable<unknown>;
 
 // forkJoin(undefined | undefined)
-export function forkJoin(scheduler: undefined | undefined): Observable<never>;
+export function forkJoin(scheduler: undefined): Observable<never>;
 
 // forkJoin([a, b, c])
 export function forkJoin(sources: readonly []): Observable<never>;
@@ -144,7 +144,7 @@ export function forkJoin<T extends Record<string, ObservableInput<any>>>(
  */
 export function forkJoin(...args: any[]): Observable<any> {
   const resultSelector = popResultSelector(args);
-  const { args: sources, keys } = argsArgArrayOrObject(args);
+  const { args: sources, keys } = argsArgArrayOrObject(args as defined[]);
   const result = new Observable((subscriber) => {
     const length = sources.size();
     if (!length) {
@@ -156,7 +156,7 @@ export function forkJoin(...args: any[]): Observable<any> {
     let remainingEmissions = length;
     for (let sourceIndex = 0; sourceIndex < length; sourceIndex++) {
       let hasValue = false;
-      innerFrom(sources[sourceIndex]).subscribe(
+      innerFrom(sources[sourceIndex] as any).subscribe(
         createOperatorSubscriber(
           subscriber,
           (value) => {

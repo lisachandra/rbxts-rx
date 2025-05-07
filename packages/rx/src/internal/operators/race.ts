@@ -2,6 +2,8 @@ import { ObservableInputTuple, OperatorFunction } from '../types';
 import { argsOrArgArray } from '../util/argsOrArgArray';
 import { raceWith } from './raceWith';
 
+const luaUnpack: Callback = getfenv(0)['unpack' as never];
+
 /** @deprecated Replaced with {@link raceWith}. Will be removed in v8. */
 export function race<T, A extends readonly unknown[]>(otherSources: [...ObservableInputTuple<A>]): OperatorFunction<T, T | A[number]>;
 /** @deprecated Replaced with {@link raceWith}. Will be removed in v8. */
@@ -16,5 +18,5 @@ export function race<T, A extends readonly unknown[]>(...otherSources: [...Obser
  * @deprecated Replaced with {@link raceWith}. Will be removed in v8.
  */
 export function race<T>(...args: any[]): OperatorFunction<T, unknown> {
-  return raceWith(...argsOrArgArray(args));
+  return raceWith(luaUnpack(argsOrArgArray(args)));
 }

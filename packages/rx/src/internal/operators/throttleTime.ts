@@ -57,6 +57,6 @@ export function throttleTime<T>(
   scheduler: SchedulerLike = asyncScheduler,
   config?: ThrottleConfig
 ): MonoTypeOperatorFunction<T> {
-  const duration$ = timer(duration, scheduler);
-  return throttle(() => duration$, config);
+  const duration0 = timer(duration, scheduler);
+  return throttle(() => duration0, config);
 }

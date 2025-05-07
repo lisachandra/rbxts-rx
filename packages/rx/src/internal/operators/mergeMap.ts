@@ -78,7 +78,7 @@ export function mergeMap<T, R, O extends ObservableInput<any>>(
  * `resultSelector`) to each item emitted by the source Observable and merging
  * the results of the Observables obtained from this transformation.
  */
-export function mergeMap<T, R, O extends ObservableInput<any>>(
+export function mergeMap<T extends defined, R, O extends ObservableInput<any>>(
   project: (value: T, index: number) => O,
   resultSelector?: ((outerValue: T, innerValue: ObservedValueOf<O>, outerIndex: number, innerIndex: number) => R) | number,
   concurrent: number = math.huge

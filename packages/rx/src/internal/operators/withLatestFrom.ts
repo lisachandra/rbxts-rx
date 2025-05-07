@@ -1,10 +1,11 @@
-import { OperatorFunction, ObservableInputTuple } from '../types';
+import { OperatorFunction, ObservableInputTuple, ObservableInput } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 import { innerFrom } from '../observable/innerFrom';
 import { identity } from '../util/identity';
 import { noop } from '../util/noop';
 import { popResultSelector } from '../util/args';
+import { typeAssertIs } from 'internal/polyfill/type';
 
 export function withLatestFrom<T, O extends unknown[]>(...inputs: [...ObservableInputTuple<O>]): OperatorFunction<T, [T, ...O]>;
 
@@ -57,6 +58,7 @@ export function withLatestFrom<T, O extends unknown[], R>(
  * recent values from each input Observable.
  */
 export function withLatestFrom<T, R>(...inputs: any[]): OperatorFunction<T, R | any[]> {
+  typeAssertIs<defined[]>(inputs);
   const project = popResultSelector(inputs) as ((...args: any[]) => R) | undefined;
 
   return operate((source, subscriber) => {
@@ -75,7 +77,7 @@ export function withLatestFrom<T, R>(...inputs: any[]): OperatorFunction<T, R | 
     // from them. This is an important distinction because subscription constitutes
     // a side-effect.
     for (let i = 0; i < len; i++) {
-      innerFrom(inputs[i]).subscribe(
+      innerFrom(inputs[i] as ObservableInput<any>).subscribe(
         createOperatorSubscriber(
           subscriber,
           (value) => {

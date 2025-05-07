@@ -2,11 +2,12 @@ import type { Operator } from './Operator';
 import { SafeSubscriber, Subscriber } from './Subscriber';
 import { isSubscription, Subscription } from './Subscription';
 import type { TeardownLogic, OperatorFunction, Subscribable, Observer } from './types';
-import { symbolObservable as Symbol_observable } from './symbol/observable';
 import { pipeFromArray } from './util/pipe';
 import { config } from './config';
 import { isFunction } from './util/isFunction';
 import { errorContext } from './util/errorContext';
+import { is } from './polyfill/type';
+import Symbol from './polyfill/symbol';
 
 /**
  * A representation of any set of values over any amount of time. This is the most basic building block
@@ -66,7 +67,7 @@ export class Observable<T> implements Subscribable<T> {
 
   subscribe(observerOrNext?: Partial<Observer<T>> | ((value: T) => void)): Subscription;
   /** @deprecated Instead of passing separate callback arguments, use an observer argument. Signatures taking separate callback arguments will be removed in v8. Details: https://rxjs.dev/deprecations/subscribe-arguments */
-  subscribe(next?: ((value: T) => void) | undefined, error?: ((error: any) => void) | undefined, complete?: (() => void) | undefined): Subscription;
+  subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
   /**
    * Invokes an execution of an Observable and registers Observer handlers for notifications it will emit.
    *
@@ -196,17 +197,13 @@ export class Observable<T> implements Subscribable<T> {
    *
    * @param observerOrNext Either an {@link Observer} with some or all callback methods,
    * or the `next` handler that is called for each value emitted from the subscribed Observable.
-   * @param error A handler for a terminal event resulting from an error. If no error handler is provided,
+   * @param err A handler for a terminal event resulting from an error. If no error handler is provided,
    * the error will be thrown asynchronously as unhandled.
    * @param complete A handler for a terminal event resulting from successful completion.
    * @return A subscription reference to the registered handlers.
    */
-  subscribe(
-    observerOrNext?: Partial<Observer<T>> | ((value: T) => void) | undefined,
-    error?: ((error: any) => void) | undefined,
-    complete?: (() => void) | undefined
-  ): Subscription {
-    const subscriber = isSubscriber(observerOrNext) ? observerOrNext : new SafeSubscriber(observerOrNext, error, complete);
+  subscribe(observerOrNext?: Partial<Observer<T>> | ((value: T) => void), err?: (error: any) => void, complete?: () => void): Subscription {
+    const subscriber = isSubscriber(observerOrNext) ? observerOrNext : new SafeSubscriber(observerOrNext, err, complete);
 
     errorContext(() => {
       const { operator, source } = this;
@@ -300,14 +297,14 @@ export class Observable<T> implements Subscribable<T> {
    */
   forEach(next: (value: T) => void, promiseCtor: PromiseConstructor): Promise<void>;
 
-  forEach(next: (value: T) => void, promiseCtor?: PromiseConstructor): Promise<void> {
+  forEach(Next: (value: T) => void, promiseCtor?: PromiseConstructor): Promise<void> {
     promiseCtor = getPromiseCtor(promiseCtor);
 
     return new promiseCtor<void>((resolve, reject) => {
       const subscriber = new SafeSubscriber<T>({
         next: (value) => {
           try {
-            next(value);
+            Next(value);
           } catch (err) {
             reject(err);
             subscriber.unsubscribe();
@@ -329,7 +326,7 @@ export class Observable<T> implements Subscribable<T> {
    * An interop point defined by the es7-observable spec https://github.com/zenparsing/es-observable
    * @return This instance of the observable.
    */
-  [Symbol_observable]() {
+  [Symbol.observable]() {
     return this;
   }
 
@@ -478,10 +475,19 @@ function getPromiseCtor(promiseCtor: PromiseConstructor | undefined) {
   return promiseCtor ?? config.Promise ?? Promise;
 }
 
-function isObserver<T>(value: any): value is Observer<T> {
-  return value && isFunction(value.next) && isFunction(value.error) && isFunction(value.complete);
+function isObserver<T>(value: unknown): value is Observer<T> {
+  return (
+    typeIs(value, 'table') &&
+    is<{ [K: string]: unknown }>(value) &&
+    isFunction(value.next) &&
+    isFunction(value.error) &&
+    isFunction(value.complete)
+  );
 }
 
-function isSubscriber<T>(value: any): value is Subscriber<T> {
-  return (value && value instanceof Subscriber) || (isObserver(value) && isSubscription(value));
+function isSubscriber<T>(value: unknown): value is Subscriber<T> {
+  return (
+    (typeIs(value, 'table') && is<{ [K: string]: unknown }>(value) && value instanceof Subscriber) ||
+    (isObserver(value) && isSubscription(value))
+  );
 }

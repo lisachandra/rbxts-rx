@@ -195,7 +195,7 @@ export function combineLatest<T extends Record<string, ObservableInput<any>>>(
  * @return An Observable of projected values from the most recent values from each `ObservableInput`,
  * or an array of the most recent values from each `ObservableInput`.
  */
-export function combineLatest<O extends ObservableInput<any>, R>(...args: any[]): Observable<R> | Observable<ObservedValueOf<O>[]> {
+export function combineLatest<O extends ObservableInput<any>, R>(...args: defined[]): Observable<R> | Observable<ObservedValueOf<O>[]> {
   const scheduler = popScheduler(args);
   const resultSelector = popResultSelector(args);
 

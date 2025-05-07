@@ -65,7 +65,7 @@ export function range(start: number, count?: number, scheduler?: SchedulerLike):
   }
 
   // Where the range should stop.
-  const end = count + start;
+  const endRange = count + start;
 
   return new Observable(
     scheduler
@@ -73,7 +73,7 @@ export function range(start: number, count?: number, scheduler?: SchedulerLike):
         (subscriber) => {
           let n = start;
           return scheduler.schedule(function () {
-            if (n < end) {
+            if (n < endRange) {
               subscriber.next(n++);
               this.schedule();
             } else {
@@ -84,7 +84,7 @@ export function range(start: number, count?: number, scheduler?: SchedulerLike):
       : // Standard synchronous range.
         (subscriber) => {
           let n = start;
-          while (n < end && !subscriber.closed) {
+          while (n < endRange && !subscriber.closed) {
             subscriber.next(n++);
           }
           subscriber.complete();

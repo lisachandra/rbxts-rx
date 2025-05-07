@@ -45,7 +45,7 @@ export function repeatWhen<T>(notifier: (notifications: Observable<void>) => Obs
   return operate((source, subscriber) => {
     let innerSub: Subscription | undefined;
     let syncResub = false;
-    let completions$: Subject<void>;
+    let completions: Subject<void>;
     let isNotifierComplete = false;
     let isMainComplete = false;
 
@@ -58,12 +58,12 @@ export function repeatWhen<T>(notifier: (notifications: Observable<void>) => Obs
      * we know we need to setup the notifier.
      */
     const getCompletionSubject = () => {
-      if (!completions$) {
-        completions$ = new Subject();
+      if (!completions) {
+        completions = new Subject();
 
         // If the call to `notifier` throws, it will be caught by the OperatorSubscriber
         // In the main subscription -- in `subscribeForRepeatWhen`.
-        innerFrom(notifier(completions$)).subscribe(
+        innerFrom(notifier(completions)).subscribe(
           createOperatorSubscriber(
             subscriber,
             () => {
@@ -84,7 +84,7 @@ export function repeatWhen<T>(notifier: (notifications: Observable<void>) => Obs
           )
         );
       }
-      return completions$;
+      return completions;
     };
 
     const subscribeForRepeatWhen = () => {

@@ -33,11 +33,11 @@ export const animationFrameProvider: AnimationFrameProvider = {
     });
     return new Subscription(() => cancel?.(handle));
   },
-  requestAnimationFrame(...args) {
+  requestAnimationFrame(this: void, ...args) {
     const { delegate } = animationFrameProvider;
     return (delegate?.requestAnimationFrame || requestAnimationFrame)(...args);
   },
-  cancelAnimationFrame(...args) {
+  cancelAnimationFrame(this: void, ...args) {
     const { delegate } = animationFrameProvider;
     return (delegate?.cancelAnimationFrame || cancelAnimationFrame)(...args);
   },

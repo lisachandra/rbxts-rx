@@ -4,7 +4,7 @@
 import { Boolean } from '@rbxts/luau-polyfill';
 import type { Observable } from './Observable';
 import type { Subscription } from './Subscription';
-import { symbolObservable } from './symbol/observable';
+import Symbol from './polyfill/symbol';
 
 export declare function cancelAnimationFrame(handle: number): void;
 export declare function requestAnimationFrame(callback: FrameRequestCallback): number;
@@ -116,7 +116,7 @@ export type ObservableLike<T> = InteropObservable<T>;
  * An object that implements the `Symbol.observable` interface.
  */
 export interface InteropObservable<T> {
-  [symbolObservable]: () => Subscribable<T>;
+  [Symbol.observable]: () => Subscribable<T>;
 }
 
 /* NOTIFICATIONS */
@@ -325,7 +325,7 @@ export type ValueFromNotification<T> = T extends { kind: 'N' | 'E' | 'C' }
  * `NaN` is "falsy" however, it is not and cannot be typed via TypeScript. See
  * comments here: https://github.com/microsoft/TypeScript/issues/28682#issuecomment-707142417
  */
-// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents, roblox-ts/no-null
 export type Falsy = null | undefined | false | 0 | -0 | 0n | '';
 
 export type TruthyTypesOf<T> = T extends Falsy ? never : T;

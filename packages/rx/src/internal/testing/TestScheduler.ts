@@ -17,6 +17,7 @@ import { timeoutProvider } from '../scheduler/timeoutProvider';
 import { Array, Error, Number, Object, String } from '@rbxts/luau-polyfill';
 import { bind } from 'internal/polyfill/bind';
 import RegExp from '@rbxts/regexp';
+import { typeAssertIs } from 'internal/polyfill/type';
 
 const defaultMaxFrame: number = 750;
 
@@ -87,16 +88,16 @@ export class TestScheduler extends VirtualTimeScheduler {
   /**
    * @param marbles A diagram in the marble DSL. Letters map to keys in `values` if provided.
    * @param values Values to use for the letters in `marbles`. If omitted, the letters themselves are used.
-   * @param error The error to use for the `#` marble (if present).
+   * @param err The error to use for the `#` marble (if present).
    */
-  createColdObservable<T = string>(marbles: string, values?: { [marble: string]: T }, error?: any): ColdObservable<T> {
+  createColdObservable<T = string>(marbles: string, values?: { [marble: string]: T }, err?: any): ColdObservable<T> {
     if (String.indexOf(marbles, '^') !== -1) {
       throw new Error('cold observable cannot have subscription offset "^"');
     }
     if (String.indexOf(marbles, '!') !== -1) {
       throw new Error('cold observable cannot have unsubscription marker "!"');
     }
-    const messages = TestScheduler.parseMarbles(marbles, values, error, undefined, this.runMode);
+    const messages = TestScheduler.parseMarbles(marbles, values, err, undefined, this.runMode);
     const cold = new ColdObservable<T>(messages, this);
     this.coldObservables.push(cold);
     return cold;
@@ -105,13 +106,13 @@ export class TestScheduler extends VirtualTimeScheduler {
   /**
    * @param marbles A diagram in the marble DSL. Letters map to keys in `values` if provided.
    * @param values Values to use for the letters in `marbles`. If omitted, the letters themselves are used.
-   * @param error The error to use for the `#` marble (if present).
+   * @param err The error to use for the `#` marble (if present).
    */
-  createHotObservable<T = string>(marbles: string, values?: { [marble: string]: T }, error?: any): HotObservable<T> {
+  createHotObservable<T = string>(marbles: string, values?: { [marble: string]: T }, err?: any): HotObservable<T> {
     if (String.indexOf(marbles, '!') !== -1) {
       throw new Error('hot observable cannot have unsubscription marker "!"');
     }
-    const messages = TestScheduler.parseMarbles(marbles, values, error, undefined, this.runMode);
+    const messages = TestScheduler.parseMarbles(marbles, values, err, undefined, this.runMode);
     const subject = new HotObservable<T>(messages, this);
     this.hotObservables.push(subject);
     return subject;
@@ -123,8 +124,8 @@ export class TestScheduler extends VirtualTimeScheduler {
       next: (value) => {
         messages.push({ frame: this.frame - outerFrame, notification: nextNotification(value) });
       },
-      error: (error) => {
-        messages.push({ frame: this.frame - outerFrame, notification: errorNotification(error) });
+      error: (err) => {
+        messages.push({ frame: this.frame - outerFrame, notification: errorNotification(err) });
       },
       complete: () => {
         messages.push({ frame: this.frame - outerFrame, notification: COMPLETE_NOTIFICATION });
@@ -148,8 +149,8 @@ export class TestScheduler extends VirtualTimeScheduler {
           const value = x instanceof Observable ? this.materializeInnerObservable(x, this.frame) : x;
           actual.push({ frame: this.frame, notification: nextNotification(value) });
         },
-        error: (error) => {
-          actual.push({ frame: this.frame, notification: errorNotification(error) });
+        error: (err) => {
+          actual.push({ frame: this.frame, notification: errorNotification(err) });
         },
         complete: () => {
           actual.push({ frame: this.frame, notification: COMPLETE_NOTIFICATION });
@@ -177,13 +178,13 @@ export class TestScheduler extends VirtualTimeScheduler {
             next: (x) => {
               // Support Observable-of-Observables
               const value = x instanceof Observable ? this.materializeInnerObservable(x, this.frame) : x;
-              flushTest.expected!.push({ frame: this.frame, notification: nextNotification(value) });
+              (flushTest.expected as Array<defined>).push({ frame: this.frame, notification: nextNotification(value) });
             },
-            error: (error) => {
-              flushTest.expected!.push({ frame: this.frame, notification: errorNotification(error) });
+            error: (err) => {
+              (flushTest.expected as Array<defined>).push({ frame: this.frame, notification: errorNotification(err) });
             },
             complete: () => {
-              flushTest.expected!.push({ frame: this.frame, notification: COMPLETE_NOTIFICATION });
+              (flushTest.expected as Array<defined>).push({ frame: this.frame, notification: COMPLETE_NOTIFICATION });
             },
           });
         }, subscriptionFrame);
@@ -196,7 +197,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     this.flushTests.push(flushTest);
     const { runMode } = this;
     return {
-      toBe(marblesOrMarblesArray: string | string[]) {
+      toBe: (marblesOrMarblesArray: string | string[]) => {
         const marblesArray: string[] = typeIs(marblesOrMarblesArray, 'string') ? [marblesOrMarblesArray] : marblesOrMarblesArray;
         flushTest.ready = true;
         flushTest.expected = marblesArray
@@ -381,7 +382,7 @@ export class TestScheduler extends VirtualTimeScheduler {
           advanceFrameBy(1);
           break;
         case '#':
-          notification = errorNotification(errorValue || 'error');
+          notification = errorNotification((errorValue as unknown) || 'error');
           advanceFrameBy(1);
           break;
         default:
@@ -527,14 +528,14 @@ export class TestScheduler extends VirtualTimeScheduler {
       const now = this.now();
       const scheduledRecords = table.clone(Object.values(scheduleLookup));
       const scheduledRecordsDue = scheduledRecords.filter(({ due }: { due: number }) => due <= now);
-      const dueImmediates = scheduledRecordsDue.filter(({ type }: { type: unknown }) => type === 'immediate');
+      const dueImmediates = scheduledRecordsDue.filter(({ type: kind }: { type: unknown }) => kind === 'immediate');
       if (dueImmediates.size() > 0) {
         const { handle, handler } = dueImmediates[0];
         scheduleLookup.delete(handle);
         handler();
         return;
       }
-      const dueIntervals = scheduledRecordsDue.filter(({ type }: { type: unknown }) => type === 'interval');
+      const dueIntervals = scheduledRecordsDue.filter(({ type: kind }: { type: unknown }) => kind === 'interval');
       if (dueIntervals.size() > 0) {
         const firstDueInterval = dueIntervals[0];
         const { duration, handler } = firstDueInterval;
@@ -546,7 +547,7 @@ export class TestScheduler extends VirtualTimeScheduler {
         handler();
         return;
       }
-      const dueTimeouts = scheduledRecordsDue.filter(({ type }: { type: unknown }) => type === 'timeout');
+      const dueTimeouts = scheduledRecordsDue.filter(({ type: kind }: { type: unknown }) => kind === 'timeout');
       if (dueTimeouts.size() > 0) {
         const { handle, handler } = dueTimeouts[0];
         scheduleLookup.delete(handle);

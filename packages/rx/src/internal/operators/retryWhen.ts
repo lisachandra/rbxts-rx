@@ -68,14 +68,14 @@ export function retryWhen<T>(notifier: (errors: Observable<any>) => ObservableIn
   return operate((source, subscriber) => {
     let innerSub: Subscription | undefined;
     let syncResub = false;
-    let errors$: Subject<any>;
+    let errors: Subject<any>;
 
     const subscribeForRetryWhen = () => {
       innerSub = source.subscribe(
         createOperatorSubscriber(subscriber, undefined, undefined, (err) => {
-          if (!errors$) {
-            errors$ = new Subject();
-            innerFrom(notifier(errors$)).subscribe(
+          if (!errors) {
+            errors = new Subject();
+            innerFrom(notifier(errors)).subscribe(
               createOperatorSubscriber(subscriber, () =>
                 // If we have an innerSub, this was an asynchronous call, kick off the retry.
                 // Otherwise, if we don't have an innerSub yet, that's because the inner subscription
@@ -86,9 +86,9 @@ export function retryWhen<T>(notifier: (errors: Observable<any>) => ObservableIn
               )
             );
           }
-          if (errors$) {
+          if (errors) {
             // We have set up the notifier without error.
-            errors$.next(err);
+            errors.next(err);
           }
         })
       );

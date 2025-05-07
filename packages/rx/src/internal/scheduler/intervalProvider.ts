@@ -17,14 +17,14 @@ interface IntervalProvider {
 export const intervalProvider: IntervalProvider = {
   // When accessing the delegate, use the variable rather than `this` so that
   // the functions can be called without being bound to the provider.
-  setInterval(handler: () => void, timeout?: number, ...args: any[]) {
+  setInterval(this: void, handler: () => void, timeout?: number, ...args: unknown[]) {
     const { delegate } = intervalProvider;
     if (delegate?.setInterval) {
       return delegate.setInterval(handler, timeout, ...args);
     }
     return setInterval<any[]>(handler, timeout, ...args);
   },
-  clearInterval(handle) {
+  clearInterval(this: void, handle) {
     const { delegate } = intervalProvider;
     return (delegate?.clearInterval || clearInterval)(handle as any);
   },

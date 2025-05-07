@@ -314,7 +314,7 @@ export function timeout<T, O extends ObservableInput<any>, M>(
     with: _with = timeoutErrorFactory,
     scheduler = schedulerArg ?? asyncScheduler,
     meta = undefined!,
-  } = isValidDate(config) ? { first: config } : typeIs(config, 'number') ? { each: config } : config;
+  } = isValidDate(config) ? { first: config, each: undefined } : typeIs(config, 'number') ? { each: config, first: undefined } : config;
 
   if (first === undefined && each === undefined) {
     // Ensure timeout was provided at runtime.

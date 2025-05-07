@@ -18,9 +18,7 @@ export function bindCallbackInternals(
     } else {
       // The user provided a result selector.
       return function (this: any, ...args: any[]) {
-        return (bindCallbackInternals(isNodeStyle, callbackFunc, scheduler) as any)
-          .apply(this, args)
-          .pipe(mapOneOrManyArgs(resultSelector));
+        return bindCallbackInternals(isNodeStyle, callbackFunc, scheduler)(this, args).pipe(mapOneOrManyArgs(resultSelector));
       };
     }
   }
@@ -29,7 +27,7 @@ export function bindCallbackInternals(
   // to compose that behavior for the user.
   if (scheduler) {
     return function (this: any, ...args: any[]) {
-      return (bindCallbackInternals(isNodeStyle, callbackFunc) as any).apply(this, args).pipe(subscribeOn(scheduler), observeOn(scheduler));
+      return bindCallbackInternals(isNodeStyle, callbackFunc)(this, args).pipe(subscribeOn(scheduler), observeOn(scheduler));
     };
   }
 
@@ -59,14 +57,14 @@ export function bindCallbackInternals(
         // Call our function that has a callback. If at any time during this
         // call, an error is thrown, it will be caught by the Observable
         // subscription process and sent to the consumer.
-        callbackFunc.apply(
+        (callbackFunc as Callback)(
           // Pass the appropriate `this` context.
           this,
           [
             // Pass the arguments.
             ...args,
             // And our callback handler.
-            (...results: any[]) => {
+            (...results: defined[]) => {
               if (isNodeStyle) {
                 // If this is a node callback, shift the first value off of the
                 // results and check it, as it is the error argument. By shifting,

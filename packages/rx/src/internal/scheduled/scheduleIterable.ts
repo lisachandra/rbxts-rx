@@ -1,8 +1,7 @@
 import { Observable } from '../Observable';
 import { SchedulerLike } from '../types';
-import { symbolIterator as Symbol_iterator } from '../symbol/iterator';
-import { isFunction } from '../util/isFunction';
 import { executeSchedule } from '../util/executeSchedule';
+import { getIterator } from 'internal/polyfill/iterable';
 
 /**
  * Used in {@link scheduled} to create an observable from an Iterable.
@@ -18,7 +17,7 @@ export function scheduleIterable<T>(input: Iterable<T>, scheduler: SchedulerLike
     // not called until the scheduled job fires.
     executeSchedule(subscriber, scheduler, () => {
       // Create the iterator.
-      iterator = (input as any)[Symbol_iterator]();
+      iterator = getIterator(input) as Iterator<T, T, undefined>;
 
       executeSchedule(
         subscriber,

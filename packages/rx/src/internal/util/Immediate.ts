@@ -22,7 +22,7 @@ function findAndClearHandle(handle: number): boolean {
  * Helper functions to schedule and unschedule microtasks.
  */
 export const Immediate = {
-  setImmediate(cb: () => void): number {
+  setImmediate(this: void, cb: () => void): number {
     const handle = nextHandle++;
     activeHandles[handle] = true;
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -34,7 +34,7 @@ export const Immediate = {
     return handle;
   },
 
-  clearImmediate(handle: number): void {
+  clearImmediate(this: void, handle: number): void {
     findAndClearHandle(handle);
   },
 };
@@ -43,7 +43,7 @@ export const Immediate = {
  * Used for internal testing purposes only. Do not export from library.
  */
 export const TestTools = {
-  pending() {
+  pending(this: void) {
     return Object.keys(activeHandles).size();
   },
 };

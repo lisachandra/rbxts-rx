@@ -7,6 +7,8 @@ import { noop } from './util/noop';
 import { nextNotification, errorNotification, COMPLETE_NOTIFICATION } from './NotificationFactories';
 import { timeoutProvider } from './scheduler/timeoutProvider';
 import { captureError } from './util/errorContext';
+import { bind } from './polyfill/bind';
+import { typeAssertIs } from './polyfill/type';
 
 /**
  * Implements the {@link Observer} interface and extends the
@@ -20,8 +22,8 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
   /**
    * A static factory for a Subscriber, given a (potentially partial) definition
    * of an Observer.
-   * @param next The `next` callback of an Observer.
-   * @param error The `error` callback of an
+   * @param Next The `next` callback of an Observer.
+   * @param err The `error` callback of an
    * Observer.
    * @param complete The `complete` callback of an
    * Observer.
@@ -31,8 +33,8 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
    * method, and there is no reason to be creating instances of `Subscriber` directly.
    * If you have a specific use case, please file an issue.
    */
-  static create<T>(next?: (x?: T) => void, error?: (e?: any) => void, complete?: () => void): Subscriber<T> {
-    return new SafeSubscriber(next, error, complete);
+  static create<T>(Next?: (x?: T) => void, err?: (e?: any) => void, complete?: () => void): Subscriber<T> {
+    return new SafeSubscriber(Next, err, complete);
   }
 
   /** @deprecated Internal implementation detail, do not use directly. Will be made internal in v8. */
@@ -64,7 +66,8 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
    * times.
    * @param value The `next` value.
    */
-  next(value: T): void {
+  next(this: void, value: T): void {
+    typeAssertIs<Subscriber<T>>(this);
     if (this.isStopped) {
       handleStoppedNotification(nextNotification(value), this);
     } else {
@@ -78,7 +81,8 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
    * the Observable has experienced an error condition.
    * @param err The `error` exception.
    */
-  error(err?: any): void {
+  error(this: void, err?: any): void {
+    typeAssertIs<Subscriber<T>>(this);
     if (this.isStopped) {
       handleStoppedNotification(errorNotification(err), this);
     } else {
@@ -92,7 +96,8 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
    * `complete` from the Observable. Notifies the Observer that the Observable
    * has finished sending push-based notifications.
    */
-  complete(): void {
+  complete(this: void): void {
+    typeAssertIs<Subscriber<T>>(this);
     if (this.isStopped) {
       handleStoppedNotification(COMPLETE_NOTIFICATION, this);
     } else {
@@ -147,10 +152,14 @@ function bind<Fn extends (...args: any[]) => any>(fn: Fn, thisArg: any): Fn {
  * @internal
  */
 class ConsumerObserver<T> implements Observer<T> {
-  constructor(private partialObserver: Partial<Observer<T>>) {}
+  constructor(private partialObserver: Partial<Observer<T>>) {
+    this.next = bind(false, this['next' as never], this);
+    this.error = bind(false, this['error' as never], this);
+    this.complete = bind(false, this['complete' as never], this);
+  }
 
-  next(value: T): void {
-    const { partialObserver } = this;
+  next(this: void, value: T): void {
+    const { partialObserver } = this as never as ConsumerObserver<T>;
     if (partialObserver.next) {
       try {
         partialObserver.next(value);
@@ -160,8 +169,8 @@ class ConsumerObserver<T> implements Observer<T> {
     }
   }
 
-  error(err: any): void {
-    const { partialObserver } = this;
+  error(this: void, err: any): void {
+    const { partialObserver } = this as never as ConsumerObserver<T>;
     if (partialObserver.error) {
       try {
         partialObserver.error(err);
@@ -173,8 +182,8 @@ class ConsumerObserver<T> implements Observer<T> {
     }
   }
 
-  complete(): void {
-    const { partialObserver } = this;
+  complete(this: void): void {
+    const { partialObserver } = this as never as ConsumerObserver<T>;
     if (partialObserver.complete) {
       try {
         partialObserver.complete();
@@ -186,11 +195,7 @@ class ConsumerObserver<T> implements Observer<T> {
 }
 
 export class SafeSubscriber<T> extends Subscriber<T> {
-  constructor(
-    observerOrNext?: Partial<Observer<T>> | ((value: T) => void) | undefined,
-    error?: ((e?: any) => void) | undefined,
-    complete?: (() => void) | undefined
-  ) {
+  constructor(observerOrNext?: Partial<Observer<T>> | ((value: T) => void), err?: (e?: any) => void, complete?: () => void) {
     super();
 
     let partialObserver: Partial<Observer<T>>;
@@ -199,7 +204,7 @@ export class SafeSubscriber<T> extends Subscriber<T> {
       // two arguments *could* be observers, or they could be empty.
       partialObserver = {
         next: (observerOrNext ?? undefined) as ((value: T) => void) | undefined,
-        error: error ?? undefined,
+        error: err ?? undefined,
         complete: complete ?? undefined,
       };
     } else {
@@ -212,9 +217,9 @@ export class SafeSubscriber<T> extends Subscriber<T> {
         context = table.clone(observerOrNext);
         context.unsubscribe = () => this.unsubscribe();
         partialObserver = {
-          next: observerOrNext.next && observerOrNext.next,
-          error: observerOrNext.error && observerOrNext.error,
-          complete: observerOrNext.complete && observerOrNext.complete,
+          next: observerOrNext.next && bind(false, observerOrNext.next, context),
+          error: observerOrNext.error && bind(false, observerOrNext.error, context),
+          complete: observerOrNext.complete && bind(false, observerOrNext.complete, context),
         };
       } else {
         // The "normal" path. Just use the partial observer directly.
@@ -228,13 +233,13 @@ export class SafeSubscriber<T> extends Subscriber<T> {
   }
 }
 
-function handleUnhandledError(error: any) {
+function handleUnhandledError(err: any) {
   if (config.useDeprecatedSynchronousErrorHandling) {
-    captureError(error);
+    captureError(err);
   } else {
     // Ideal path, we report this as an unhandled error,
     // which is thrown on a new call stack.
-    reportUnhandledError(error);
+    reportUnhandledError(err);
   }
 }
 

@@ -1,4 +1,4 @@
-import { not } from '../util/not';
+import { Not } from '../util/not';
 import { filter } from '../operators/filter';
 import { ObservableInput } from '../types';
 import { Observable } from '../Observable';
@@ -81,7 +81,7 @@ export function partition<T>(
   predicate: (this: any, value: T, index: number) => boolean,
   thisArg?: any
 ): [Observable<T>, Observable<T>] {
-  return [filter(predicate, thisArg)(innerFrom(source)), filter(not(predicate, thisArg))(innerFrom(source))] as [
+  return [filter(predicate, thisArg)(innerFrom(source)), filter(Not(predicate, thisArg))(innerFrom(source))] as [
     Observable<T>,
     Observable<T>,
   ];

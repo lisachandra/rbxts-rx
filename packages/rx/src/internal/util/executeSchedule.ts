@@ -21,11 +21,11 @@ export function executeSchedule(
   scheduler: SchedulerLike,
   work: () => void,
   delay = 0,
-  repeat = false
+  repeat0 = false
 ): Subscription | void {
   const scheduleSubscription = scheduler.schedule(function (this: SchedulerAction<any>) {
     work();
-    if (repeat) {
+    if (repeat0) {
       parentSubscription.add(this.schedule(undefined, delay));
     } else {
       this.unsubscribe();
@@ -34,7 +34,7 @@ export function executeSchedule(
 
   parentSubscription.add(scheduleSubscription);
 
-  if (!repeat) {
+  if (!repeat0) {
     // Because user-land scheduler implementations are unlikely to properly reuse
     // Actions for repeat scheduling, we can't trust that the returned subscription
     // will control repeat subscription scenarios. So we're trying to avoid using them

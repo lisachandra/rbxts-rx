@@ -177,6 +177,6 @@ export function distinctUntilChanged<T, K>(
   });
 }
 
-function defaultCompare(a: any, b: any) {
+function defaultCompare(a: unknown, b: unknown) {
   return a === b;
 }

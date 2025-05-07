@@ -17,10 +17,10 @@ export function errorContext(cb: () => void) {
     }
     cb();
     if (isRoot) {
-      const { errorThrown, error } = context!;
+      const { errorThrown, error: err } = context!;
       context = undefined;
       if (errorThrown) {
-        throw error;
+        throw err;
       }
     }
   } else {

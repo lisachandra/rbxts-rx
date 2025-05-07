@@ -1,4 +1,4 @@
-import { not } from '../util/not';
+import { Not } from '../util/not';
 import { filter } from './filter';
 import { Observable } from '../Observable';
 import { UnaryFunction } from '../types';
@@ -58,5 +58,5 @@ export function partition<T>(
   thisArg?: any
 ): UnaryFunction<Observable<T>, [Observable<T>, Observable<T>]> {
   return (source: Observable<T>) =>
-    [filter(predicate, thisArg)(source), filter(not(predicate, thisArg))(source)] as [Observable<T>, Observable<T>];
+    [filter(predicate, thisArg)(source), filter(Not(predicate, thisArg))(source)] as [Observable<T>, Observable<T>];
 }

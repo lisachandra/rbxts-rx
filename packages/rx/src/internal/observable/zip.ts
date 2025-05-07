@@ -86,9 +86,9 @@ export function zip(...args: unknown[]): Observable<unknown> {
                 // can shift out the oldest value from each buffer and emit
                 // them as an array.
                 if (buffers.every((buffer) => !!buffer.size())) {
-                  const result: any = buffers.map((buffer) => buffer.shift()!);
+                  const result = buffers.map((buffer) => buffer.shift()!);
                   // Emit the array. If theres' a result selector, use that.
-                  subscriber.next(resultSelector ? resultSelector(...result) : result);
+                  subscriber.next((resultSelector ? resultSelector(...result) : result) as unknown[]);
                   // If any one of the sources is both complete and has an empty buffer
                   // then we complete the result. This is because we cannot possibly have
                   // any more values to zip together.

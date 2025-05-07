@@ -5,6 +5,8 @@
 // https://github.com/microsoft/TypeScript/issues/43034
 //////////////////////////////////////////////////////////
 
+import Symbol from 'internal/polyfill/symbol';
+
 // tslint:disable: no-reference
 // It's tempting to add references to all of the deep-import locations, but
 // adding references to those that require DOM types breaks Node projects.
@@ -19,7 +21,7 @@ export { Observable } from './internal/Observable';
 export { ConnectableObservable } from './internal/observable/ConnectableObservable';
 export { GroupedObservable } from './internal/operators/groupBy';
 export { Operator } from './internal/Operator';
-export { symbolObservable as observable } from './internal/symbol/observable';
+export const observable = Symbol.observable
 // export { animationFrames } from './internal/observable/dom/animationFrames';
 
 /* Subjects */
@@ -82,7 +84,7 @@ export { merge } from './internal/observable/merge';
 export { never } from './internal/observable/never';
 export { of } from './internal/observable/of';
 export { onErrorResumeNext } from './internal/observable/onErrorResumeNext';
-export { pairs } from './internal/observable/pairs';
+export { rxPairs as pairs } from './internal/observable/pairs';
 export { partition } from './internal/observable/partition';
 export { race } from './internal/observable/race';
 export { range } from './internal/observable/range';
@@ -167,7 +169,7 @@ export { publishLast } from './internal/operators/publishLast';
 export { publishReplay } from './internal/operators/publishReplay';
 export { raceWith } from './internal/operators/raceWith';
 export { reduce } from './internal/operators/reduce';
-export { repeat, RepeatConfig } from './internal/operators/repeat';
+export { Repeat as repeat, RepeatConfig } from './internal/operators/repeat';
 export { repeatWhen } from './internal/operators/repeatWhen';
 export { retry, RetryConfig } from './internal/operators/retry';
 export { retryWhen } from './internal/operators/retryWhen';

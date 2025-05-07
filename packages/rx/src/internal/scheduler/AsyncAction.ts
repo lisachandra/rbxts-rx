@@ -96,9 +96,9 @@ export class AsyncAction<T> extends Action<T> {
     }
 
     this.pending = false;
-    const error = this._execute(state, delay);
-    if (error) {
-      return error;
+    const err = this._execute(state, delay);
+    if (err) {
+      return err;
     } else if (this.pending === false && this.id !== undefined) {
       // Dequeue if the action didn't reschedule itself. Don't call
       // unsubscribe(), because the action could reschedule later.

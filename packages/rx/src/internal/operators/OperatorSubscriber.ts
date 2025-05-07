@@ -72,7 +72,7 @@ export class OperatorSubscriber<T> extends Subscriber<T> {
             destination.error(err);
           }
         }
-      : super._next;
+      : super['_next' as never];
     this._error = onError
       ? function (this: OperatorSubscriber<T>, err: any) {
           try {
@@ -85,7 +85,7 @@ export class OperatorSubscriber<T> extends Subscriber<T> {
             this.unsubscribe();
           }
         }
-      : super._error;
+      : super['_error' as never];
     this._complete = onComplete
       ? function (this: OperatorSubscriber<T>) {
           try {
@@ -98,7 +98,7 @@ export class OperatorSubscriber<T> extends Subscriber<T> {
             this.unsubscribe();
           }
         }
-      : super._complete;
+      : super['_complete' as never];
   }
 
   unsubscribe() {

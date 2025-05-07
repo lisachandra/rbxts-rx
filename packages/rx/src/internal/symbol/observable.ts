@@ -1,9 +1,0 @@
-import { Symbol } from '@rbxts/luau-polyfill';
-
-/**
- * Symbol.observable or a string "@@observable". Used for interop
- *
- * @deprecated We will no longer be exporting this symbol in upcoming versions of RxJS.
- * Instead polyfill and use Symbol.observable directly *or* use https://www.npmjs.com/package/symbol-observable
- */
-export const symbolObservable: unique symbol = (() => Symbol('observable') || '@@observable')() as never;

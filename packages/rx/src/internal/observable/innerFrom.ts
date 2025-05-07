@@ -1,7 +1,7 @@
 import { isArrayLike } from '../util/isArrayLike';
 import { isPromise } from '../util/isPromise';
 import { Observable } from '../Observable';
-import { ObservableInput, ObservedValueOf, ReadableStreamLike } from '../types';
+import { InteropObservable, ObservableInput, ObservedValueOf, ReadableStreamLike } from '../types';
 import { isInteropObservable } from '../util/isInteropObservable';
 import { isAsyncIterable } from '../util/isAsyncIterable';
 import { createInvalidObservableTypeError } from '../util/throwUnobservableError';
@@ -10,8 +10,8 @@ import { isReadableStreamLike, readableStreamLikeToAsyncGenerator } from '../uti
 import { Subscriber } from '../Subscriber';
 import { isFunction } from '../util/isFunction';
 import { reportUnhandledError } from '../util/reportUnhandledError';
-import { symbolObservable as Symbol_observable } from '../symbol/observable';
 import { Error } from '@rbxts/luau-polyfill';
+import { getAsyncIterator, getIterator } from 'internal/polyfill/iterable';
 
 export function innerFrom<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
@@ -48,8 +48,8 @@ export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
  */
 export function fromInteropObservable<T>(obj: any) {
   return new Observable((subscriber: Subscriber<T>) => {
-    const obs = obj[Symbol_observable]();
-    if (isFunction(obs.subscribe)) {
+    const obs = (obj as InteropObservable<any>)[Symbol.observable]();
+    if (isFunction(obs['subscribe' as never])) {
       return obs.subscribe(subscriber);
     }
     // Should be caught by observable subscribe function error handling.
@@ -100,7 +100,11 @@ export function fromPromise<T>(promise: Promise<T>) {
 
 export function fromIterable<T>(iterable: Iterable<T>) {
   return new Observable((subscriber: Subscriber<T>) => {
-    for (const value of iterable) {
+    const iterator = getIterator(iterable);
+    let result;
+    while (!(result = iterator.next()).done) {
+      const value = result.value;
+
       subscriber.next(value);
       if (subscriber.closed) {
         return;
@@ -121,7 +125,11 @@ export function fromReadableStreamLike<T>(readableStream: ReadableStreamLike<T>)
 }
 
 async function process<T>(asyncIterable: AsyncIterable<T>, subscriber: Subscriber<T>) {
-  for await (const value of asyncIterable) {
+  const iterator = getAsyncIterator(asyncIterable);
+  let result;
+  while (!(result = await iterator.next()).done) {
+    const value = result.value;
+
     subscriber.next(value);
     // A side-effect may have closed our subscriber,
     // check before the next iteration.

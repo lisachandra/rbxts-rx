@@ -9,17 +9,17 @@ import { Error, Object } from '@rbxts/luau-polyfill';
  * @param createImpl A factory function to create the actual constructor implementation. The returned
  * function should be a named function that calls `_super` internally.
  */
-export function createErrorClass<T>(createImpl: (_super: any) => any): T {
+export function createErrorClass<T>(createImpl: (_super: Callback) => any): T {
   const _super = (instance: any) => {
     const err = new Error();
     Object.assign(instance, err);
     setmetatable(instance, Error as never);
   };
 
-  const ctorFunc = createImpl(_super);
+  const ctorFunc = createImpl(_super) as Callback;
 
   class ErrorSubclass {
-    constructor(...args: any[]) {
+    constructor(...args: unknown[]) {
       ctorFunc(this, ...args);
     }
   }

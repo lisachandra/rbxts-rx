@@ -13,9 +13,9 @@ export class HotObservable<T> extends Subject<T> implements SubscriptionLoggable
   public subscriptions: SubscriptionLog[] = [];
   scheduler: Scheduler;
   // @ts-ignore: Property has no initializer and is not definitely assigned
-  logSubscribedFrame: () => number;
+  logSubscribedFrame: (this: any) => number;
   // @ts-ignore: Property has no initializer and is not definitely assigned
-  logUnsubscribedFrame: (index: number) => void;
+  logUnsubscribedFrame: (this: any, index: number) => void;
 
   constructor(
     public messages: TestMessage[],

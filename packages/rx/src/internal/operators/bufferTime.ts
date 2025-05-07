@@ -7,6 +7,7 @@ import { asyncScheduler } from '../scheduler/async';
 import { popScheduler } from '../util/args';
 import { executeSchedule } from '../util/executeSchedule';
 import { Array } from '@rbxts/luau-polyfill';
+import { typeAssertIs } from 'internal/polyfill/type';
 
 export function bufferTime<T>(bufferTimeSpan: number, scheduler?: SchedulerLike): OperatorFunction<T, T[]>;
 export function bufferTime<T>(
@@ -74,6 +75,8 @@ export function bufferTime<T>(
  * @return A function that returns an Observable of arrays of buffered values.
  */
 export function bufferTime<T extends defined>(bufferTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, T[]> {
+  typeAssertIs<unknown[]>(otherArgs);
+
   const scheduler = popScheduler(otherArgs) ?? asyncScheduler;
   const bufferCreationInterval = (otherArgs[0] as number) ?? undefined;
   const maxBufferSize = (otherArgs[1] as number) || math.huge;
