@@ -1,0 +1,14 @@
+import { noop } from '../utils';
+
+export const AssertionError = /* @__PURE__ */ (() => {
+  return class AssertionError extends Error {};
+})();
+
+function assertImpl(test: boolean, message?: string): asserts test {
+  if (!test) {
+    throw new AssertionError('Assertion failed' + (message ? `: ${message}` : ''));
+  }
+}
+
+const assert: typeof assertImpl = _G.__DEV__ ? assertImpl : noop;
+export default assert;

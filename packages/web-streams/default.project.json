@@ -1,0 +1,4 @@
+{
+	"name": "whatwg-web-streams",
+	"tree": { "$path": "out" }
+}

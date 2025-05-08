@@ -1,0 +1,44 @@
+{
+	"name": "@rbxts/whatwg-web-streams",
+  "version": "4.1.0-rc.1",
+  "description": "Web Streams, based on the WHATWG spec reference implementation. (Ported to Roblox-TS)",
+	"main": "out/init.luau",
+	"types": "out/index.d.ts",
+	"files": [
+		"out",
+		"default.project.json",
+		"!**/*.tsbuildinfo",
+		"!**/__tests__"
+	],
+	"scripts": {
+		"build": "shx rm -rf out && rbxtsc --verbose --allowCommentDirectives",
+		"dev": "shx rm -rf out && rbxtsc -w --allowCommentDirectives"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lisachandra/rbxts-whatwg.git"
+	},
+	"contributors": [
+    "Mattias Buelens <mattias@buelens.com>",
+     "Diwank Singh <diwank.singh@gmail.com>",
+		"lisachandra <lisachandra@proton.me>"
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/lisachandra/rbxts-whatwg/issues"
+	},
+	"homepage": "https://github.com/lisachandra/rbxts-whatwg/tree/main/packages/web-streams#readme",
+	"dependencies": {
+		"@rbxts/luau-polyfill": "^1.0.0",
+		"@rbxts/regexp": "^0.2.1-ts.4",
+		"@rbxts/services": "^1.0.0"
+	},
+	"devDependencies": {
+		"@rbxts/compiler-types": "^3.0.0-types.0",
+		"@rbxts/types": "^1.0.844",
+		"ajv": "^8.12.0",
+		"pkg-up": "^3.1.0",
+		"roblox-ts": "^3.0.0",
+		"shx": "^0.3.4"
+	}
+}
