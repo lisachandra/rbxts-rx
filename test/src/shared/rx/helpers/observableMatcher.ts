@@ -24,9 +24,9 @@ function stringify(x: any): string {
 function deleteErrorNotificationStack(marble: unknown) {
   const { notification } = marble as never;
   if (notification) {
-    const { kind, error } = notification;
-    if (kind === 'E' && (error as any) instanceof Error) {
-      (notification as { error: unknown }).error = { name: (error as Error).name, message: (error as Error).message };
+    const { kind, error: err } = notification;
+    if (kind === 'E' && (err as unknown) instanceof Error) {
+      (notification as { error: unknown }).error = { name: (err as Error).name, message: (err as Error).message };
     }
   }
   return marble;

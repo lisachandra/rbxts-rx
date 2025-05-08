@@ -3,10 +3,10 @@ import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest,
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { asyncScheduler, of, from, Observer, observable, Subject, noop, Subscription } from '@rbxts/rx';
 import { first, concatMap, delay, take, tap } from '@rbxts/rx/out/operators';
-import { ReadableStream } from '@rbxts/whatwg-web-streams';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { Error, setTimeout } from '@rbxts/luau-polyfill';
 import Symbol from '@rbxts/rx/out/internal/polyfill/symbol';
+import { ReadableStream } from '../helpers/readableStream';
 
 function getArguments<T>(...args: T[]) {
   return args;
@@ -369,10 +369,10 @@ describe('from', () => {
     const input = [0, 1, 2];
     const output: number[] = [];
 
-    const readableStream = new ReadableStream({
+    const readableStream = new ReadableStream<number>({
       pull(controller) {
         if (input.size() > 0) {
-          controller.enqueue(input.shift());
+          controller.enqueue(input.shift()!);
 
           if (input.size() === 0) {
             controller.close();
@@ -398,10 +398,10 @@ describe('from', () => {
     const input = [0, 1, 2];
     const output: number[] = [];
 
-    const readableStream = new ReadableStream({
+    const readableStream = new ReadableStream<number>({
       pull(controller) {
         if (input.size() > 0) {
-          controller.enqueue(input.shift());
+          controller.enqueue(input.shift()!);
 
           if (input.size() === 0) {
             controller.close();
