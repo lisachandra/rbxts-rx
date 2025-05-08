@@ -28,7 +28,7 @@ export function mapTo<T, R>(value: R): OperatorFunction<T, R>;
  * Map every click to the string `'Hi'`
  *
  * ```ts
- * import { fromEvent, mapTo } from 'rxjs';
+ * import { fromEvent, mapTo } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const greetings = clicks.pipe(mapTo('Hi'));

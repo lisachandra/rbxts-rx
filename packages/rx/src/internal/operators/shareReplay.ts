@@ -47,7 +47,7 @@ export function shareReplay<T>(bufferSize?: number, windowTime?: number, schedul
  * Example with a third subscriber coming late to the party
  *
  * ```ts
- * import { interval, take, shareReplay } from 'rxjs';
+ * import { interval, take, shareReplay } from '@rbxts/rx';
  *
  * const shared$ = interval(2000).pipe(
  *   take(6),
@@ -90,7 +90,7 @@ export function shareReplay<T>(bufferSize?: number, windowTime?: number, schedul
  * Example for `refCount` usage
  *
  * ```ts
- * import { Observable, tap, interval, shareReplay, take } from 'rxjs';
+ * import { Observable, tap, interval, shareReplay, take } from '@rbxts/rx';
  *
  * const log = <T>(name: string, source: Observable<T>) => source.pipe(
  *   tap({
@@ -162,7 +162,7 @@ export function shareReplay<T extends defined>(
   if (configOrBufferSize && typeIs(configOrBufferSize, 'table')) {
     ({ bufferSize = math.huge, windowTime = math.huge, refCount = false, scheduler } = configOrBufferSize);
   } else {
-    bufferSize = (configOrBufferSize ?? math.huge);
+    bufferSize = configOrBufferSize ?? math.huge;
   }
   return share<T>({
     connector: () => new ReplaySubject(bufferSize, windowTime, scheduler),

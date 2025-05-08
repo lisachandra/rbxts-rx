@@ -27,7 +27,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Ignore every 3rd click event, starting from the first one
  *
  * ```ts
- * import { fromEvent, windowCount, map, skip, mergeAll } from 'rxjs';
+ * import { fromEvent, windowCount, map, skip, mergeAll } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(
@@ -41,7 +41,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Ignore every 3rd click event, starting from the third one
  *
  * ```ts
- * import { fromEvent, windowCount, mergeAll } from 'rxjs';
+ * import { fromEvent, windowCount, mergeAll } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(

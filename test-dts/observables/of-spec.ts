@@ -6,7 +6,7 @@ it('should infer never with 0 params', () => {
 });
 
 it('forced generic should not cause an issue', () => {
-  const x: any = undefined;
+  const x: any = null;
   const res = of<string>(); // $ExpectType Observable<string>
   const res2 = of<string>(x); // $ExpectType Observable<string>
 });
@@ -77,6 +77,7 @@ it('should infer correctly with array', () => {
   const res = of([a, b, c]); // $ExpectType Observable<(A | B | C)[]>
 });
 
+
 // SchedulerLike inclusions (remove in v8)
 it('should infer never with 0 params', () => {
   const res = of(queueScheduler); // $ExpectType Observable<never>
@@ -137,8 +138,8 @@ it('should deprecate correctly', () => {
   of(a, b, c, d); // $ExpectNoDeprecation
 });
 
-it('should handle undefined and undefined properly', () => {
+it('should handle null and undefined properly', () => {
   const a = of(undefined); // $ExpectType Observable<undefined>
-  const b = of(undefined); // $ExpectType Observable<undefined>
+  const b = of(null); // $ExpectType Observable<null>
   const c = [of(1), of(2), of(undefined), of(3)] as const;
 });

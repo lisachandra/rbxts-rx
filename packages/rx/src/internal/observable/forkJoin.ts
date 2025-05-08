@@ -21,24 +21,24 @@ import { AnyCatcher } from '../AnyCatcher';
  */
 export function forkJoin<T extends AnyCatcher>(arg: T): Observable<unknown>;
 
-// forkJoin(undefined | undefined)
-export function forkJoin(scheduler: undefined): Observable<never>;
+// forkJoin(null | undefined)
+export function forkJoin(scheduler: null | undefined): Observable<never>;
 
 // forkJoin([a, b, c])
 export function forkJoin(sources: readonly []): Observable<never>;
-export function forkJoin<A extends readonly unknown[]>(sources: readonly [...ObservableInputTuple<A>]): Observable<A>;
+export function forkJoin<A extends readonly unknown[]>(sources: [...ObservableInputTuple<A>]): Observable<A>;
 export function forkJoin<A extends readonly unknown[], R>(
   sources: readonly [...ObservableInputTuple<A>],
   resultSelector: (...values: A) => R
 ): Observable<R>;
 
 // forkJoin(a, b, c)
-/** @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument */
-export function forkJoin<A extends readonly unknown[]>(...sources: [...ObservableInputTuple<A>]): Observable<A>;
-/** @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument */
+/* @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument
+export function forkJoin<A extends readonly unknown[]>(...sources: [...ObservableInputTuple<A>]): Observable<A>;*/
+/* @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument
 export function forkJoin<A extends readonly unknown[], R>(
   ...sourcesAndResultSelector: [...ObservableInputTuple<A>, (...values: A) => R]
-): Observable<R>;
+): Observable<R>;*/
 
 // forkJoin({a, b, c})
 export function forkJoin(sourcesObject: { [K in any]: never }): Observable<never>;
@@ -97,7 +97,7 @@ export function forkJoin<T extends Record<string, ObservableInput<any>>>(
  * Use `forkJoin` with a dictionary of observable inputs
  *
  * ```ts
- * import { forkJoin, of, timer } from 'rxjs';
+ * import { forkJoin, of, timer } from '@rbxts/rx';
  *
  * const observable = forkJoin({
  *   foo: of(1, 2, 3, 4),
@@ -117,7 +117,7 @@ export function forkJoin<T extends Record<string, ObservableInput<any>>>(
  * Use `forkJoin` with an array of observable inputs
  *
  * ```ts
- * import { forkJoin, of, timer } from 'rxjs';
+ * import { forkJoin, of, timer } from '@rbxts/rx';
  *
  * const observable = forkJoin([
  *   of(1, 2, 3, 4),

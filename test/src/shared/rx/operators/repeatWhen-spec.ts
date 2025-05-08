@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { repeatWhen, map, mergeMap, takeUntil, takeWhile, take } from 'rxjs/operators';
-import { of, EMPTY, Observable, Subscriber } from 'rxjs';
-import { SafeSubscriber } from 'rxjs/internal/Subscriber';
-import { TestScheduler } from 'rxjs/testing';
+import { repeatWhen, map, mergeMap, takeUntil, takeWhile, take } from '@rbxts/rx/out/operators';
+import { of, EMPTY, Observable, Subscriber } from '@rbxts/rx';
+import { SafeSubscriber } from '@rbxts/rx/out/internal/Subscriber';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {repeatWhen} */

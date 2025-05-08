@@ -1,7 +1,7 @@
-import { race, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { race, of } from '@rbxts/rx';
+import { mergeMap } from '@rbxts/rx/out/operators';
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {race} */

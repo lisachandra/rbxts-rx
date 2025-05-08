@@ -4,23 +4,23 @@ import { ObservableInput } from '../types';
 import { Observable } from '../Observable';
 import { innerFrom } from './innerFrom';
 
-/** @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8. */
+/* @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8.
 export function partition<T, U extends T, A>(
   source: ObservableInput<T>,
   predicate: (this: A, value: T, index: number) => value is U,
   thisArg: A
-): [Observable<U>, Observable<Exclude<T, U>>];
+): [Observable<U>, Observable<Exclude<T, U>>];*/
 export function partition<T, U extends T>(
   source: ObservableInput<T>,
   predicate: (value: T, index: number) => value is U
 ): [Observable<U>, Observable<Exclude<T, U>>];
 
-/** @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8. */
+/* @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8.
 export function partition<T, A>(
   source: ObservableInput<T>,
   predicate: (this: A, value: T, index: number) => boolean,
   thisArg: A
-): [Observable<T>, Observable<T>];
+): [Observable<T>, Observable<T>];*/
 export function partition<T>(source: ObservableInput<T>, predicate: (value: T, index: number) => boolean): [Observable<T>, Observable<T>];
 
 /**
@@ -45,7 +45,7 @@ export function partition<T>(source: ObservableInput<T>, predicate: (value: T, i
  * Partition a set of numbers into odds and evens observables
  *
  * ```ts
- * import { of, partition } from 'rxjs';
+ * import { of, partition } from '@rbxts/rx';
  *
  * const observableValues = of(1, 2, 3, 4, 5, 6);
  * const [evens$, odds$] = partition(observableValues, value => value % 2 === 0);
@@ -71,18 +71,12 @@ export function partition<T>(source: ObservableInput<T>, predicate: (value: T, i
  * in the returned array, if `false` the value is emitted on the second Observable
  * in the array. The `index` parameter is the number `i` for the i-th source
  * emission that has happened since the subscription, starting from the number `0`.
- * @param @deprecated thisArg An optional argument to determine the value of `this` in the
- * `predicate` function. Unused for now.
  * @return An array with two Observables: one with values that passed the
  * predicate, and another with values that did not pass the predicate.
  */
 export function partition<T>(
   source: ObservableInput<T>,
-  predicate: (this: any, value: T, index: number) => boolean,
-  thisArg?: any
+  predicate: (this: any, value: T, index: number) => boolean
 ): [Observable<T>, Observable<T>] {
-  return [filter(predicate, thisArg)(innerFrom(source)), filter(Not(predicate, thisArg))(innerFrom(source))] as [
-    Observable<T>,
-    Observable<T>,
-  ];
+  return [filter(predicate)(innerFrom(source)), filter(Not(predicate))(innerFrom(source))] as [Observable<T>, Observable<T>];
 }

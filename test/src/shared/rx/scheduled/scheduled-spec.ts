@@ -1,5 +1,5 @@
-import { scheduled, of } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { scheduled, of } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { lowerCaseO } from '../helpers/test-helper';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { expect } from 'chai';

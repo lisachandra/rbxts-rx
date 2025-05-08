@@ -7,7 +7,7 @@
  * This is useful in some cases when using things like `mergeMap`
  *
  * ```ts
- * import { interval, take, map, range, mergeMap, identity } from 'rxjs';
+ * import { interval, take, map, range, mergeMap, identity } from '@rbxts/rx';
  *
  * const source$ = interval(1000).pipe(take(5));
  *
@@ -24,7 +24,7 @@
  * Or when you want to selectively apply an operator
  *
  * ```ts
- * import { interval, take, identity } from 'rxjs';
+ * import { interval, take, identity } from '@rbxts/rx';
  *
  * const shouldLimit = () => math.random() < 0.5;
  *

@@ -1,4 +1,4 @@
-import * as index from 'rxjs/testing';
+import * as index from '@rbxts/rx/out/testing';
 import { expect } from 'chai';
 
 describe('index', () => {

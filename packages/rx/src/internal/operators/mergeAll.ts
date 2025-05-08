@@ -22,7 +22,7 @@ import { OperatorFunction, ObservableInput, ObservedValueOf } from '../types';
  * Spawn a new interval Observable for each click event, and blend their outputs as one Observable
  *
  * ```ts
- * import { fromEvent, map, interval, mergeAll } from 'rxjs';
+ * import { fromEvent, map, interval, mergeAll } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const higherOrder = clicks.pipe(map(() => interval(1000)));
@@ -34,7 +34,7 @@ import { OperatorFunction, ObservableInput, ObservedValueOf } from '../types';
  * Count from 0 to 9 every second for each click, but only allow 2 concurrent timers
  *
  * ```ts
- * import { fromEvent, map, interval, take, mergeAll } from 'rxjs';
+ * import { fromEvent, map, interval, take, mergeAll } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const higherOrder = clicks.pipe(

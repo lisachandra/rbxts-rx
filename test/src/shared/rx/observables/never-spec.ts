@@ -1,6 +1,6 @@
-import { NEVER } from 'rxjs';
+import { NEVER } from '@rbxts/rx';
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {NEVER} */

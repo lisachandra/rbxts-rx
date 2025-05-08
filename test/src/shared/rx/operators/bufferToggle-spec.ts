@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { of, concat, timer, EMPTY } from 'rxjs';
-import { bufferToggle, mergeMap, mapTo } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { of, concat, timer, EMPTY } from '@rbxts/rx';
+import { bufferToggle, mergeMap, mapTo } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {bufferToggle} */

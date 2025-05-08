@@ -20,7 +20,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * If no clicks happen in 5 seconds, then emit 'no clicks'
  *
  * ```ts
- * import { fromEvent, takeUntil, interval, defaultIfEmpty } from 'rxjs';
+ * import { fromEvent, takeUntil, interval, defaultIfEmpty } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const clicksBeforeFive = clicks.pipe(takeUntil(interval(5000)));

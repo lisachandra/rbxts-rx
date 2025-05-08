@@ -195,7 +195,11 @@ class ConsumerObserver<T> implements Observer<T> {
 }
 
 export class SafeSubscriber<T> extends Subscriber<T> {
-  constructor(observerOrNext?: Partial<Observer<T>> | ((value: T) => void), err?: (e?: any) => void, complete?: () => void) {
+  constructor(
+    observerOrNext?: (Partial<Observer<T>> | ((value: T) => void)) | null,
+    err?: ((e?: any) => void) | null,
+    complete?: (() => void) | null
+  ) {
     super();
 
     let partialObserver: Partial<Observer<T>>;

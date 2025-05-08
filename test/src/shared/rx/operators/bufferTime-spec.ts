@@ -1,6 +1,6 @@
-import { of, throwError, interval, scheduled, asapScheduler, Subject } from 'rxjs';
-import { bufferTime, mergeMap, take, tap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { of, throwError, interval, scheduled, asapScheduler, Subject } from '@rbxts/rx';
+import { bufferTime, mergeMap, take, tap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { expect } from 'chai';
 

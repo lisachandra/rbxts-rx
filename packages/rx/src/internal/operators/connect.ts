@@ -51,7 +51,7 @@ const DEFAULT_CONFIG: ConnectConfig<unknown> = {
  * Sharing a totally synchronous observable
  *
  * ```ts
- * import { of, tap, connect, merge, map, filter } from 'rxjs';
+ * import { of, tap, connect, merge, map, filter } from '@rbxts/rx';
  *
  * const source$ = of(1, 2, 3, 4, 5).pipe(
  *   tap({

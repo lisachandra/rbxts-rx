@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { Observable, NEVER, of, ObjectUnsubscribedError, EMPTY } from 'rxjs';
-import { windowToggle, tap, mergeMap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { Observable, NEVER, of, ObjectUnsubscribedError, EMPTY } from '@rbxts/rx';
+import { windowToggle, tap, mergeMap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {windowToggle} */

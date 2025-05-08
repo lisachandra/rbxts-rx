@@ -6,7 +6,7 @@ it('should infer correctly', () => {
 });
 
 it('should support projecting values', () => {
-  const o = of(of(1, 2, 3)).pipe(zipAll((value) => String(value))); // $ExpectType Observable<string>
+  const o = of(of(1, 2, 3)).pipe(zipAll(value => String(value))); // $ExpectType Observable<string>
 });
 
 it('should be accept projectors for observables with different types', () => {
@@ -30,7 +30,7 @@ it('should enforce projector types', () => {
 
   const myIterator: Iterator<number | undefined> = {
     next(value) {
-      return { done: false, value };
+      return {done: false, value};
     },
   };
   const s = of(of(1, 2, 3)).pipe(zipAll(myIterator)); // $ExpectError

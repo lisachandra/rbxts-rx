@@ -19,20 +19,20 @@ it('should default D to T with an undefined predicate', () => {
   const o = of('foo').pipe(first<string>(undefined)); // $Observable<string>
 });
 
-it('should support a undefined predicate with no default', () => {
-  const o = of('foo').pipe(first(undefined)); // $ExpectType Observable<string>
+it('should support a null predicate with no default', () => {
+  const o = of('foo').pipe(first(null)); // $ExpectType Observable<string>
 });
 
-it('should support a undefined predicate with a T default', () => {
-  const o = of('foo').pipe(first(undefined, 'bar')); // $ExpectType Observable<string>
+it('should support a null predicate with a T default', () => {
+  const o = of('foo').pipe(first(null, 'bar')); // $ExpectType Observable<string>
 });
 
-it('should support a undefined predicate with a non-T default', () => {
-  const o = of('foo').pipe(first(undefined, false)); // $ExpectType Observable<string | boolean>
+it('should support a null predicate with a non-T default', () => {
+  const o = of('foo').pipe(first(null, false)); // $ExpectType Observable<string | boolean>
 });
 
-it('should default D to T with a undefined predicate', () => {
-  const o = of('foo').pipe(first<string>(undefined)); // $Observable<string>
+it('should default D to T with a null predicate', () => {
+  const o = of('foo').pipe(first<string>(null)); // $Observable<string>
 });
 
 it('should support a user-defined type guard with no default', () => {
@@ -48,15 +48,15 @@ it('should widen a user-defined type guard with a non-S default', () => {
 });
 
 it('should support a predicate with no default', () => {
-  const o = of('foo').pipe(first((x) => !!x)); // $ExpectType Observable<string>
+  const o = of('foo').pipe(first(x => !!x)); // $ExpectType Observable<string>
 });
 
 it('should support a predicate with a T default', () => {
-  const o = of('foo').pipe(first((x) => !!x, 'bar')); // $ExpectType Observable<string>
+  const o = of('foo').pipe(first(x => !!x, 'bar')); // $ExpectType Observable<string>
 });
 
 it('should support a predicate with a non-T default', () => {
-  const o = of('foo').pipe(first((x) => !!x, false)); // $ExpectType Observable<string | boolean>
+  const o = of('foo').pipe(first(x => !!x, false)); // $ExpectType Observable<string | boolean>
 });
 
 it('should work properly with the Boolean constructor', () => {

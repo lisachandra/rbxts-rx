@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { AsyncSubject, Observer } from 'rxjs';
+import { AsyncSubject, Observer } from '@rbxts/rx';
 
 class TestObserver implements Observer<number> {
   results: (number | string)[] = [];

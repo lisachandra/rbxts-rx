@@ -22,7 +22,7 @@ export class AnimationFrameAction<T> extends AsyncAction<T> {
     // If an animation frame has already been requested, don't request another
     // one. If an animation frame hasn't been requested yet, request one. Return
     // the current animation frame request id.
-    return scheduler._scheduled || (scheduler._scheduled = animationFrameProvider.requestAnimationFrame(() => scheduler.flush(undefined)));
+    return scheduler._scheduled || (scheduler._scheduled = animationFrameProvider.requestAnimationFrame(() => scheduler.flush(undefined)))!;
   }
 
   protected recycleAsyncId(scheduler: AnimationFrameScheduler, id?: TimerHandle, delay: number = 0): TimerHandle | undefined {

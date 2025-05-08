@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { Observable, of, Subscriber } from 'rxjs';
-import { observable as symbolObservable } from 'rxjs/internal/symbol/observable';
+import { Observable, of, Subscriber } from '@rbxts/rx';
+import { observable as symbolObservable } from '@rbxts/rx/out/internal/symbol/observable';
 import { asInteropObservable, asInteropSubscriber } from './interop-helper';
 
 describe('interop helper', () => {

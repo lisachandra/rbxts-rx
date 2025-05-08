@@ -24,7 +24,7 @@ import { noop } from '../util/noop';
  * Tick every second until the first click happens
  *
  * ```ts
- * import { interval, fromEvent, takeUntil } from 'rxjs';
+ * import { interval, fromEvent, takeUntil } from '@rbxts/rx';
  *
  * const source = interval(1000);
  * const clicks = fromEvent(document, 'click');

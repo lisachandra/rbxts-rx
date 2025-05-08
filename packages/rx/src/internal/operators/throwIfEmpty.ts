@@ -15,7 +15,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Throw an error if the document wasn't clicked within 1 second
  *
  * ```ts
- * import { fromEvent, takeUntil, timer, throwIfEmpty } from 'rxjs';
+ * import { fromEvent, takeUntil, timer, throwIfEmpty } from '@rbxts/rx';
  *
  * const click$ = fromEvent(document, 'click');
  *

@@ -1,4 +1,4 @@
-import { Observable, Operator, Subject, Subscriber, Subscription } from 'rxjs';
+import { Observable, Operator, Subject, Subscriber, Subscription } from '@rbxts/rx';
 
 /**
  * Returns an observable that will be deemed by this package's implementation

@@ -1,7 +1,7 @@
-import { config } from '../src/internal/config';
+import { config } from '../packages/rx/out/internal/config';
 import { expect } from 'chai';
-import { Observable } from 'rxjs';
-import { timeoutProvider } from 'rxjs/internal/scheduler/timeoutProvider';
+import { Observable } from '@rbxts/rx';
+import { timeoutProvider } from '@rbxts/rx/out/internal/scheduler/timeoutProvider';
 
 describe('config', () => {
   it('should have a Promise property that defaults to nothing', () => {

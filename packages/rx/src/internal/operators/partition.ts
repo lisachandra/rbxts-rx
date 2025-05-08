@@ -25,8 +25,8 @@ import { UnaryFunction } from '../types';
  * Partition click events into those on DIV elements and those elsewhere
  *
  * ```ts
- * import { fromEvent } from 'rxjs';
- * import { partition } from 'rxjs/operators';
+ * import { fromEvent } from '@rbxts/rx';
+ * import { partition } from '@rbxts/rx/out/operators';
  *
  * const div = document.createElement('div');
  * div.style.cssText = 'width: 200px; height: 200px; background: #09c;';
@@ -46,17 +46,13 @@ import { UnaryFunction } from '../types';
  * in the returned array, if `false` the value is emitted on the second Observable
  * in the array. The `index` parameter is the number `i` for the i-th source
  * emission that has happened since the subscription, starting from the number `0`.
- * @param @deprecated thisArg An optional argument to determine the value of `this` in the
- * `predicate` function.
  * @return A function that returns an array with two Observables: one with
  * values that passed the predicate, and another with values that did not pass
  * the predicate.
  * @deprecated Replaced with the {@link partition} static creation function. Will be removed in v8.
  */
 export function partition<T>(
-  predicate: (value: T, index: number) => boolean,
-  thisArg?: any
+  predicate: (value: T, index: number) => boolean
 ): UnaryFunction<Observable<T>, [Observable<T>, Observable<T>]> {
-  return (source: Observable<T>) =>
-    [filter(predicate, thisArg)(source), filter(Not(predicate, thisArg))(source)] as [Observable<T>, Observable<T>];
+  return (source: Observable<T>) => [filter(predicate)(source), filter(Not(predicate))(source)] as [Observable<T>, Observable<T>];
 }

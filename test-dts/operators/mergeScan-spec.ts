@@ -14,7 +14,7 @@ it('should support the accumulator returning an iterable', () => {
 });
 
 it('should support the accumulator returning a promise', () => {
-  const o = of(1, 2, 3).pipe(mergeScan((acc) => Promise.resolve(acc), '')); // $ExpectType Observable<string>
+  const o = of(1, 2, 3).pipe(mergeScan(acc => Promise.resolve(acc), '')); // $ExpectType Observable<string>
 });
 
 it('should support a currency', () => {
@@ -40,5 +40,5 @@ it('should enforce concurrent type', () => {
 
 // TODO(benlesh): It still seems we don't have a great way to do this in TS 3.2
 // it('should support union types', () => {
-//   const o = of(1, 2, 3).pipe(mergeScan(() => math.random() > 0.5 ? of(123) : of('test'), 0)); // $ExpectType Observable<string | number>
+//   const o = of(1, 2, 3).pipe(mergeScan(() => Math.random() > 0.5 ? of(123) : of('test'), 0)); // $ExpectType Observable<string | number>
 // });

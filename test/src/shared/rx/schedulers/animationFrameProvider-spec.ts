@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { animationFrameProvider } from 'rxjs/internal/scheduler/animationFrameProvider';
+import { animationFrameProvider } from '@rbxts/rx/out/internal/scheduler/animationFrameProvider';
 
 describe('animationFrameProvider', () => {
   const originalRequest = global.requestAnimationFrame;

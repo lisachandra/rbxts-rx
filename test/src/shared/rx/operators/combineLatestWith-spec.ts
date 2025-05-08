@@ -1,6 +1,6 @@
-import { of } from 'rxjs';
-import { combineLatestWith, mergeMap, distinct, count, map } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { of } from '@rbxts/rx';
+import { combineLatestWith, mergeMap, distinct, count, map } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {combineLatestWith} */

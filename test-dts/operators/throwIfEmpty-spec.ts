@@ -11,5 +11,5 @@ it('should support an errorFactory', () => {
 
 it('should enforce errorFactory type', () => {
   const o = of('a', 'b', 'c').pipe(throwIfEmpty('nope')); // $ExpectError
-  const p = of('a', 'b', 'c').pipe(throwIfEmpty((x) => 47)); // $ExpectError
+  const p = of('a', 'b', 'c').pipe(throwIfEmpty(x => 47)); // $ExpectError
 });

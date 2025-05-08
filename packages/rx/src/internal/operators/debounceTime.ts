@@ -36,7 +36,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Emit the most recent click after a burst of clicks
  *
  * ```ts
- * import { fromEvent, debounceTime } from 'rxjs';
+ * import { fromEvent, debounceTime } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(debounceTime(1000));

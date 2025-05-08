@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { expand, mergeMap, map, take, toArray } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
-import { EMPTY, Observable, of, Observer, asapScheduler, asyncScheduler, InteropObservable } from 'rxjs';
+import { expand, mergeMap, map, take, toArray } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { EMPTY, Observable, of, Observer, asapScheduler, asyncScheduler, InteropObservable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {expand} */

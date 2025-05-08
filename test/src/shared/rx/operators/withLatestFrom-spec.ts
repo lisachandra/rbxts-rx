@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { lowerCaseO } from '../helpers/test-helper';
-import { withLatestFrom, mergeMap, delay } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { withLatestFrom, mergeMap, delay } from '@rbxts/rx/out/operators';
+import { of } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {withLatestFrom} */

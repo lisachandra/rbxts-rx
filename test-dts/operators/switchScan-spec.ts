@@ -18,11 +18,11 @@ it('should support a projector that takes an index', () => {
 });
 
 it('should support projecting to union types', () => {
-  const o = of(math.random()).pipe(switchScan((n) => (n > 0.5 ? of(123) : of('test')), 0)); // $ExpectType Observable<string | number>
+  const o = of(Math.random()).pipe(switchScan(n => n > 0.5 ? of(123) : of('test'), 0)); // $ExpectType Observable<string | number>
 });
 
 it('should use the inferred accumulator return type over the seed type', () => {
-  const o = of(1, 2, 3).pipe(switchScan((p) => of(1), [])); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(switchScan(p => of(1), [])); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {
@@ -30,7 +30,7 @@ it('should enforce types', () => {
 });
 
 it('should enforce the return type to be Observable', () => {
-  const o = of(1, 2, 3).pipe(switchScan((p) => p)); // $ExpectError
+  const o = of(1, 2, 3).pipe(switchScan(p => p)); // $ExpectError
 });
 
 it('should enforce seed and accumulator to have the same type', () => {

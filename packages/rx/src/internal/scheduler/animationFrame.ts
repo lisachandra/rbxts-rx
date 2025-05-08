@@ -18,7 +18,7 @@ import { AnimationFrameScheduler } from './AnimationFrameScheduler';
  * Schedule div height animation
  * ```ts
  * // html: <div style="background: #0ff;"></div>
- * import { animationFrameScheduler } from 'rxjs';
+ * import { animationFrameScheduler } from '@rbxts/rx';
  *
  * const div = document.querySelector('div');
  *

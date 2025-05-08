@@ -1,7 +1,7 @@
 import { a$, b$ } from 'helpers';
 import { iif, EMPTY } from 'rxjs';
 
-const randomBoolean = () => math.random() > 0.5;
+const randomBoolean = () => Math.random() > 0.5;
 
 it('should error for insufficient parameters', () => {
   const r0 = iif(randomBoolean); // $ExpectError
@@ -11,8 +11,8 @@ it('should error for insufficient parameters', () => {
 
 it('should error for incorrect parameters', () => {
   const r0 = iif(() => 132, a$, b$); // $ExpectError
-  const r1 = iif(randomBoolean, {}, b$); // $ExpectError
-  const r2 = iif(randomBoolean, a$, {}); // $ExpectError
+  const r1 = iif(randomBoolean, {} as never as object, b$); // $ExpectError
+  const r2 = iif(randomBoolean, a$, {} as never as object); // $ExpectError
 });
 
 it('should infer correctly', () => {
@@ -24,10 +24,11 @@ it('should infer correctly', () => {
   const r5 = iif(randomBoolean, EMPTY, EMPTY); // $ExpectType Observable<never>
 });
 
+
 it('should support inference from a predicate that returns any', () => {
   function alwaysTrueButReturnsAny(): any {
     return true;
   }
 
-  const o$ = iif(alwaysTrueButReturnsAny, a$, b$); // $ExpectType Observable<A | B>
+  const o$ = iif(alwaysTrueButReturnsAny, a$, b$) // $ExpectType Observable<A | B>
 });

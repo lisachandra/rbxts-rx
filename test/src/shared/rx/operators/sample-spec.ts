@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { sample, mergeMap } from 'rxjs/operators';
-import { Subject, of } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { sample, mergeMap } from '@rbxts/rx/out/operators';
+import { Subject, of } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {sample} */

@@ -24,7 +24,7 @@ import { innerFrom } from '../observable/innerFrom';
  * Emit an array of the last clicks every [1-5] random seconds
  *
  * ```ts
- * import { fromEvent, bufferWhen, interval } from 'rxjs';
+ * import { fromEvent, bufferWhen, interval } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const buffered = clicks.pipe(

@@ -65,7 +65,7 @@ export function fromEventPattern<T>(
  * Emits clicks happening on the DOM document
  *
  * ```ts
- * import { fromEventPattern } from 'rxjs';
+ * import { fromEventPattern } from '@rbxts/rx';
  *
  * function addClickHandler(handler) {
  *   document.addEventListener('click', handler);
@@ -88,7 +88,7 @@ export function fromEventPattern<T>(
  * Use with API that returns cancellation token
  *
  * ```ts
- * import { fromEventPattern } from 'rxjs';
+ * import { fromEventPattern } from '@rbxts/rx';
  *
  * const token = someAPI.registerEventHandler(function() {});
  * someAPI.unregisterEventHandler(token); // this APIs cancellation method accepts
@@ -103,7 +103,7 @@ export function fromEventPattern<T>(
  * Use with project function
  *
  * ```ts
- * import { fromEventPattern } from 'rxjs';
+ * import { fromEventPattern } from '@rbxts/rx';
  *
  * someAPI.registerEventHandler((eventType, eventMessage) => {
  *   console.log(eventType, eventMessage); // Logs 'EVENT_TYPE' 'EVENT_MESSAGE' to console.

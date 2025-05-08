@@ -27,7 +27,7 @@ import { innerFrom } from '../observable/innerFrom';
  * In every window of 1 second each, emit at most 2 click events
  *
  * ```ts
- * import { fromEvent, interval, window, map, take, mergeAll } from 'rxjs';
+ * import { fromEvent, interval, window, map, take, mergeAll } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const sec = interval(1000);

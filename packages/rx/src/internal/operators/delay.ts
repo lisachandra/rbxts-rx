@@ -24,7 +24,7 @@ import { timer } from '../observable/timer';
  * Delay each click by one second
  *
  * ```ts
- * import { fromEvent, delay } from 'rxjs';
+ * import { fromEvent, delay } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const delayedClicks = clicks.pipe(delay(1000)); // each click emitted after 1 second
@@ -34,7 +34,7 @@ import { timer } from '../observable/timer';
  * Delay all clicks until a future date happens
  *
  * ```ts
- * import { fromEvent, delay } from 'rxjs';
+ * import { fromEvent, delay } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const date = new Date('March 15, 2050 12:00:00'); // in the future

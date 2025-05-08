@@ -27,7 +27,7 @@ import { innerFrom } from '../observable/innerFrom';
  * Emit only the first two clicks events in every window of [1-5] random seconds
  *
  * ```ts
- * import { fromEvent, windowWhen, interval, map, take, mergeAll } from 'rxjs';
+ * import { fromEvent, windowWhen, interval, map, take, mergeAll } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(

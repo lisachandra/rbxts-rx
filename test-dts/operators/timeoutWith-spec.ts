@@ -14,16 +14,16 @@ it('should infer correctly while having the same types', () => {
 });
 
 it('should support a date', () => {
-  const o = of('a', 'b', 'c').pipe(timeoutWith(new Date(), of(1, 2, 3))); // $ExpectType Observable<string | number>
-  const p = of('a', 'b', 'c').pipe(timeoutWith(new Date(), [1, 2, 3])); // $ExpectType Observable<string | number>
-  const q = of('a', 'b', 'c').pipe(timeoutWith(new Date(), Promise.resolve(5))); // $ExpectType Observable<string | number>
-  const r = of('a', 'b', 'c').pipe(timeoutWith(new Date(), new Set([1, 2, 3]))); // $ExpectType Observable<string | number>
-  const s = of('a', 'b', 'c').pipe(timeoutWith(new Date(), 'foo')); // $ExpectType Observable<string>
+  const o = of('a', 'b', 'c').pipe(timeoutWith(DateTime.now(), of(1, 2, 3))); // $ExpectType Observable<string | number>
+  const p = of('a', 'b', 'c').pipe(timeoutWith(DateTime.now(), [1, 2, 3])); // $ExpectType Observable<string | number>
+  const q = of('a', 'b', 'c').pipe(timeoutWith(DateTime.now(), Promise.resolve(5))); // $ExpectType Observable<string | number>
+  const r = of('a', 'b', 'c').pipe(timeoutWith(DateTime.now(), new Set([1, 2, 3]))); // $ExpectType Observable<string | number>
+  const s = of('a', 'b', 'c').pipe(timeoutWith(DateTime.now(), 'foo')); // $ExpectType Observable<string>
 });
 
 it('should support a scheduler', () => {
   const o = of('a', 'b', 'c').pipe(timeoutWith(10, of(1, 2, 3), asyncScheduler)); // $ExpectType Observable<string | number>
-  const p = of('a', 'b', 'c').pipe(timeoutWith(new Date(), of(1, 2, 3), asyncScheduler)); // $ExpectType Observable<string | number>
+  const p = of('a', 'b', 'c').pipe(timeoutWith(DateTime.now(), of(1, 2, 3), asyncScheduler)); // $ExpectType Observable<string | number>
 });
 
 it('should enforce types', () => {

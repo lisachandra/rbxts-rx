@@ -8,7 +8,7 @@ import { from } from './from';
 // use the `strictNullChecks: false` TypeScript compiler option, these
 // overloads with explicit undefined and undefined values are included.
 
-export function of(value: undefined): Observable<undefined>;
+export function of(value: null): Observable<null>;
 export function of(value: undefined): Observable<undefined>;
 
 /** @deprecated The `scheduler` parameter will be removed in v8. Use `scheduled`. Details: https://rxjs.dev/deprecations/scheduler-argument */
@@ -37,7 +37,7 @@ export function of<A extends readonly unknown[]>(...values: A): Observable<Value
  * Emit the values `10, 20, 30`
  *
  * ```ts
- * import { of } from 'rxjs';
+ * import { of } from '@rbxts/rx';
  *
  * of(10, 20, 30)
  *   .subscribe({
@@ -56,7 +56,7 @@ export function of<A extends readonly unknown[]>(...values: A): Observable<Value
  * Emit the array `[1, 2, 3]`
  *
  * ```ts
- * import { of } from 'rxjs';
+ * import { of } from '@rbxts/rx';
  *
  * of([1, 2, 3])
  *   .subscribe({

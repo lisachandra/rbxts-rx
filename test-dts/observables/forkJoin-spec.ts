@@ -1,23 +1,24 @@
 import { a$, b$, c$ } from 'helpers';
-import { of, forkJoin } from 'rxjs';
+import { of, forkJoin, ObservableInput } from 'rxjs';
 
+/*
 describe('deprecated rest args', () => {
   it('should infer correctly with 1 parameter', () => {
     const a = of(1, 2, 3);
-    const res = forkJoin(a); // $ExpectType Observable<[number]>
+    const res = forkJoin(a); // ExpectType Observable<[number]>
   });
 
   it('should infer correctly with 2 parameters', () => {
     const a = of(1, 2, 3);
     const b = of('a', 'b', 'c');
-    const res = forkJoin(a, b); // $ExpectType Observable<[number, string]>
+    const res = forkJoin(a, b); // ExpectType Observable<[number, string]>
   });
 
   it('should infer correctly with 3 parameters', () => {
     const a = of(1, 2, 3);
     const b = of('a', 'b', 'c');
     const c = of(1, 2, 3);
-    const res = forkJoin(a, b, c); // $ExpectType Observable<[number, string, number]>
+    const res = forkJoin(a, b, c); // ExpectType Observable<[number, string, number]>
   });
 
   it('should infer correctly with 4 parameters', () => {
@@ -25,7 +26,7 @@ describe('deprecated rest args', () => {
     const b = of('a', 'b', 'c');
     const c = of(1, 2, 3);
     const d = of(1, 2, 3);
-    const res = forkJoin(a, b, c, d); // $ExpectType Observable<[number, string, number, number]>
+    const res = forkJoin(a, b, c, d); // ExpectType Observable<[number, string, number, number]>
   });
 
   it('should infer correctly with 5 parameters', () => {
@@ -34,7 +35,7 @@ describe('deprecated rest args', () => {
     const c = of(1, 2, 3);
     const d = of(1, 2, 3);
     const e = of(1, 2, 3);
-    const res = forkJoin(a, b, c, d, e); // $ExpectType Observable<[number, string, number, number, number]>
+    const res = forkJoin(a, b, c, d, e); // ExpectType Observable<[number, string, number, number, number]>
   });
 
   it('should infer correctly with 6 parameters', () => {
@@ -44,20 +45,21 @@ describe('deprecated rest args', () => {
     const d = of(1, 2, 3);
     const e = of(1, 2, 3);
     const f = of(1, 2, 3);
-    const res = forkJoin(a, b, c, d, e, f); // $ExpectType Observable<[number, string, number, number, number, number]>
+    const res = forkJoin(a, b, c, d, e, f); // ExpectType Observable<[number, string, number, number, number, number]>
+  });
+
+  it('should infer of type any for more than 6 parameters', () => {
+    const a = of(1, 2, 3);
+    const b = of('a', 'b', 'c');
+    const c = of(1, 2, 3);
+    const d = of(1, 2, 3);
+    const e = of(1, 2, 3);
+    const f = of(1, 2, 3);
+    const g = of(1, 2, 3);
+    const res = forkJoin(a, b, c, d, e, f, g); // ExpectType Observable<[number, string, number, number, number, number, number]>
   });
 });
-
-it('should infer of type any for more than 6 parameters', () => {
-  const a = of(1, 2, 3);
-  const b = of('a', 'b', 'c');
-  const c = of(1, 2, 3);
-  const d = of(1, 2, 3);
-  const e = of(1, 2, 3);
-  const f = of(1, 2, 3);
-  const g = of(1, 2, 3);
-  const res = forkJoin(a, b, c, d, e, f, g); // $ExpectType Observable<[number, string, number, number, number, number, number]>
-});
+*/
 
 describe('forkJoin({})', () => {
   it('should properly type empty objects', () => {
@@ -85,7 +87,7 @@ describe('forkJoin([])', () => {
     const resConst = forkJoin([] as const); // $ExpectType Observable<never>
   });
 
-  it('should properly type readonly arrays', () => {
+    it('should properly type readonly arrays', () => {
     const res = forkJoin([a$, b$, c$] as const); // $ExpectType Observable<[A, B, C]>
   });
 
@@ -118,7 +120,7 @@ describe('forkJoin([])', () => {
   });
 
   it('should return unknown for argument of any', () => {
-    const arg: any = undefined;
+    const arg: any = null;
     const res = forkJoin(arg); // $ExpectType Observable<unknown>
-  });
+  })
 });

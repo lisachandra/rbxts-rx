@@ -17,7 +17,7 @@ import { merge } from './merge';
  * Joining all outputs from multiple user input event streams
  *
  * ```ts
- * import { fromEvent, map, mergeWith } from 'rxjs';
+ * import { fromEvent, map, mergeWith } from '@rbxts/rx';
  *
  * const clicks$ = fromEvent(document, 'click').pipe(map(() => 'click'));
  * const mousemoves$ = fromEvent(document, 'mousemove').pipe(map(() => 'mousemove'));

@@ -54,7 +54,7 @@ export function retry<T>(config: RetryConfig): MonoTypeOperatorFunction<T>;
  * ## Example
  *
  * ```ts
- * import { interval, mergeMap, throwError, of, retry } from 'rxjs';
+ * import { interval, mergeMap, throwError, of, retry } from '@rbxts/rx';
  *
  * const source = interval(1000);
  * const result = source.pipe(

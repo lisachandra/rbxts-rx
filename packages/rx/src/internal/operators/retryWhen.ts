@@ -20,7 +20,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * ## Example
  *
  * ```ts
- * import { interval, map, retryWhen, tap, delayWhen, timer } from 'rxjs';
+ * import { interval, map, retryWhen, tap, delayWhen, timer } from '@rbxts/rx';
  *
  * const source = interval(1000);
  * const result = source.pipe(

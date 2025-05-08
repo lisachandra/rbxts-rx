@@ -16,10 +16,7 @@ it('should infer correctly with a different type of defaultValue', () => {
 });
 
 it('should infer correctly with a subtype passed through parameters', () => {
-  const o = of(true, false).pipe(
-    map((p) => p),
-    defaultIfEmpty(true)
-  ); // $ExpectType Observable<boolean>
+  const o = of(true, false).pipe(map(p => p), defaultIfEmpty(true)); // $ExpectType Observable<boolean>
 });
 
 it('should enforce types', () => {
@@ -28,4 +25,4 @@ it('should enforce types', () => {
 
 it('should handle Observable<never> appropriately', () => {
   const o = EMPTY.pipe(defaultIfEmpty('blah')); // $ExpectType Observable<string>
-});
+})

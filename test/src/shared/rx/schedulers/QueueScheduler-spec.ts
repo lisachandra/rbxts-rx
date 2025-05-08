@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { queueScheduler, Subscription, merge } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { queueScheduler, Subscription, merge } from '@rbxts/rx';
+import { delay } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 const queue = queueScheduler;

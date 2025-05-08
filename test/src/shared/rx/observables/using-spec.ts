@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { using, range, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { using, range, Subscription } from '@rbxts/rx';
+import { take } from '@rbxts/rx/out/operators';
 
 describe('using', () => {
   it('should dispose of the resource when the subscription is disposed', (done) => {

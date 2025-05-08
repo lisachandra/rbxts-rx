@@ -1,5 +1,5 @@
-import { combineLatest } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { combineLatest } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {combineLatest} */

@@ -5,7 +5,7 @@ it('should infer correctly with 1 parameter of number type', () => {
 });
 
 it('should infer correctly with 1 parameter of date type', () => {
-  const a = timer(new Date()); // $ExpectType Observable<0>
+  const a = timer((DateTime.now())); // $ExpectType Observable<0>
 });
 
 it('should not support string parameter', () => {

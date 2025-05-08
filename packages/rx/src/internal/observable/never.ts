@@ -17,7 +17,7 @@ import { noop } from '../util/noop';
  * Emit the number 7, then never emit anything else (not even complete)
  *
  * ```ts
- * import { NEVER, startWith } from 'rxjs';
+ * import { NEVER, startWith } from '@rbxts/rx';
  *
  * const info = () => console.log('Will not be called');
  *

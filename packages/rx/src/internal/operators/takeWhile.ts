@@ -1,4 +1,4 @@
-import { OperatorFunction, MonoTypeOperatorFunction, TruthyTypesOf, BooleanConstructor } from '../types';
+import { OperatorFunction, MonoTypeOperatorFunction, TruthyTypesOf } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 
@@ -31,7 +31,7 @@ export function takeWhile<T>(predicate: (value: T, index: number) => boolean, in
  * Emit click events only while the clientX property is greater than 200
  *
  * ```ts
- * import { fromEvent, takeWhile } from 'rxjs';
+ * import { fromEvent, takeWhile } from '@rbxts/rx';
  *
  * const clicks = fromEvent<PointerEvent>(document, 'click');
  * const result = clicks.pipe(takeWhile(ev => ev.clientX > 200));

@@ -51,7 +51,7 @@ export function concat<T extends readonly unknown[]>(
  * Concatenate a timer counting from 0 to 3 with a synchronous sequence from 1 to 10
  *
  * ```ts
- * import { interval, take, range, concat } from 'rxjs';
+ * import { interval, take, range, concat } from '@rbxts/rx';
  *
  * const timer = interval(1000).pipe(take(4));
  * const sequence = range(1, 10);
@@ -65,7 +65,7 @@ export function concat<T extends readonly unknown[]>(
  * Concatenate 3 Observables
  *
  * ```ts
- * import { interval, take, concat } from 'rxjs';
+ * import { interval, take, concat } from '@rbxts/rx';
  *
  * const timer1 = interval(1000).pipe(take(10));
  * const timer2 = interval(2000).pipe(take(6));
@@ -84,7 +84,7 @@ export function concat<T extends readonly unknown[]>(
  * Concatenate the same Observable to repeat it
  *
  * ```ts
- * import { interval, take, concat } from 'rxjs';
+ * import { interval, take, concat } from '@rbxts/rx';
  *
  * const timer = interval(1000).pipe(take(2));
  *

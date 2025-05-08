@@ -73,7 +73,7 @@ export function bindCallback<A extends readonly unknown[], R extends readonly un
  * Convert jQuery's getJSON to an Observable API
  *
  * ```ts
- * import { bindCallback } from 'rxjs';
+ * import { bindCallback } from '@rbxts/rx';
  * import * as jQuery from 'jquery';
  *
  * // Suppose we have jQuery.getJSON('/my/url', callback)
@@ -85,7 +85,7 @@ export function bindCallback<A extends readonly unknown[], R extends readonly un
  * Receive an array of arguments passed to a callback
  *
  * ```ts
- * import { bindCallback } from 'rxjs';
+ * import { bindCallback } from '@rbxts/rx';
  *
  * const someFunction = (n, s, cb) => {
  *   cb(n, s, { someProperty: 'someValue' });
@@ -100,7 +100,7 @@ export function bindCallback<A extends readonly unknown[], R extends readonly un
  * Compare behaviour with and without `asyncScheduler`
  *
  * ```ts
- * import { bindCallback, asyncScheduler } from 'rxjs';
+ * import { bindCallback, asyncScheduler } from '@rbxts/rx';
  *
  * function iCallMyCallbackSynchronously(cb) {
  *   cb();
@@ -122,7 +122,7 @@ export function bindCallback<A extends readonly unknown[], R extends readonly un
  * Use `bindCallback` on an object method
  *
  * ```ts
- * import { bindCallback } from 'rxjs';
+ * import { bindCallback } from '@rbxts/rx';
  *
  * const boundMethod = bindCallback(someObject.methodWithCallback);
  * boundMethod

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
-import { throwError } from 'rxjs';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { throwError } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {throwError} */

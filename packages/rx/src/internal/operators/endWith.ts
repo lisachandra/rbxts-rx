@@ -30,7 +30,7 @@ export function endWith<T, A extends unknown[] = T[]>(...values: A): OperatorFun
  * stop when a user clicks anywhere on the document.
  *
  * ```ts
- * import { interval, map, fromEvent, startWith, takeUntil, endWith } from 'rxjs';
+ * import { interval, map, fromEvent, startWith, takeUntil, endWith } from '@rbxts/rx';
  *
  * const ticker$ = interval(5000).pipe(
  *   map(() => 'tick')

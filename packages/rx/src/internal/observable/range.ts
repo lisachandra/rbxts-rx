@@ -27,7 +27,7 @@ export function range(start: number, count: number | undefined, scheduler: Sched
  * Produce a range of numbers
  *
  * ```ts
- * import { range } from 'rxjs';
+ * import { range } from '@rbxts/rx';
  *
  * const numbers = range(1, 3);
  *

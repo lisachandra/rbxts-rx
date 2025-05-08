@@ -41,12 +41,12 @@ export interface EventListenerObject<E> {
 export interface HasEventTargetAddRemove<E> {
   addEventListener(
     type: string,
-    listener: ((evt: E) => void) | EventListenerObject<E> | undefined,
+    listener: ((evt: E) => void) | EventListenerObject<E> | null,
     options?: boolean | AddEventListenerOptions
   ): void;
   removeEventListener(
     type: string,
-    listener: ((evt: E) => void) | EventListenerObject<E> | undefined,
+    listener: ((evt: E) => void) | EventListenerObject<E> | null,
     options?: EventListenerOptions | boolean
   ): void;
 }
@@ -191,7 +191,7 @@ export function fromEvent<T, R>(
  * Emit clicks happening on the DOM document
  *
  * ```ts
- * import { fromEvent } from 'rxjs';
+ * import { fromEvent } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * clicks.subscribe(x => console.log(x));
@@ -204,7 +204,7 @@ export function fromEvent<T, R>(
  * Use `addEventListener` with capture option
  *
  * ```ts
- * import { fromEvent } from 'rxjs';
+ * import { fromEvent } from '@rbxts/rx';
  *
  * const div = document.createElement('div');
  * div.style.cssText = 'width: 200px; height: 200px; background: #09c;';

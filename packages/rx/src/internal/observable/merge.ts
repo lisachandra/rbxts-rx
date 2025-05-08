@@ -37,7 +37,7 @@ export function merge<A extends readonly unknown[]>(
  * Merge together two Observables: 1s interval and clicks
  *
  * ```ts
- * import { merge, fromEvent, interval } from 'rxjs';
+ * import { merge, fromEvent, interval } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const timer = interval(1000);
@@ -54,7 +54,7 @@ export function merge<A extends readonly unknown[]>(
  * Merge together 3 Observables, but run only 2 concurrently
  *
  * ```ts
- * import { interval, take, merge } from 'rxjs';
+ * import { interval, take, merge } from '@rbxts/rx';
  *
  * const timer1 = interval(1000).pipe(take(10));
  * const timer2 = interval(2000).pipe(take(6));

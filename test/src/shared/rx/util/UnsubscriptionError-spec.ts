@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { UnsubscriptionError, Observable, timer, merge } from 'rxjs';
+import { UnsubscriptionError, Observable, timer, merge } from '@rbxts/rx';
 
 /** @test {UnsubscriptionError} */
 describe('UnsubscriptionError', () => {

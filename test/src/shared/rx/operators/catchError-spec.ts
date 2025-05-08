@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import { concat, defer, Observable, of, throwError, EMPTY, from } from 'rxjs';
-import { catchError, map, mergeMap, takeWhile, delay, take } from 'rxjs/operators';
+import { concat, defer, Observable, of, throwError, EMPTY, from } from '@rbxts/rx';
+import { catchError, map, mergeMap, takeWhile, delay, take } from '@rbxts/rx/out/operators';
 import * as sinon from 'sinon';
 import { createObservableInputs } from '../helpers/test-helper';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { asInteropObservable } from '../helpers/interop-helper';
 

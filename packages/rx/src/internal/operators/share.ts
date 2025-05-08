@@ -70,7 +70,7 @@ export function share<T>(options: ShareConfig<T>): MonoTypeOperatorFunction<T>;
  * Generate new multicast Observable from the `source` Observable value
  *
  * ```ts
- * import { interval, tap, map, take, share } from 'rxjs';
+ * import { interval, tap, map, take, share } from '@rbxts/rx';
  *
  * const source = interval(1000).pipe(
  *   tap(x => console.log('Processing: ', x)),
@@ -106,7 +106,7 @@ export function share<T>(options: ShareConfig<T>): MonoTypeOperatorFunction<T>;
  * ## Example with notifier factory: Delayed reset
  *
  * ```ts
- * import { interval, take, share, timer } from 'rxjs';
+ * import { interval, take, share, timer } from '@rbxts/rx';
  *
  * const source = interval(1000).pipe(
  *   take(3),

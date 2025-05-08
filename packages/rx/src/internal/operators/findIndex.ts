@@ -1,16 +1,16 @@
 import { Observable } from '../Observable';
-import { BooleanConstructor, Falsy, OperatorFunction } from '../types';
+import { Falsy, OperatorFunction } from '../types';
 import { operate } from '../util/lift';
 import { createFind } from './find';
 
 export function findIndex<T>(predicate: BooleanConstructor): OperatorFunction<T, T extends Falsy ? -1 : number>;
-/** @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8. */
-export function findIndex<T>(predicate: BooleanConstructor, thisArg: any): OperatorFunction<T, T extends Falsy ? -1 : number>;
-/** @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8. */
+/* @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8.
+export function findIndex<T>(predicate: BooleanConstructor, thisArg: any): OperatorFunction<T, T extends Falsy ? -1 : number>;*/
+/* @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8.
 export function findIndex<T, A>(
   predicate: (this: A, value: T, index: number, source: Observable<T>) => boolean,
   thisArg: A
-): OperatorFunction<T, number>;
+): OperatorFunction<T, number>;*/
 export function findIndex<T>(predicate: (value: T, index: number, source: Observable<T>) => boolean): OperatorFunction<T, number>;
 
 /**
@@ -33,7 +33,7 @@ export function findIndex<T>(predicate: (value: T, index: number, source: Observ
  * Emit the index of first click that happens on a DIV element
  *
  * ```ts
- * import { fromEvent, findIndex } from 'rxjs';
+ * import { fromEvent, findIndex } from '@rbxts/rx';
  *
  * const div = document.createElement('div');
  * div.style.cssText = 'width: 200px; height: 200px; background: #09c;';
@@ -50,14 +50,9 @@ export function findIndex<T>(predicate: (value: T, index: number, source: Observ
  * @see {@link take}
  *
  * @param predicate A function called with each item to test for condition matching.
- * @param @deprecated thisArg An optional argument to determine the value of `this` in the
- * `predicate` function. Unused for now.
  * @return A function that returns an Observable that emits the index of the
  * first item that matches the condition.
  */
-export function findIndex<T>(
-  predicate: (value: T, index: number, source: Observable<T>) => boolean,
-  thisArg?: any
-): OperatorFunction<T, number> {
-  return operate(createFind(predicate, thisArg, 'index'));
+export function findIndex<T>(predicate: (value: T, index: number, source: Observable<T>) => boolean): OperatorFunction<T, number> {
+  return operate(createFind(predicate, 'index'));
 }

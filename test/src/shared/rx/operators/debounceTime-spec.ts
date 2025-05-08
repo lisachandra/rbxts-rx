@@ -1,10 +1,10 @@
 import { expect } from 'chai';
-import { NEVER, of, Subject } from 'rxjs';
-import { AnimationFrameAction } from 'rxjs/internal/scheduler/AnimationFrameAction';
-import { AnimationFrameScheduler } from 'rxjs/internal/scheduler/AnimationFrameScheduler';
-import { debounceTime, mergeMap, startWith } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
-import { VirtualTimeScheduler } from '../../src/internal/scheduler/VirtualTimeScheduler';
+import { NEVER, of, Subject } from '@rbxts/rx';
+import { AnimationFrameAction } from '@rbxts/rx/out/internal/scheduler/AnimationFrameAction';
+import { AnimationFrameScheduler } from '@rbxts/rx/out/internal/scheduler/AnimationFrameScheduler';
+import { debounceTime, mergeMap, startWith } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { VirtualTimeScheduler } from '../../packages/rx/out/internal/scheduler/VirtualTimeScheduler';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {debounceTime} */

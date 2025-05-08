@@ -26,7 +26,7 @@ import { isValidDate } from '../util/isDate';
  * a few seconds and start a subscription to a source.
  *
  * ```ts
- * import { of, timer, concatMap } from 'rxjs';
+ * import { of, timer, concatMap } from '@rbxts/rx';
  *
  * // This could be any observable
  * const source = of(1, 2, 3);
@@ -45,7 +45,7 @@ import { isValidDate } from '../util/isDate';
  * {@link takeUntil}.
  *
  * ```ts
- * import { interval, takeUntil, timer } from 'rxjs';
+ * import { interval, takeUntil, timer } from '@rbxts/rx';
  *
  * // Build a Date object that marks the
  * // next minute.
@@ -102,7 +102,7 @@ export function timer(due: number | DateTime, scheduler?: SchedulerLike): Observ
  * Note that this observable will never complete.
  *
  * ```ts
- * import { timer, interval } from 'rxjs';
+ * import { timer, interval } from '@rbxts/rx';
  *
  * timer(0, 1000).subscribe(n => console.log('timer', n));
  * interval(1000).subscribe(n => console.log('interval', n));

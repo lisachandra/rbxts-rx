@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { bindCallback } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { bindCallback } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {bindCallback} */

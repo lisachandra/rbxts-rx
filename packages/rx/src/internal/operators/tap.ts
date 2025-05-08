@@ -16,7 +16,7 @@ import { identity } from '../util/identity';
  * ## Example
  *
  * ```ts
- * import { fromEvent, switchMap, tap, interval, take } from 'rxjs';
+ * import { fromEvent, switchMap, tap, interval, take } from '@rbxts/rx';
  *
  * const source$ = fromEvent(document, 'click');
  * const result$ = source$.pipe(
@@ -73,7 +73,11 @@ export interface TapObserver<T> extends Observer<T> {
 }
 export function tap<T>(observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void)): MonoTypeOperatorFunction<T>;
 /** @deprecated Instead of passing separate callback arguments, use an observer argument. Signatures taking separate callback arguments will be removed in v8. Details: https://rxjs.dev/deprecations/subscribe-arguments */
-export function tap<T>(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): MonoTypeOperatorFunction<T>;
+export function tap<T>(
+  next?: ((value: T) => void) | null,
+  error?: ((error: any) => void) | null,
+  complete?: (() => void) | null
+): MonoTypeOperatorFunction<T>;
 
 /**
  * Used to perform side-effects for notifications from the source observable
@@ -106,7 +110,7 @@ export function tap<T>(next?: (value: T) => void, error?: (error: any) => void, 
  * was, so we have added a `tap(console.log)`.
  *
  * ```ts
- * import { of, tap, map } from 'rxjs';
+ * import { of, tap, map } from '@rbxts/rx';
  *
  * of(math.random()).pipe(
  *   tap(console.log),
@@ -119,7 +123,7 @@ export function tap<T>(next?: (value: T) => void, error?: (error: any) => void, 
  * using `tap`.
  *
  * ```ts
- * import { of, tap } from 'rxjs';
+ * import { of, tap } from '@rbxts/rx';
  *
  * const source = of(1, 2, 3, 4, 5);
  *
@@ -139,7 +143,7 @@ export function tap<T>(next?: (value: T) => void, error?: (error: any) => void, 
  * we have added a `tap` with the side effect of logging to console.
  *
  * ```ts
- * import { of, concatMap, interval, take, map, tap } from 'rxjs';
+ * import { of, concatMap, interval, take, map, tap } from '@rbxts/rx';
  *
  * of(1, 2, 3).pipe(
  *   concatMap(n => interval(1000).pipe(
@@ -161,9 +165,9 @@ export function tap<T>(next?: (value: T) => void, error?: (error: any) => void, 
  * runs the specified Observer or callback(s) for each item.
  */
 export function tap<T>(
-  observerOrNext?: Partial<TapObserver<T>> | ((value: T) => void),
-  err?: (e: any) => void,
-  complete?: () => void
+  observerOrNext?: (Partial<TapObserver<T>> | ((value: T) => void)) | null,
+  err?: ((e: any) => void) | null,
+  complete?: (() => void) | null
 ): MonoTypeOperatorFunction<T> {
   // We have to check to see not only if next is a function,
   // but if error or complete were passed. This is because someone

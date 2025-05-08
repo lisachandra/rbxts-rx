@@ -5,7 +5,7 @@ describe('ReplaySubject', () => {
     const s1 = new ReplaySubject(); // $ExpectType ReplaySubject<unknown>
     s1.next(); // $ExpectError
     s1.next('test'); // $ExpectType void
-    s1.subscribe((value) => {
+    s1.subscribe(value => {
       const x = value; // $ExpectType unknown
     });
   });
@@ -15,7 +15,7 @@ describe('ReplaySubject', () => {
     s1.next(); // $ExpectError
     s1.next('test'); // $ExpectType void
     s1.next(32); // $ExpectError
-    s1.subscribe((value) => {
+    s1.subscribe(value => {
       const x = value; // $ExpectType string
     });
   });
@@ -25,7 +25,7 @@ describe('ReplaySubject', () => {
     s1.next(); // $ExpectType void
     s1.next(undefined); // $ExpectType void
     s1.next('test'); // $ExpectError
-    s1.subscribe((value) => {
+    s1.subscribe(value => {
       const x = value; // $ExpectType void
     });
   });

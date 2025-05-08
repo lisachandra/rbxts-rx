@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs';
-import { SubscriptionLog } from '../../src/internal/testing/SubscriptionLog';
-import { ColdObservable } from '../../src/internal/testing/ColdObservable';
-import { HotObservable } from '../../src/internal/testing/HotObservable';
-import { observableToBeFn, subscriptionLogsToBeFn } from '../../src/internal/testing/TestScheduler';
+import { Observable } from '@rbxts/rx';
+import { SubscriptionLog } from '../../packages/rx/out/internal/testing/SubscriptionLog';
+import { ColdObservable } from '../../packages/rx/out/internal/testing/ColdObservable';
+import { HotObservable } from '../../packages/rx/out/internal/testing/HotObservable';
+import { observableToBeFn, subscriptionLogsToBeFn } from '../../packages/rx/out/internal/testing/TestScheduler';
 
 declare const global: any;
 
@@ -24,7 +24,10 @@ export function cold(marbles: string, values?: any, error?: any): ColdObservable
   return global.rxTestScheduler.createColdObservable.apply(global.rxTestScheduler, arguments);
 }
 
-export function expectObservable(observable: Observable<any>, unsubscriptionMarbles: string | undefined = undefined): { toBe: observableToBeFn } {
+export function expectObservable(
+  observable: Observable<any>,
+  unsubscriptionMarbles: string | undefined = undefined
+): { toBe: observableToBeFn } {
   if (!global.rxTestScheduler) {
     throw 'tried to use expectObservable() in async test';
   }

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { findIndex, mergeMap, delay } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { findIndex, mergeMap, delay } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { of, Observable } from 'rxjs';
+import { of, Observable } from '@rbxts/rx';
 
 /** @test {findIndex} */
 describe('findIndex', () => {

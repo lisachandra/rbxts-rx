@@ -49,7 +49,7 @@ export interface RepeatConfig {
  * Repeat a message stream
  *
  * ```ts
- * import { of, repeat } from 'rxjs';
+ * import { of, repeat } from '@rbxts/rx';
  *
  * const source = of('Repeat message');
  * const result = source.pipe(repeat(3));
@@ -65,7 +65,7 @@ export interface RepeatConfig {
  * Repeat 3 values, 2 times
  *
  * ```ts
- * import { interval, take, repeat } from 'rxjs';
+ * import { interval, take, repeat } from '@rbxts/rx';
  *
  * const source = interval(1000);
  * const result = source.pipe(take(3), repeat(2));
@@ -86,7 +86,7 @@ export interface RepeatConfig {
  * repeat as exhausted it's count.
  *
  * ```ts
- * import { defer, of, repeat } from 'rxjs';
+ * import { defer, of, repeat } from '@rbxts/rx';
  *
  * const source = defer(() => {
  *    return of(`Hello, it is ${new Date()}`)

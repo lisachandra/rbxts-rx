@@ -1,6 +1,6 @@
-import { windowTime, mergeMap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
-import { of, Observable } from 'rxjs';
+import { windowTime, mergeMap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { of, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {windowTime} */

@@ -1,4 +1,4 @@
-import { of, asyncScheduler } from 'rxjs';
+import { of, asyncScheduler  } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { A, B, a, b, c, d, e, f, g, h } from '../helpers';
 
@@ -25,6 +25,6 @@ it('should infer correctly with a scheduler', () => {
 
 it('should infer correctly with a single specified type', () => {
   const r0 = of(a).pipe(startWith<A>(a)); // $ExpectType Observable<A>
-  const r1 = of(a).pipe(startWith<A | B>(b)); // $ExpectType Observable<A | B>
-  const r2 = of(a).pipe(startWith<A | B>(a)); // $ExpectType Observable<A | B>
+  const r1 = of(a).pipe(startWith<A|B>(b)); // $ExpectType Observable<A | B>
+  const r2 = of(a).pipe(startWith<A|B>(a)); // $ExpectType Observable<A | B>
 });

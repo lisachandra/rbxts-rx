@@ -33,7 +33,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Ensure values in subscribe are called just before browser repaint
  *
  * ```ts
- * import { interval, observeOn, animationFrameScheduler } from 'rxjs';
+ * import { interval, observeOn, animationFrameScheduler } from '@rbxts/rx';
  *
  * const someDiv = document.createElement('div');
  * someDiv.style.cssText = 'width: 200px;background: #09c';

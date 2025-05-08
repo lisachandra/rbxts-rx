@@ -17,7 +17,7 @@ import { SchedulerLike } from '../types';
  * Log complete notification
  *
  * ```ts
- * import { EMPTY } from 'rxjs';
+ * import { EMPTY } from '@rbxts/rx';
  *
  * EMPTY.subscribe({
  *   next: () => console.log('Next'),
@@ -31,7 +31,7 @@ import { SchedulerLike } from '../types';
  * Emit the number 7, then complete
  *
  * ```ts
- * import { EMPTY, startWith } from 'rxjs';
+ * import { EMPTY, startWith } from '@rbxts/rx';
  *
  * const result = EMPTY.pipe(startWith(7));
  * result.subscribe(x => console.log(x));
@@ -43,7 +43,7 @@ import { SchedulerLike } from '../types';
  * Map and flatten only odd numbers to the sequence `'a'`, `'b'`, `'c'`
  *
  * ```ts
- * import { interval, mergeMap, of, EMPTY } from 'rxjs';
+ * import { interval, mergeMap, of, EMPTY } from '@rbxts/rx';
  *
  * const interval$ = interval(1000);
  * const result = interval$.pipe(

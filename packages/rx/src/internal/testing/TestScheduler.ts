@@ -5,7 +5,7 @@ import { TestMessage } from './TestMessage';
 import { SubscriptionLog } from './SubscriptionLog';
 import { Subscription } from '../Subscription';
 import { VirtualTimeScheduler, VirtualAction } from '../scheduler/VirtualTimeScheduler';
-import { FrameRequestCallback, ObservableNotification } from '../types';
+import { ObservableNotification } from '../types';
 import { COMPLETE_NOTIFICATION, errorNotification, nextNotification } from '../NotificationFactories';
 import { dateTimestampProvider } from '../scheduler/dateTimestampProvider';
 import { performanceTimestampProvider } from '../scheduler/performanceTimestampProvider';
@@ -18,6 +18,7 @@ import { Array, Error, Number, Object, String } from '@rbxts/luau-polyfill';
 import { bind } from 'internal/polyfill/bind';
 import RegExp from '@rbxts/regexp';
 import { typeAssertIs } from 'internal/polyfill/type';
+import { FrameRequestCallback } from 'internal/polyfill/animationFrame';
 
 const defaultMaxFrame: number = 750;
 

@@ -1,9 +1,7 @@
 import { of } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
-interface Person {
-  name: string;
-}
+interface Person { name: string; }
 const sample: Person = { name: 'Tim' };
 
 it('should infer correctly', () => {
@@ -15,12 +13,7 @@ it('should accept a compare', () => {
 });
 
 it('should accept a keySelector', () => {
-  const o = of(sample).pipe(
-    distinctUntilChanged(
-      (name1, name2) => name1 === name2,
-      (p) => p.name
-    )
-  ); // $ExpectType Observable<Person>
+  const o = of(sample).pipe(distinctUntilChanged((name1, name2) => name1 === name2, p => p.name)); // $ExpectType Observable<Person>
 });
 
 it('should enforce types', () => {
@@ -33,25 +26,10 @@ it('should enforce types of compare', () => {
 });
 
 it('should enforce types of keySelector', () => {
-  const o = of(sample).pipe(
-    distinctUntilChanged(
-      (name1, name2) => name1 === name2,
-      (p) => p.foo
-    )
-  ); // $ExpectError
+  const o = of(sample).pipe(distinctUntilChanged((name1 , name2) => name1 === name2, p => p.foo)); // $ExpectError
 });
 
 it('should enforce types of compare in combination with keySelector', () => {
-  const o = of(sample).pipe(
-    distinctUntilChanged(
-      (name1: number, name2) => name1 === name2,
-      (p) => p.name
-    )
-  ); // $ExpectError
-  const p = of(sample).pipe(
-    distinctUntilChanged(
-      (name1, name2: number) => name1 === name2,
-      (p) => p.name
-    )
-  ); // $ExpectError
+  const o = of(sample).pipe(distinctUntilChanged((name1: number, name2) => name1 === name2, p => p.name)); // $ExpectError
+  const p = of(sample).pipe(distinctUntilChanged((name1, name2: number) => name1 === name2, p => p.name)); // $ExpectError
 });

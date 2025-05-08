@@ -23,7 +23,7 @@ import { arrRemove } from '../util/arrRemove';
  * Emit the last two click events as an array
  *
  * ```ts
- * import { fromEvent, bufferCount } from 'rxjs';
+ * import { fromEvent, bufferCount } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const buffered = clicks.pipe(bufferCount(2));
@@ -33,7 +33,7 @@ import { arrRemove } from '../util/arrRemove';
  * On every click, emit the last two click events as an array
  *
  * ```ts
- * import { fromEvent, bufferCount } from 'rxjs';
+ * import { fromEvent, bufferCount } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const buffered = clicks.pipe(bufferCount(2, 1));
@@ -54,7 +54,10 @@ import { arrRemove } from '../util/arrRemove';
  * beginning of the source by default.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferCount<T extends defined>(bufferSize: number, startBufferEvery: number | undefined = undefined): OperatorFunction<T, T[]> {
+export function bufferCount<T extends defined>(
+  bufferSize: number,
+  startBufferEvery: number | undefined = undefined
+): OperatorFunction<T, T[]> {
   // If no `startBufferEvery` value was supplied, then we're
   // opening and closing on the bufferSize itself.
   startBufferEvery = startBufferEvery ?? bufferSize;

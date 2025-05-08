@@ -14,7 +14,7 @@ import { filter } from './filter';
  * Skip the values before the emission
  *
  * ```ts
- * import { interval, skip } from 'rxjs';
+ * import { interval, skip } from '@rbxts/rx';
  *
  * // emit every half second
  * const source = interval(500);

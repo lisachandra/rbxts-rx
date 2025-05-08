@@ -18,7 +18,7 @@ import { AsyncScheduler } from './AsyncScheduler';
  * ## Examples
  * Use async scheduler to delay task
  * ```ts
- * import { asyncScheduler } from 'rxjs';
+ * import { asyncScheduler } from '@rbxts/rx';
  *
  * const task = () => console.log('it works!');
  *
@@ -30,7 +30,7 @@ import { AsyncScheduler } from './AsyncScheduler';
  *
  * Use async scheduler to repeat task in intervals
  * ```ts
- * import { asyncScheduler } from 'rxjs';
+ * import { asyncScheduler } from '@rbxts/rx';
  *
  * function task(state) {
  *   console.log(state);

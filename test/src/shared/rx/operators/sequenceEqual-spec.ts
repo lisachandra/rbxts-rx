@@ -1,5 +1,5 @@
-import { sequenceEqual } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { sequenceEqual } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 const booleans = { T: true, F: false };

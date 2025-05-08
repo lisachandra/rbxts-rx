@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { EMPTY, NEVER, of, timer, defer, Observable, throwError } from 'rxjs';
-import { race, mergeMap, map, finalize, startWith } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { EMPTY, NEVER, of, timer, defer, Observable, throwError } from '@rbxts/rx';
+import { race, mergeMap, map, finalize, startWith } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {race} */

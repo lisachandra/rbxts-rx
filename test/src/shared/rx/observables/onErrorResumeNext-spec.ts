@@ -1,7 +1,7 @@
-import { onErrorResumeNext, of } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { onErrorResumeNext, of } from '@rbxts/rx';
+import { finalize } from '@rbxts/rx/out/operators';
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 describe('onErrorResumeNext', () => {

@@ -44,7 +44,7 @@ export function onErrorResumeNextWith<T, A extends readonly unknown[]>(
  * Subscribe to the next Observable after map fails
  *
  * ```ts
- * import { of, onErrorResumeNext, map } from 'rxjs';
+ * import { of, onErrorResumeNext, map } from '@rbxts/rx';
  *
  * of(1, 2, 3, 0)
  *   .pipe(

@@ -1,6 +1,6 @@
-import { isEmpty, mergeMap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
-import { of } from 'rxjs';
+import { isEmpty, mergeMap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { of } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {isEmpty} */

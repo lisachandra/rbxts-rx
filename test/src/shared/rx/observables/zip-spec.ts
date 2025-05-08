@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { queueScheduler as rxQueueScheduler, zip, from, of } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { queueScheduler as rxQueueScheduler, zip, from, of } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 const queueScheduler = rxQueueScheduler;

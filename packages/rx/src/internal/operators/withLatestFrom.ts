@@ -35,7 +35,7 @@ export function withLatestFrom<T, O extends unknown[], R>(
  * On every click event, emit an array with the latest timer event plus the click event
  *
  * ```ts
- * import { fromEvent, interval, withLatestFrom } from 'rxjs';
+ * import { fromEvent, interval, withLatestFrom } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const timer = interval(1000);

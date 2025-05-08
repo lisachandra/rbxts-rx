@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { queueScheduler as rxQueueScheduler, combineLatest, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { queueScheduler as rxQueueScheduler, combineLatest, of } from '@rbxts/rx';
+import { map, mergeMap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 const queueScheduler = rxQueueScheduler;

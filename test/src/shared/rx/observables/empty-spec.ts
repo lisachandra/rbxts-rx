@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { empty, EMPTY } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { empty, EMPTY } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {empty} */

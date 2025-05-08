@@ -15,7 +15,7 @@ import { operate } from '../util/lift';
  * Given the following code:
  *
  * ```ts
- * import { of, merge } from 'rxjs';
+ * import { of, merge } from '@rbxts/rx';
  *
  * const a = of(1, 2, 3);
  * const b = of(4, 5, 6);
@@ -36,7 +36,7 @@ import { operate } from '../util/lift';
  * If we instead use the `subscribeOn` operator declaring that we want to use the {@link asyncScheduler} for values emitted by Observable `a`:
  *
  * ```ts
- * import { of, subscribeOn, asyncScheduler, merge } from 'rxjs';
+ * import { of, subscribeOn, asyncScheduler, merge } from '@rbxts/rx';
  *
  * const a = of(1, 2, 3).pipe(subscribeOn(asyncScheduler));
  * const b = of(4, 5, 6);

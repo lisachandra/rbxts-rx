@@ -21,5 +21,5 @@ it('should enforce types', () => {
 it('should enforce config types', () => {
   const o = of(1, 2, 3).pipe(throttle(() => timer(47), { x: 1 })); // $ExpectError
   const p = of(1, 2, 3).pipe(throttle(() => timer(47), { leading: 1, trailing: 1 })); // $ExpectError
-  const q = of(1, 2, 3).pipe(throttle(() => timer(47), undefined)); // $ExpectError
+  const q = of(1, 2, 3).pipe(throttle(() => timer(47), null)); // $ExpectError
 });

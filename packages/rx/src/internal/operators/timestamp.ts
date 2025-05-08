@@ -18,7 +18,7 @@ import { map } from './map';
  * In this example there is a timestamp attached to the document's click events
  *
  * ```ts
- * import { fromEvent, timestamp } from 'rxjs';
+ * import { fromEvent, timestamp } from '@rbxts/rx';
  *
  * const clickWithTimestamp = fromEvent(document, 'click').pipe(
  *   timestamp()

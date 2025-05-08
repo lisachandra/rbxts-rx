@@ -11,7 +11,7 @@ import { identity } from '../util/identity';
  * ## Example
  *
  * ```ts
- * import { interval, map, raceWith } from 'rxjs';
+ * import { interval, map, raceWith } from '@rbxts/rx';
  *
  * const obs1 = interval(7000).pipe(map(() => 'slow one'));
  * const obs2 = interval(3000).pipe(map(() => 'fast one'));

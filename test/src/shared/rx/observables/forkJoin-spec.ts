@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { finalize, forkJoin, map, of, timer } from 'rxjs';
+import { finalize, forkJoin, map, of, timer } from '@rbxts/rx';
 import { lowerCaseO } from '../helpers/test-helper';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {forkJoin} */

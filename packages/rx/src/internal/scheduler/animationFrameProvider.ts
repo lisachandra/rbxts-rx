@@ -1,14 +1,14 @@
-import { cancelAnimationFrame, FrameRequestCallback, requestAnimationFrame } from 'internal/types';
+import { FrameRequestCallback, requestAnimationFrame, cancelAnimationFrame } from 'internal/polyfill/animationFrame';
 import { Subscription } from '../Subscription';
 
 interface AnimationFrameProvider {
   schedule(callback: FrameRequestCallback): Subscription;
-  requestAnimationFrame: typeof requestAnimationFrame;
-  cancelAnimationFrame: typeof cancelAnimationFrame;
+  requestAnimationFrame: requestAnimationFrame;
+  cancelAnimationFrame: cancelAnimationFrame;
   delegate:
     | {
-        requestAnimationFrame: typeof requestAnimationFrame;
-        cancelAnimationFrame: typeof cancelAnimationFrame;
+        requestAnimationFrame: requestAnimationFrame;
+        cancelAnimationFrame: cancelAnimationFrame;
       }
     | undefined;
 }
@@ -17,29 +17,29 @@ export const animationFrameProvider: AnimationFrameProvider = {
   // When accessing the delegate, use the variable rather than `this` so that
   // the functions can be called without being bound to the provider.
   schedule(callback) {
-    let request = requestAnimationFrame;
-    let cancel: typeof cancelAnimationFrame | undefined = cancelAnimationFrame;
+    let request: requestAnimationFrame | undefined = undefined;
+    let cancel: cancelAnimationFrame | undefined = undefined;
     const { delegate } = animationFrameProvider;
     if (delegate) {
       request = delegate.requestAnimationFrame;
       cancel = delegate.cancelAnimationFrame;
     }
-    const handle = request((timestamp) => {
+    const handle = request?.((timestamp) => {
       // Clear the cancel function. The request has been fulfilled, so
       // attempting to cancel the request upon unsubscription would be
       // pointless.
       cancel = undefined;
       callback(timestamp);
     });
-    return new Subscription(() => cancel?.(handle));
+    return new Subscription(() => cancel?.(handle!));
   },
   requestAnimationFrame(this: void, ...args) {
     const { delegate } = animationFrameProvider;
-    return (delegate?.requestAnimationFrame || requestAnimationFrame)(...args);
+    return delegate?.requestAnimationFrame?.(...args);
   },
   cancelAnimationFrame(this: void, ...args) {
     const { delegate } = animationFrameProvider;
-    return (delegate?.cancelAnimationFrame || cancelAnimationFrame)(...args);
+    return delegate?.cancelAnimationFrame?.(...args);
   },
   delegate: undefined,
 };

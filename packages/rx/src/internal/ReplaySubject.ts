@@ -36,7 +36,7 @@ import { typeAssertIs } from './polyfill/type';
  * @see {@link BehaviorSubject}
  * @see {@link shareReplay}
  */
-export class ReplaySubject<T extends defined> extends Subject<T> {
+export class ReplaySubject<T> extends Subject<T> {
   private _buffer: (T | number)[] = [];
   private _infiniteTimeWindow = true;
 
@@ -60,6 +60,7 @@ export class ReplaySubject<T extends defined> extends Subject<T> {
   next(value: T): void {
     const { isStopped, _buffer, _infiniteTimeWindow, _timestampProvider, _windowTime } = this;
     if (!isStopped) {
+      typeAssertIs<defined[]>(_buffer);
       _buffer.push(value);
       !_infiniteTimeWindow && _buffer.push(_timestampProvider.now() + _windowTime);
     }

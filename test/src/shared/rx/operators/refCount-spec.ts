@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
-import { refCount, publish, publishReplay, first } from 'rxjs/operators';
-import { NEVER, noop, Observable, Subject } from 'rxjs';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { refCount, publish, publishReplay, first } from '@rbxts/rx/out/operators';
+import { NEVER, noop, Observable, Subject } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {refCount} */

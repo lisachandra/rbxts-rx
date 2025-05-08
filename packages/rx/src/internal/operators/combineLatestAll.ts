@@ -24,7 +24,7 @@ export function combineLatestAll<R>(project: (...values: Array<any>) => R): Oper
  * Map two click events to a finite interval Observable, then apply `combineLatestAll`
  *
  * ```ts
- * import { fromEvent, map, interval, take, combineLatestAll } from 'rxjs';
+ * import { fromEvent, map, interval, take, combineLatestAll } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const higherOrder = clicks.pipe(

@@ -1,13 +1,13 @@
-import { OperatorFunction, MonoTypeOperatorFunction, TruthyTypesOf, BooleanConstructor } from '../types';
+import { OperatorFunction, MonoTypeOperatorFunction, TruthyTypesOf } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 
-/** @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8. */
-export function filter<T, S extends T, A>(predicate: (this: A, value: T, index: number) => value is S, thisArg: A): OperatorFunction<T, S>;
+/* @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8.
+export function filter<T, S extends T, A>(predicate: (this: A, value: T, index: number) => value is S, thisArg: A): OperatorFunction<T, S>;*/
 export function filter<T, S extends T>(predicate: (value: T, index: number) => value is S): OperatorFunction<T, S>;
 export function filter<T>(predicate: BooleanConstructor): OperatorFunction<T, TruthyTypesOf<T>>;
-/** @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8. */
-export function filter<T, A>(predicate: (this: A, value: T, index: number) => boolean, thisArg: A): MonoTypeOperatorFunction<T>;
+/* @deprecated Use a closure instead of a `thisArg`. Signatures accepting a `thisArg` will be removed in v8.
+export function filter<T, A>(predicate: (this: A, value: T, index: number) => boolean, thisArg: A): MonoTypeOperatorFunction<T>;*/
 export function filter<T>(predicate: (value: T, index: number) => boolean): MonoTypeOperatorFunction<T>;
 
 /**
@@ -29,7 +29,7 @@ export function filter<T>(predicate: (value: T, index: number) => boolean): Mono
  * Emit only click events whose target was a DIV element
  *
  * ```ts
- * import { fromEvent, filter } from 'rxjs';
+ * import { fromEvent, filter } from '@rbxts/rx';
  *
  * const div = document.createElement('div');
  * div.style.cssText = 'width: 200px; height: 200px; background: #09c;';
@@ -53,12 +53,10 @@ export function filter<T>(predicate: (value: T, index: number) => boolean): Mono
  * Observable. The `index` parameter is the number `i` for the i-th source
  * emission that has happened since the subscription, starting from the number
  * `0`.
- * @param @deprecated thisArg An optional argument to determine the value of `this`
- * in the `predicate` function. Unused for now.
  * @return A function that returns an Observable that emits items from the
  * source Observable that satisfy the specified `predicate`.
  */
-export function filter<T>(predicate: (value: T, index: number) => boolean, thisArg?: any): MonoTypeOperatorFunction<T> {
+export function filter<T>(predicate: (value: T, index: number) => boolean): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
     // An index passed to our predicate function on each call.
     let index = 0;

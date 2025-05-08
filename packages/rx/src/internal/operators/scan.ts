@@ -35,7 +35,7 @@ export function scan<V, A, S>(accumulator: (acc: A | S, value: V, index: number)
  * first value from the source.
  *
  * ```ts
- * import { of, scan, map } from 'rxjs';
+ * import { of, scan, map } from '@rbxts/rx';
  *
  * const numbers$ = of(1, 2, 3);
  *
@@ -56,7 +56,7 @@ export function scan<V, A, S>(accumulator: (acc: A | S, value: V, index: number)
  * in job interviews. Now you can show them the Rx version! (Please don't, haha)
  *
  * ```ts
- * import { interval, scan, map, startWith } from 'rxjs';
+ * import { interval, scan, map, startWith } from '@rbxts/rx';
  *
  * const firstTwoFibs = [0, 1];
  * // An endless stream of Fibonacci numbers.

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { publishLast, mergeMapTo, tap, mergeMap, refCount, retry } from 'rxjs/operators';
-import { ConnectableObservable, of, Subscription, Observable, pipe } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { publishLast, mergeMapTo, tap, mergeMap, refCount, retry } from '@rbxts/rx/out/operators';
+import { ConnectableObservable, of, Subscription, Observable, pipe } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {publishLast} */

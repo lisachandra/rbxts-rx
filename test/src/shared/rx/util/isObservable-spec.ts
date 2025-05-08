@@ -1,4 +1,4 @@
-import { Observable, isObservable } from 'rxjs';
+import { Observable, isObservable } from '@rbxts/rx';
 import { expect } from 'chai';
 
 describe('isObservable', () => {

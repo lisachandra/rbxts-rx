@@ -1,3 +1,4 @@
+/** @prettier */
 import { onErrorResumeNext } from 'rxjs';
 import { a$, b$, c$, d$, e$, f$, g$, h$, i$, j$ } from '../helpers';
 
@@ -22,8 +23,8 @@ it('should handle non-observable inputs appropriately', () => {
 
 it('should handle observable inputs okay', () => {
   const o1 = onErrorResumeNext([1, 2, 3, 'test'], Promise.resolve(true)); // $ExpectType Observable<string | number | boolean>
-  const o2 = onErrorResumeNext(
-    // $ExpecType Observable<string>
+  const o2 = onErrorResumeNext( // $ExpecType Observable<string>
+    // eslint-disable-next-line require-yield
     (function* () {
       return 'test';
     })()

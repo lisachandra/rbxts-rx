@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { asapScheduler as asap, range, of } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
-import { concatMap, delay } from 'rxjs/operators';
+import { asapScheduler as asap, range, of } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { concatMap, delay } from '@rbxts/rx/out/operators';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {range} */

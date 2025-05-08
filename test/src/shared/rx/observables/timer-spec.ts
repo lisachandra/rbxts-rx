@@ -1,6 +1,6 @@
-import { timer, NEVER, merge } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
-import { mergeMap, take, concat } from 'rxjs/operators';
+import { timer, NEVER, merge } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { mergeMap, take, concat } from '@rbxts/rx/out/operators';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {timer} */

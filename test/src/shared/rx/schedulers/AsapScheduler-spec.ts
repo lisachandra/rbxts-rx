@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { asapScheduler, Subscription, SchedulerAction, merge } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { asapScheduler, Subscription, SchedulerAction, merge } from '@rbxts/rx';
+import { delay } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { immediateProvider } from 'rxjs/internal/scheduler/immediateProvider';
-import { intervalProvider } from 'rxjs/internal/scheduler/intervalProvider';
+import { immediateProvider } from '@rbxts/rx/out/internal/scheduler/immediateProvider';
+import { intervalProvider } from '@rbxts/rx/out/internal/scheduler/intervalProvider';
 
 const asap = asapScheduler;
 

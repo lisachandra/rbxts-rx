@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { finalize, map, share, take } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { finalize, map, share, take } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { of, timer, interval, NEVER, Observable, noop } from 'rxjs';
+import { of, timer, interval, NEVER, Observable, noop } from '@rbxts/rx';
 import { asInteropObservable } from '../helpers/interop-helper';
 
 /** @test {finalize} */

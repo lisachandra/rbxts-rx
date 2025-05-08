@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { zipWith, mergeMap } from 'rxjs/operators';
-import { queueScheduler, of, scheduled } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { zipWith, mergeMap } from '@rbxts/rx/out/operators';
+import { queueScheduler, of, scheduled } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {zipWith} */

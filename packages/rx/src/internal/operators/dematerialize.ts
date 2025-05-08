@@ -25,7 +25,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Convert an Observable of Notifications to an actual Observable
  *
  * ```ts
- * import { NextNotification, ErrorNotification, of, dematerialize } from 'rxjs';
+ * import { NextNotification, ErrorNotification, of, dematerialize } from '@rbxts/rx';
  *
  * const notifA: NextNotification<string> = { kind: 'N', value: 'A' };
  * const notifB: NextNotification<string> = { kind: 'N', value: 'B' };

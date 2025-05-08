@@ -1,4 +1,4 @@
-import { TeardownLogic } from 'rxjs';
+import { TeardownLogic } from '@rbxts/rx';
 
 export function getRegisteredFinalizers(subscription: any): Exclude<TeardownLogic, void>[] {
   if ('_finalizers' in subscription) {

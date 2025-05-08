@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { BehaviorSubject, Subject, ObjectUnsubscribedError, of } from 'rxjs';
-import { tap, mergeMapTo } from 'rxjs/operators';
+import { BehaviorSubject, Subject, ObjectUnsubscribedError, of } from '@rbxts/rx';
+import { tap, mergeMapTo } from '@rbxts/rx/out/operators';
 import { asInteropSubject } from '../helpers/interop-helper';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {BehaviorSubject} */

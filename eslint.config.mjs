@@ -36,6 +36,7 @@ export default tseslint.config(
 			...eslintPluginRoblox.configs.recommended.rules,
 			"prettier/prettier": ["warn", prettierConfig],
 			"roblox-ts/lua-truthiness": "off",
+			"roblox-ts/no-null": "off",
 			"import-x/no-cycle": "error",
 		},
 	},
@@ -92,6 +93,20 @@ export default tseslint.config(
 			"@typescript-eslint/no-floating-promises": "off",
 			"@typescript-eslint/no-unnecessary-type-assertion": "off",
 			"no-empty-pattern": "off",
+		},
+	},
+	{
+		files: ["test-dts/**"],
+		rules: {
+			"import-x/no-unresolved": "off",
+			"prefer-const": "off",
+			"prettier/prettier": "off",
+			...Object.fromEntries(
+				Object.keys(eslintPluginRoblox.configs.recommended.rules).map(rule => [
+					rule,
+					"off",
+				]),
+			),
 		},
 	},
 );

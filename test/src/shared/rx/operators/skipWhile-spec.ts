@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { skipWhile, mergeMap, tap, take } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { skipWhile, mergeMap, tap, take } from '@rbxts/rx/out/operators';
+import { of, Observable } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {skipWhile} */

@@ -11,7 +11,7 @@ import { operate } from '../util/lift';
  * Execute callback function when the observable completes
  *
  * ```ts
- * import { interval, take, finalize } from 'rxjs';
+ * import { interval, take, finalize } from '@rbxts/rx';
  *
  * // emit value in sequence every 1 second
  * const source = interval(1000);
@@ -33,7 +33,7 @@ import { operate } from '../util/lift';
  * Execute callback function when the subscriber explicitly unsubscribes
  *
  * ```ts
- * import { interval, finalize, tap, noop, timer } from 'rxjs';
+ * import { interval, finalize, tap, noop, timer } from '@rbxts/rx';
  *
  * const source = interval(100).pipe(
  *   finalize(() => console.log('[finalize] Called')),

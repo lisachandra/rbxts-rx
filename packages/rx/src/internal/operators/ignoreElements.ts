@@ -20,7 +20,7 @@ import { noop } from '../util/noop';
  * Ignore all `next` emissions from the source
  *
  * ```ts
- * import { of, ignoreElements } from 'rxjs';
+ * import { of, ignoreElements } from '@rbxts/rx';
  *
  * of('you', 'talking', 'to', 'me')
  *   .pipe(ignoreElements())

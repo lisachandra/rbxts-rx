@@ -41,7 +41,7 @@ it('should not accept a number when plucking an object', () => {
   const a = of({ name: 'abc' }).pipe(pluck(1)); // $ExpectError
 });
 
-it("should not infer type from the variable if key doesn't exist", () => {
+it('should not infer type from the variable if key doesn\'t exist', () => {
   const a: Observable<number> = of({ name: 'abc' }).pipe(pluck('xyz')); // $ExpectError
 });
 
@@ -49,9 +49,9 @@ it('should accept a spread of arguments', () => {
   const obj = {
     foo: {
       bar: {
-        baz: 123,
-      },
-    },
+        baz: 123
+      }
+    }
   };
 
   const path = ['foo', 'bar', 'baz'];
@@ -62,10 +62,10 @@ it('should accept a spread of arguments', () => {
 });
 
 it('should support arrays', () => {
-  const a = of(['abc']).pipe(pluck(0)); // $ExpectType Observable<string>
-});
+  const a = of(['abc']).pipe(pluck(0)) // $ExpectType Observable<string>
+})
 
 it('should support picking by symbols', () => {
-  const sym = Symbol('sym');
-  const a = of({ [sym]: 'abc' }).pipe(pluck(sym)); // $ExpectType Observable<string>
-});
+  const sym = Symbol('sym')
+  const a = of({ [sym]: 'abc' }).pipe(pluck(sym)) // $ExpectType Observable<string>
+})

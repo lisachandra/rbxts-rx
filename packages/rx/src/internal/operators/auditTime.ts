@@ -29,7 +29,7 @@ import { MonoTypeOperatorFunction, SchedulerLike } from '../types';
  * Emit clicks at a rate of at most one click per second
  *
  * ```ts
- * import { fromEvent, auditTime } from 'rxjs';
+ * import { fromEvent, auditTime } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(auditTime(1000));

@@ -20,7 +20,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Repeat a message stream on click
  *
  * ```ts
- * import { of, fromEvent, repeatWhen } from 'rxjs';
+ * import { of, fromEvent, repeatWhen } from '@rbxts/rx';
  *
  * const source = of('Repeat message');
  * const documentClick$ = fromEvent(document, 'click');

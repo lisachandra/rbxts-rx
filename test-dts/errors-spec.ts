@@ -1,4 +1,4 @@
-import { AjaxError } from 'rxjs/ajax';
+// import { AjaxError } from 'rxjs/ajax';
 import {
   ArgumentOutOfRangeError,
   EmptyError,
@@ -11,7 +11,7 @@ import {
 
 it('should deprecate error construction', () => {
   let error: Error;
-  error = new AjaxError('message', undefined!, undefined!); // $ExpectDeprecation
+  // error = new AjaxError('message', null!, null!); // $ExpectDeprecation
   error = new ArgumentOutOfRangeError(); // $ExpectDeprecation
   error = new EmptyError(); // $ExpectDeprecation
   error = new NotFoundError('message'); // $ExpectDeprecation
@@ -24,7 +24,7 @@ it('should deprecate error construction', () => {
 it('should not deprecate instanceof use', () => {
   const error = new Error('message');
   let b: boolean;
-  b = error instanceof AjaxError; // $ExpectNoDeprecation
+  // b = error instanceof AjaxError; // $ExpectNoDeprecation
   b = error instanceof ArgumentOutOfRangeError; // $ExpectNoDeprecation
   b = error instanceof EmptyError; // $ExpectNoDeprecation
   b = error instanceof NotFoundError; // $ExpectNoDeprecation

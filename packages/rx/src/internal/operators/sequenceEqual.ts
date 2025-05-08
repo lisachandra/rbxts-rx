@@ -25,7 +25,7 @@ import { innerFrom } from '../observable/innerFrom';
  * Figure out if the Konami code matches
  *
  * ```ts
- * import { from, fromEvent, map, bufferCount, mergeMap, sequenceEqual } from 'rxjs';
+ * import { from, fromEvent, map, bufferCount, mergeMap, sequenceEqual } from '@rbxts/rx';
  *
  * const codes = from([
  *   'ArrowUp',

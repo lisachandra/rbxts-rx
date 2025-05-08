@@ -71,7 +71,7 @@ export function pluck<T>(...properties: string[]): OperatorFunction<T, unknown>;
  * Map every click to the tagName of the clicked target element
  *
  * ```ts
- * import { fromEvent, pluck } from 'rxjs';
+ * import { fromEvent, pluck } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const tagNames = clicks.pipe(pluck('target', 'tagName'));

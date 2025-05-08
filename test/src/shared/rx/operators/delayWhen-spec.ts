@@ -1,6 +1,6 @@
-import { of, EMPTY, interval, take } from 'rxjs';
-import { delayWhen, tap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { of, EMPTY, interval, take } from '@rbxts/rx';
+import { delayWhen, tap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { expect } from 'chai';
 

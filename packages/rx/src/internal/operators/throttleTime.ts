@@ -28,7 +28,7 @@ import { timer } from '../observable/timer';
  * Emit clicks at a rate of at most one click per second
  *
  * ```ts
- * import { fromEvent, throttleTime } from 'rxjs';
+ * import { fromEvent, throttleTime } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(throttleTime(1000));

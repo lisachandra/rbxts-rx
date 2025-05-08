@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { skipLast, mergeMap, take } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { skipLast, mergeMap, take } from '@rbxts/rx/out/operators';
+import { of, Observable } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {skipLast} */

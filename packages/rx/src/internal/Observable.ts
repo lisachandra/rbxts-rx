@@ -67,7 +67,7 @@ export class Observable<T> implements Subscribable<T> {
 
   subscribe(observerOrNext?: Partial<Observer<T>> | ((value: T) => void)): Subscription;
   /** @deprecated Instead of passing separate callback arguments, use an observer argument. Signatures taking separate callback arguments will be removed in v8. Details: https://rxjs.dev/deprecations/subscribe-arguments */
-  subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
+  subscribe(next?: ((value: T) => void) | null, error?: ((error: any) => void) | null, complete?: (() => void) | null): Subscription;
   /**
    * Invokes an execution of an Observable and registers Observer handlers for notifications it will emit.
    *
@@ -119,7 +119,7 @@ export class Observable<T> implements Subscribable<T> {
    * Subscribe with an {@link guide/observer Observer}
    *
    * ```ts
-   * import { of } from 'rxjs';
+   * import { of } from '@rbxts/rx';
    *
    * const sumObserver = {
    *   sum: 0,
@@ -149,7 +149,7 @@ export class Observable<T> implements Subscribable<T> {
    * Subscribe with functions ({@link deprecations/subscribe-arguments deprecated})
    *
    * ```ts
-   * import { of } from 'rxjs'
+   * import { of } from '@rbxts/rx'
    *
    * let sum = 0;
    *
@@ -172,7 +172,7 @@ export class Observable<T> implements Subscribable<T> {
    * Cancel a subscription
    *
    * ```ts
-   * import { interval } from 'rxjs';
+   * import { interval } from '@rbxts/rx';
    *
    * const subscription = interval(1000).subscribe({
    *   next(num) {
@@ -202,7 +202,11 @@ export class Observable<T> implements Subscribable<T> {
    * @param complete A handler for a terminal event resulting from successful completion.
    * @return A subscription reference to the registered handlers.
    */
-  subscribe(observerOrNext?: Partial<Observer<T>> | ((value: T) => void), err?: (error: any) => void, complete?: () => void): Subscription {
+  subscribe(
+    observerOrNext?: Partial<Observer<T>> | ((value: T) => void) | null,
+    err?: ((error: any) => void) | null,
+    complete?: (() => void) | null
+  ): Subscription {
     const subscriber = isSubscriber(observerOrNext) ? observerOrNext : new SafeSubscriber(observerOrNext, err, complete);
 
     errorContext(() => {
@@ -251,7 +255,7 @@ export class Observable<T> implements Subscribable<T> {
    * #### Example
    *
    * ```ts
-   * import { interval, take } from 'rxjs';
+   * import { interval, take } from '@rbxts/rx';
    *
    * const source$ = interval(1000).pipe(take(4));
    *
@@ -406,7 +410,7 @@ export class Observable<T> implements Subscribable<T> {
    * ## Example
    *
    * ```ts
-   * import { interval, filter, map, scan } from 'rxjs';
+   * import { interval, filter, map, scan } from '@rbxts/rx';
    *
    * interval(1000)
    *   .pipe(

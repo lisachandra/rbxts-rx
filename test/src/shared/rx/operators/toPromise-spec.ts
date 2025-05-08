@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { of, EMPTY, throwError, config } from 'rxjs';
+import { of, EMPTY, throwError, config } from '@rbxts/rx';
 
 /** @test {toPromise} */
 describe('Observable.toPromise', () => {

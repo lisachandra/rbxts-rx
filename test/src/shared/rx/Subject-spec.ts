@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { Subject, ObjectUnsubscribedError, Observable, AsyncSubject, Observer, of, config, throwError, concat } from 'rxjs';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
-import { catchError, delay, map, mergeMap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { Subject, ObjectUnsubscribedError, Observable, AsyncSubject, Observer, of, config, throwError, concat } from '@rbxts/rx';
+import { AnonymousSubject } from '@rbxts/rx/out/internal/Subject';
+import { catchError, delay, map, mergeMap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from './helpers/observableMatcher';
 
 /** @test {Subject} */

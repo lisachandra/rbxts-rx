@@ -1,8 +1,8 @@
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { expect } from 'chai';
-import { generate } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { SafeSubscriber } from 'rxjs/internal/Subscriber';
+import { generate } from '@rbxts/rx';
+import { take } from '@rbxts/rx/out/operators';
+import { SafeSubscriber } from '@rbxts/rx/out/internal/Subscriber';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 function err(): any {

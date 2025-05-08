@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
-import { asyncScheduler, of, from, Observer, observable, Subject, noop, Subscription } from 'rxjs';
-import { first, concatMap, delay, take, tap } from 'rxjs/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { asyncScheduler, of, from, Observer, observable, Subject, noop, Subscription } from '@rbxts/rx';
+import { first, concatMap, delay, take, tap } from '@rbxts/rx/out/operators';
 import { ReadableStream } from 'web-streams-polyfill';
 import { observableMatcher } from '../helpers/observableMatcher';
 

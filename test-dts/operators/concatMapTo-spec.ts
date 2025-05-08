@@ -18,7 +18,7 @@ it('should infer correctly with a Promise', () => {
 });
 
 it('should infer correctly by using the resultSelector first parameter', () => {
-  const o = of(1, 2, 3).pipe(concatMapTo(of('foo'), (a) => a)); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(concatMapTo(of('foo'), a => a)); // $ExpectType Observable<number>
 });
 
 it('should infer correctly by using the resultSelector second parameter', () => {
@@ -38,12 +38,12 @@ it('should support an undefined resultSelector', () => {
 });
 
 it('should support union types', () => {
-  const s = math.random() > 0.5 ? of(123) : of('abc');
+  const s = Math.random() > 0.5 ? of(123) : of('abc');
   const r = of(1, 2, 3).pipe(concatMapTo(s)); // $ExpectType Observable<string | number>
 });
 
 it('should support union-type projections with empty streams', () => {
-  const o = of(1, 2, 3).pipe(concatMapTo(math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(concatMapTo(Math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {
@@ -51,12 +51,12 @@ it('should enforce types', () => {
 });
 
 it('should enforce types of the observable parameter', () => {
-  const fn = () => {};
+  const fn = () => {}
   const o = of(1, 2, 3).pipe(concatMapTo(fn)); // $ExpectError
 });
 
 it('should enforce the return type', () => {
-  const o = of(1, 2, 3).pipe(concatMapTo((p) => p)); // $ExpectError
+  const o = of(1, 2, 3).pipe(concatMapTo(p => p)); // $ExpectError
   const p = of(1, 2, 3).pipe(concatMapTo(4)); // $ExpectError
 });
 

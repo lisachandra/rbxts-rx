@@ -1,6 +1,6 @@
-import { of, concat } from 'rxjs';
-import { delay, repeatWhen, skip, take, tap, mergeMap, ignoreElements } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { of, concat } from '@rbxts/rx';
+import { delay, repeatWhen, skip, take, tap, mergeMap, ignoreElements } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import * as sinon from 'sinon';
 import { expect } from 'chai';
 import { observableMatcher } from '../helpers/observableMatcher';

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
-import { onErrorResumeNext, take, finalize, tap } from 'rxjs/operators';
-import { concat, throwError, of, Observable } from 'rxjs';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { onErrorResumeNext, take, finalize, tap } from '@rbxts/rx/out/operators';
+import { concat, throwError, of, Observable } from '@rbxts/rx';
 import { asInteropObservable } from '../helpers/interop-helper';
 import { observableMatcher } from '../helpers/observableMatcher';
 

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { Observer, TeardownLogic } from '../src/internal/types';
-import { Observable, config, Subscription, noop, Subscriber, Operator, NEVER, Subject, of, throwError, empty } from 'rxjs';
+import { Observer, TeardownLogic } from '../packages/rx/out/internal/types';
+import { Observable, config, Subscription, noop, Subscriber, Operator, NEVER, Subject, of, throwError, empty } from '@rbxts/rx';
 import {
   map,
   multicast,
@@ -22,8 +22,8 @@ import {
   publishBehavior,
   share,
   finalize,
-} from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+} from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from './helpers/observableMatcher';
 
 function expectFullObserver(val: any) {

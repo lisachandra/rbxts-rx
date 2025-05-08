@@ -18,7 +18,7 @@ import { UnaryFunction } from '../types';
  * ## Example
  *
  * ```ts
- * import { ConnectableObservable, interval, publishLast, tap, take } from 'rxjs';
+ * import { ConnectableObservable, interval, publishLast, tap, take } from '@rbxts/rx';
  *
  * const connectable = <ConnectableObservable<number>>interval(1000)
  *   .pipe(

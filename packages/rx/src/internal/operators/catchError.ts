@@ -30,7 +30,7 @@ export function catchError<T, O extends ObservableInput<any>>(
  * Continue with a different Observable when there's an error
  *
  * ```ts
- * import { of, map, catchError } from 'rxjs';
+ * import { of, map, catchError } from '@rbxts/rx';
  *
  * of(1, 2, 3, 4, 5)
  *   .pipe(
@@ -49,7 +49,7 @@ export function catchError<T, O extends ObservableInput<any>>(
  * Retry the caught source Observable again in case of error, similar to `retry()` operator
  *
  * ```ts
- * import { of, map, catchError, take } from 'rxjs';
+ * import { of, map, catchError, take } from '@rbxts/rx';
  *
  * of(1, 2, 3, 4, 5)
  *   .pipe(
@@ -69,7 +69,7 @@ export function catchError<T, O extends ObservableInput<any>>(
  * Throw a new error when the source Observable throws an error
  *
  * ```ts
- * import { of, map, catchError } from 'rxjs';
+ * import { of, map, catchError } from '@rbxts/rx';
  *
  * of(1, 2, 3, 4, 5)
  *   .pipe(

@@ -21,7 +21,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Take the first 5 seconds of an infinite 1-second interval Observable
  *
  * ```ts
- * import { interval, take } from 'rxjs';
+ * import { interval, take } from '@rbxts/rx';
  *
  * const intervalCount = interval(1000);
  * const takeFive = intervalCount.pipe(take(5));

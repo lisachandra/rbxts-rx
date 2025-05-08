@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { NEVER, interval, asapScheduler, animationFrameScheduler, queueScheduler } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
-import { take, concat } from 'rxjs/operators';
+import { NEVER, interval, asapScheduler, animationFrameScheduler, queueScheduler } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { take, concat } from '@rbxts/rx/out/operators';
 import * as sinon from 'sinon';
 import { observableMatcher } from '../helpers/observableMatcher';
 

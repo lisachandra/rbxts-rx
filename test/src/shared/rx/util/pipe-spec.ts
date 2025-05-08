@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { pipe } from 'rxjs';
+import { pipe } from '@rbxts/rx';
 
 describe('pipe', () => {
   it('should exist', () => {

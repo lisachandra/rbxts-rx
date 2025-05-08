@@ -1,7 +1,7 @@
 import { of } from 'rxjs';
 import { distinctUntilKeyChanged } from 'rxjs/operators';
 
-const sample = { name: 'foobar', num: 42 };
+const sample = {name: 'foobar', num: 42};
 
 it('should infer correctly', () => {
   const o = of(sample).pipe(distinctUntilKeyChanged('name')); // $ExpectType Observable<{ name: string; num: number; }>

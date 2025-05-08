@@ -17,7 +17,7 @@ import { combineLatest } from './combineLatest';
  * Simple concatenation of values from two inputs
  *
  * ```ts
- * import { fromEvent, combineLatestWith, map } from 'rxjs';
+ * import { fromEvent, combineLatestWith, map } from '@rbxts/rx';
  *
  * // Setup: Add two inputs to the page
  * const input1 = document.createElement('input');

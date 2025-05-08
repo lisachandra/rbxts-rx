@@ -23,7 +23,7 @@ import { innerFrom } from '../observable/innerFrom';
  * On every click, emit array of most recent interval events
  *
  * ```ts
- * import { fromEvent, interval, buffer } from 'rxjs';
+ * import { fromEvent, interval, buffer } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const intervalEvents = interval(1000);

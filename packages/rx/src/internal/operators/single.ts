@@ -1,7 +1,7 @@
 import { Observable } from '../Observable';
 import { EmptyError } from '../util/EmptyError';
 
-import { BooleanConstructor, MonoTypeOperatorFunction, OperatorFunction, TruthyTypesOf } from '../types';
+import { MonoTypeOperatorFunction, OperatorFunction, TruthyTypesOf } from '../types';
 import { SequenceError } from '../util/SequenceError';
 import { NotFoundError } from '../util/NotFoundError';
 import { operate } from '../util/lift';
@@ -31,7 +31,7 @@ export function single<T>(predicate?: (value: T, index: number, source: Observab
  * Expect only `name` beginning with `'B'`
  *
  * ```ts
- * import { of, single } from 'rxjs';
+ * import { of, single } from '@rbxts/rx';
  *
  * const source1 = of(
  *  { name: 'Ben' },

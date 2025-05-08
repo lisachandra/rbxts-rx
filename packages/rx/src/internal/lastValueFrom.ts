@@ -32,7 +32,7 @@ export function lastValueFrom<T>(source: Observable<T>): Promise<T>;
  * an async function
  *
  * ```ts
- * import { interval, take, lastValueFrom } from 'rxjs';
+ * import { interval, take, lastValueFrom } from '@rbxts/rx';
  *
  * async function execute() {
  *   const source$ = interval(2000).pipe(take(10));

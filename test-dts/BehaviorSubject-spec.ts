@@ -11,7 +11,7 @@ describe('BehaviorSubject', () => {
     s1.next(); // $ExpectError
     s1.next('test'); // $ExpectType void
     s1.next(32); // $ExpectError
-    s1.subscribe((value) => {
+    s1.subscribe(value => {
       const x = value; // $ExpectType string
     });
     const v = s1.getValue(); // $ExpectType string
@@ -22,7 +22,7 @@ describe('BehaviorSubject', () => {
     s1.next(); // $ExpectType void
     s1.next('test'); // $ExpectError
     s1.next(32); // $ExpectError
-    s1.subscribe((value) => {
+    s1.subscribe(value => {
       const x = value; // $ExpectType void
     });
     const v = s1.getValue(); // $ExpectType void

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { EmptyError } from 'rxjs';
+import { EmptyError } from '@rbxts/rx';
 
 /** @test {EmptyError} */
 describe('EmptyError', () => {

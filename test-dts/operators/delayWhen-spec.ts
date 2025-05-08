@@ -11,7 +11,7 @@ it('should support an empty notifier', () => {
 });
 
 it('should support a subscriptionDelay parameter', () => {
-  const o = of(1, 2, 3).pipe(delayWhen(() => of('a', 'b', 'c'), of(new Date()))); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(delayWhen(() => of('a', 'b', 'c'), of(DateTime.now()))); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {

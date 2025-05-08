@@ -13,8 +13,8 @@
 		"@rbxts/jest-vendor": "^0.1.0",
 		"@rbxts/luau-polyfill": "^1.0.0",
 		"@rbxts/regexp": "^0.2.1-ts.4",
-		"@rbxts/services": "^1.0.0",
-		"@rbxts/rx": "^7.8.2-rc.1"
+		"@rbxts/rx": "^7.8.2-rc.1",
+		"@rbxts/services": "^1.0.0"
 	},
 	"dependenciesMeta": {
 		"@rbxts/rx": {

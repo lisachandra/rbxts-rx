@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { throwError, ConnectableObservable, EMPTY, NEVER, of, Observable, Subscription, pipe } from 'rxjs';
-import { publishReplay, mergeMapTo, tap, mergeMap, refCount, retry, repeat, map } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { throwError, ConnectableObservable, EMPTY, NEVER, of, Observable, Subscription, pipe } from '@rbxts/rx';
+import { publishReplay, mergeMapTo, tap, mergeMap, refCount, retry, repeat, map } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {publishReplay} */

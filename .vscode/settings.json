@@ -30,5 +30,7 @@
 	"npm.packageManager": "pnpm",
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"roblox-ts.command.npm.useNpmScripts": true,
-	"roblox-ts.command.npm.watchScript": "dev:test"
+	"roblox-ts.command.npm.watchScript": "dev:test",
+	"tslint.configFile": "test-dts/tslint.json",
+	"tslint.exclude": "!test-dts/**"
 }

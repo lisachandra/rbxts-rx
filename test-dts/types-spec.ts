@@ -1,4 +1,12 @@
-import { Observable, ObservedValueOf, ObservedValueUnionFromArray, ObservedValueTupleFromArray, Cons, Head, Tail } from 'rxjs';
+import {
+  Observable,
+  ObservedValueOf,
+  ObservedValueUnionFromArray,
+  ObservedValueTupleFromArray,
+  Cons,
+  Head,
+  Tail
+} from 'rxjs';
 import { A, B, C } from './helpers';
 
 describe('ObservedValueOf', () => {
@@ -60,7 +68,7 @@ describe('Cons', () => {
 
   it('should support rest tuples', () => {
     let explicit: Cons<A, B[]>;
-    let inferred = explicit!; // $ExpectType [arg: A, ...rest: B[]]
+    let inferred = explicit!; // $ExpectType [A, ...B[]]
   });
 });
 

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { intervalProvider } from 'rxjs/internal/scheduler/intervalProvider';
+import { intervalProvider } from '@rbxts/rx/out/internal/scheduler/intervalProvider';
 
 describe('intervalProvider', () => {
   const originalSet = global.setInterval;

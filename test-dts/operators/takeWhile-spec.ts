@@ -10,26 +10,20 @@ it('should support a user-defined type guard with inclusive option', () => {
 });
 
 it('should support a predicate', () => {
-  const o = of('foo').pipe(takeWhile((s) => true)); // $ExpectType Observable<string>
+  const o = of('foo').pipe(takeWhile(s => true)); // $ExpectType Observable<string>
 });
 
 it('should support a predicate with inclusive option', () => {
-  const o = of('foo').pipe(takeWhile((s) => true, true)); // $ExpectType Observable<string>
+  const o = of('foo').pipe(takeWhile(s => true, true)); // $ExpectType Observable<string>
 });
 
 it('should properly support Boolean constructor', () => {
-  const a = of(false as const, 0 as const, -0 as const, 0n as const, '' as const, undefined, undefined).pipe(takeWhile(Boolean)); // $ExpectType Observable<never>
-  const b = of(false as const, 0 as const, -0 as const, 0n as const, '' as const, undefined, undefined).pipe(takeWhile(Boolean, true)); // $ExpectType Observable<false | "" | 0 | 0n | undefined | undefined>
-  const c = of(false as const, 0 as const, 'hi' as const, -0 as const, 0n as const, '' as const, undefined, undefined).pipe(takeWhile(Boolean)); // $ExpectType Observable<"hi">
-  const d = of(false as const, 0 as const, 'hi' as const, -0 as const, 0n as const, '' as const, undefined, undefined).pipe(
-    takeWhile(Boolean, false)
-  ); // $ExpectType Observable<"hi">
-  const e = of(false as const, 0 as const, 'hi' as const, -0 as const, 0n as const, '' as const, undefined, undefined).pipe(
-    takeWhile(Boolean, true)
-  ); // $ExpectType Observable<false | "" | 0 | 0n | "hi" | undefined | undefined>
-  const f = of(1, ['hi'], false as const, 0 as const, -0 as const, 0n as const, '' as const, undefined, undefined).pipe(
-    takeWhile(Boolean, true)
-  ); // $ExpectType Observable<number | false | "" | 0n | string[] | undefined | undefined>
+  const a = of(false as const, 0 as const, -0 as const, 0n as const, '' as const, null, undefined).pipe(takeWhile(Boolean)); // $ExpectType Observable<never>
+  const b = of(false as const, 0 as const, -0 as const, 0n as const, '' as const, null, undefined).pipe(takeWhile(Boolean, true)); // $ExpectType Observable<false | "" | 0 | 0n | null | undefined>
+  const c = of(false as const, 0 as const, 'hi' as const, -0 as const, 0n as const, '' as const, null, undefined).pipe(takeWhile(Boolean)); // $ExpectType Observable<"hi">
+  const d = of(false as const, 0 as const, 'hi' as const, -0 as const, 0n as const, '' as const, null, undefined).pipe(takeWhile(Boolean, false)); // $ExpectType Observable<"hi">
+  const e = of(false as const, 0 as const, 'hi' as const, -0 as const, 0n as const, '' as const, null, undefined).pipe(takeWhile(Boolean, true)); // $ExpectType Observable<false | "" | 0 | 0n | "hi" | null | undefined>
+  const f = of(1, ['hi'], false as const, 0 as const, -0 as const, 0n as const, '' as const, null, undefined).pipe(takeWhile(Boolean, true)); // $ExpectType Observable<number | false | "" | 0n | string[] | null | undefined>
 });
 
 it('should properly handle predicates that always return false', () => {

@@ -24,5 +24,5 @@ it('should enforce types', () => {
 
 it('should enforce type of the projector', () => {
   const o = of([1, 2, 3]).pipe(combineLatestAll((values: string) => ['x', 'y', 'z'])); // $ExpectError
-  const p = of([1, 2, 3]).pipe(combineLatestAll<number[]>((values) => ['x', 'y', 'z'])); // $ExpectError
+  const p = of([1, 2, 3]).pipe(combineLatestAll<number[]>(values => ['x', 'y', 'z'])); // $ExpectError
 });

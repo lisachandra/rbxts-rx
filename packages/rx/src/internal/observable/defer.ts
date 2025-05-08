@@ -25,7 +25,7 @@ import { innerFrom } from './innerFrom';
  * Subscribe to either an Observable of clicks or an Observable of interval, at random
  *
  * ```ts
- * import { defer, fromEvent, interval } from 'rxjs';
+ * import { defer, fromEvent, interval } from '@rbxts/rx';
  *
  * const clicksOrInterval = defer(() => {
  *   return math.random() > 0.5

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { takeWhile, tap, mergeMap } from 'rxjs/operators';
-import { of, Observable, from } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { takeWhile, tap, mergeMap } from '@rbxts/rx/out/operators';
+import { of, Observable, from } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {takeWhile} */

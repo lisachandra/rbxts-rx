@@ -25,7 +25,7 @@ import { noop } from '../util/noop';
  * within the page
  *
  * ```ts
- * import { interval, fromEvent, skipUntil } from 'rxjs';
+ * import { interval, fromEvent, skipUntil } from '@rbxts/rx';
  *
  * const intervalObservable = interval(1000);
  * const click = fromEvent(document, 'click');

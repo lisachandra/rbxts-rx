@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { retry, map, take, mergeMap, concat, multicast, refCount } from 'rxjs/operators';
-import { Observable, Observer, defer, range, of, throwError, Subject, timer, EMPTY } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { retry, map, take, mergeMap, concat, multicast, refCount } from '@rbxts/rx/out/operators';
+import { Observable, Observer, defer, range, of, throwError, Subject, timer, EMPTY } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {retry} */

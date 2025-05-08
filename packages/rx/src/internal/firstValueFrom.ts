@@ -34,7 +34,7 @@ export function firstValueFrom<T>(source: Observable<T>): Promise<T>;
  * an async function
  *
  * ```ts
- * import { interval, firstValueFrom } from 'rxjs';
+ * import { interval, firstValueFrom } from '@rbxts/rx';
  *
  * async function execute() {
  *   const source$ = interval(2000);

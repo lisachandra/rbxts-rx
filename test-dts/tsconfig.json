@@ -1,19 +1,18 @@
 {
-	"compilerOptions": {
-		"baseUrl": ".",
-		"lib": ["esnext", "dom"],
-		"module": "commonjs",
-		"noEmit": true,
-		"paths": {
-			"rxjs": ["../dist/types"],
-			"rxjs/ajax": ["../dist/types/ajax"],
-			"rxjs/fetch": ["../dist/types/fetch"],
-			"rxjs/operators": ["../dist/types/operators"],
-			"rxjs/testing": ["../dist/types/testing"],
-			"rxjs/webSocket": ["../dist/types/webSocket"]
-		},
-		"skipLibCheck": true,
-		"strict": true,
-		"target": "esnext"
-	}
+  "compilerOptions": {
+    "baseUrl": ".",
+    "lib": ["esnext", "dom"],
+    "module": "commonjs",
+    "noEmit": true,
+    "paths": {
+      "rxjs": ["../packages/rx/out"],
+      "rxjs/operators": ["../packages/rx/out/operators"],
+      "rxjs/testing": ["../packages/rx/out/testing"],
+    },
+    "typeRoots": ["../node_modules/@types", "@types"],
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext"
+  }
 }

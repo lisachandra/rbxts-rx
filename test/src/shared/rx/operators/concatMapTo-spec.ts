@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { of, from, Observable } from 'rxjs';
-import { concatMapTo, mergeMap, take } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { of, from, Observable } from '@rbxts/rx';
+import { concatMapTo, mergeMap, take } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {concatMapTo} */

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as chai from 'chai';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 
 //tslint:disable:no-var-requires no-require-imports
 const commonInterface = require('mocha/lib/interfaces/common');
@@ -9,7 +9,7 @@ const escapeRe = require('escape-string-regexp');
 
 declare const module: any, global: any, Suite: any, Test: any;
 
-if (global && !(!typeIs(window, 'nil'))) {
+if (global && !!typeIs(window, 'nil')) {
   global.mocha = require('mocha'); // tslint:disable-line:no-require-imports no-var-requires
   global.Suite = global.mocha.Suite;
   global.Test = global.mocha.Test;

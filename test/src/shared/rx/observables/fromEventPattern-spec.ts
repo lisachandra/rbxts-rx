@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import { fromEventPattern, noop, NEVER, timer } from 'rxjs';
-import { mapTo, take, concat } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { fromEventPattern, noop, NEVER, timer } from '@rbxts/rx';
+import { mapTo, take, concat } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {fromEventPattern} */

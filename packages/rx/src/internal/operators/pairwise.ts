@@ -22,7 +22,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * On every click (starting from the second), emit the relative distance to the previous click
  *
  * ```ts
- * import { fromEvent, pairwise, map } from 'rxjs';
+ * import { fromEvent, pairwise, map } from '@rbxts/rx';
  *
  * const clicks = fromEvent<PointerEvent>(document, 'click');
  * const pairs = clicks.pipe(pairwise());

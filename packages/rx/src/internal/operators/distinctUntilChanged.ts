@@ -39,7 +39,7 @@ export function distinctUntilChanged<T, K>(
  * not in comparison to _all other emitted values_.
  *
  * ```ts
- * import { of, distinctUntilChanged } from 'rxjs';
+ * import { of, distinctUntilChanged } from '@rbxts/rx';
  *
  * of(1, 1, 1, 2, 2, 2, 1, 1, 3, 3)
  *   .pipe(distinctUntilChanged())
@@ -52,7 +52,7 @@ export function distinctUntilChanged<T, K>(
  * changed:
  *
  * ```ts
- * import { of, distinctUntilChanged } from 'rxjs';
+ * import { of, distinctUntilChanged } from '@rbxts/rx';
  *
  * const totallyDifferentBuilds$ = of(
  *   { engineVersion: '1.1.0', transmissionVersion: '1.2.0' },
@@ -82,7 +82,7 @@ export function distinctUntilChanged<T, K>(
  * the next record temperature:
  *
  * ```ts
- * import { of, distinctUntilChanged } from 'rxjs';
+ * import { of, distinctUntilChanged } from '@rbxts/rx';
  *
  * const temps$ = of(30, 31, 20, 34, 33, 29, 35, 20);
  *
@@ -103,7 +103,7 @@ export function distinctUntilChanged<T, K>(
  * the account changed hands.
  *
  * ```ts
- * import { of, distinctUntilChanged } from 'rxjs';
+ * import { of, distinctUntilChanged } from '@rbxts/rx';
  *
  * // A stream of updates to a given account
  * const accountUpdates$ = of(

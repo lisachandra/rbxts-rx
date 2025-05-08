@@ -1,6 +1,6 @@
-import { of, asyncScheduler, Observable, scheduled, ObservableInput } from 'rxjs';
-import { observable } from 'rxjs/internal/symbol/observable';
-import { iterator } from 'rxjs/internal/symbol/iterator';
+import { of, asyncScheduler, Observable, scheduled, ObservableInput } from '@rbxts/rx';
+import { observable } from '@rbxts/rx/out/internal/symbol/observable';
+import { iterator } from '@rbxts/rx/out/internal/symbol/iterator';
 
 if (process && process.on) {
   /**

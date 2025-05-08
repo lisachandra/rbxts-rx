@@ -19,7 +19,7 @@ export function distinctUntilKeyChanged<T, K extends keyof T>(key: K, compare: (
  * An example comparing the name of persons
  *
  * ```ts
- * import { of, distinctUntilKeyChanged } from 'rxjs';
+ * import { of, distinctUntilKeyChanged } from '@rbxts/rx';
  *
  * of(
  *   { age: 4, name: 'Foo' },
@@ -40,7 +40,7 @@ export function distinctUntilKeyChanged<T, K extends keyof T>(key: K, compare: (
  * An example comparing the first letters of the name
  *
  * ```ts
- * import { of, distinctUntilKeyChanged } from 'rxjs';
+ * import { of, distinctUntilKeyChanged } from '@rbxts/rx';
  *
  * of(
  *   { age: 4, name: 'Foo1' },

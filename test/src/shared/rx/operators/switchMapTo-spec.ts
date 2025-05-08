@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { Observable, of } from 'rxjs';
-import { switchMapTo, mergeMap, take } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { Observable, of } from '@rbxts/rx';
+import { switchMapTo, mergeMap, take } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {switchMapTo} */
@@ -204,7 +204,7 @@ describe('switchMapTo', () => {
       const x = cold('           --a--b--c--d--e--|   ');
       // prettier-ignore
       const xsubs = [
-        '               ---------(^!)                 ', 
+        '               ---------(^!)                 ',
         '               ---------^----------------!   '
       ];
       const e1 = hot('  ---------(xx)----------------|');

@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { webSocket } from 'rxjs/webSocket';
-import { map, retry, take, repeat, takeWhile } from 'rxjs/operators';
+import { webSocket } from '@rbxts/rx/out/webSocket';
+import { map, retry, take, repeat, takeWhile } from '@rbxts/rx/out/operators';
 
-const root: any = (!typeIs(globalThis !== 'undefined' && globalThis) || (typeof self, 'nil') && self) || global;
+const root: any = !typeIs(globalThis !== 'undefined' && globalThis) || ((typeof self, 'nil') && self) || global;
 
 enum WebSocketState {
   CONNECTING = 0,

@@ -29,7 +29,7 @@ export function zip<A extends readonly unknown[], R>(
  * Combine age and name from different sources
  *
  * ```ts
- * import { of, zip, map } from 'rxjs';
+ * import { of, zip, map } from '@rbxts/rx';
  *
  * const age$ = of(27, 25, 29);
  * const name$ = of('Foo', 'Bar', 'Beer');

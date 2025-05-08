@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { connectable, of, ReplaySubject } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { connectable, of, ReplaySubject } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 describe('connectable', () => {

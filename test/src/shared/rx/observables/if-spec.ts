@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { iif, of } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { iif, of } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 describe('iif', () => {

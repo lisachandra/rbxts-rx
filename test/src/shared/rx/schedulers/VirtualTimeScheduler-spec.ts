@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { SchedulerAction, VirtualAction, VirtualTimeScheduler } from 'rxjs';
+import { SchedulerAction, VirtualAction, VirtualTimeScheduler } from '@rbxts/rx';
 
 /** @test {VirtualTimeScheduler} */
 describe('VirtualTimeScheduler', () => {

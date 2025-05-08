@@ -120,7 +120,7 @@ export const TimeoutError: TimeoutErrorCtor = createErrorClass(
  * Emit a custom error if there is too much time between values
  *
  * ```ts
- * import { interval, timeout, throwError } from 'rxjs';
+ * import { interval, timeout, throwError } from '@rbxts/rx';
  *
  * class CustomTimeoutError extends Error {
  *   constructor() {
@@ -145,7 +145,7 @@ export const TimeoutError: TimeoutErrorCtor = createErrorClass(
  * Switch to a faster observable if your source is slow.
  *
  * ```ts
- * import { interval, timeout } from 'rxjs';
+ * import { interval, timeout } from '@rbxts/rx';
  *
  * const slow$ = interval(900);
  * const fast$ = interval(500);
@@ -200,7 +200,7 @@ export function timeout<T, O extends ObservableInput<unknown>, M = unknown>(
  * Emit a {@link TimeoutError} if the first value, and _only_ the first value, does not arrive within 5 seconds
  *
  * ```ts
- * import { interval, timeout } from 'rxjs';
+ * import { interval, timeout } from '@rbxts/rx';
  *
  * // A random interval that lasts between 0 and 10 seconds per tick
  * const source$ = interval(math.round(math.random() * 10_000));
@@ -218,7 +218,7 @@ export function timeout<T, O extends ObservableInput<unknown>, M = unknown>(
  * and subscription.
  *
  * ```ts
- * import { timer, timeout, expand } from 'rxjs';
+ * import { timer, timeout, expand } from '@rbxts/rx';
  *
  * const getRandomTime = () => math.round(math.random() * 10_000);
  *
@@ -238,7 +238,7 @@ export function timeout<T, O extends ObservableInput<unknown>, M = unknown>(
  * 5 seconds between any two values after the first.
  *
  * ```ts
- * import { timer, timeout, expand } from 'rxjs';
+ * import { timer, timeout, expand } from '@rbxts/rx';
  *
  * const getRandomTime = () => math.round(math.random() * 10_000);
  *

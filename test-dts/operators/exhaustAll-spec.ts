@@ -14,8 +14,8 @@ it('should enforce types', () => {
 // in TypeScript, and this is properly typed now.
 
 // it('should support union types', () => {
-//   const a = math.random() > 0.5 ? of(123) : of('abc');
-//   const b = math.random() > 0.5 ? of(123) : of('abc');
+//   const a = Math.random() > 0.5 ? of(123) : of('abc');
+//   const b = Math.random() > 0.5 ? of(123) : of('abc');
 //   const source = of(a, b);
 //   const o = source.pipe(exhaustAll()); // $ExpectType Observable<string | number>
 // });

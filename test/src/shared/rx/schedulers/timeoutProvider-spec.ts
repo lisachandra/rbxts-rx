@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { timeoutProvider } from 'rxjs/internal/scheduler/timeoutProvider';
+import { timeoutProvider } from '@rbxts/rx/out/internal/scheduler/timeoutProvider';
 
 describe('timeoutProvider', () => {
   const originalSet = global.setTimeout;

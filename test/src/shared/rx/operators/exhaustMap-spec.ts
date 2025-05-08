@@ -1,6 +1,6 @@
-import { TestScheduler } from 'rxjs/testing';
-import { concat, defer, Observable, of, BehaviorSubject } from 'rxjs';
-import { exhaustMap, mergeMap, takeWhile, map, take } from 'rxjs/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { concat, defer, Observable, of, BehaviorSubject } from '@rbxts/rx';
+import { exhaustMap, mergeMap, takeWhile, map, take } from '@rbxts/rx/out/operators';
 import { expect } from 'chai';
 import { asInteropObservable } from '../helpers/interop-helper';
 import { observableMatcher } from '../helpers/observableMatcher';

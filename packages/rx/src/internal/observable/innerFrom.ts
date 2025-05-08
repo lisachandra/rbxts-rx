@@ -1,12 +1,11 @@
 import { isArrayLike } from '../util/isArrayLike';
 import { isPromise } from '../util/isPromise';
 import { Observable } from '../Observable';
-import { InteropObservable, ObservableInput, ObservedValueOf, ReadableStreamLike } from '../types';
+import { InteropObservable, ObservableInput, ObservedValueOf } from '../types';
 import { isInteropObservable } from '../util/isInteropObservable';
 import { isAsyncIterable } from '../util/isAsyncIterable';
 import { createInvalidObservableTypeError } from '../util/throwUnobservableError';
 import { isIterable } from '../util/isIterable';
-import { isReadableStreamLike, readableStreamLikeToAsyncGenerator } from '../util/isReadableStreamLike';
 import { Subscriber } from '../Subscriber';
 import { isFunction } from '../util/isFunction';
 import { reportUnhandledError } from '../util/reportUnhandledError';
@@ -34,9 +33,11 @@ export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
     if (isIterable(input)) {
       return fromIterable(input);
     }
+    /*
     if (isReadableStreamLike(input)) {
       return fromReadableStreamLike(input);
     }
+    */
   }
 
   throw createInvalidObservableTypeError(input);
@@ -120,9 +121,11 @@ export function fromAsyncIterable<T>(asyncIterable: AsyncIterable<T>) {
   });
 }
 
+/*
 export function fromReadableStreamLike<T>(readableStream: ReadableStreamLike<T>) {
   return fromAsyncIterable(readableStreamLikeToAsyncGenerator(readableStream));
 }
+*/
 
 async function process<T>(asyncIterable: AsyncIterable<T>, subscriber: Subscriber<T>) {
   const iterator = getAsyncIterator(asyncIterable);

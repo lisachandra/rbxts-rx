@@ -19,7 +19,7 @@ import { ObservableInput } from '../types';
  * Change at runtime which Observable will be subscribed
  *
  * ```ts
- * import { iif, of } from 'rxjs';
+ * import { iif, of } from '@rbxts/rx';
  *
  * let subscribeToFirst;
  * const firstOrSecond = iif(
@@ -44,7 +44,7 @@ import { ObservableInput } from '../types';
  * Control access to an Observable
  *
  * ```ts
- * import { iif, of, EMPTY } from 'rxjs';
+ * import { iif, of, EMPTY } from '@rbxts/rx';
  *
  * let accessGranted;
  * const observableIfYouHaveAccess = iif(

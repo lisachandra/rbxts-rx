@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { hot, cold, expectObservable, expectSubscriptions, time } from '../helpers/marble-testing';
-import { TestScheduler } from 'rxjs/testing';
-import { Observable, NEVER, EMPTY, Subject, of, merge, animationFrameScheduler, asapScheduler, asyncScheduler, interval } from 'rxjs';
-import { delay, debounceTime, concatMap, mergeMap, mapTo, take } from 'rxjs/operators';
-import { nextNotification, COMPLETE_NOTIFICATION, errorNotification } from 'rxjs/internal/NotificationFactories';
-import { animationFrameProvider } from 'rxjs/internal/scheduler/animationFrameProvider';
-import { immediateProvider } from 'rxjs/internal/scheduler/immediateProvider';
-import { intervalProvider } from 'rxjs/internal/scheduler/intervalProvider';
-import { timeoutProvider } from 'rxjs/internal/scheduler/timeoutProvider';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { Observable, NEVER, EMPTY, Subject, of, merge, animationFrameScheduler, asapScheduler, asyncScheduler, interval } from '@rbxts/rx';
+import { delay, debounceTime, concatMap, mergeMap, mapTo, take } from '@rbxts/rx/out/operators';
+import { nextNotification, COMPLETE_NOTIFICATION, errorNotification } from '@rbxts/rx/out/internal/NotificationFactories';
+import { animationFrameProvider } from '@rbxts/rx/out/internal/scheduler/animationFrameProvider';
+import { immediateProvider } from '@rbxts/rx/out/internal/scheduler/immediateProvider';
+import { intervalProvider } from '@rbxts/rx/out/internal/scheduler/intervalProvider';
+import { timeoutProvider } from '@rbxts/rx/out/internal/scheduler/timeoutProvider';
 
 declare const rxTestScheduler: TestScheduler;
 

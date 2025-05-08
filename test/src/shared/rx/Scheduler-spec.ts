@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { queueScheduler as queue } from 'rxjs';
-import { QueueScheduler } from 'rxjs/internal/scheduler/QueueScheduler';
+import { queueScheduler as queue } from '@rbxts/rx';
+import { QueueScheduler } from '@rbxts/rx/out/internal/scheduler/QueueScheduler';
 
 /** @test {Scheduler} */
 describe('Scheduler.queue', () => {

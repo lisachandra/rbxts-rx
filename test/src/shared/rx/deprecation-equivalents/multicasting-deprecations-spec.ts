@@ -1,6 +1,27 @@
-import { Observable, ConnectableObservable, connectable, of, AsyncSubject, BehaviorSubject, ReplaySubject, Subject, merge } from 'rxjs';
-import { connect, share, multicast, publish, publishReplay, publishBehavior, publishLast, refCount, repeat, retry } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import {
+  Observable,
+  ConnectableObservable,
+  connectable,
+  of,
+  AsyncSubject,
+  BehaviorSubject,
+  ReplaySubject,
+  Subject,
+  merge,
+} from '@rbxts/rx';
+import {
+  connect,
+  share,
+  multicast,
+  publish,
+  publishReplay,
+  publishBehavior,
+  publishLast,
+  refCount,
+  repeat,
+  retry,
+} from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 describe('multicasting equivalent tests', () => {

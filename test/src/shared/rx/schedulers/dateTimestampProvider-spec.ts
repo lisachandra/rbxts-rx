@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { dateTimestampProvider } from 'rxjs/internal/scheduler/dateTimestampProvider';
+import { dateTimestampProvider } from '@rbxts/rx/out/internal/scheduler/dateTimestampProvider';
 
 describe('dateTimestampProvider', () => {
   const originalDate = global.Date;

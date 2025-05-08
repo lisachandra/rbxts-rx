@@ -1,4 +1,4 @@
-import { createErrorClass } from 'rxjs/internal/util/createErrorClass';
+import { createErrorClass } from '@rbxts/rx/out/internal/util/createErrorClass';
 import { expect } from 'chai';
 
 describe('createErrorClass', () => {

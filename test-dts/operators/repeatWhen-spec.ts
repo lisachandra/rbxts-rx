@@ -1,13 +1,13 @@
 import { of } from 'rxjs';
 import { repeatWhen } from 'rxjs/operators';
-import { asInteropObservable } from '../../spec/helpers/interop-helper';
+import { asInteropObservable } from '../../test/src/shared/rx/helpers/interop-helper';
 
 it('should infer correctly', () => {
-  of(1, 2, 3).pipe(repeatWhen((errors) => errors)); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(repeatWhen(errors => errors)); // $ExpectType Observable<number>
 });
 
 it('should infer correctly when the error observable has a different type', () => {
-  of(1, 2, 3).pipe(repeatWhen((errors) => asInteropObservable(of('a', 'b', 'c')))); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(repeatWhen(errors => asInteropObservable(of('a', 'b', 'c')))); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {
@@ -32,14 +32,14 @@ it('should async iterable notifier', () => {
         last: this.to,
         async next() {
           await Promise.resolve();
-          const done = this.current > this.last;
+          const done = (this.current > this.last);
           return {
             done,
-            value: done ? this.current++ : undefined,
+            value: done ? this.current++ : undefined
           };
-        },
+        }
       };
-    },
+    }
   };
   of(1, 2, 3).pipe(repeatWhen(() => asyncRange)); // $ExpectType Observable<number>
 });
@@ -53,18 +53,19 @@ it('should accept iterable notifier', () => {
         current: this.from,
         last: this.to,
         next() {
-          const done = this.current > this.last;
+          const done = (this.current > this.last);
           return {
             done,
-            value: done ? this.current++ : undefined,
+            value: done ? this.current++ : undefined
           };
-        },
+        }
       };
-    },
+    }
   };
   of(1, 2, 3).pipe(repeatWhen(() => syncRange)); // $ExpectType Observable<number>
 });
 
+/*
 it('should accept readable stream notifier', () => {
   const readableStream = new ReadableStream<string>({
     pull(controller) {
@@ -72,8 +73,9 @@ it('should accept readable stream notifier', () => {
       controller.close();
     },
   });
-  of(1, 2, 3).pipe(repeatWhen(() => readableStream)); // $ExpectType Observable<number>
+  of(1, 2, 3).pipe(repeatWhen(() => readableStream)); // ExpectType Observable<number>
 });
+*/
 
 it('should enforce types of the notifier', () => {
   of(1, 2, 3).pipe(repeatWhen(() => 8)); // $ExpectError

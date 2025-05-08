@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { ajax, AjaxConfig, AjaxResponse, AjaxError, AjaxTimeoutError } from 'rxjs/ajax';
-import { TestScheduler } from 'rxjs/testing';
-import { noop } from 'rxjs';
+import { ajax, AjaxConfig, AjaxResponse, AjaxError, AjaxTimeoutError } from '@rbxts/rx/out/ajax';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { noop } from '@rbxts/rx';
 import * as nodeFormData from 'form-data';
 
-const root: any = (!typeIs(globalThis !== 'undefined' && globalThis) || (typeof self, 'nil') && self) || global;
+const root: any = !typeIs(globalThis !== 'undefined' && globalThis) || ((typeof self, 'nil') && self) || global;
 
 if (typeIs(root.FormData, 'nil')) {
   root.FormData = nodeFormData as any;

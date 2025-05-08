@@ -34,7 +34,7 @@ export function startWith<T, A extends readonly unknown[] = T[]>(...values: A): 
  * Emit a value when a timer starts.
  *
  * ```ts
- * import { timer, map, startWith } from 'rxjs';
+ * import { timer, map, startWith } from '@rbxts/rx';
  *
  * timer(1000)
  *   .pipe(

@@ -46,16 +46,16 @@ export function combineLatest<A extends readonly unknown[]>(
 ): Observable<A>;
 
 // combineLatest(a, b, c)
-/** @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument */
-export function combineLatest<A extends readonly unknown[]>(...sources: [...ObservableInputTuple<A>]): Observable<A>;
+/* @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument
+export function combineLatest<A extends readonly unknown[]>(...sources: [...ObservableInputTuple<A>]): Observable<A>;*/
 /** @deprecated The `scheduler` parameter will be removed in v8. Use `scheduled` and `combineLatestAll`. Details: https://rxjs.dev/deprecations/scheduler-argument */
 export function combineLatest<A extends readonly unknown[], R>(
   ...sourcesAndResultSelectorAndScheduler: [...ObservableInputTuple<A>, (...values: A) => R, SchedulerLike]
 ): Observable<R>;
-/** @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument */
+/* @deprecated Pass an array of sources instead. The rest-parameters signature will be removed in v8. Details: https://rxjs.dev/deprecations/array-argument
 export function combineLatest<A extends readonly unknown[], R>(
   ...sourcesAndResultSelector: [...ObservableInputTuple<A>, (...values: A) => R]
-): Observable<R>;
+): Observable<R>;*/
 /** @deprecated The `scheduler` parameter will be removed in v8. Use `scheduled` and `combineLatestAll`. Details: https://rxjs.dev/deprecations/scheduler-argument */
 export function combineLatest<A extends readonly unknown[]>(
   ...sourcesAndScheduler: [...ObservableInputTuple<A>, SchedulerLike]
@@ -115,7 +115,7 @@ export function combineLatest<T extends Record<string, ObservableInput<any>>>(
  * Combine two timer Observables
  *
  * ```ts
- * import { timer, combineLatest } from 'rxjs';
+ * import { timer, combineLatest } from '@rbxts/rx';
  *
  * const firstTimer = timer(0, 1000); // emit 0, 1, 2... after every second, starting from now
  * const secondTimer = timer(500, 1000); // emit 0, 1, 2... after every second, starting 0,5s from now
@@ -131,7 +131,7 @@ export function combineLatest<T extends Record<string, ObservableInput<any>>>(
  * Combine a dictionary of Observables
  *
  * ```ts
- * import { of, delay, startWith, combineLatest } from 'rxjs';
+ * import { of, delay, startWith, combineLatest } from '@rbxts/rx';
  *
  * const observables = {
  *   a: of(1).pipe(delay(1000), startWith(0)),
@@ -150,7 +150,7 @@ export function combineLatest<T extends Record<string, ObservableInput<any>>>(
  * Combine an array of Observables
  *
  * ```ts
- * import { of, delay, startWith, combineLatest } from 'rxjs';
+ * import { of, delay, startWith, combineLatest } from '@rbxts/rx';
  *
  * const observables = [1, 5, 10].map(
  *   n => of(n).pipe(
@@ -170,7 +170,7 @@ export function combineLatest<T extends Record<string, ObservableInput<any>>>(
  * Use map operator to dynamically calculate the Body-Mass Index
  *
  * ```ts
- * import { of, combineLatest, map } from 'rxjs';
+ * import { of, combineLatest, map } from '@rbxts/rx';
  *
  * const weight = of(70, 72, 76, 79, 75);
  * const height = of(1.76, 1.77, 1.78);

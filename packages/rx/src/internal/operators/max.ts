@@ -14,7 +14,7 @@ import { isFunction } from '../util/isFunction';
  * Get the maximal value of a series of numbers
  *
  * ```ts
- * import { of, max } from 'rxjs';
+ * import { of, max } from '@rbxts/rx';
  *
  * of(5, 4, 7, 2, 8)
  *   .pipe(max())
@@ -27,7 +27,7 @@ import { isFunction } from '../util/isFunction';
  * Use a comparer function to get the maximal item
  *
  * ```ts
- * import { of, max } from 'rxjs';
+ * import { of, max } from '@rbxts/rx';
  *
  * of(
  *   { age: 7, name: 'Foo' },

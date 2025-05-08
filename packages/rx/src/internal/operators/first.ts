@@ -1,13 +1,13 @@
 import { Observable } from '../Observable';
 import { EmptyError } from '../util/EmptyError';
-import { BooleanConstructor, OperatorFunction, TruthyTypesOf } from '../types';
+import { OperatorFunction, TruthyTypesOf } from '../types';
 import { filter } from './filter';
 import { take } from './take';
 import { defaultIfEmpty } from './defaultIfEmpty';
 import { throwIfEmpty } from './throwIfEmpty';
 import { identity } from '../util/identity';
 
-export function first<T, D = T>(predicate?: undefined, defaultValue?: D): OperatorFunction<T, T | D>;
+export function first<T, D = T>(predicate?: null, defaultValue?: D): OperatorFunction<T, T | D>;
 export function first<T>(predicate: BooleanConstructor): OperatorFunction<T, TruthyTypesOf<T>>;
 export function first<T, D>(predicate: BooleanConstructor, defaultValue: D): OperatorFunction<T, TruthyTypesOf<T> | D>;
 export function first<T, S extends T>(
@@ -42,7 +42,7 @@ export function first<T, D = T>(
  * Emit only the first click that happens on the DOM
  *
  * ```ts
- * import { fromEvent, first } from 'rxjs';
+ * import { fromEvent, first } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(first());
@@ -52,7 +52,7 @@ export function first<T, D = T>(
  * Emits the first click that happens on a DIV
  *
  * ```ts
- * import { fromEvent, first } from 'rxjs';
+ * import { fromEvent, first } from '@rbxts/rx';
  *
  * const div = document.createElement('div');
  * div.style.cssText = 'width: 200px; height: 200px; background: #09c;';
@@ -80,7 +80,7 @@ export function first<T, D = T>(
  * matches the condition.
  */
 export function first<T, D>(
-  predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | undefined,
+  predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | null,
   defaultValue?: D
 ): OperatorFunction<T, T | D> {
   const hasDefaultValue = defaultValue !== undefined;

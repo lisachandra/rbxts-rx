@@ -1,5 +1,5 @@
-import { merge } from 'rxjs/operators';
-import { queueScheduler, of } from 'rxjs';
+import { merge } from '@rbxts/rx/out/operators';
+import { queueScheduler, of } from '@rbxts/rx';
 import { expect } from 'chai';
 
 describe('merge (legacy)', () => {

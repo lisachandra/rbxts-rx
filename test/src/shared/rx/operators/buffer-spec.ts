@@ -1,6 +1,6 @@
-import { buffer, mergeMap, take, window, toArray } from 'rxjs/operators';
-import { EMPTY, NEVER, throwError, of, Subject, interval } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { buffer, mergeMap, take, window, toArray } from '@rbxts/rx/out/operators';
+import { EMPTY, NEVER, throwError, of, Subject, interval } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { expect } from 'chai';
 

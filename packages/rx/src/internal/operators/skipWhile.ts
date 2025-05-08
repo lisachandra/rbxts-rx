@@ -1,4 +1,4 @@
-import { BooleanConstructor, Falsy, MonoTypeOperatorFunction, OperatorFunction } from '../types';
+import { Falsy, MonoTypeOperatorFunction, OperatorFunction } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 
@@ -20,7 +20,7 @@ export function skipWhile<T>(predicate: (value: T, index: number) => boolean): M
  * Skip some super heroes
  *
  * ```ts
- * import { from, skipWhile } from 'rxjs';
+ * import { from, skipWhile } from '@rbxts/rx';
  *
  * const source = from(['Green Arrow', 'SuperMan', 'Flash', 'SuperGirl', 'Black Canary'])
  * // Skip the heroes until SuperGirl
@@ -32,7 +32,7 @@ export function skipWhile<T>(predicate: (value: T, index: number) => boolean): M
  * Skip values from the array until index 5
  *
  * ```ts
- * import { from, skipWhile } from 'rxjs';
+ * import { from, skipWhile } from '@rbxts/rx';
  *
  * const source = from([1, 2, 3, 4, 5, 6, 7, 9, 10]);
  * const example = source.pipe(skipWhile((_, i) => i !== 5));

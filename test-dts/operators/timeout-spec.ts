@@ -7,12 +7,12 @@ it('should infer correctly', () => {
 });
 
 it('should support a date', () => {
-  const o = of('a', 'b', 'c').pipe(timeout(new Date())); // $ExpectType Observable<string>
+  const o = of('a', 'b', 'c').pipe(timeout(DateTime.now())); // $ExpectType Observable<string>
 });
 
 it('should support a scheduler', () => {
   const o = of('a', 'b', 'c').pipe(timeout(10, asyncScheduler)); // $ExpectType Observable<string>
-  const p = of('a', 'b', 'c').pipe(timeout(new Date(), asyncScheduler)); // $ExpectType Observable<string>
+  const p = of('a', 'b', 'c').pipe(timeout(DateTime.now(), asyncScheduler)); // $ExpectType Observable<string>
 });
 
 it('should enforce types', () => {
@@ -28,8 +28,7 @@ it('should enforce types of scheduler', () => {
 });
 
 it('Check info argument to factory', () => {
-  const o = of('a').pipe(
-    // $ExpectType Observable<string | number>
+  const o = of('a').pipe( // $ExpectType Observable<string | number>
     timeout({
       meta: new A(),
       with: (info) => {
@@ -42,25 +41,23 @@ it('Check info argument to factory', () => {
         info.seen = 12; // $ExpectError
         info.lastValue = 'blah'; // $ExpectError
         return of(123);
-      },
+      }
     })
   );
 });
 
 it('Check config arguments', () => {
-  const o = of('a').pipe(
-    // $ExpectType Observable<string>
+  const o = of('a').pipe( // $ExpectType Observable<string>
     timeout({
-      first: 1000,
+      first: 1000
     })
   );
 });
 
 it('should support a union', () => {
-  const o = a$.pipe(
-    // $ExpectType Observable<A | B | C>
+  const o = a$.pipe( // $ExpectType Observable<A | B | C>
     timeout({
-      with: () => (math.random() > 0.5 ? b$ : c$),
+      with: () => Math.random() > 0.5 ? b$ : c$
     })
   );
 });

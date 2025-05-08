@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { mergeMap, map, delay, take } from 'rxjs/operators';
-import { asapScheduler, defer, Observable, from, of, timer } from 'rxjs';
+import { mergeMap, map, delay, take } from '@rbxts/rx/out/operators';
+import { asapScheduler, defer, Observable, from, of, timer } from '@rbxts/rx';
 import { asInteropObservable } from '../helpers/interop-helper';
-import { TestScheduler } from 'rxjs/testing';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {mergeMap} */

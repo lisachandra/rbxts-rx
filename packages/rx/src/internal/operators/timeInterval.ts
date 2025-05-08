@@ -21,7 +21,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * Emit interval between current value with the last value
  *
  * ```ts
- * import { interval, timeInterval } from 'rxjs';
+ * import { interval, timeInterval } from '@rbxts/rx';
  *
  * const seconds = interval(1000);
  *

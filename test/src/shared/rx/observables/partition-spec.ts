@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { Observable, partition, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { Observable, partition, of } from '@rbxts/rx';
+import { mergeMap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {partition} */

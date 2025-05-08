@@ -23,7 +23,7 @@ import { innerFrom } from '../observable/innerFrom';
  * A simple example with numbers
  *
  * ```ts
- * import { of, distinct } from 'rxjs';
+ * import { of, distinct } from '@rbxts/rx';
  *
  * of(1, 1, 2, 2, 2, 1, 2, 3, 4, 3, 2, 1)
  *   .pipe(distinct())
@@ -39,7 +39,7 @@ import { innerFrom } from '../observable/innerFrom';
  * An example using the `keySelector` function
  *
  * ```ts
- * import { of, distinct } from 'rxjs';
+ * import { of, distinct } from '@rbxts/rx';
  *
  * of(
  *   { age: 4, name: 'Foo'},

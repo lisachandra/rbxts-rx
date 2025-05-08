@@ -1,15 +1,14 @@
-// https://github.com/microsoft/TypeScript/issues/40462#issuecomment-689879308
-/// <reference lib="esnext.asynciterable" />
-
-import { Boolean } from '@rbxts/luau-polyfill';
+/* eslint-disable @typescript-eslint/no-wrapper-object-types */
 import type { Observable } from './Observable';
 import type { Subscription } from './Subscription';
 import Symbol from './polyfill/symbol';
 
-export declare function cancelAnimationFrame(handle: number): void;
-export declare function requestAnimationFrame(callback: FrameRequestCallback): number;
-export interface FrameRequestCallback {
-  (time: number): void;
+declare global {
+  interface BooleanConstructor {
+    new (value?: any): Boolean;
+    <T>(value?: T): boolean;
+    readonly prototype: Boolean;
+  }
 }
 
 /* OPERATOR INTERFACES */
@@ -98,14 +97,8 @@ export interface Subscribable<T> {
 /**
  * Valid types that can be converted to observables.
  */
-export type ObservableInput<T> =
-  | Observable<T>
-  | InteropObservable<T>
-  | AsyncIterable<T>
-  | Promise<T>
-  | ArrayLike<T>
-  | Iterable<T>
-  | ReadableStreamLike<T>;
+export type ObservableInput<T> = Observable<T> | InteropObservable<T> | AsyncIterable<T> | Promise<T> | ArrayLike<T> | Iterable<T>;
+// | ReadableStreamLike<T>;
 
 /**
  * @deprecated Renamed to {@link InteropObservable }. Will be removed in v8.
@@ -288,19 +281,19 @@ export type ObservableInputTuple<T> = {
  * Constructs a new tuple with the specified type at the head.
  * If you declare `Cons<A, [B, C]>` you will get back `[A, B, C]`.
  */
-export type Cons<X, Y extends readonly any[]> = ((arg: X, ...rest: Y) => any) extends (...args: infer U) => any ? U : never;
+export type Cons<X, Y extends readonly any[]> = [X, ...Y];
 
 /**
  * Extracts the head of a tuple.
  * If you declare `Head<[A, B, C]>` you will get back `A`.
  */
-export type Head<X extends readonly any[]> = ((...args: X) => any) extends (arg: infer U, ...rest: any[]) => any ? U : never;
+export type Head<X extends readonly any[]> = X extends [infer H, ...infer T] ? H : never;
 
 /**
  * Extracts the tail of a tuple.
  * If you declare `Tail<[A, B, C]>` you will get back `[B, C]`.
  */
-export type Tail<X extends readonly any[]> = ((...args: X) => any) extends (arg: any, ...rest: infer U) => any ? U : never;
+export type Tail<X extends readonly any[]> = X extends [infer H, ...infer T] ? T : never;
 
 /**
  * Extracts the generic value from an Array type.
@@ -325,11 +318,12 @@ export type ValueFromNotification<T> = T extends { kind: 'N' | 'E' | 'C' }
  * `NaN` is "falsy" however, it is not and cannot be typed via TypeScript. See
  * comments here: https://github.com/microsoft/TypeScript/issues/28682#issuecomment-707142417
  */
-// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents, roblox-ts/no-null
+// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
 export type Falsy = null | undefined | false | 0 | -0 | 0n | '';
 
 export type TruthyTypesOf<T> = T extends Falsy ? never : T;
 
+/*
 // We shouldn't rely on this type definition being available globally yet since it's
 // not necessarily available in every TS environment.
 interface ReadableStreamDefaultReaderLike<T> {
@@ -351,9 +345,11 @@ interface ReadableStreamDefaultReaderLike<T> {
  * a [ReadableStream](https://streams.spec.whatwg.org/#rs-class)
  * as an {@link ObservableInput} source.
  */
+/*
 export interface ReadableStreamLike<T> {
   getReader(): ReadableStreamDefaultReaderLike<T>;
 }
+*/
 
 /**
  * An observable with a `connect` method that is used to create a subscription
@@ -375,5 +371,3 @@ export type SignalLike<T extends Callback = Callback> =
   | { subscribe(callback: T): ConnectionLike };
 
 export type ConnectionLike = (() => void) | { Disconnect(): void } | { disconnect(): void };
-
-export type BooleanConstructor = typeof Boolean.toJSBoolean;

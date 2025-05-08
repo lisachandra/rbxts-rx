@@ -1,6 +1,6 @@
 import { Observable } from '../Observable';
 import { EmptyError } from '../util/EmptyError';
-import { BooleanConstructor, OperatorFunction, TruthyTypesOf } from '../types';
+import { OperatorFunction, TruthyTypesOf } from '../types';
 import { filter } from './filter';
 import { takeLast } from './takeLast';
 import { throwIfEmpty } from './throwIfEmpty';
@@ -9,7 +9,7 @@ import { identity } from '../util/identity';
 
 export function last<T>(predicate: BooleanConstructor): OperatorFunction<T, TruthyTypesOf<T>>;
 export function last<T, D>(predicate: BooleanConstructor, defaultValue: D): OperatorFunction<T, TruthyTypesOf<T> | D>;
-export function last<T, D = T>(predicate?: undefined, defaultValue?: D): OperatorFunction<T, T | D>;
+export function last<T, D = T>(predicate?: null, defaultValue?: D): OperatorFunction<T, T | D>;
 export function last<T, S extends T>(
   predicate: (value: T, index: number, source: Observable<T>) => value is S,
   defaultValue?: S
@@ -36,7 +36,7 @@ export function last<T, D = T>(
  * Last alphabet from the sequence
  *
  * ```ts
- * import { from, last } from 'rxjs';
+ * import { from, last } from '@rbxts/rx';
  *
  * const source = from(['x', 'y', 'z']);
  * const result = source.pipe(last());
@@ -50,7 +50,7 @@ export function last<T, D = T>(
  * Default value when the value in the predicate is not matched
  *
  * ```ts
- * import { from, last } from 'rxjs';
+ * import { from, last } from '@rbxts/rx';
  *
  * const source = from(['x', 'y', 'z']);
  * const result = source.pipe(last(char => char === 'a', 'not found'));
@@ -78,7 +78,7 @@ export function last<T, D = T>(
  * with an `EmptyError` object if no such items are emitted.
  */
 export function last<T extends defined, D>(
-  predicate?: (value: T, index: number, source: Observable<T>) => boolean,
+  predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | null,
   defaultValue?: D
 ): OperatorFunction<T, T | D> {
   const hasDefaultValue = defaultValue !== undefined;

@@ -50,7 +50,7 @@ export interface GenerateOptions<T, S> extends GenerateBaseOptions<S> {
  * Produces sequence of numbers
  *
  * ```ts
- * import { generate } from 'rxjs';
+ * import { generate } from '@rbxts/rx';
  *
  * const result = generate(0, x => x < 3, x => x + 1, x => x);
  *
@@ -65,7 +65,7 @@ export interface GenerateOptions<T, S> extends GenerateBaseOptions<S> {
  * Use `asapScheduler`
  *
  * ```ts
- * import { generate, asapScheduler } from 'rxjs';
+ * import { generate, asapScheduler } from '@rbxts/rx';
  *
  * const result = generate(1, x => x < 5, x => x * 2, x => x + 1, asapScheduler);
  *
@@ -147,7 +147,7 @@ export function generate<T, S>(
  * Use with condition and iterate functions
  *
  * ```ts
- * import { generate } from 'rxjs';
+ * import { generate } from '@rbxts/rx';
  *
  * const result = generate(0, x => x < 3, x => x + 1);
  *
@@ -166,7 +166,7 @@ export function generate<T, S>(
  * Use with condition, iterate and resultSelector functions
  *
  * ```ts
- * import { generate } from 'rxjs';
+ * import { generate } from '@rbxts/rx';
  *
  * const result = generate(0, x => x < 3, x => x + 1, x => x * 1000);
  *
@@ -185,7 +185,7 @@ export function generate<T, S>(
  * Use with options object
  *
  * ```ts
- * import { generate } from 'rxjs';
+ * import { generate } from '@rbxts/rx';
  *
  * const result = generate({
  *   initialState: 0,
@@ -209,7 +209,7 @@ export function generate<T, S>(
  * Use options object without condition function
  *
  * ```ts
- * import { generate } from 'rxjs';
+ * import { generate } from '@rbxts/rx';
  *
  * const result = generate({
  *   initialState: 0,
@@ -262,7 +262,7 @@ export function generate<S>(
  * Use options object with condition function
  *
  * ```ts
- * import { generate } from 'rxjs';
+ * import { generate } from '@rbxts/rx';
  *
  * const result = generate({
  *   initialState: 0,
@@ -304,7 +304,7 @@ export function generate<S>(options: GenerateBaseOptions<S>): Observable<S>;
  * Use options object with condition and iterate function
  *
  * ```ts
- * import { generate } from 'rxjs';
+ * import { generate } from '@rbxts/rx';
  *
  * const result = generate({
  *   initialState: 0,

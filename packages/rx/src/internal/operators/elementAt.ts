@@ -25,7 +25,7 @@ import { take } from './take';
  * Emit only the third click event
  *
  * ```ts
- * import { fromEvent, elementAt } from 'rxjs';
+ * import { fromEvent, elementAt } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(elementAt(2));

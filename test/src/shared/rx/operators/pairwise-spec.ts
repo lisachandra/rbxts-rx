@@ -1,6 +1,6 @@
-import { TestScheduler } from 'rxjs/testing';
-import { pairwise, take } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { pairwise, take } from '@rbxts/rx/out/operators';
+import { Subject, Observable } from '@rbxts/rx';
 import { expect } from 'chai';
 import { observableMatcher } from '../helpers/observableMatcher';
 

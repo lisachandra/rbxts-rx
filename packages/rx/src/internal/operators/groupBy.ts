@@ -71,7 +71,7 @@ export function groupBy<T, K, R>(
  * Group objects by `id` and return as array
  *
  * ```ts
- * import { of, groupBy, mergeMap, reduce } from 'rxjs';
+ * import { of, groupBy, mergeMap, reduce } from '@rbxts/rx';
  *
  * of(
  *   { id: 1, name: 'JavaScript' },
@@ -94,7 +94,7 @@ export function groupBy<T, K, R>(
  * Pivot data on the `id` field
  *
  * ```ts
- * import { of, groupBy, mergeMap, reduce, map } from 'rxjs';
+ * import { of, groupBy, mergeMap, reduce, map } from '@rbxts/rx';
  *
  * of(
  *   { id: 1, name: 'JavaScript' },

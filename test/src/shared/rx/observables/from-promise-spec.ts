@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { asapScheduler, from } from 'rxjs';
+import { asapScheduler, from } from '@rbxts/rx';
 
 declare const process: any;
 

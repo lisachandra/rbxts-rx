@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { TestScheduler } from 'rxjs/testing';
-import { pairs } from 'rxjs';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { pairs } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 describe('pairs', () => {

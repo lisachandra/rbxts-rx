@@ -6,4 +6,8 @@ declare global {
   }
 }
 
-export = Symbol as never as SymbolConstructor;
+export = {
+  iterator: Symbol.for('iterator'),
+  asyncIterator: Symbol.for('asyncIterator'),
+  observable: Symbol.for('observable'),
+} as SymbolConstructor;

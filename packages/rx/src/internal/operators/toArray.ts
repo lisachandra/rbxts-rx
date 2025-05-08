@@ -18,7 +18,7 @@ const arrReducer = (arr: any[], value: any) => ((arr as defined[]).push(value), 
  * ## Example
  *
  * ```ts
- * import { interval, take, toArray } from 'rxjs';
+ * import { interval, take, toArray } from '@rbxts/rx';
  *
  * const source = interval(1000);
  * const example = source.pipe(

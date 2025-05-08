@@ -59,7 +59,7 @@ export interface ThrottleConfig {
  * Emit clicks at a rate of at most one click per second
  *
  * ```ts
- * import { fromEvent, throttle, interval } from 'rxjs';
+ * import { fromEvent, throttle, interval } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(throttle(() => interval(1000)));

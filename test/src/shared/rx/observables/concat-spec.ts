@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { lowerCaseO } from '../helpers/test-helper';
-import { asyncScheduler, queueScheduler, concat, of, defer, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { asyncScheduler, queueScheduler, concat, of, defer, Observable } from '@rbxts/rx';
+import { mergeMap } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {concat} */

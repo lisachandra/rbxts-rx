@@ -1,6 +1,6 @@
-import { TestScheduler } from 'rxjs/testing';
-import { last, mergeMap } from 'rxjs/operators';
-import { EmptyError, of, from, Observable } from 'rxjs';
+import { TestScheduler } from '@rbxts/rx/out/testing';
+import { last, mergeMap } from '@rbxts/rx/out/operators';
+import { EmptyError, of, from, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {last} */

@@ -1,6 +1,6 @@
-import { takeUntil, mergeMap } from 'rxjs/operators';
-import { of, EMPTY } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
+import { takeUntil, mergeMap } from '@rbxts/rx/out/operators';
+import { of, EMPTY } from '@rbxts/rx';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {takeUntil} */

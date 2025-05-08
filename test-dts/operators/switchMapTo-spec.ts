@@ -18,7 +18,7 @@ it('should infer correctly with a Promise', () => {
 });
 
 it('should infer correctly by using the resultSelector first parameter', () => {
-  const o = of(1, 2, 3).pipe(switchMapTo(of('foo'), (a) => a)); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(switchMapTo(of('foo'), a => a)); // $ExpectType Observable<number>
 });
 
 it('should infer correctly by using the resultSelector second parameter', () => {
@@ -38,7 +38,7 @@ it('should support an undefined resultSelector', () => {
 });
 
 it('should support union-type projections with empty streams', () => {
-  const o = of(1, 2, 3).pipe(switchMapTo(math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
+  const o = of(1, 2, 3).pipe(switchMapTo(Math.random() < 0.5 ? of(123) : of())); // $ExpectType Observable<number>
 });
 
 it('should enforce types', () => {
@@ -46,12 +46,12 @@ it('should enforce types', () => {
 });
 
 it('should enforce types of the observable parameter', () => {
-  const fn = () => {};
+  const fn = () => {}
   const o = of(1, 2, 3).pipe(switchMapTo(fn)); // $ExpectError
 });
 
 it('should enforce the return type', () => {
-  const o = of(1, 2, 3).pipe(switchMapTo((p) => p)); // $ExpectError
+  const o = of(1, 2, 3).pipe(switchMapTo(p => p)); // $ExpectError
   const p = of(1, 2, 3).pipe(switchMapTo(4)); // $ExpectError
 });
 

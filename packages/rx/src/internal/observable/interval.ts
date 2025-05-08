@@ -23,7 +23,7 @@ import { timer } from './timer';
  * Emits ascending numbers, one every second (1000ms) up to the number 3
  *
  * ```ts
- * import { interval, take } from 'rxjs';
+ * import { interval, take } from '@rbxts/rx';
  *
  * const numbers = interval(1000);
  *

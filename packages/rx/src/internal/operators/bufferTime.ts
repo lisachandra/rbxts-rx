@@ -12,12 +12,12 @@ import { typeAssertIs } from 'internal/polyfill/type';
 export function bufferTime<T>(bufferTimeSpan: number, scheduler?: SchedulerLike): OperatorFunction<T, T[]>;
 export function bufferTime<T>(
   bufferTimeSpan: number,
-  bufferCreationInterval: number | undefined,
+  bufferCreationInterval: number | null | undefined,
   scheduler?: SchedulerLike
 ): OperatorFunction<T, T[]>;
 export function bufferTime<T>(
   bufferTimeSpan: number,
-  bufferCreationInterval: number | undefined,
+  bufferCreationInterval: number | null | undefined,
   maxBufferSize: number,
   scheduler?: SchedulerLike
 ): OperatorFunction<T, T[]>;
@@ -44,7 +44,7 @@ export function bufferTime<T>(
  * Every second, emit an array of the recent click events
  *
  * ```ts
- * import { fromEvent, bufferTime } from 'rxjs';
+ * import { fromEvent, bufferTime } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const buffered = clicks.pipe(bufferTime(1000));
@@ -54,7 +54,7 @@ export function bufferTime<T>(
  * Every 5 seconds, emit the click events from the next 2 seconds
  *
  * ```ts
- * import { fromEvent, bufferTime } from 'rxjs';
+ * import { fromEvent, bufferTime } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const buffered = clicks.pipe(bufferTime(2000, 5000));

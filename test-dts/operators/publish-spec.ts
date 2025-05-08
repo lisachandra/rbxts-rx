@@ -10,8 +10,8 @@ it('should infer when type is specified', () => {
 });
 
 it('should infer correctly with parameter', () => {
-  const a = of(1, 2, 3).pipe(publish((x) => x)); // $ExpectType Observable<number>
-  const b = of('a', 'b', 'c').pipe(publish((x) => x)); // $ExpectType Observable<string>
+  const a = of(1, 2, 3).pipe(publish(x => x)); // $ExpectType Observable<number>
+  const b = of('a', 'b', 'c').pipe(publish(x => x)); // $ExpectType Observable<string>
 });
 
 it('should enforce type on selector', () => {
@@ -19,5 +19,5 @@ it('should enforce type on selector', () => {
 });
 
 it('should support union types in selector', () => {
-  const a = of(1, 2, 3).pipe(publish(() => (math.random() > 0.5 ? of(123) : of('test')))); // $ExpectType Observable<string | number>
+  const a = of(1, 2, 3).pipe(publish(() => Math.random() > 0.5 ? of(123) : of('test'))); // $ExpectType Observable<string | number>
 });

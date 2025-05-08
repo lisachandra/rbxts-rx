@@ -43,7 +43,7 @@ export function concatMapTo<T, R, O extends ObservableInput<unknown>>(
  * For each click event, tick every second from 0 to 3, with no concurrency
  *
  * ```ts
- * import { fromEvent, concatMapTo, interval, take } from 'rxjs';
+ * import { fromEvent, concatMapTo, interval, take } from '@rbxts/rx';
  *
  * const clicks = fromEvent(document, 'click');
  * const result = clicks.pipe(

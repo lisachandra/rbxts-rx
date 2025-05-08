@@ -23,7 +23,7 @@ import { isFunction } from '../util/isFunction';
  * and the message every time you subscribe to it
  *
  * ```ts
- * import { throwError } from 'rxjs';
+ * import { throwError } from '@rbxts/rx';
  *
  * let errorCount = 0;
  *
@@ -50,7 +50,7 @@ import { isFunction } from '../util/isFunction';
  * with a callback, is usually not necessary
  *
  * ```ts
- * import { of, concatMap, timer, throwError } from 'rxjs';
+ * import { of, concatMap, timer, throwError } from '@rbxts/rx';
  *
  * const delays$ = of(1000, 2000, math.huge, 3000);
  *
@@ -73,7 +73,7 @@ import { isFunction } from '../util/isFunction';
  * You can just throw the error instead
  *
  * ```ts
- * import { of, concatMap, timer } from 'rxjs';
+ * import { of, concatMap, timer } from '@rbxts/rx';
  *
  * const delays$ = of(1000, 2000, math.huge, 3000);
  *

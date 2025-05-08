@@ -63,12 +63,12 @@ it('should enforce types', () => {
 });
 
 it('should support union types', () => {
-  const u = math.random() > 0.5 ? of(123) : of('abc');
+  const u = Math.random() > 0.5 ? of(123) : of('abc');
   const o = concat(u, u, u); // $ExpectType Observable<string | number>
 });
 
 it('should support different union types', () => {
-  const u1 = math.random() > 0.5 ? of(123) : of('abc');
-  const u2 = math.random() > 0.5 ? of(true) : of([1, 2, 3]);
+  const u1 = Math.random() > 0.5 ? of(123) : of('abc');
+  const u2 = Math.random() > 0.5 ? of(true) : of([1, 2, 3]);
   const o = concat(u1, u2); // $ExpectType Observable<string | number | boolean | number[]>
 });

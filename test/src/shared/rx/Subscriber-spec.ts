@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { SafeSubscriber } from 'rxjs/internal/Subscriber';
-import { Subscriber, Observable, config, of, Observer } from 'rxjs';
+import { SafeSubscriber } from '@rbxts/rx/out/internal/Subscriber';
+import { Subscriber, Observable, config, of, Observer } from '@rbxts/rx';
 import { asInteropSubscriber } from './helpers/interop-helper';
 import { getRegisteredFinalizers } from './helpers/subscription';
 

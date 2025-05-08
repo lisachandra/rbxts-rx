@@ -13,7 +13,7 @@ it('should infer correctly with function return promise', () => {
 });
 
 it('should support union type returns', () => {
-  const a = defer(() => (math.random() > 0.5 ? of(123) : of('abc'))); // $ExpectType Observable<string | number>
+  const a = defer(() => Math.random() > 0.5 ? of(123) : of('abc')); // $ExpectType Observable<string | number>
 });
 
 it('should infer correctly with function return any', () => {
@@ -33,25 +33,20 @@ it('should error if function returns undefined', () => {
 });
 
 it('should infer if function returns never', () => {
-  const a = defer(() => {
-    throw new Error();
-  }); // $ExpectType Observable<never>
+  const a = defer(() => { throw new Error(); }); // $ExpectType Observable<never>
 });
+
 
 it('should infer correctly with function that sometimes error', () => {
   // $ExpectType Observable<number>
   defer(() => {
-    if (math.random() > 0.5) {
-      throw new Error();
+    if (Math.random() > 0.5) {
+       throw new Error();
     }
     return of(1, 2, 3);
   });
 });
 
 it('should error with functions that sometimes do not return an ObservableInput', () => {
-  const a = defer(() => {
-    if (math.random() < 0.5) {
-      return of(42);
-    }
-  }); // $ExpectError
+  const a = defer(() => { if (Math.random() < 0.5) { return of(42); } }); // $ExpectError
 });

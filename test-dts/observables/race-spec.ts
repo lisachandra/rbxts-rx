@@ -35,3 +35,4 @@ it('should handle observables that do not emit', () => {
   const o1 = race([NEVER, a$, EMPTY, [], b$]); // $ExpectType Observable<A | B>
   const o2 = race(NEVER, a$, EMPTY, [], b$); // $ExpectType Observable<A | B>
 });
+

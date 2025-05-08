@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { animationFrames } from 'rxjs';
-import { mergeMapTo, take, takeUntil } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { animationFrames } from '@rbxts/rx';
+import { mergeMapTo, take, takeUntil } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../../helpers/observableMatcher';
-import { animationFrameProvider } from 'rxjs/internal/scheduler/animationFrameProvider';
+import { animationFrameProvider } from '@rbxts/rx/out/internal/scheduler/animationFrameProvider';
 
 describe('animationFrames', () => {
   let testScheduler: TestScheduler;

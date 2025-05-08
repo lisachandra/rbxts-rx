@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import { animationFrameScheduler, Subscription, merge } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { TestScheduler } from 'rxjs/testing';
+import { animationFrameScheduler, Subscription, merge } from '@rbxts/rx';
+import { delay } from '@rbxts/rx/out/operators';
+import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { animationFrameProvider } from 'rxjs/internal/scheduler/animationFrameProvider';
-import { intervalProvider } from 'rxjs/internal/scheduler/intervalProvider';
+import { animationFrameProvider } from '@rbxts/rx/out/internal/scheduler/animationFrameProvider';
+import { intervalProvider } from '@rbxts/rx/out/internal/scheduler/intervalProvider';
 
 const animationFrame = animationFrameScheduler;
 

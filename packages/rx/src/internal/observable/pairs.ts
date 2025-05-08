@@ -45,7 +45,7 @@ export function rxPairs(
  * Converts an object to an Observable
  *
  * ```ts
- * import { pairs } from 'rxjs';
+ * import { pairs } from '@rbxts/rx';
  *
  * const obj = {
  *   foo: 42,
