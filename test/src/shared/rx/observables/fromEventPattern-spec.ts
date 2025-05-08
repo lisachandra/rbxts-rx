@@ -1,10 +1,10 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 
 import { fromEventPattern, noop, NEVER, timer } from '@rbxts/rx';
 import { mapTo, take, concat } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {fromEventPattern} */
 describe('fromEventPattern', () => {
@@ -30,59 +30,58 @@ describe('fromEventPattern', () => {
   });
 
   it('should call addHandler on subscription', () => {
-    const addHandler = sinon.spy();
+    const addHandler = jest.fn();
     fromEventPattern(addHandler, noop).subscribe(noop);
 
-    const call = addHandler.getCall(0);
-    expect(addHandler).calledOnce;
-    expect(call.args[0]).to.be.a('function');
+    const call = addHandler.mock.calls;
+    expect(addHandler).toHaveBeenCalledTimes(1);
+    expect(type(call[0][0])).toBe('function');
   });
 
   it('should call removeHandler on unsubscription', () => {
-    const removeHandler = sinon.spy();
+    const removeHandler = jest.fn();
 
     fromEventPattern(noop, removeHandler).subscribe(noop).unsubscribe();
 
-    const call = removeHandler.getCall(0);
-    expect(removeHandler).calledOnce;
-    expect(call.args[0]).to.be.a('function');
+    const call = removeHandler.mock.calls;
+    expect(removeHandler).toHaveBeenCalledTimes(1);
+    expect(type(call[0][0])).toBe('function');
   });
 
   it('should work without optional removeHandler', () => {
-    const addHandler: (h: Function) => any = sinon.spy();
+    const addHandler: (h: Callback) => any = jest.fn();
     fromEventPattern(addHandler).subscribe(noop);
 
-    expect(addHandler).calledOnce;
+    expect(addHandler).toHaveBeenCalledTimes(1);
   });
 
   it('should deliver return value of addHandler to removeHandler as signal', () => {
     const expected = { signal: true };
     const addHandler = () => expected;
-    const removeHandler = sinon.spy();
+    const removeHandler = jest.fn();
     fromEventPattern(addHandler, removeHandler).subscribe(noop).unsubscribe();
 
-    const call = removeHandler.getCall(0);
-    expect(call).calledWith(sinon.match.any, expected);
+    expect(removeHandler).toHaveBeenCalledWith(expect.anything(), expected);
   });
 
-  it('should send errors in addHandler down the error path', (done) => {
+  it('should send errors in addHandler down the error path', (_, done) => {
     fromEventPattern((h: any) => {
       throw 'bad';
     }, noop).subscribe({
       next: () => done(new Error('should not be called')),
       error: (err: any) => {
-        expect(err).to.equal('bad');
+        expect(err).toEqual('bad');
         done();
       },
       complete: () => done(new Error('should not be called')),
     });
   });
 
-  it('should accept a selector that maps outgoing values', (done) => {
+  it('should accept a selector that maps outgoing values', (_, done) => {
     let target: any;
     const trigger = function (...args: any[]) {
       if (target) {
-        target.apply(undefined, arguments);
+        (target as Callback)(args);
       }
     };
 
@@ -100,7 +99,7 @@ describe('fromEventPattern', () => {
       .pipe(take(1))
       .subscribe({
         next: (x: any) => {
-          expect(x).to.equal('testme!');
+          expect(x).toEqual('testme!');
         },
         error: (err: any) => {
           done(new Error('should not be called'));
@@ -113,7 +112,7 @@ describe('fromEventPattern', () => {
     trigger('test', 'me');
   });
 
-  it('should send errors in the selector down the error path', (done) => {
+  it('should send errors in the selector down the error path', (_, done) => {
     let target: any;
     const trigger = (value: any) => {
       if (target) {
@@ -136,7 +135,7 @@ describe('fromEventPattern', () => {
         done(new Error('should not be called'));
       },
       error: (err: any) => {
-        expect(err).to.equal('bad');
+        expect(err).toEqual('bad');
         done();
       },
       complete: () => {

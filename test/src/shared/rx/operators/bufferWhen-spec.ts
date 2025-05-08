@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of } from '@rbxts/rx';
 import { bufferWhen, mergeMap, takeWhile } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, Array } from '@rbxts/luau-polyfill';
 
 /** @test {bufferWhen} */
 describe('bufferWhen operator', () => {
@@ -363,7 +364,7 @@ describe('bufferWhen operator', () => {
   // closing Observables, because doing such would constantly recreate a new
   // buffer in a synchronous infinite loop until the stack overflows. This also
   // happens with buffer in RxJS 4.
-  it('should NOT handle synchronous inner', (done) => {
+  it('should NOT handle synchronous inner', (_, done) => {
     const source = of(1, 2, 3, 4, 5, 6, 7, 8, 9);
     const closing = of(1);
     const TOO_MANY_INVOCATIONS = 30;
@@ -375,8 +376,8 @@ describe('bufferWhen operator', () => {
       )
       .subscribe({
         next: (val: any) => {
-          expect(Array.isArray(val)).to.be.true;
-          expect(val.size()).to.equal(0);
+          expect(Array.isArray(val)).toBe(true);
+          expect(val.size()).toEqual(0);
         },
         error: (err: any) => {
           done(new Error('should not be called'));

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { SafeSubscriber } from '@rbxts/rx/out/internal/Subscriber';
 import { Subscriber, Observable, config, of, Observer } from '@rbxts/rx';
 import { asInteropSubscriber } from './helpers/interop-helper';
 import { getRegisteredFinalizers } from './helpers/subscription';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {Subscriber} */
 describe('SafeSubscriber', () => {
@@ -20,7 +21,7 @@ describe('SafeSubscriber', () => {
     sub.unsubscribe();
     sub.next();
 
-    expect(times).to.equal(2);
+    expect(times).toEqual(2);
   });
 
   it('should ignore error messages after unsubscription', () => {
@@ -42,8 +43,8 @@ describe('SafeSubscriber', () => {
     sub.next();
     sub.error();
 
-    expect(times).to.equal(2);
-    expect(errorCalled).to.be.false;
+    expect(times).toEqual(2);
+    expect(errorCalled).toBe(false);
   });
 
   it('should ignore complete messages after unsubscription', () => {
@@ -65,8 +66,8 @@ describe('SafeSubscriber', () => {
     sub.next();
     sub.complete();
 
-    expect(times).to.equal(2);
-    expect(completeCalled).to.be.false;
+    expect(times).toEqual(2);
+    expect(completeCalled).toBe(false);
   });
 
   it('should not be closed when other subscriber with same observer instance completes', () => {
@@ -81,8 +82,8 @@ describe('SafeSubscriber', () => {
 
     sub2.complete();
 
-    expect(sub1.closed).to.be.false;
-    expect(sub2.closed).to.be.true;
+    expect(sub1.closed).toBe(false);
+    expect(sub2.closed).toBe(true);
   });
 
   it('should call complete observer without any arguments', () => {
@@ -97,7 +98,7 @@ describe('SafeSubscriber', () => {
     const sub1 = new SafeSubscriber(observer);
     sub1.complete();
 
-    expect(argument).to.have.lengthOf(0);
+    expect(argument).toHaveLength(0);
   });
 
   it('should chain interop unsubscriptions', () => {
@@ -113,22 +114,22 @@ describe('SafeSubscriber', () => {
     subscription.add(() => (subscriptionUnsubscribed = true));
     subscriber.unsubscribe();
 
-    expect(observableUnsubscribed).to.be.true;
-    expect(subscriberUnsubscribed).to.be.true;
-    expect(subscriptionUnsubscribed).to.be.true;
+    expect(observableUnsubscribed).toBe(true);
+    expect(subscriberUnsubscribed).toBe(true);
+    expect(subscriptionUnsubscribed).toBe(true);
   });
 
   it('should have idempotent unsubscription', () => {
     let count = 0;
     const subscriber = new SafeSubscriber();
     subscriber.add(() => ++count);
-    expect(count).to.equal(0);
+    expect(count).toEqual(0);
 
     subscriber.unsubscribe();
-    expect(count).to.equal(1);
+    expect(count).toEqual(1);
 
     subscriber.unsubscribe();
-    expect(count).to.equal(1);
+    expect(count).toEqual(1);
   });
 
   it('should close, unsubscribe, and unregister all finalizers after complete', () => {
@@ -136,9 +137,9 @@ describe('SafeSubscriber', () => {
     const subscriber = new SafeSubscriber();
     subscriber.add(() => (isUnsubscribed = true));
     subscriber.complete();
-    expect(isUnsubscribed).to.be.true;
-    expect(subscriber.closed).to.be.true;
-    expect(getRegisteredFinalizers(subscriber).size()).to.equal(0);
+    expect(isUnsubscribed).toBe(true);
+    expect(subscriber.closed).toBe(true);
+    expect(getRegisteredFinalizers(subscriber).size()).toEqual(0);
   });
 
   it('should close, unsubscribe, and unregister all finalizers after error', () => {
@@ -152,9 +153,9 @@ describe('SafeSubscriber', () => {
     });
     subscriber.add(() => (isTornDown = true));
     subscriber.error(new Error('test'));
-    expect(isTornDown).to.be.true;
-    expect(subscriber.closed).to.be.true;
-    expect(getRegisteredFinalizers(subscriber).size()).to.equal(0);
+    expect(isTornDown).toBe(true);
+    expect(subscriber.closed).toBe(true);
+    expect(getRegisteredFinalizers(subscriber).size()).toEqual(0);
   });
 });
 
@@ -166,8 +167,8 @@ describe('Subscriber', () => {
       isTornDown = true;
     });
     subscriber.complete();
-    expect(isTornDown).to.be.true;
-    expect(getRegisteredFinalizers(subscriber).size()).to.equal(0);
+    expect(isTornDown).toBe(true);
+    expect(getRegisteredFinalizers(subscriber).size()).toEqual(0);
   });
 
   it('should NOT break this context on next methods from unfortunate consumers', () => {
@@ -191,7 +192,7 @@ describe('Subscriber', () => {
 
     of('old', 'old', 'reset', 'new', 'new').subscribe(consumer);
 
-    expect(consumer.valuesProcessed).not.to.equal(['new', 'new']);
+    expect(consumer.valuesProcessed).never.toEqual(['new', 'new']);
   });
 
   describe('deprecated next context mode', () => {
@@ -219,7 +220,7 @@ describe('Subscriber', () => {
 
       source.subscribe({
         next: function (this: any, value) {
-          expect(this.unsubscribe).to.be.a('function');
+          expect(type(this.unsubscribe)).toBe('function');
           results.push(value);
           if (value === 3) {
             this.unsubscribe();
@@ -230,7 +231,7 @@ describe('Subscriber', () => {
         },
       });
 
-      expect(results).to.deep.equal([0, 1, 2, 3, 'finalizer']);
+      expect(results).toEqual([0, 1, 2, 3, 'finalizer']);
     });
 
     it('should NOT break this context on next methods from unfortunate consumers', () => {
@@ -253,37 +254,9 @@ describe('Subscriber', () => {
 
       of('old', 'old', 'reset', 'new', 'new').subscribe(consumer);
 
-      expect(consumer.valuesProcessed).not.to.equal(['new', 'new']);
+      expect(consumer.valuesProcessed).never.toEqual(['new', 'new']);
     });
   });
 
-  const FinalizationRegistry = (global as any).FinalizationRegistry;
-  if (FinalizationRegistry && global.gc) {
-    it('should not leak the destination', (done) => {
-      let observer: Observer<number> | undefined = {
-        next() {
-          /* noop */
-        },
-        error() {
-          /* noop */
-        },
-        complete() {
-          /* noop */
-        },
-      };
-
-      const registry = new FinalizationRegistry((value: any) => {
-        expect(value).to.equal('observer');
-        done();
-      });
-      registry.register(observer, 'observer');
-
-      const subscription = of(42).subscribe(observer);
-
-      observer = undefined;
-      global.gc?.();
-    });
-  } else {
-    console.warn(`No support for FinalizationRegistry in Node ${process.version}`);
-  }
+  warn(`No support for FinalizationRegistry`);
 });

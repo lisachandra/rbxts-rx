@@ -1,5 +1,6 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { Error } from '@rbxts/luau-polyfill';
 import { createErrorClass } from '@rbxts/rx/out/internal/util/createErrorClass';
-import { expect } from 'chai';
 
 describe('createErrorClass', () => {
   it('should create a class that subclasses error and has the right properties', () => {
@@ -13,14 +14,14 @@ describe('createErrorClass', () => {
         }
     );
 
-    expect(MySpecialError).to.be.a('function');
+    expect(type(MySpecialError)).toBe('function');
     const err = new MySpecialError(123, 'Test');
-    expect(err).to.be.an.instanceOf(Error);
-    expect(err).to.be.an.instanceOf(MySpecialError);
-    expect(err.constructor).to.equal(MySpecialError);
-    expect(err.stack).to.be.a('string');
-    expect(err.message).to.equal('Super special error!');
-    expect(err.arg1).to.equal(123);
-    expect(err.arg2).to.equal('Test');
+    expect(err).toBeInstanceOf(Error);
+    expect(err).toBeInstanceOf(MySpecialError);
+    expect(err.constructor).toEqual(MySpecialError);
+    expect(type(err.stack)).toBe('string');
+    expect(err.message).toEqual('Super special error!');
+    expect(err.arg1).toEqual(123);
+    expect(err.arg2).toEqual('Test');
   });
 });

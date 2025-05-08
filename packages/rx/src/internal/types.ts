@@ -20,11 +20,9 @@ declare global {
  * Usually used to describe {@link OperatorFunction} - it always takes a single
  * parameter (the source Observable) and returns another Observable.
  */
-export interface UnaryFunction<T, R> {
-  (source: T): R;
-}
+export type UnaryFunction<T, R> = (source: T) => R;
 
-export interface OperatorFunction<T, R> extends UnaryFunction<Observable<T>, Observable<R>> {}
+export type OperatorFunction<T, R> = UnaryFunction<Observable<T>, Observable<R>>;
 
 export type FactoryOrValue<T> = T | (() => T);
 
@@ -34,7 +32,7 @@ export type FactoryOrValue<T> = T | (() => T);
  * Used to describe {@link OperatorFunction} with the only one type: `OperatorFunction<T, T>`.
  *
  */
-export interface MonoTypeOperatorFunction<T> extends OperatorFunction<T, T> {}
+export type MonoTypeOperatorFunction<T> = OperatorFunction<T, T>;
 
 /**
  * A value and the time at which it was emitted.
@@ -97,8 +95,14 @@ export interface Subscribable<T> {
 /**
  * Valid types that can be converted to observables.
  */
-export type ObservableInput<T> = Observable<T> | InteropObservable<T> | AsyncIterable<T> | Promise<T> | ArrayLike<T> | Iterable<T>;
-// | ReadableStreamLike<T>;
+export type ObservableInput<T> =
+  | Observable<T>
+  | InteropObservable<T>
+  | AsyncIterable<T>
+  | Promise<T>
+  | ArrayLike<T>
+  | Iterable<T>
+  | ReadableStreamLike<T>;
 
 /**
  * @deprecated Renamed to {@link InteropObservable }. Will be removed in v8.
@@ -323,14 +327,13 @@ export type Falsy = null | undefined | false | 0 | -0 | 0n | '';
 
 export type TruthyTypesOf<T> = T extends Falsy ? never : T;
 
-/*
 // We shouldn't rely on this type definition being available globally yet since it's
 // not necessarily available in every TS environment.
 interface ReadableStreamDefaultReaderLike<T> {
   // HACK: As of TS 4.2.2, The provided types for the iterator results of a `ReadableStreamDefaultReader`
   // are significantly different enough from `IteratorResult` as to cause compilation errors.
   // The type at the time is `ReadableStreamDefaultReadResult`.
-  read(): Promise<
+  read(...args: any[]): Promise<
     | {
         done: false;
         value: T;
@@ -345,11 +348,9 @@ interface ReadableStreamDefaultReaderLike<T> {
  * a [ReadableStream](https://streams.spec.whatwg.org/#rs-class)
  * as an {@link ObservableInput} source.
  */
-/*
 export interface ReadableStreamLike<T> {
-  getReader(): ReadableStreamDefaultReaderLike<T>;
+  getReader(...args: any[]): ReadableStreamDefaultReaderLike<T>;
 }
-*/
 
 /**
  * An observable with a `connect` method that is used to create a subscription

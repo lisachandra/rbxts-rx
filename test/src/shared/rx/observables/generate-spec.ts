@@ -1,5 +1,6 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
-import { expect } from 'chai';
+
 import { generate } from '@rbxts/rx';
 import { take } from '@rbxts/rx/out/operators';
 import { SafeSubscriber } from '@rbxts/rx/out/internal/Subscriber';
@@ -33,7 +34,8 @@ describe('generate', () => {
     rxTestScheduler.run(({ expectObservable }) => {
       const source = generate(
         1,
-        (x) => x == 1,
+
+        (x) => x === 1,
         (x) => x + 1
       );
       const expected = '(1|)';
@@ -61,7 +63,7 @@ describe('generate', () => {
         1,
         (x) => x < 3,
         (x) => x + 1,
-        (x) => (x + 1).toString()
+        (x) => tostring(x + 1)
       );
       const expected = '(23|)';
 
@@ -74,7 +76,7 @@ describe('generate', () => {
       const source = generate({
         initialState: 1,
         iterate: (x) => x + 1,
-        resultSelector: (x: number) => x.toString(),
+        resultSelector: (x: number) => tostring(x),
       }).pipe(take(5));
       const expected = '(12345|)';
 
@@ -91,12 +93,13 @@ describe('generate', () => {
     let count = 0;
     const subscriber = new SafeSubscriber<number>((x) => {
       count++;
-      if (x == 2) {
+
+      if (x === 2) {
         subscriber.unsubscribe();
       }
     });
     source.subscribe(subscriber);
-    expect(count).to.be.equal(2);
+    expect(count).toEqual(2);
   });
 
   it('should accept a scheduler', () => {
@@ -113,9 +116,9 @@ describe('generate', () => {
       let count = 0;
       source.subscribe((x) => count++);
 
-      expect(count).to.be.equal(0);
+      expect(count).toEqual(0);
       rxTestScheduler.flush();
-      expect(count).to.be.equal(3);
+      expect(count).toEqual(3);
 
       expectObservable(source).toBe(expected, { '1': 1, '2': 2, '3': 3 });
     });

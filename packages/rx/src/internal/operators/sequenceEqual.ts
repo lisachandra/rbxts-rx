@@ -2,6 +2,7 @@ import { OperatorFunction, ObservableInput } from '../types';
 import { operate } from '../util/lift';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 import { innerFrom } from '../observable/innerFrom';
+import { typeAssertIs } from 'internal/polyfill/type';
 
 /**
  * Compares all values of two observables in sequence using an optional comparator function
@@ -60,7 +61,7 @@ import { innerFrom } from '../observable/innerFrom';
  * value representing whether or not the values emitted by the source
  * Observable and provided `ObservableInput` were equal in sequence.
  */
-export function sequenceEqual<T extends defined>(
+export function sequenceEqual<T>(
   compareTo: ObservableInput<T>,
   comparator: (a: T, b: T) => boolean = (a, b) => a === b
 ): OperatorFunction<T, boolean> {
@@ -86,6 +87,8 @@ export function sequenceEqual<T extends defined>(
         subscriber,
         (a: T) => {
           const { buffer, complete } = otherState;
+          typeAssertIs<defined[]>(buffer);
+          typeAssertIs<defined[]>(selfState.buffer);
           if (buffer.size() === 0) {
             // If there's no values in the other buffer
             // and the other stream is complete, we know

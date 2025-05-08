@@ -1,8 +1,10 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, defer, EMPTY, NEVER, concat, throwError, Observable } from '@rbxts/rx';
 import { mergeScan, delay, mergeMap, takeWhile, startWith, take } from '@rbxts/rx/out/operators';
-import { expect } from 'chai';
+
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, Array } from '@rbxts/luau-polyfill';
 
 /** @test {mergeScan} */
 describe('mergeScan', () => {
@@ -27,7 +29,7 @@ describe('mergeScan', () => {
         z: ['b', 'c', 'd', 'e', 'f', 'g'],
       };
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)), [] as string[]));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -46,7 +48,7 @@ describe('mergeScan', () => {
         w: ['b', 'c', 'd'],
       };
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)), [] as string[]));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -74,7 +76,7 @@ describe('mergeScan', () => {
         z: ['b', 'c', 'd', 'e', 'f', 'g'],
       };
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)).pipe(delay(t)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)).pipe(delay(t)), [] as string[]));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -85,12 +87,12 @@ describe('mergeScan', () => {
     testScheduler.run(({ hot, time, expectObservable, expectSubscriptions }) => {
       const e1 = hot('--a--^--b--c--d--e--f--g--|     ');
       const e1subs = '     ^--------------------!     ';
-      const t = time('        -----|'); //          acc = []; x = 'b'; acc.concat(x) = ['b']; t = 5
-      //                         -----|             acc = []; x = 'c'; acc.concat(x) = ['c']
-      //                            -----|          acc = ['b']; x = 'd'; acc.concat(x) = ['b', 'd']
-      //                               -----|       acc = ['c']; x = 'e'; acc.concat(x) = ['c', 'e']
-      //                                  -----|    acc = ['b', 'd']; x = 'f'; acc.concat(x) = ['b', 'd', 'f']
-      //                                     -----| acc = ['c', 'e']; x = 'g'; acc.concat(x) = ['c', 'e', 'g']
+      const t = time('        -----|'); //          acc = []; x = 'b'; Array.concat(acc, x) = ['b']; t = 5
+      //                         -----|             acc = []; x = 'c'; Array.concat(acc, x) = ['c']
+      //                            -----|          acc = ['b']; x = 'd'; Array.concat(acc, x) = ['b', 'd']
+      //                               -----|       acc = ['c']; x = 'e'; Array.concat(acc, x) = ['c', 'e']
+      //                                  -----|    acc = ['b', 'd']; x = 'f'; Array.concat(acc, x) = ['b', 'd', 'f']
+      //                                     -----| acc = ['c', 'e']; x = 'g'; Array.concat(acc, x) = ['c', 'e', 'g']
       const expected = '   --------u--v--w--x--y--(z|)';
 
       const values = {
@@ -102,7 +104,7 @@ describe('mergeScan', () => {
         z: ['c', 'e', 'g'],
       };
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)).pipe(delay(t)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)).pipe(delay(t)), [] as string[]));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -113,9 +115,9 @@ describe('mergeScan', () => {
     testScheduler.run(({ hot, time, expectObservable, expectSubscriptions }) => {
       const e1 = hot('--a--^--b--c--d--e--f--g--|');
       const e1subs = '     ^---------------!     ';
-      const t = time('        -----|'); // acc = []; x = 'b'; acc.concat(x) = ['b']; t = 5
-      //                         -----|    acc = []; x = 'c'; acc.concat(x) = ['c']
-      //                            -----| acc = ['b']; x = 'd'; acc.concat(x) = ['b', 'd']
+      const t = time('        -----|'); // acc = []; x = 'b'; Array.concat(acc, x) = ['b']; t = 5
+      //                         -----|    acc = []; x = 'c'; Array.concat(acc, x) = ['c']
+      //                            -----| acc = ['b']; x = 'd'; Array.concat(acc, x) = ['b', 'd']
       const expected = '   --------u--v--w--     ';
       const unsub = '      ----------------!     ';
 
@@ -125,7 +127,7 @@ describe('mergeScan', () => {
         w: ['b', 'd'],
       };
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)).pipe(delay(t)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)).pipe(delay(t)), [] as string[]));
 
       expectObservable(result, unsub).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -136,9 +138,9 @@ describe('mergeScan', () => {
     testScheduler.run(({ hot, time, expectObservable, expectSubscriptions }) => {
       const e1 = hot('--a--^--b--c--d--e--f--g--|');
       const e1subs = '     ^---------------!     ';
-      const t = time('        -----|'); // acc = []; x = 'b'; acc.concat(x) = ['b']; t = 5
-      //                         -----|    acc = []; x = 'c'; acc.concat(x) = ['c']
-      //                            -----| acc = ['b']; x = 'd'; acc.concat(x) = ['b', 'd']
+      const t = time('        -----|'); // acc = []; x = 'b'; Array.concat(acc, x) = ['b']; t = 5
+      //                         -----|    acc = []; x = 'c'; Array.concat(acc, x) = ['c']
+      //                            -----| acc = ['b']; x = 'd'; Array.concat(acc, x) = ['b', 'd']
       const expected = '   --------u--v--w--     ';
       const unsub = '      ----------------!     ';
 
@@ -150,7 +152,7 @@ describe('mergeScan', () => {
 
       const result = e1.pipe(
         mergeMap((x) => of(x)),
-        mergeScan((acc, x) => of(acc.concat(x)).pipe(delay(t)), [] as string[]),
+        mergeScan((acc, x) => of(Array.concat(acc, x)).pipe(delay(t)), [] as string[]),
         mergeMap((x) => of(x))
       );
 
@@ -179,13 +181,14 @@ describe('mergeScan', () => {
     of(undefined)
       .pipe(
         mergeScan(() => synchronousObservable, 0),
+
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([1, 2]);
+    expect(sideEffects).toEqual([1, 2]);
   });
 
   it('should handle errors in the projection function', () => {
@@ -204,7 +207,7 @@ describe('mergeScan', () => {
           if (x === 'd') {
             throw new Error('bad!');
           }
-          return of(acc.concat(x));
+          return of(Array.concat(acc, x));
         }, [] as string[])
       );
 
@@ -258,7 +261,7 @@ describe('mergeScan', () => {
       const e1subs = '  (^!)';
       const expected = '|   ';
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)), [] as string[]));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -271,7 +274,7 @@ describe('mergeScan', () => {
       const e1subs = '  ^';
       const expected = '-';
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)), [] as string[]));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -284,7 +287,7 @@ describe('mergeScan', () => {
       const e1subs = '  (^!)';
       const expected = '#   ';
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)), [] as string[]));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -305,7 +308,7 @@ describe('mergeScan', () => {
         x: ['b', 'c', 'd', 'e'],
       };
 
-      const result = e1.pipe(mergeScan((acc, x) => of(acc.concat(x)), [] as string[]));
+      const result = e1.pipe(mergeScan((acc, x) => of(Array.concat(acc, x)), [] as string[]));
 
       expectObservable(result, unsub).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -458,7 +461,7 @@ describe('mergeScan', () => {
       }, 0)
     ).subscribe();
 
-    expect(recorded).to.deep.equal([0, 1, 2, 3]);
+    expect(recorded).toEqual([0, 1, 2, 3]);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -481,6 +484,6 @@ describe('mergeScan', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

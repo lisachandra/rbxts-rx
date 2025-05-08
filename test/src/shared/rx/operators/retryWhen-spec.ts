@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { retryWhen, map, mergeMap, takeUntil, take } from '@rbxts/rx/out/operators';
 import { of, EMPTY, Observable, throwError } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {retryWhen} */
 describe('retryWhen', () => {
@@ -52,7 +53,7 @@ describe('retryWhen', () => {
     });
   });
 
-  it('should retry when notified via returned notifier on thrown error', (done) => {
+  it('should retry when notified via returned notifier on thrown error', (_, done) => {
     let retried = false;
     const expected = [1, 2, 1, 2];
     let i = 0;
@@ -67,7 +68,7 @@ describe('retryWhen', () => {
         retryWhen((errors: any) =>
           errors.pipe(
             map((x: any) => {
-              expect(x).to.equal('bad');
+              expect(x).toEqual('bad');
               if (retried) {
                 throw new Error('done');
               }
@@ -79,16 +80,16 @@ describe('retryWhen', () => {
       )
       .subscribe({
         next(x: any) {
-          expect(x).to.equal(expected[i++]);
+          expect(x).toEqual(expected[i++]);
         },
         error(err: any) {
-          expect(err).to.be.an('error', 'done');
+          expect(err).toBeInstanceOf(Error);
           done();
         },
       });
   });
 
-  it('should retry when notified and complete on returned completion', (done) => {
+  it('should retry when notified and complete on returned completion', (_, done) => {
     const expected = [1, 2, 1, 2];
     of(1, 2, 3)
       .pipe(
@@ -102,7 +103,7 @@ describe('retryWhen', () => {
       )
       .subscribe({
         next(n: number) {
-          expect(n).to.equal(expected.shift());
+          expect(n).toEqual(expected.shift());
         },
         error() {
           done(new Error('should not be called'));
@@ -445,8 +446,8 @@ describe('retryWhen', () => {
         error: (err) => results.push(err),
       });
 
-    expect(subscription.closed).to.be.true;
-    expect(results).to.deep.equal([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'bad', 'finalizer']);
+    expect(subscription.closed).toBe(true);
+    expect(results).toEqual([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'bad', 'finalizer']);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -469,6 +470,6 @@ describe('retryWhen', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

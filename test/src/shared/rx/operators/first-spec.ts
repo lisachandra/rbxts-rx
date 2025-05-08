@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { first, mergeMap, delay } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -78,7 +78,7 @@ describe('first', () => {
 
     subject.next(0);
 
-    expect(results).to.deep.equal([0]);
+    expect(results).toEqual([0]);
   });
 
   it('should propagate error from the source observable', () => {
@@ -209,7 +209,7 @@ describe('first', () => {
       const e1subs = '    ^--------!      ';
       const expected = '  ---------(a|)   ';
 
-      expectObservable(e1.pipe(first((_, i) => i === 2))).toBe(expected);
+      expectObservable(e1.pipe(first((_: any, i: number) => i === 2))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -282,7 +282,7 @@ describe('first', () => {
         .pipe(first())
         .subscribe((x) => x.baz); // x is still { bar: string; baz: number; }
       of(barish)
-        .pipe(first((x) => x.bar === 'quack'))
+        .pipe(first((x) => x!.bar === 'quack'))
         .subscribe((x) => x.bar); // x is still { bar: string; baz: number; }
       of(barish)
         .pipe(first(isBar))
@@ -330,6 +330,6 @@ describe('first', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

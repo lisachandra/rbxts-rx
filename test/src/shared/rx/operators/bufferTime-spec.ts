@@ -1,8 +1,9 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, throwError, interval, scheduled, asapScheduler, Subject } from '@rbxts/rx';
 import { bufferTime, mergeMap, take, tap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { expect } from 'chai';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {bufferTime} */
 describe('bufferTime operator', () => {
@@ -72,7 +73,7 @@ describe('bufferTime operator', () => {
     });
   });
 
-  it('should handle situations with a creation interval of zero', (done) => {
+  it('should handle situations with a creation interval of zero', (_, done) => {
     // This is an odd scenario, and I can't imagine who is weird enough to want this, but here
     // it is. Someone scheduling buffers to open and close on microtasks, with values emitted on microtasks
     // NOTE: Trying this with a completely synchronous scheduler (like queueScheduler, which is
@@ -83,7 +84,7 @@ describe('bufferTime operator', () => {
     source.pipe(bufferTime(0, 0, asapScheduler)).subscribe({
       next: (value) => results.push(value),
       complete: () => {
-        expect(results).to.deep.equal([
+        expect(results).toEqual([
           // It opens one on 0 and closes it on 0
           [],
           // It opens one on 0, emits on 0, and closes on 0 (x 5)

@@ -1,6 +1,7 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { race, of } from '@rbxts/rx';
 import { mergeMap } from '@rbxts/rx/out/operators';
-import { expect } from 'chai';
+
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
@@ -242,11 +243,11 @@ describe('race', () => {
     });
   });
 
-  it('should support a single ObservableInput argument', (done) => {
+  it('should support a single ObservableInput argument', (_, done) => {
     const source = race(Promise.resolve(42));
     source.subscribe({
       next: (value) => {
-        expect(value).to.equal(42);
+        expect(value).toEqual(42);
       },
       error: done,
       complete: done,

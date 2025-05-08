@@ -1,9 +1,9 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { queueScheduler, Subscription, merge } from '@rbxts/rx';
 import { delay } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 const queue = queueScheduler;
 
@@ -29,11 +29,10 @@ describe('Scheduler.queue', () => {
   });
 
   it('should switch from synchronous to asynchronous at will', () => {
-    const sandbox = sinon.createSandbox();
-    const fakeTimer = sandbox.useFakeTimers();
+    jest.useFakeTimers();
 
     let asyncExec = false;
-    let state: Array<number> = [];
+    const state: Array<number> = [];
 
     queue.schedule(
       function (index) {
@@ -49,15 +48,15 @@ describe('Scheduler.queue', () => {
       0
     );
 
-    expect(asyncExec).to.be.false;
-    expect(state).to.be.deep.equal([0]);
+    expect(asyncExec).toBe(false);
+    expect(state).toEqual([0]);
 
-    fakeTimer.tick(100);
+    jest.advanceTimersByTime(100);
 
-    expect(asyncExec).to.be.true;
-    expect(state).to.be.deep.equal([0, 1, 2]);
+    expect(asyncExec).toBe(true);
+    expect(state).toEqual([0, 1, 2]);
 
-    sandbox.restore();
+    jest.useRealTimers();
   });
 
   it('should unsubscribe the rest of the scheduled actions if an action throws an error', () => {
@@ -82,10 +81,10 @@ describe('Scheduler.queue', () => {
     } catch (e) {
       errorValue = e;
     }
-    expect(actions.every((action) => action.closed)).to.be.true;
-    expect(action2Exec).to.be.false;
-    expect(action3Exec).to.be.false;
-    expect(errorValue).exist;
-    expect(errorValue.message).to.equal('oops');
+    expect(actions.every((action) => action.closed)).toBe(true);
+    expect(action2Exec).toBe(false);
+    expect(action3Exec).toBe(false);
+    expect(errorValue).toBeDefined();
+    expect(errorValue.message).toEqual('oops');
   });
 });

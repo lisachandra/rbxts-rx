@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { exhaustAll, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {exhaust} */
 describe('exhaust', () => {
@@ -234,23 +235,23 @@ describe('exhaust', () => {
     });
   });
 
-  it('should handle an observable of promises', (done) => {
+  it('should handle an observable of promises', (_, done) => {
     const expected = [1];
 
     of(Promise.resolve(1), Promise.resolve(2), Promise.resolve(3))
       .pipe(exhaustAll())
       .subscribe({
         next: (x) => {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         complete: () => {
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
           done();
         },
       });
   });
 
-  it('should handle an observable of promises, where one rejects', (done) => {
+  it('should handle an observable of promises, where one rejects', (_, done) => {
     of(Promise.reject(2), Promise.resolve(1))
       .pipe(exhaustAll())
       .subscribe({
@@ -258,7 +259,7 @@ describe('exhaust', () => {
           done(new Error('should not be called'));
         },
         error: (err) => {
-          expect(err).to.equal(2);
+          expect(err).toEqual(2);
           done();
         },
         complete: () => {
@@ -284,17 +285,17 @@ describe('exhaust', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
-  it('should handle synchronously completing inner observables', (done) => {
+  it('should handle synchronously completing inner observables', (_, done) => {
     let i = 1;
     of(of(1), of(2))
       .pipe(exhaustAll())
       .subscribe({
-        next: (v) => expect(v).to.equal(i++),
+        next: (v) => expect(v).toEqual(i++),
         complete: () => {
-          expect(i).to.equal(3);
+          expect(i).toEqual(3);
           done();
         },
       });

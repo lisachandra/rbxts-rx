@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { Observable, of, NEVER, queueScheduler, Subject, scheduled } from '@rbxts/rx';
 import { map, switchAll, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {switch} */
 describe('switchAll', () => {
@@ -31,7 +32,7 @@ describe('switchAll', () => {
     });
   });
 
-  it('should switch to each immediately-scheduled inner Observable', (done) => {
+  it('should switch to each immediately-scheduled inner Observable', (_, done) => {
     const a = scheduled([1, 2, 3], queueScheduler);
     const b = scheduled([4, 5, 6], queueScheduler);
     const r = [1, 4, 5, 6];
@@ -40,7 +41,7 @@ describe('switchAll', () => {
       .pipe(switchAll())
       .subscribe({
         next(x) {
-          expect(x).to.equal(r[i++]);
+          expect(x).toEqual(r[i++]);
         },
         complete: done,
       });
@@ -64,10 +65,10 @@ describe('switchAll', () => {
       )
       .subscribe();
 
-    expect(unsubbed).to.deep.equal(['a', 'b']);
+    expect(unsubbed).toEqual(['a', 'b']);
   });
 
-  it('should switch to each inner Observable', (done) => {
+  it('should switch to each inner Observable', (_, done) => {
     const a = of(1, 2, 3);
     const b = of(4, 5, 6);
     const r = [1, 2, 3, 4, 5, 6];
@@ -76,7 +77,7 @@ describe('switchAll', () => {
       .pipe(switchAll())
       .subscribe({
         next(x) {
-          expect(x).to.equal(r[i++]);
+          expect(x).toEqual(r[i++]);
         },
         complete: done,
       });
@@ -251,23 +252,23 @@ describe('switchAll', () => {
     });
   });
 
-  it('should handle an observable of promises', (done) => {
+  it('should handle an observable of promises', (_, done) => {
     const expected = [3];
 
     of(Promise.resolve(1), Promise.resolve(2), Promise.resolve(3))
       .pipe(switchAll())
       .subscribe({
         next(x) {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         complete() {
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
           done();
         },
       });
   });
 
-  it('should handle an observable of promises, where last rejects', (done) => {
+  it('should handle an observable of promises, where last rejects', (_, done) => {
     of(Promise.resolve(1), Promise.resolve(2), Promise.reject(3))
       .pipe(switchAll())
       .subscribe({
@@ -275,7 +276,7 @@ describe('switchAll', () => {
           done(new Error('should not be called'));
         },
         error(err) {
-          expect(err).to.equal(3);
+          expect(err).toEqual(3);
           done();
         },
         complete() {
@@ -292,15 +293,15 @@ describe('switchAll', () => {
       .pipe(switchAll())
       .subscribe({
         next(x) {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         complete() {
           completed = true;
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
         },
       });
 
-    expect(completed).to.be.true;
+    expect(completed).toBe(true);
   });
 
   it('should not leak when child completes before each switch (prevent memory leaks #2355)', () => {
@@ -317,7 +318,7 @@ describe('switchAll', () => {
     });
 
     // Expect one child of switchAll(): The oStream
-    expect((sub as any)._finalizers?.[0]._finalizers?.size()).to.equal(1);
+    expect((sub as any)._finalizers?.[0]._finalizers?.size()).toEqual(1);
     sub.unsubscribe();
   });
 
@@ -332,10 +333,10 @@ describe('switchAll', () => {
       oStreamControl.next(n); // creates inner
     });
     // Expect one child of switchAll(): The oStream
-    expect((sub as any)._finalizers?.[0]._finalizers?.size()).to.equal(1);
+    expect((sub as any)._finalizers?.[0]._finalizers?.size()).toEqual(1);
     // Expect two children of subscribe(): The destination and the first inner
     // See #4106 - inner subscriptions are now added to destinations
-    expect((sub as any)._finalizers?.size()).to.equal(2);
+    expect((sub as any)._finalizers?.size()).toEqual(2);
     sub.unsubscribe();
   });
 
@@ -356,6 +357,6 @@ describe('switchAll', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

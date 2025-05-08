@@ -74,7 +74,7 @@ export function bufferTime<T>(
  * - `scheduler` - the scheduler on which to schedule the intervals that determine buffer boundaries.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferTime<T extends defined>(bufferTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, T[]> {
+export function bufferTime<T>(bufferTimeSpan: number, ...otherArgs: any[]): OperatorFunction<T, T[]> {
   typeAssertIs<unknown[]>(otherArgs);
 
   const scheduler = popScheduler(otherArgs) ?? asyncScheduler;
@@ -143,6 +143,7 @@ export function bufferTime<T extends defined>(bufferTimeSpan: number, ...otherAr
         for (const record of recordsCopy) {
           // Loop over all buffers and
           const { buffer } = record;
+          typeAssertIs<defined[]>(buffer);
           buffer.push(value);
           // If the buffer is over the max size, we need to emit it.
           maxBufferSize <= buffer.size() && emit(record);

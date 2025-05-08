@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { switchMap, mergeMap, map, takeWhile, take } from '@rbxts/rx/out/operators';
 import { concat, defer, of, Observable, BehaviorSubject } from '@rbxts/rx';
 import { asInteropObservable } from '../helpers/interop-helper';
@@ -48,7 +48,7 @@ describe('switchMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([
+          expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
             [1, 3, 0, 2],
@@ -67,7 +67,7 @@ describe('switchMap', () => {
     const results: number[] = [];
 
     of(1, 2, 3)
-      .pipe(switchMap((x) => of(x, x + 1, x + 2), void 0))
+      .pipe(switchMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
         next(value) {
           results.push(value);
@@ -76,7 +76,7 @@ describe('switchMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([1, 2, 3, 2, 3, 4, 3, 4, 5]);
+          expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
   });
@@ -98,7 +98,7 @@ describe('switchMap', () => {
       )
       .subscribe();
 
-    expect(unsubbed).to.deep.equal(['a', 'b']);
+    expect(unsubbed).toEqual(['a', 'b']);
   });
 
   it('should switch inner cold observables', () => {
@@ -236,13 +236,14 @@ describe('switchMap', () => {
     of(undefined)
       .pipe(
         switchMap(() => synchronousObservable),
+
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([1, 2]);
+    expect(sideEffects).toEqual([1, 2]);
   });
 
   it('should switch inner cold observables, inner never completes', () => {
@@ -511,7 +512,7 @@ describe('switchMap', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should unsubscribe previous inner sub when getting synchronously reentrance during subscribing the inner sub', () => {
@@ -529,6 +530,6 @@ describe('switchMap', () => {
       )
     ).subscribe((value) => results.push(value));
 
-    expect(results).to.deep.equal([3]);
+    expect(results).toEqual([3]);
   });
 });

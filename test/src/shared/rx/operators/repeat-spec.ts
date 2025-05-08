@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { repeat, mergeMap, map, multicast, refCount, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, Subject, Observable, timer } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {repeat} */
 describe('repeat operator', () => {
@@ -153,7 +154,7 @@ describe('repeat operator', () => {
 
     await source.pipe(repeat(3)).forEach((value) => results.push(value));
 
-    expect(results).to.deep.equal([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer']);
+    expect(results).toEqual([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer']);
   });
 
   it('should always finalize before starting the next cycle, even when synchronous', () => {
@@ -171,8 +172,8 @@ describe('repeat operator', () => {
       complete: () => results.push('complete'),
     });
 
-    expect(subscription.closed).to.be.true;
-    expect(results).to.deep.equal([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'complete', 'finalizer']);
+    expect(subscription.closed).toBe(true);
+    expect(results).toEqual([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'complete', 'finalizer']);
   });
 
   it('should not complete when source never completes', () => {
@@ -321,7 +322,7 @@ describe('repeat operator', () => {
     });
   });
 
-  it('should repeat a synchronous source (multicasted and refCounted) multiple times', (done) => {
+  it('should repeat a synchronous source (multicasted and refCounted) multiple times', (_, done) => {
     const expected = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
 
     of(1, 2, 3)
@@ -332,13 +333,13 @@ describe('repeat operator', () => {
       )
       .subscribe({
         next: (x: number) => {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         error: (x) => {
           done(new Error('should not be called'));
         },
         complete: () => {
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
           done();
         },
       });
@@ -359,7 +360,7 @@ describe('repeat operator', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should allow count configuration', () => {
@@ -411,7 +412,7 @@ describe('repeat operator', () => {
           repeat({
             count: 3,
             delay: (count) => {
-              expect(count).to.equal(expectedCounts.shift());
+              expect(count).toEqual(expectedCounts.shift());
               return timer(delay);
             },
           })

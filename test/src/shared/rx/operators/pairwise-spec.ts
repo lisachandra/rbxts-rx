@@ -1,7 +1,8 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { pairwise, take } from '@rbxts/rx/out/operators';
 import { Subject, Observable } from '@rbxts/rx';
-import { expect } from 'chai';
+
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {pairwise} */
@@ -123,7 +124,7 @@ describe('pairwise operator', () => {
     subject.next('a');
     subject.next('b');
 
-    expect(results).to.deep.equal([
+    expect(results).toEqual([
       ['a', 'b'],
       ['b', 'c'],
       ['c', 'c'],
@@ -145,6 +146,6 @@ describe('pairwise operator', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

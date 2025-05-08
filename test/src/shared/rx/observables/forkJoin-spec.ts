@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { finalize, forkJoin, map, of, timer } from '@rbxts/rx';
 import { lowerCaseO } from '../helpers/test-helper';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -38,12 +38,12 @@ describe('forkJoin', () => {
       },
     });
 
-    expect(results).to.deep.equal([18, 'done']);
+    expect(results).toEqual([18, 'done']);
   });
 
   it('should support a resultSelector with a spread of ObservableInputs', () => {
     const results: Array<number | string> = [];
-    forkJoin(of(1, 2, 3), of(4, 5, 6), of(7, 8, 9), (a: number, b: number, c: number) => a + b + c).subscribe({
+    forkJoin([of(1, 2, 3), of(4, 5, 6), of(7, 8, 9)], (a: number, b: number, c: number) => a + b + c).subscribe({
       next(value) {
         results.push(value);
       },
@@ -55,12 +55,12 @@ describe('forkJoin', () => {
       },
     });
 
-    expect(results).to.deep.equal([18, 'done']);
+    expect(results).toEqual([18, 'done']);
   });
 
   it('should accept single observable', () => {
     rxTestScheduler.run(({ hot, expectObservable }) => {
-      const e1 = forkJoin(hot('--a--b--c--d--|'));
+      const e1 = forkJoin([hot('--a--b--c--d--|')]);
       const expected = '       --------------(x|)';
 
       expectObservable(e1).toBe(expected, { x: ['d'] });
@@ -128,12 +128,12 @@ describe('forkJoin', () => {
       });
     });
 
-    it('should accept promise', (done) => {
+    it('should accept promise', (_, done) => {
       rxTestScheduler.run(() => {
         const e1 = forkJoin([of(1), Promise.resolve(2)]);
 
         e1.subscribe({
-          next: (x) => expect(x).to.deep.equal([1, 2]),
+          next: (x) => expect(x).toEqual([1, 2]),
           complete: done,
         });
       });
@@ -219,7 +219,7 @@ describe('forkJoin', () => {
 
     it('should complete if source is not provided', () => {
       rxTestScheduler.run(({ expectObservable }) => {
-        const e1 = forkJoin();
+        const e1 = forkJoin([]);
         const expected = '|';
 
         expectObservable(e1).toBe(expected);
@@ -315,7 +315,7 @@ describe('forkJoin', () => {
 
     source.subscribe((value) => results.push(value));
     rxTestScheduler.flush();
-    expect(results).to.deep.equal(['finalized 1', 'finalized 2', 'finalized 3', 'finalized 4', [1, 2, 3, 4]]);
+    expect(results).toEqual(['finalized 1', 'finalized 2', 'finalized 3', 'finalized 4', [1, 2, 3, 4]]);
   });
 
   describe('forkJoin({ foo, bar, baz })', () => {
@@ -383,14 +383,14 @@ describe('forkJoin', () => {
       });
     });
 
-    it('should accept promise', (done) => {
+    it('should accept promise', (_, done) => {
       const e1 = forkJoin({
         foo: of(1),
         bar: Promise.resolve(2),
       });
 
       e1.subscribe({
-        next: (x) => expect(x).to.deep.equal({ foo: 1, bar: 2 }),
+        next: (x) => expect(x).toEqual({ foo: 1, bar: 2 }),
         complete: done,
       });
     });
@@ -483,10 +483,10 @@ describe('forkJoin', () => {
     });
 
     // TODO(benlesh): this is the wrong behavior, it should probably throw right away.
-    it('should have same v5/v6 throwing behavior full argument of undefined', (done) => {
+    it('should have same v5/v6 throwing behavior full argument of undefined', (_, done) => {
       rxTestScheduler.run(() => {
         // It doesn't throw when you pass undefined
-        expect(() => forkJoin(undefined as any)).not.to.throw();
+        expect(() => forkJoin(undefined as any)).never.toThrow();
 
         // It doesn't even throw if you subscribe to forkJoin(undefined).
         expect(() =>
@@ -494,7 +494,7 @@ describe('forkJoin', () => {
             // It sends the error to the subscription.
             error: () => done(),
           })
-        ).not.to.throw();
+        ).never.toThrow();
       });
     });
 
@@ -582,14 +582,14 @@ describe('forkJoin', () => {
       });
     });
 
-    it('should accept promise as the first arg', (done) => {
-      const e1 = forkJoin(Promise.resolve(1));
+    it('should accept promise as the first arg', (_, done) => {
+      const e1 = forkJoin([Promise.resolve(1)]);
       const values: number[][] = [];
 
       e1.subscribe({
         next: (x) => values.push(x),
         complete: () => {
-          expect(values).to.deep.equal([[1]]);
+          expect(values).toEqual([[1]]);
           done();
         },
       });

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { throttleTime, take, map, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, concat, timer } from '@rbxts/rx';
@@ -27,12 +27,12 @@ describe('throttleTime operator', () => {
       });
     });
 
-    it('should throttle events by 5 time units', (done) => {
+    it('should throttle events by 5 time units', (_, done) => {
       of(1, 2, 3)
         .pipe(throttleTime(5))
         .subscribe({
           next: (x) => {
-            expect(x).to.equal(1);
+            expect(x).toEqual(1);
           },
           complete: done,
         });
@@ -52,7 +52,7 @@ describe('throttleTime operator', () => {
       )
         .pipe(throttleTime(5, rxTest))
         .subscribe((x) => {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         });
 
       rxTest.flush();

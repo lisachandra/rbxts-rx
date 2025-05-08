@@ -11,6 +11,8 @@ import { ObservableInput, SchedulerLike } from '../types';
 import { Observable } from '../Observable';
 import { isAsyncIterable } from '../util/isAsyncIterable';
 import { createInvalidObservableTypeError } from '../util/throwUnobservableError';
+import { scheduleReadableStreamLike } from './scheduleReadableStreamLike';
+import { isReadableStreamLike } from 'internal/util/isReadableStreamLike';
 
 /**
  * Converts from a common {@link ObservableInput} type to an observable where subscription and emissions
@@ -40,11 +42,9 @@ export function scheduled<T>(input: ObservableInput<T>, scheduler: SchedulerLike
     if (isIterable(input)) {
       return scheduleIterable(input, scheduler);
     }
-    /*
     if (isReadableStreamLike(input)) {
       return scheduleReadableStreamLike(input, scheduler);
     }
-    */
   }
   throw createInvalidObservableTypeError(input);
 }

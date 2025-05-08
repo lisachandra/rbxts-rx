@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { queueScheduler, of } from '@rbxts/rx';
 import { combineLatestAll, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -19,7 +19,7 @@ describe('combineLatestAll operator', () => {
       const outer = hot('-x----y--------|           ', { x: x, y: y });
       const expected = ' -----------------A-B--C---|';
 
-      const result = outer.pipe(combineLatestAll((a, b) => String(a) + String(b)));
+      const result = outer.pipe(combineLatestAll((a, b) => tostring(a) + tostring(b)));
 
       expectObservable(result).toBe(expected, { A: 'a1', B: 'a2', C: 'b2' });
     });
@@ -520,7 +520,7 @@ describe('combineLatestAll operator', () => {
     });
   });
 
-  it('should combine two observables', (done) => {
+  it('should combine two observables', (_, done) => {
     const a = of(1, 2, 3);
     const b = of(4, 5, 6, 7, 8);
     const expected = [
@@ -534,16 +534,16 @@ describe('combineLatestAll operator', () => {
       .pipe(combineLatestAll())
       .subscribe({
         next: (vals) => {
-          expect(vals).to.deep.equal(expected.shift());
+          expect(vals).toEqual(expected.shift());
         },
         complete: () => {
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
           done();
         },
       });
   });
 
-  it('should combine two immediately-scheduled observables', (done) => {
+  it('should combine two immediately-scheduled observables', (_, done) => {
     const a = of(1, 2, 3, queueScheduler);
     const b = of(4, 5, 6, 7, 8, queueScheduler);
     const r = [
@@ -560,10 +560,10 @@ describe('combineLatestAll operator', () => {
       .pipe(combineLatestAll())
       .subscribe({
         next: (vals) => {
-          expect(vals).to.deep.equal(r.shift());
+          expect(vals).toEqual(r.shift());
         },
         complete: () => {
-          expect(r.size()).to.equal(0);
+          expect(r.size()).toEqual(0);
           done();
         },
       });

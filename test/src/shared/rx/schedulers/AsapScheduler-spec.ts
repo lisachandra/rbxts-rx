@@ -1,11 +1,13 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { asapScheduler, Subscription, SchedulerAction, merge } from '@rbxts/rx';
 import { delay } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { immediateProvider } from '@rbxts/rx/out/internal/scheduler/immediateProvider';
 import { intervalProvider } from '@rbxts/rx/out/internal/scheduler/intervalProvider';
+import * as LuauPolyfill from '@rbxts/luau-polyfill';
+
+const Error = LuauPolyfill.Error;
 
 const asap = asapScheduler;
 
@@ -18,7 +20,7 @@ describe('Scheduler.asap', () => {
   });
 
   it('should exist', () => {
-    expect(asap).exist;
+    expect(asap).toBeDefined();
   });
 
   it('should act like the async scheduler if delay > 0', () => {
@@ -36,10 +38,9 @@ describe('Scheduler.asap', () => {
 
   it('should cancel asap actions when delay > 0', () => {
     testScheduler.run(({ cold, expectObservable, flush, time }) => {
-      const sandbox = sinon.createSandbox();
-      const setImmediateSpy = sandbox.spy(immediateProvider, 'setImmediate');
-      const setSpy = sandbox.spy(intervalProvider, 'setInterval');
-      const clearSpy = sandbox.spy(intervalProvider, 'clearInterval');
+      const setImmediateSpy = jest.spyOn(immediateProvider, 'setImmediate');
+      const setSpy = jest.spyOn(intervalProvider, 'setInterval');
+      const clearSpy = jest.spyOn(intervalProvider, 'clearInterval');
 
       const a = cold('  a            ');
       const ta = time(' ----|        ');
@@ -50,18 +51,18 @@ describe('Scheduler.asap', () => {
       expectObservable(result, subs).toBe(expected);
 
       flush();
-      expect(setImmediateSpy).to.have.not.been.called;
-      expect(setSpy).to.have.been.calledOnce;
-      expect(clearSpy).to.have.been.calledOnce;
-      sandbox.restore();
+      expect(setImmediateSpy).never.toHaveBeenCalled();
+      expect(setSpy).toHaveBeenCalled();
+      expect(clearSpy).toHaveBeenCalled();
+      jest.restoreAllMocks();
+      jest.useRealTimers();
     });
   });
 
   it('should reuse the interval for recursively scheduled actions with the same delay', () => {
-    const sandbox = sinon.createSandbox();
-    const fakeTimer = sandbox.useFakeTimers();
+    jest.useFakeTimers();
     // callThrough is missing from the declarations installed by the typings tool in stable
-    const stubSetInterval = (<any>sandbox.stub(fakeTimer, 'setInterval')).callThrough();
+    const stubSetInterval = jest.spyOn(LuauPolyfill, 'setInterval');
     const period = 50;
     const state = { index: 0, period };
     type State = typeof state;
@@ -72,22 +73,22 @@ describe('Scheduler.asap', () => {
       }
     }
     asap.schedule(dispatch as any, period, state);
-    expect(state).to.have.property('index', 0);
-    expect(stubSetInterval).to.have.property('callCount', 1);
-    fakeTimer.tick(period);
-    expect(state).to.have.property('index', 1);
-    expect(stubSetInterval).to.have.property('callCount', 1);
-    fakeTimer.tick(period);
-    expect(state).to.have.property('index', 2);
-    expect(stubSetInterval).to.have.property('callCount', 1);
-    sandbox.restore();
+    expect(state).toHaveProperty('index', 0);
+    expect(stubSetInterval).toHaveBeenCalledTimes(1);
+    jest.advanceTimersByTime(period);
+    expect(state).toHaveProperty('index', 1);
+    expect(stubSetInterval).toHaveBeenCalledTimes(1);
+    jest.advanceTimersByTime(period);
+    expect(state).toHaveProperty('index', 2);
+    expect(stubSetInterval).toHaveBeenCalledTimes(1);
+    jest.restoreAllMocks();
+    jest.useRealTimers();
   });
 
   it('should not reuse the interval for recursively scheduled actions with a different delay', () => {
-    const sandbox = sinon.createSandbox();
-    const fakeTimer = sandbox.useFakeTimers();
+    jest.useFakeTimers();
     // callThrough is missing from the declarations installed by the typings tool in stable
-    const stubSetInterval = (<any>sandbox.stub(fakeTimer, 'setInterval')).callThrough();
+    const stubSetInterval = <any>jest.spyOn(LuauPolyfill, 'setInterval');
     const period = 50;
     const state = { index: 0, period };
     type State = typeof state;
@@ -99,18 +100,19 @@ describe('Scheduler.asap', () => {
       }
     }
     asap.schedule(dispatch as any, period, state);
-    expect(state).to.have.property('index', 0);
-    expect(stubSetInterval).to.have.property('callCount', 1);
-    fakeTimer.tick(period);
-    expect(state).to.have.property('index', 1);
-    expect(stubSetInterval).to.have.property('callCount', 2);
-    fakeTimer.tick(period);
-    expect(state).to.have.property('index', 2);
-    expect(stubSetInterval).to.have.property('callCount', 3);
-    sandbox.restore();
+    expect(state).toHaveProperty('index', 0);
+    expect(stubSetInterval).toHaveBeenCalledTimes(1);
+    jest.advanceTimersByTime(period);
+    expect(state).toHaveProperty('index', 1);
+    expect(stubSetInterval).toHaveBeenCalledTimes(2);
+    jest.advanceTimersByTime(period);
+    expect(state).toHaveProperty('index', 2);
+    expect(stubSetInterval).toHaveBeenCalledTimes(3);
+    jest.restoreAllMocks();
+    jest.useRealTimers();
   });
 
-  it('should schedule an action to happen later', (done) => {
+  it('should schedule an action to happen later', (_, done) => {
     let actionHappened = false;
     asap.schedule(() => {
       actionHappened = true;
@@ -121,7 +123,7 @@ describe('Scheduler.asap', () => {
     }
   });
 
-  it('should execute recursively scheduled actions in separate asynchronous contexts', (done) => {
+  it('should execute recursively scheduled actions in separate asynchronous contexts', (_, done) => {
     let syncExec1 = true;
     let syncExec2 = true;
     asap.schedule(
@@ -151,7 +153,7 @@ describe('Scheduler.asap', () => {
     );
   });
 
-  it('should schedule asap actions from a delayed one', (done) => {
+  it('should schedule asap actions from a delayed one', (_, done) => {
     asap.schedule(() => {
       asap.schedule(() => {
         done();
@@ -159,7 +161,7 @@ describe('Scheduler.asap', () => {
     }, 1);
   });
 
-  it('should cancel the setImmediate if all scheduled actions unsubscribe before it executes', (done) => {
+  it('should cancel the setImmediate if all scheduled actions unsubscribe before it executes', (_, done) => {
     let asapExec1 = false;
     let asapExec2 = false;
     const action1 = asap.schedule(() => {
@@ -168,20 +170,20 @@ describe('Scheduler.asap', () => {
     const action2 = asap.schedule(() => {
       asapExec2 = true;
     });
-    expect(asap._scheduled).to.exist;
-    expect(asap.actions.size()).to.equal(2);
+    expect(asap._scheduled).toBeDefined();
+    expect(asap.actions.size()).toEqual(2);
     action1.unsubscribe();
     action2.unsubscribe();
-    expect(asap.actions.size()).to.equal(0);
-    expect(asap._scheduled).to.equal(undefined);
+    expect(asap.actions.size()).toEqual(0);
+    expect(asap._scheduled).toEqual(undefined);
     asap.schedule(() => {
-      expect(asapExec1).to.equal(false);
-      expect(asapExec2).to.equal(false);
+      expect(asapExec1).toEqual(false);
+      expect(asapExec2).toEqual(false);
       done();
     });
   });
 
-  it('should execute the rest of the scheduled actions if the first action is canceled', (done) => {
+  it('should execute the rest of the scheduled actions if the first action is canceled', (_, done) => {
     let actionHappened = false;
     let secondSubscription: Subscription | undefined = undefined;
 
@@ -206,18 +208,18 @@ describe('Scheduler.asap', () => {
     }
   });
 
-  it('should not execute rescheduled actions when flushing', (done) => {
+  it('should not execute rescheduled actions when flushing', (_, done) => {
     let flushCount = 0;
     let scheduledIndices: number[] = [];
 
     let originalFlush = asap.flush;
     asap.flush = (...args) => {
       ++flushCount;
-      originalFlush.apply(asap, args);
+      (originalFlush as Callback)(asap, ...args);
       if (flushCount === 2) {
         asap.flush = originalFlush;
         try {
-          expect(scheduledIndices).to.deep.equal([0, 1]);
+          expect(scheduledIndices).toEqual([0, 1]);
           done();
         } catch (error) {
           done(error);
@@ -238,40 +240,38 @@ describe('Scheduler.asap', () => {
     scheduledIndices.push(0);
   });
 
-  it('should execute actions scheduled when flushing in a subsequent flush', (done) => {
-    const sandbox = sinon.createSandbox();
-    const stubFlush = sandbox.stub(asapScheduler, 'flush').callThrough();
+  it('should execute actions scheduled when flushing in a subsequent flush', (_, done) => {
+    const stubFlush = jest.spyOn(asapScheduler, 'flush');
 
     let a: Subscription;
     let b: Subscription;
     let c: Subscription;
 
     a = asapScheduler.schedule(() => {
-      expect(stubFlush).to.have.callCount(1);
+      expect(stubFlush).toHaveBeenCalledTimes(1);
       c = asapScheduler.schedule(() => {
-        expect(stubFlush).to.have.callCount(2);
-        sandbox.restore();
+        expect(stubFlush).toHaveBeenCalledTimes(2);
+        jest.restoreAllMocks();
         done();
       });
     });
     b = asapScheduler.schedule(() => {
-      expect(stubFlush).to.have.callCount(1);
+      expect(stubFlush).toHaveBeenCalledTimes(1);
     });
   });
 
-  it('should execute actions scheduled when flushing in a subsequent flush when some actions are unsubscribed', (done) => {
-    const sandbox = sinon.createSandbox();
-    const stubFlush = sandbox.stub(asapScheduler, 'flush').callThrough();
+  it('should execute actions scheduled when flushing in a subsequent flush when some actions are unsubscribed', (_, done) => {
+    const stubFlush = jest.spyOn(asapScheduler, 'flush');
 
     let a: Subscription;
     let b: Subscription;
     let c: Subscription;
 
     a = asapScheduler.schedule(() => {
-      expect(stubFlush).to.have.callCount(1);
+      expect(stubFlush).toHaveBeenCalledTimes(1);
       c = asapScheduler.schedule(() => {
-        expect(stubFlush).to.have.callCount(2);
-        sandbox.restore();
+        expect(stubFlush).toHaveBeenCalledTimes(2);
+        jest.restoreAllMocks();
         done();
       });
       b.unsubscribe();
@@ -281,35 +281,34 @@ describe('Scheduler.asap', () => {
     });
   });
 
-  it('should properly cancel an unnecessary flush', (done) => {
-    const sandbox = sinon.createSandbox();
-    const clearImmediateStub = sandbox.stub(immediateProvider, 'clearImmediate').callThrough();
+  it('should properly cancel an unnecessary flush', (_, done) => {
+    const clearImmediateStub = jest.spyOn(immediateProvider, 'clearImmediate');
 
     let a: Subscription;
     let b: Subscription;
     let c: Subscription;
 
     a = asapScheduler.schedule(() => {
-      expect(asapScheduler.actions).to.have.size()(1);
+      expect(asapScheduler.actions).toHaveLength(1);
       c = asapScheduler.schedule(() => {
         done(new Error('Unexpected execution of c'));
       });
-      expect(asapScheduler.actions).to.have.size()(2);
+      expect(asapScheduler.actions).toHaveLength(2);
       // What we're testing here is that the unsubscription of action c effects
       // the cancellation of the microtask in a scenario in which the actions
       // queue is not empty - it contains action b.
       c.unsubscribe();
-      expect(asapScheduler.actions).to.have.size()(1);
-      expect(clearImmediateStub).to.have.callCount(1);
+      expect(asapScheduler.actions).toHaveLength(1);
+      expect(clearImmediateStub).toHaveBeenCalledTimes(1);
     });
     b = asapScheduler.schedule(() => {
-      sandbox.restore();
+      jest.restoreAllMocks();
       done();
     });
   });
 
-  it('scheduling inside of an executing action more than once should work', (done) => {
-    const results: any[] = [];
+  it('scheduling inside of an executing action more than once should work', (_, done) => {
+    const results: defined[] = [];
 
     let resolve: () => void;
     let promise = new Promise<void>((r) => (resolve = r));
@@ -327,7 +326,7 @@ describe('Scheduler.asap', () => {
 
     promise.then(() => {
       // This should always fire after two recursively scheduled microtasks.
-      expect(results).to.deep.equal([1, 2, 3]);
+      expect(results).toEqual([1, 2, 3]);
       done();
     });
   });

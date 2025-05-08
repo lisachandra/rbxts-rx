@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { zipAll, mergeMap } from '@rbxts/rx/out/operators';
 import { queueScheduler, of, zip, scheduled } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {zipAll} */
 describe('zipAll operator', () => {
@@ -40,14 +41,14 @@ describe('zipAll operator', () => {
     });
   });
 
-  it('should take all observables from the source and zip them', (done) => {
+  it('should take all observables from the source and zip them', (_, done) => {
     const expected = ['a1', 'b2', 'c3'];
     let i = 0;
     of(of('a', 'b', 'c'), of(1, 2, 3))
       .pipe(zipAll((a: string, b: number) => a + b))
       .subscribe({
         next(x) {
-          expect(x).to.equal(expected[i++]);
+          expect(x).toEqual(expected[i++]);
         },
         complete: done,
       });
@@ -378,14 +379,14 @@ describe('zipAll operator', () => {
     });
   });
 
-  it('should zip until one child terminates', (done) => {
+  it('should zip until one child terminates', (_, done) => {
     const expected = ['a1', 'b2'];
     let i = 0;
     of(of('a', 'b', 'c'), of(1, 2))
       .pipe(zipAll((a: string, b: number) => a + b))
       .subscribe({
         next: (x) => {
-          expect(x).to.equal(expected[i++]);
+          expect(x).toEqual(expected[i++]);
         },
         complete: done,
       });
@@ -727,7 +728,7 @@ describe('zipAll operator', () => {
     });
   });
 
-  it('should combine two immediately-scheduled observables', (done) => {
+  it('should combine two immediately-scheduled observables', (_, done) => {
     rxTestScheduler.run(() => {
       const a = scheduled([1, 2, 3], queueScheduler);
       const b = scheduled([4, 5, 6, 7, 8], queueScheduler);
@@ -742,14 +743,14 @@ describe('zipAll operator', () => {
 
       result.subscribe({
         next(vals) {
-          expect(vals).to.deep.equal(r[i++]);
+          expect(vals).toEqual(r[i++]);
         },
         complete: done,
       });
     });
   });
 
-  it('should combine a source with an immediately-scheduled source', (done) => {
+  it('should combine a source with an immediately-scheduled source', (_, done) => {
     const a = scheduled([1, 2, 3], queueScheduler);
     const b = of(4, 5, 6, 7, 8);
     const r = [
@@ -763,7 +764,7 @@ describe('zipAll operator', () => {
 
     result.subscribe({
       next(vals) {
-        expect(vals).to.deep.equal(r[i++]);
+        expect(vals).toEqual(r[i++]);
       },
       complete: done,
     });

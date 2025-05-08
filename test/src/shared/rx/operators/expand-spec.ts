@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { expand, mergeMap, map, take, toArray } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { EMPTY, Observable, of, Observer, asapScheduler, asyncScheduler, InteropObservable } from '@rbxts/rx';
@@ -373,7 +373,7 @@ describe('expand', () => {
     });
   });
 
-  it('should recursively flatten promises', (done) => {
+  it('should recursively flatten promises', (_, done) => {
     const expected = [1, 2, 4, 8, 16];
     of(1)
       .pipe(
@@ -386,16 +386,16 @@ describe('expand', () => {
       )
       .subscribe({
         next: (x) => {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         complete: () => {
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
           done();
         },
       });
   });
 
-  it('should recursively flatten Arrays', (done) => {
+  it('should recursively flatten Arrays', (_, done) => {
     const expected = [1, 2, 4, 8, 16];
     of(1)
       .pipe(
@@ -408,16 +408,16 @@ describe('expand', () => {
       )
       .subscribe({
         next: (x) => {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         complete: () => {
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
           done();
         },
       });
   });
 
-  it('should recursively flatten lowercase-o observables', (done) => {
+  it('should recursively flatten lowercase-o observables', (_, done) => {
     const expected = [1, 2, 4, 8, 16];
     const project = (x: number): InteropObservable<number> => {
       if (x === 16) {
@@ -439,10 +439,10 @@ describe('expand', () => {
       .pipe(expand(project))
       .subscribe({
         next: (x) => {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         complete: () => {
-          expect(expected.size()).to.equal(0);
+          expect(expected.size()).toEqual(0);
           done();
         },
       });
@@ -476,7 +476,7 @@ describe('expand', () => {
     });
   });
 
-  it('should work with the AsapScheduler', (done) => {
+  it('should work with the AsapScheduler', (_, done) => {
     const expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     of(0)
       .pipe(
@@ -484,10 +484,10 @@ describe('expand', () => {
         take(10),
         toArray()
       )
-      .subscribe({ next: (actual) => expect(actual).to.deep.equal(expected), error: done, complete: done });
+      .subscribe({ next: (actual) => expect(actual).toEqual(expected), error: done, complete: done });
   });
 
-  it('should work with the AsyncScheduler', (done) => {
+  it('should work with the AsyncScheduler', (_, done) => {
     const expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     of(0)
       .pipe(
@@ -495,7 +495,7 @@ describe('expand', () => {
         take(10),
         toArray()
       )
-      .subscribe({ next: (actual) => expect(actual).to.deep.equal(expected), error: done, complete: done });
+      .subscribe({ next: (actual) => expect(actual).toEqual(expected), error: done, complete: done });
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -518,6 +518,6 @@ describe('expand', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

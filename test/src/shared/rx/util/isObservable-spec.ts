@@ -1,10 +1,10 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { Observable, isObservable } from '@rbxts/rx';
-import { expect } from 'chai';
 
 describe('isObservable', () => {
   it('should return true for RxJS Observable', () => {
     const o = new Observable<any>();
-    expect(isObservable(o)).to.be.true;
+    expect(isObservable(o)).toBe(true);
   });
 
   it('should return true for an observable that comes from another RxJS 5+ library', () => {
@@ -17,7 +17,7 @@ describe('isObservable', () => {
       },
     };
 
-    expect(isObservable(o)).to.be.true;
+    expect(isObservable(o)).toBe(true);
   });
 
   it('should NOT return true for any old subscribable', () => {
@@ -27,14 +27,14 @@ describe('isObservable', () => {
       },
     };
 
-    expect(isObservable(o)).to.be.false;
+    expect(isObservable(o)).toBe(false);
   });
 
   it('should return false for undefined', () => {
-    expect(isObservable(undefined)).to.be.false;
+    expect(isObservable(undefined)).toBe(false);
   });
 
   it('should return false for a number', () => {
-    expect(isObservable(1)).to.be.false;
+    expect(isObservable(1)).toBe(false);
   });
 });

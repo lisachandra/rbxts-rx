@@ -1,25 +1,19 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { dateTimestampProvider } from '@rbxts/rx/out/internal/scheduler/dateTimestampProvider';
 
 describe('dateTimestampProvider', () => {
-  const originalDate = global.Date;
-
-  afterEach(() => {
-    global.Date = originalDate;
-  });
-
   it('should be monkey patchable', () => {
     let nowCalled = false;
 
-    global.Date = {
+    dateTimestampProvider.delegate = {
       now() {
         nowCalled = true;
         return 0;
       },
-    } as any;
+    };
 
     dateTimestampProvider.now();
 
-    expect(nowCalled).to.be.true;
+    expect(nowCalled).toBe(true);
   });
 });

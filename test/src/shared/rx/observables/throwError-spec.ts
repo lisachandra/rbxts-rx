@@ -1,7 +1,8 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { throwError } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {throwError} */
 describe('throwError', () => {
@@ -19,15 +20,15 @@ describe('throwError', () => {
     });
   });
 
-  it('should emit one value', (done) => {
+  it('should emit one value', (_, done) => {
     let calls = 0;
     throwError(() => 'bad').subscribe({
       next: () => {
         done(new Error('should not be called'));
       },
       error: (err) => {
-        expect(++calls).to.equal(1);
-        expect(err).to.equal('bad');
+        expect(++calls).toEqual(1);
+        expect(err).toEqual('bad');
         done();
       },
     });
@@ -68,7 +69,7 @@ describe('throwError', () => {
       },
     });
 
-    expect(errors).to.deep.equal([
+    expect(errors).toEqual([
       {
         call: 1,
         message: 'LOL',

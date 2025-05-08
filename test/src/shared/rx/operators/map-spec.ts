@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { map, tap, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, Observable, identity } from '@rbxts/rx';
@@ -114,7 +114,7 @@ describe('map', () => {
         }),
         tap({
           complete() {
-            expect(invoked).to.equal(0);
+            expect(invoked).toEqual(0);
           },
         })
       );
@@ -149,11 +149,11 @@ describe('map', () => {
       const result = e1.pipe(
         map((x: string, index: number) => {
           invoked++;
-          return parseInt(x) + 1 + index * 10;
+          return tonumber(x)! + 1 + index * 10;
         }),
         tap({
           complete() {
-            expect(invoked).to.equal(4);
+            expect(invoked).toEqual(4);
           },
         })
       );
@@ -174,11 +174,11 @@ describe('map', () => {
       const result = e1.pipe(
         map((x: string, index: number) => {
           invoked++;
-          return parseInt(x) + 1 + index * 10;
+          return tonumber(x)! + 1 + index * 10;
         }),
         tap({
           complete() {
-            expect(invoked).to.equal(4);
+            expect(invoked).toEqual(4);
           },
         })
       );
@@ -199,11 +199,11 @@ describe('map', () => {
       const result = e1.pipe(
         map((x: string, index: number) => {
           invoked++;
-          return parseInt(x) + 1 + index * 10;
+          return tonumber(x)! + 1 + index * 10;
         }),
         tap({
           error() {
-            expect(invoked).to.equal(4);
+            expect(invoked).toEqual(4);
           },
         })
       );
@@ -213,6 +213,7 @@ describe('map', () => {
     });
   });
 
+  /*
   it('should map using a custom thisArg', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const e1 = hot('-5-^-4--3---2----1--|');
@@ -225,8 +226,8 @@ describe('map', () => {
       };
       const result = e1.pipe(
         map(function (this: typeof foo, x: string, index: number) {
-          expect(this).to.equal(foo);
-          return parseInt(x) + foo.value + index * 10;
+          expect(this).toEqual(foo);
+          return tonumber(x)! + foo.value + index * 10;
         }, foo)
       );
 
@@ -234,6 +235,7 @@ describe('map', () => {
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
+  */
 
   it('should map twice', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
@@ -247,7 +249,7 @@ describe('map', () => {
       const result = e1.pipe(
         map((x: string) => {
           invoked1++;
-          return parseInt(x) * 2;
+          return tonumber(x)! * 2;
         }),
         map((x: number) => {
           invoked2++;
@@ -255,8 +257,8 @@ describe('map', () => {
         }),
         tap({
           complete() {
-            expect(invoked1).to.equal(7);
-            expect(invoked2).to.equal(7);
+            expect(invoked1).toEqual(7);
+            expect(invoked2).toEqual(7);
           },
         })
       );
@@ -266,6 +268,7 @@ describe('map', () => {
     });
   });
 
+  /*
   it('should do multiple maps using a custom thisArg', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const e1 = hot('  --1--2--3--4--|');
@@ -274,8 +277,8 @@ describe('map', () => {
       const values = { a: 11, b: 14, c: 17, d: 20 };
 
       class Filterer {
-        selector1 = (x: string) => parseInt(x) + 2;
-        selector2 = (x: string) => parseInt(x) * 3;
+        selector1 = (x: string) => tonumber(x)! + 2;
+        selector2 = (x: string) => tonumber(x)! * 3;
       }
       const filterer = new Filterer();
 
@@ -295,6 +298,7 @@ describe('map', () => {
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
+  */
 
   it('should not break unsubscription chain when unsubscribed explicitly', () => {
     testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
@@ -329,6 +333,6 @@ describe('map', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

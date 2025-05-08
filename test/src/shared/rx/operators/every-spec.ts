@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { every, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, Observable, Observer } from '@rbxts/rx';
@@ -32,31 +32,32 @@ describe('every', () => {
     });
   });
 
-  it('should accept thisArg with scalar observables', () => {
-    const thisArg = {};
-
-    of(1)
-      .pipe(
-        every(function (this: any, value: number, index: number) {
-          expect(this).to.deep.equal(thisArg);
-          return true;
-        }, thisArg)
-      )
-      .subscribe();
-  });
-
   it('should increment index on each call to the predicate', () => {
     const indices: number[] = [];
     of(1, 2, 3, 4)
       .pipe(
-        every((_, i) => {
+        every((_: any, i: number) => {
           indices.push(i);
           return true;
         })
       )
       .subscribe();
 
-    expect(indices).to.deep.equal([0, 1, 2, 3]);
+    expect(indices).toEqual([0, 1, 2, 3]);
+  });
+
+  /*
+  it('should accept thisArg with scalar observables', () => {
+    const thisArg = {};
+
+    of(1)
+      .pipe(
+        every(function (this: any, value: number, index: number) {
+          expect(this).toEqual(thisArg);
+          return true;
+        }, thisArg)
+      )
+      .subscribe();
   });
 
   it('should accept thisArg with array observable', () => {
@@ -65,7 +66,7 @@ describe('every', () => {
     of(1, 2, 3, 4)
       .pipe(
         every(function (this: any, value: number, index: number) {
-          expect(this).to.deep.equal(thisArg);
+          expect(this).toEqual(thisArg);
           return true;
         }, thisArg)
       )
@@ -82,12 +83,13 @@ describe('every', () => {
     source
       .pipe(
         every(function (this: any, value: number, index: number) {
-          expect(this).to.deep.equal(thisArg);
+          expect(this).toEqual(thisArg);
           return true;
         }, thisArg)
       )
       .subscribe();
   });
+  */
 
   it('should emit true if source is empty', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {

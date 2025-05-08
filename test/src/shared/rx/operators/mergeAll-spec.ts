@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { mergeAll, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { throwError, from, of, queueScheduler, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {mergeAll} */
 describe('mergeAll', () => {
@@ -436,7 +437,7 @@ describe('mergeAll', () => {
     });
   });
 
-  it('should merge all promises in an observable', (done) => {
+  it('should merge all promises in an observable', (_, done) => {
     const e1 = from([
       new Promise<string>((res) => {
         res('a');
@@ -462,13 +463,13 @@ describe('mergeAll', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(res).to.deep.equal(expected);
+        expect(res).toEqual(expected);
         done();
       },
     });
   });
 
-  it('should raise error when promise rejects', (done) => {
+  it('should raise error when promise rejects', (_, done) => {
     const error = 'error';
     const e1 = from([
       new Promise<string>((res) => {
@@ -491,8 +492,8 @@ describe('mergeAll', () => {
         res.push(x);
       },
       error: (err) => {
-        expect(res.size()).to.equal(1);
-        expect(err).to.equal('error');
+        expect(res.size()).toEqual(1);
+        expect(err).toEqual('error');
         done();
       },
       complete: () => {
@@ -522,11 +523,11 @@ describe('mergeAll', () => {
       .pipe(mergeAll(), take(3))
       .subscribe({ next: (x) => results.push(x), complete: () => results.push('GOOSE!') });
 
-    expect(results).to.deep.equal(['duck', 'duck', 'duck', 'GOOSE!']);
-    expect(iterable.finalized).to.be.true;
+    expect(results).toEqual(['duck', 'duck', 'duck', 'GOOSE!']);
+    expect(iterable.finalized).toBe(true);
   });
 
-  it('should merge two observables', (done) => {
+  it('should merge two observables', (_, done) => {
     const a = of(1, 2, 3);
     const b = of(4, 5, 6, 7, 8);
     const r = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -535,13 +536,13 @@ describe('mergeAll', () => {
       .pipe(mergeAll())
       .subscribe({
         next: (val) => {
-          expect(val).to.equal(r.shift());
+          expect(val).toEqual(r.shift());
         },
         complete: done,
       });
   });
 
-  it('should merge two immediately-scheduled observables', (done) => {
+  it('should merge two immediately-scheduled observables', (_, done) => {
     const a = of(1, 2, 3, queueScheduler);
     const b = of(4, 5, 6, 7, 8, queueScheduler);
     const r = [1, 2, 4, 3, 5, 6, 7, 8];
@@ -550,7 +551,7 @@ describe('mergeAll', () => {
       .pipe(mergeAll())
       .subscribe({
         next: (val) => {
-          expect(val).to.equal(r.shift());
+          expect(val).toEqual(r.shift());
         },
         complete: done,
       });
@@ -573,6 +574,6 @@ describe('mergeAll', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

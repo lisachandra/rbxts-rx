@@ -1,8 +1,13 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { fromEvent, NEVER, timer } from '@rbxts/rx';
 import { mapTo, take, concat } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import RegExp from '@rbxts/regexp';
+import { Event, EventTarget } from '@rbxts/whatwg-event-target';
+import { Error, Array } from '@rbxts/luau-polyfill';
+
+type EventListenerOrEventListenerObject = EventTarget.EventListener<EventTarget<any, any>, Event>;
 
 /** @test {fromEvent} */
 describe('fromEvent', () => {
@@ -22,8 +27,8 @@ describe('fromEvent', () => {
         addEventListener: (eventType: any, listener: any) => {
           timer(delay1, delay2).pipe(mapTo('ev'), take(2), concat(NEVER)).subscribe(listener);
         },
-        removeEventListener: (): void => void 0,
-        dispatchEvent: (): void => void 0,
+        removeEventListener: (): void => undefined,
+        dispatchEvent: (): void => undefined,
       };
       const e1 = fromEvent(target as any, 'click');
       expectObservable(e1).toBe(expected, { x: 'ev' });
@@ -37,11 +42,11 @@ describe('fromEvent', () => {
     let offHandler;
 
     const obj = {
-      on: (a: string, b: Function) => {
+      on: (a: string, b: Callback) => {
         onEventName = a;
         onHandler = b;
       },
-      off: (a: string, b: Function) => {
+      off: (a: string, b: Callback) => {
         offEventName = a;
         offHandler = b;
       },
@@ -53,10 +58,10 @@ describe('fromEvent', () => {
 
     subscription.unsubscribe();
 
-    expect(onEventName).to.equal('click');
-    expect(typeof onHandler).to.equal('function');
-    expect(offEventName).to.equal(onEventName);
-    expect(offHandler).to.equal(onHandler);
+    expect(onEventName).toEqual('click');
+    expect(type(onHandler)).toEqual('function');
+    expect(offEventName).toEqual(onEventName);
+    expect(offHandler).toEqual(onHandler);
   });
 
   it('should setup an event observable on objects with "addEventListener" and "removeEventListener" ', () => {
@@ -82,10 +87,10 @@ describe('fromEvent', () => {
 
     subscription.unsubscribe();
 
-    expect(onEventName).to.equal('click');
-    expect(typeof onHandler).to.equal('function');
-    expect(offEventName).to.equal(onEventName);
-    expect(offHandler).to.equal(onHandler);
+    expect(onEventName).toEqual('click');
+    expect(type(onHandler)).toEqual('function');
+    expect(offEventName).toEqual(onEventName);
+    expect(offHandler).toEqual(onHandler);
   });
 
   it('should setup an event observable on objects with "addListener" and "removeListener" returning event emitter', () => {
@@ -113,10 +118,10 @@ describe('fromEvent', () => {
 
     subscription.unsubscribe();
 
-    expect(onEventName).to.equal('click');
-    expect(typeof onHandler).to.equal('function');
-    expect(offEventName).to.equal(onEventName);
-    expect(offHandler).to.equal(onHandler);
+    expect(onEventName).toEqual('click');
+    expect(type(onHandler)).toEqual('function');
+    expect(offEventName).toEqual(onEventName);
+    expect(offHandler).toEqual(onHandler);
   });
 
   it('should setup an event observable on objects with "addListener" and "removeListener" returning nothing', () => {
@@ -143,10 +148,10 @@ describe('fromEvent', () => {
 
     subscription.unsubscribe();
 
-    expect(onEventName).to.equal('click');
-    expect(typeof onHandler).to.equal('function');
-    expect(offEventName).to.equal(onEventName);
-    expect(offHandler).to.equal(onHandler);
+    expect(onEventName).toEqual('click');
+    expect(type(onHandler)).toEqual('function');
+    expect(offEventName).toEqual(onEventName);
+    expect(offHandler).toEqual(onHandler);
   });
 
   it('should setup an event observable on objects with "addListener" and "removeListener" and "length" ', () => {
@@ -156,11 +161,11 @@ describe('fromEvent', () => {
     let offHandler;
 
     const obj = {
-      addListener: (a: string, b: Function) => {
+      addListener: (a: string, b: Callback) => {
         onEventName = a;
         onHandler = b;
       },
-      removeListener: (a: string, b: Function) => {
+      removeListener: (a: string, b: Callback) => {
         offEventName = a;
         offHandler = b;
       },
@@ -173,10 +178,10 @@ describe('fromEvent', () => {
 
     subscription.unsubscribe();
 
-    expect(onEventName).to.equal('click');
-    expect(typeof onHandler).to.equal('function');
-    expect(offEventName).to.equal(onEventName);
-    expect(offHandler).to.equal(onHandler);
+    expect(onEventName).toEqual('click');
+    expect(type(onHandler)).toEqual('function');
+    expect(offEventName).toEqual(onEventName);
+    expect(offHandler).toEqual(onHandler);
   });
 
   it('should throw if passed an invalid event target', () => {
@@ -187,7 +192,7 @@ describe('fromEvent', () => {
     };
     expect(() => {
       fromEvent(obj as any, 'click');
-    }).to.throw(/Invalid event target/);
+    }).toThrow(RegExp('Invalid event target'));
   });
 
   it('should pass through options to addEventListener and removeEventListener', () => {
@@ -210,14 +215,14 @@ describe('fromEvent', () => {
 
     subscription.unsubscribe();
 
-    expect(onOptions).to.equal(expectedOptions);
-    expect(offOptions).to.equal(expectedOptions);
+    expect(onOptions).toEqual(expectedOptions);
+    expect(offOptions).toEqual(expectedOptions);
   });
 
-  it('should pass through events that occur', (done) => {
+  it('should pass through events that occur', (_, done) => {
     let send: any;
     const obj = {
-      on: (name: string, handler: Function) => {
+      on: (name: string, handler: Callback) => {
         send = handler;
       },
       off: () => {
@@ -229,7 +234,7 @@ describe('fromEvent', () => {
       .pipe(take(1))
       .subscribe({
         next: (e: any) => {
-          expect(e).to.equal('test');
+          expect(e).toEqual('test');
         },
         error: (err: any) => {
           done(new Error('should not be called'));
@@ -242,10 +247,10 @@ describe('fromEvent', () => {
     send('test');
   });
 
-  it('should pass through events that occur and use the selector if provided', (done) => {
+  it('should pass through events that occur and use the selector if provided', (_, done) => {
     let send: any;
     const obj = {
-      on: (name: string, handler: Function) => {
+      on: (name: string, handler: Callback) => {
         send = handler;
       },
       off: () => {
@@ -261,7 +266,7 @@ describe('fromEvent', () => {
       .pipe(take(1))
       .subscribe({
         next: (e: any) => {
-          expect(e).to.equal('test!');
+          expect(e).toEqual('test!');
         },
         error: (err: any) => {
           done(new Error('should not be called'));
@@ -274,10 +279,10 @@ describe('fromEvent', () => {
     send('test');
   });
 
-  it('should not fail if no event arguments are passed and the selector does not return', (done) => {
+  it('should not fail if no event arguments are passed and the selector does not return', (_, done) => {
     let send: any;
     const obj = {
-      on: (name: string, handler: Function) => {
+      on: (name: string, handler: Callback) => {
         send = handler;
       },
       off: () => {
@@ -293,7 +298,7 @@ describe('fromEvent', () => {
       .pipe(take(1))
       .subscribe({
         next: (e: any) => {
-          expect(e).not.exist;
+          expect(e).never.toBeDefined();
         },
         error: (err: any) => {
           done(new Error('should not be called'));
@@ -306,10 +311,10 @@ describe('fromEvent', () => {
     send();
   });
 
-  it('should return a value from the selector if no event arguments are passed', (done) => {
+  it('should return a value from the selector if no event arguments are passed', (_, done) => {
     let send: any;
     const obj = {
-      on: (name: string, handler: Function) => {
+      on: (name: string, handler: Callback) => {
         send = handler;
       },
       off: () => {
@@ -325,7 +330,7 @@ describe('fromEvent', () => {
       .pipe(take(1))
       .subscribe({
         next: (e: any) => {
-          expect(e).to.equal('no arguments');
+          expect(e).toEqual('no arguments');
         },
         error: (err: any) => {
           done(new Error('should not be called'));
@@ -338,10 +343,10 @@ describe('fromEvent', () => {
     send();
   });
 
-  it('should pass multiple arguments to selector from event emitter', (done) => {
+  it('should pass multiple arguments to selector from event emitter', (_, done) => {
     let send: any;
     const obj = {
-      on: (name: string, handler: Function) => {
+      on: (name: string, handler: Callback) => {
         send = handler;
       },
       off: () => {
@@ -350,14 +355,14 @@ describe('fromEvent', () => {
     };
 
     function selector(x: number, y: number, z: number) {
-      return [].slice.call(arguments);
+      return Array.slice([x, y, z]);
     }
 
     fromEvent(obj, 'click', selector)
       .pipe(take(1))
       .subscribe({
         next: (e: any) => {
-          expect(e).to.deep.equal([1, 2, 3]);
+          expect(e).toEqual([1, 2, 3]);
         },
         error: (err: any) => {
           done(new Error('should not be called'));
@@ -370,10 +375,10 @@ describe('fromEvent', () => {
     send(1, 2, 3);
   });
 
-  it('should emit multiple arguments from event as an array', (done) => {
+  it('should emit multiple arguments from event as an array', (_, done) => {
     let send: any;
     const obj = {
-      on: (name: string, handler: Function) => {
+      on: (name: string, handler: Callback) => {
         send = handler;
       },
       off: () => {
@@ -385,7 +390,7 @@ describe('fromEvent', () => {
       .pipe(take(1))
       .subscribe({
         next: (e: any) => {
-          expect(e).to.deep.equal([1, 2, 3]);
+          expect(e).toEqual([1, 2, 3]);
         },
         error: (err: any) => {
           done(new Error('should not be called'));
@@ -398,7 +403,7 @@ describe('fromEvent', () => {
     send(1, 2, 3);
   });
 
-  it('should not throw an exception calling toString on obj with a undefined prototype', (done) => {
+  it('should not throw an exception calling toString on obj with a undefined prototype', (_, done) => {
     // NOTE: Can not test with Object.create(undefined) or `class Foo extends undefined`
     // due to TypeScript bug. https://github.com/Microsoft/TypeScript/issues/1108
     class NullProtoEventTarget {
@@ -409,13 +414,13 @@ describe('fromEvent', () => {
         /*noop*/
       }
     }
-    NullProtoEventTarget.prototype.toString = undefined!;
+    // NullProtoEventTarget.prototype.toString = undefined!;
     const obj: NullProtoEventTarget = new NullProtoEventTarget();
 
     expect(() => {
       fromEvent(obj, 'foo').subscribe();
       done();
-    }).to.not.throw(TypeError);
+    }).never.toThrowError();
   });
 
   it('should handle adding events to an arraylike of targets', () => {
@@ -440,27 +445,26 @@ describe('fromEvent', () => {
         _addEventListenerArgs: undefined as any,
         _removeEventListenerArgs: undefined as any,
       },
-      length: 2,
     };
 
     const options = {};
 
-    const subscription = fromEvent(nodeList, 'click', options).subscribe();
+    const subscription = fromEvent(nodeList as never as ArrayLike<ValueOf<typeof nodeList>>, 'click', options).subscribe();
 
-    expect(nodeList[0]._addEventListenerArgs[0]).to.equal('click');
-    expect(nodeList[0]._addEventListenerArgs[1]).to.be.a('function');
-    expect(nodeList[0]._addEventListenerArgs[2]).to.equal(options);
+    expect(nodeList[0]._addEventListenerArgs[0]).toEqual('click');
+    expect(type(nodeList[0]._addEventListenerArgs[1])).toBe('function');
+    expect(nodeList[0]._addEventListenerArgs[2]).toEqual(options);
 
-    expect(nodeList[1]._addEventListenerArgs[0]).to.equal('click');
-    expect(nodeList[1]._addEventListenerArgs[1]).to.be.a('function');
-    expect(nodeList[1]._addEventListenerArgs[2]).to.equal(options);
+    expect(nodeList[1]._addEventListenerArgs[0]).toEqual('click');
+    expect(type(nodeList[1]._addEventListenerArgs[1])).toBe('function');
+    expect(nodeList[1]._addEventListenerArgs[2]).toEqual(options);
 
-    expect(nodeList[0]._removeEventListenerArgs).to.be.undefined;
-    expect(nodeList[1]._removeEventListenerArgs).to.be.undefined;
+    expect(nodeList[0]._removeEventListenerArgs).toBeUndefined();
+    expect(nodeList[1]._removeEventListenerArgs).toBeUndefined();
 
     subscription.unsubscribe();
 
-    expect(nodeList[0]._removeEventListenerArgs).to.deep.equal(nodeList[0]._addEventListenerArgs);
-    expect(nodeList[1]._removeEventListenerArgs).to.deep.equal(nodeList[1]._addEventListenerArgs);
+    expect(nodeList[0]._removeEventListenerArgs).toEqual(nodeList[0]._addEventListenerArgs);
+    expect(nodeList[1]._removeEventListenerArgs).toEqual(nodeList[1]._addEventListenerArgs);
   });
 });

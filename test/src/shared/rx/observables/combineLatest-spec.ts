@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { queueScheduler as rxQueueScheduler, combineLatest, of } from '@rbxts/rx';
 import { map, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 const queueScheduler = rxQueueScheduler;
 
@@ -25,7 +26,7 @@ describe('static combineLatest', () => {
       },
     });
 
-    expect(results).to.deep.equal(['done']);
+    expect(results).toEqual(['done']);
   });
 
   it('should return EMPTY if passed an empty POJO as the only argument', () => {
@@ -39,7 +40,7 @@ describe('static combineLatest', () => {
       },
     });
 
-    expect(results).to.deep.equal(['done']);
+    expect(results).toEqual(['done']);
   });
 
   it('should return EMPTY if passed an empty array and scheduler as the only argument', () => {
@@ -53,9 +54,9 @@ describe('static combineLatest', () => {
       },
     });
 
-    expect(results).to.deep.equal([]);
+    expect(results).toEqual([]);
     rxTestScheduler.flush();
-    expect(results).to.deep.equal(['done']);
+    expect(results).toEqual(['done']);
   });
 
   it('should combineLatest the provided observables', () => {
@@ -64,13 +65,13 @@ describe('static combineLatest', () => {
       const secondSource = hot('--d--e--f--g--|');
       const expected = '        ----uv--wx-y--z----|';
 
-      const combined = combineLatest(firstSource, secondSource, (a, b) => '' + a + b);
+      const combined = combineLatest([firstSource, secondSource], (a, b) => '' + a + b);
 
       expectObservable(combined).toBe(expected, { u: 'ad', v: 'ae', w: 'af', x: 'bf', y: 'bg', z: 'cg' });
     });
   });
 
-  it('should combine an immediately-scheduled source with an immediately-scheduled second', (done) => {
+  it('should combine an immediately-scheduled source with an immediately-scheduled second', (_, done) => {
     const a = of(1, 2, 3, queueScheduler);
     const b = of(4, 5, 6, 7, 8, queueScheduler);
     const r = [
@@ -93,7 +94,7 @@ describe('static combineLatest', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(actual).to.deep.equal(r);
+        expect(actual).toEqual(r);
         done();
       },
     });
@@ -131,7 +132,7 @@ describe('static combineLatest', () => {
       const e2subs = '  ^';
       const expected = '-';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -147,7 +148,7 @@ describe('static combineLatest', () => {
       const e2subs = '  (^!)';
       const expected = '-';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -163,7 +164,7 @@ describe('static combineLatest', () => {
       const e2subs = '  ^';
       const expected = '-';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -179,7 +180,7 @@ describe('static combineLatest', () => {
       const e2subs = '  (^!)';
       const expected = '|';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -201,7 +202,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^---!';
       const expected = ' ----|';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -222,7 +223,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^---!';
       const expected = ' ----|';
 
-      const result = combineLatest(e2, e1, (x, y) => x + y);
+      const result = combineLatest([e2, e1], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -241,7 +242,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^  ';
       const expected = ' -'; //never
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -261,7 +262,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^---!';
       const expected = ' -----'; //never
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -277,7 +278,7 @@ describe('static combineLatest', () => {
       const e2subs = '     ^---------!';
       const expected = '   ----x-yz--|';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, { x: 'bf', y: 'cf', z: 'cg' });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -293,7 +294,7 @@ describe('static combineLatest', () => {
       const e2subs = '  ^-----!';
       const expected = '------#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'shazbot!');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -309,7 +310,7 @@ describe('static combineLatest', () => {
       const e2subs = '  ^---!';
       const expected = '----#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'too bad, honk');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -325,7 +326,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^-!';
       const expected = ' --#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -341,7 +342,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^-!';
       const expected = ' --#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -357,7 +358,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^-!';
       const expected = ' --#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'bazinga');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -373,7 +374,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^-!';
       const expected = ' --#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'flurp');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -389,7 +390,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^-!';
       const expected = ' --#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'flurp');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -405,7 +406,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^-----!';
       const expected = ' ------#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -421,7 +422,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^----!';
       const expected = ' -----#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -437,7 +438,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^--!';
       const expected = ' ---#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, { a: 1, b: 2 }, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -453,7 +454,7 @@ describe('static combineLatest', () => {
       const e2subs = '   ^--!';
       const expected = ' ---#';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, { a: 1, b: 2 }, 'wokka wokka');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -469,7 +470,7 @@ describe('static combineLatest', () => {
       const rightSubs = '     ^--------!';
       const expected = '      ---------#';
 
-      const result = combineLatest(left, right, (x, y) => x + y);
+      const result = combineLatest([left, right], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'bad things');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
@@ -485,7 +486,7 @@ describe('static combineLatest', () => {
       const rightSubs = '     ^------!';
       const expected = '      ---------#';
 
-      const result = combineLatest(left, right, (x, y) => x + y);
+      const result = combineLatest([left, right], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'bad things');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
@@ -501,7 +502,7 @@ describe('static combineLatest', () => {
       const e2subs = '    ^-----------!';
       const expected = '  -----x-y-z--|';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, { x: 'be', y: 'ce', z: 'cf' });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -517,7 +518,7 @@ describe('static combineLatest', () => {
       const e2subs = '     ^-------------------!';
       const expected = '   -----------x--y--z--|';
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, { x: 'cd', y: 'ce', z: 'cf' });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -533,7 +534,7 @@ describe('static combineLatest', () => {
       const rightSubs = '     ^--------!';
       const expected = '      ---------#';
 
-      const result = combineLatest(left, right, (x, y) => x + y);
+      const result = combineLatest([left, right], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, undefined, 'jenga');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
@@ -549,7 +550,7 @@ describe('static combineLatest', () => {
       const rightSubs = '     ^-------------------!';
       const expected = '      -----------x--y--z--#';
 
-      const result = combineLatest(left, right, (x, y) => x + y);
+      const result = combineLatest([left, right], (x, y) => x + y);
 
       expectObservable(result).toBe(expected, { x: 'cd', y: 'ce', z: 'cf' }, 'dun dun dun');
       expectSubscriptions(left.subscriptions).toBe(leftSubs);
@@ -565,7 +566,7 @@ describe('static combineLatest', () => {
       const e2subs = '     ^--!';
       const expected = '   ---#';
 
-      const result = combineLatest(e1, e2, (x, y) => {
+      const result = combineLatest([e1, e2], (x, y) => {
         throw 'ha ha ' + x + ', ' + y;
       });
 
@@ -585,7 +586,7 @@ describe('static combineLatest', () => {
       const unsub = '      ---------!    ';
       const values = { x: 'bf', y: 'cf', z: 'cg' };
 
-      const result = combineLatest(e1, e2, (x, y) => x + y);
+      const result = combineLatest([e1, e2], (x, y) => x + y);
 
       expectObservable(result, unsub).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -603,7 +604,7 @@ describe('static combineLatest', () => {
       const unsub = '      ---------!    ';
       const values = { x: 'bf', y: 'cf', z: 'cg' };
 
-      const result = combineLatest(e1.pipe(mergeMap((x) => of(x))), e2.pipe(mergeMap((x) => of(x))), (x, y) => x + y).pipe(
+      const result = combineLatest([e1.pipe(mergeMap((x) => of(x))), e2.pipe(mergeMap((x) => of(x)))], (x, y) => x + y).pipe(
         mergeMap((x) => of(x))
       );
 

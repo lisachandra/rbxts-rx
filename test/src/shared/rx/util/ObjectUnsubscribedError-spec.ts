@@ -1,16 +1,16 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { ObjectUnsubscribedError } from '@rbxts/rx';
 
 /** @test {ObjectUnsubscribedError} */
 describe('ObjectUnsubscribedError', () => {
   const error = new ObjectUnsubscribedError();
   it('Should have a name', () => {
-    expect(error.name).to.be.equal('ObjectUnsubscribedError');
+    expect(error.name).toEqual('ObjectUnsubscribedError');
   });
   it('Should have a message', () => {
-    expect(error.message).to.be.equal('object unsubscribed');
+    expect(error.message).toEqual('object unsubscribed');
   });
   it('Should have a stack', () => {
-    expect(error.stack).to.be.a('string');
+    expect(type(error.stack)).toBe('string');
   });
 });

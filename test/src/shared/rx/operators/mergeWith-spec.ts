@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { mergeWith, map, mergeAll, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { queueScheduler, of, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {merge} */
 describe('merge operator', () => {
@@ -28,14 +29,14 @@ describe('merge operator', () => {
     });
   });
 
-  it('should merge a source with a second', (done) => {
+  it('should merge a source with a second', (_, done) => {
     const a = of(1, 2, 3);
     const b = of(4, 5, 6, 7, 8);
     const r = [1, 2, 3, 4, 5, 6, 7, 8];
 
     a.pipe(mergeWith(b)).subscribe({
       next: (val) => {
-        expect(val).to.equal(r.shift());
+        expect(val).toEqual(r.shift());
       },
       error: () => {
         done(new Error('should not be called'));
@@ -46,14 +47,14 @@ describe('merge operator', () => {
     });
   });
 
-  it('should merge a source with a second, when the second is just a plain array', (done) => {
+  it('should merge a source with a second, when the second is just a plain array', (_, done) => {
     const a = of(1, 2, 3);
     const b = [4, 5, 6, 7, 8];
     const r = [1, 2, 3, 4, 5, 6, 7, 8];
 
     a.pipe(mergeWith(b)).subscribe({
       next: (val) => {
-        expect(val).to.equal(r.shift());
+        expect(val).toEqual(r.shift());
       },
       error: () => {
         done(new Error('should not be called'));
@@ -324,7 +325,7 @@ describe('merge operator', () => {
 });
 
 describe('mergeAll operator', () => {
-  it('should merge two observables', (done) => {
+  it('should merge two observables', (_, done) => {
     const a = of(1, 2, 3);
     const b = of(4, 5, 6, 7, 8);
     const r = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -333,13 +334,13 @@ describe('mergeAll operator', () => {
       .pipe(mergeAll())
       .subscribe({
         next: (val) => {
-          expect(val).to.equal(r.shift());
+          expect(val).toEqual(r.shift());
         },
         complete: done,
       });
   });
 
-  it('should merge two immediately-scheduled observables', (done) => {
+  it('should merge two immediately-scheduled observables', (_, done) => {
     const a = of(1, 2, 3, queueScheduler);
     const b = of(4, 5, 6, 7, 8, queueScheduler);
     const r = [1, 2, 4, 3, 5, 6, 7, 8];
@@ -348,7 +349,7 @@ describe('mergeAll operator', () => {
       .pipe(mergeAll())
       .subscribe({
         next: (val) => {
-          expect(val).to.equal(r.shift());
+          expect(val).toEqual(r.shift());
         },
         complete: done,
       });
@@ -369,6 +370,6 @@ describe('mergeAll operator', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

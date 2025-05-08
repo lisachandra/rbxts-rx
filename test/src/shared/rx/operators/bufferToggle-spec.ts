@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, concat, timer, EMPTY } from '@rbxts/rx';
 import { bufferToggle, mergeMap, mapTo } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {bufferToggle} */
 describe('bufferToggle operator', () => {
@@ -48,7 +49,7 @@ describe('bufferToggle operator', () => {
       expectObservable(
         e1.pipe(
           bufferToggle(e2, (x: string) => {
-            expect(x).to.equal(innerVals.shift());
+            expect(x).toEqual(innerVals.shift());
             return e3;
           })
         )
@@ -418,7 +419,7 @@ describe('bufferToggle operator', () => {
     });
   });
 
-  it('should accept openings resolved promise', (done) => {
+  it('should accept openings resolved promise', (_, done) => {
     const e1 = concat(timer(10).pipe(mapTo(1)), timer(100).pipe(mapTo(2)), timer(150).pipe(mapTo(3)), timer(200).pipe(mapTo(4)));
 
     const expected = [[1]];
@@ -434,19 +435,19 @@ describe('bufferToggle operator', () => {
       )
     ).subscribe({
       next: (x) => {
-        expect(x).to.deep.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: (x) => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.size()).to.be.equal(0);
+        expect(expected.size()).toEqual(0);
         done();
       },
     });
   });
 
-  it('should accept openings rejected promise', (done) => {
+  it('should accept openings rejected promise', (_, done) => {
     const e1 = concat(of(1), timer(10).pipe(mapTo(2)), timer(10).pipe(mapTo(3)), timer(100).pipe(mapTo(4)));
 
     const expected = 42;
@@ -465,7 +466,7 @@ describe('bufferToggle operator', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       },
       complete: () => {
@@ -474,7 +475,7 @@ describe('bufferToggle operator', () => {
     });
   });
 
-  it('should accept closing selector that returns a resolved promise', (done) => {
+  it('should accept closing selector that returns a resolved promise', (_, done) => {
     const e1 = concat(of(1), timer(10).pipe(mapTo(2)), timer(10).pipe(mapTo(3)), timer(100).pipe(mapTo(4)));
     const expected = [[1]];
 
@@ -488,19 +489,19 @@ describe('bufferToggle operator', () => {
       )
     ).subscribe({
       next: (x) => {
-        expect(x).to.deep.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.size()).to.be.equal(0);
+        expect(expected.size()).toEqual(0);
         done();
       },
     });
   });
 
-  it('should accept closing selector that returns a rejected promise', (done) => {
+  it('should accept closing selector that returns a rejected promise', (_, done) => {
     const e1 = concat(of(1), timer(10).pipe(mapTo(2)), timer(10).pipe(mapTo(3)), timer(100).pipe(mapTo(4)));
 
     const expected = 42;
@@ -518,7 +519,7 @@ describe('bufferToggle operator', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       },
       complete: () => {

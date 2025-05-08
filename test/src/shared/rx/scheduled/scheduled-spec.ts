@@ -1,8 +1,8 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { scheduled, of } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { lowerCaseO } from '../helpers/test-helper';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { expect } from 'chai';
 
 describe('scheduled', () => {
   let testScheduler: TestScheduler;
@@ -39,7 +39,7 @@ describe('scheduled', () => {
     });
   });
 
-  it('should schedule a promise', (done) => {
+  it('should schedule a promise', (_, done) => {
     const results: any[] = [];
     const input = Promise.resolve('x'); // strings are iterables
     scheduled(input, testScheduler).subscribe({
@@ -51,16 +51,16 @@ describe('scheduled', () => {
       },
     });
 
-    expect(results).to.deep.equal([]);
+    expect(results).toEqual([]);
 
     // Promises force async, so we can't schedule synchronously, no matter what.
     testScheduler.flush();
-    expect(results).to.deep.equal([]);
+    expect(results).toEqual([]);
 
     Promise.resolve().then(() => {
       // NOW it should work, as the other promise should have resolved.
       testScheduler.flush();
-      expect(results).to.deep.equal(['x', 'done']);
+      expect(results).toEqual(['x', 'done']);
       done();
     });
   });

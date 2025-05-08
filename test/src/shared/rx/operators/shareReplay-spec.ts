@@ -1,9 +1,9 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { shareReplay, mergeMapTo, retry, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { Observable, Operator, Observer, of, from, defer, pipe, combineLatest, firstValueFrom, BehaviorSubject } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {shareReplay} */
 describe('shareReplay', () => {
@@ -32,7 +32,7 @@ describe('shareReplay', () => {
       subscribed = true;
     });
     source.pipe(shareReplay());
-    expect(subscribed).to.be.false;
+    expect(subscribed).toBe(false);
   });
 
   it('should multicast the same values to multiple observers, bufferSize=1', () => {
@@ -199,13 +199,13 @@ describe('shareReplay', () => {
   });
 
   it('when no windowTime is given ReplaySubject should be in _infiniteTimeWindow mode', () => {
-    const spy = sinon.spy(testScheduler, 'now');
+    const spy = jest.spyOn(testScheduler, 'now');
 
     of(1)
       .pipe(shareReplay(1, undefined, testScheduler))
       .subscribe();
-    spy.restore();
-    expect(spy, 'ReplaySubject should not call scheduler.now() when no windowTime is given').to.be.not.called;
+    spy.mockRestore();
+    expect(spy).never.toHaveBeenCalled(); // With('ReplaySubject should not call scheduler.now() when no windowTime is given');
   });
 
   it('should not restart due to unsubscriptions if refCount is false', () => {
@@ -273,7 +273,7 @@ describe('shareReplay', () => {
     }).pipe(shareReplay({ bufferSize: 1, refCount: true }));
     source.subscribe();
     source.subscribe();
-    expect(subscriptions).to.equal(1);
+    expect(subscriptions).toEqual(1);
   });
 
   it('should only subscribe once each with multiple synchronous subscriptions and unsubscriptions ', async () => {
@@ -287,7 +287,7 @@ describe('shareReplay', () => {
     }).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
     await firstValueFrom(combineLatest([source, source]));
-    expect(subscriptions).to.equal(1);
+    expect(subscriptions).toEqual(1);
   });
 
   it('should default to refCount being false', () => {
@@ -307,7 +307,7 @@ describe('shareReplay', () => {
     });
   });
 
-  it('should not break lift() composability', (done) => {
+  it('should not break lift() composability', (_, done) => {
     class MyCustomObservable<T> extends Observable<T> {
       lift<R>(operator: Operator<T, R>): Observable<R> {
         const observable = new MyCustomObservable<R>();
@@ -324,14 +324,14 @@ describe('shareReplay', () => {
       observer.complete();
     }).pipe(shareReplay());
 
-    expect(result instanceof MyCustomObservable).to.be.true;
+    expect(result instanceof MyCustomObservable).toBe(true);
 
     const expected = [1, 2, 3];
 
     result.subscribe({
       next(n: any) {
-        expect(expected.size()).to.be.greaterThan(0);
-        expect(n).to.equal(expected.shift());
+        expect(expected.size()).toBeGreaterThan(0);
+        expect(n).toEqual(expected.shift());
       },
       error() {
         done(new Error('should not be called'));
@@ -377,31 +377,10 @@ describe('shareReplay', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
-  const FinalizationRegistry = (global as any).FinalizationRegistry;
-  if (FinalizationRegistry && global.gc) {
-    it('should not leak the subscriber for sync sources', (done) => {
-      let callback: (() => void) | undefined = () => {
-        /* noop */
-      };
-
-      const registry = new FinalizationRegistry((value: any) => {
-        expect(value).to.equal('callback');
-        done();
-      });
-      registry.register(callback, 'callback');
-
-      const shared = of(42).pipe(shareReplay(1));
-      shared.subscribe(callback);
-
-      callback = undefined;
-      global.gc?.();
-    });
-  } else {
-    console.warn(`No support for FinalizationRegistry in Node ${process.version}`);
-  }
+  warn(`No support for FinalizationRegistry`);
 
   it('should be referentially-transparent', () => {
     testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {

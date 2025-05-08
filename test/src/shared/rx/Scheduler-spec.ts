@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
 import { queueScheduler as queue } from '@rbxts/rx';
 import { QueueScheduler } from '@rbxts/rx/out/internal/scheduler/QueueScheduler';
 
@@ -14,8 +15,8 @@ describe('Scheduler.queue', () => {
         call2 = true;
       });
     });
-    expect(call1).to.be.true;
-    expect(call2).to.be.true;
+    expect(call1).toBe(true);
+    expect(call2).toBe(true);
   });
 
   it('should schedule things recursively via this.schedule', () => {
@@ -33,27 +34,27 @@ describe('Scheduler.queue', () => {
       0,
       { call1: true, call2: false }
     );
-    expect(call1).to.be.true;
-    expect(call2).to.be.true;
+    expect(call1).toBe(true);
+    expect(call2).toBe(true);
   });
 
-  it('should schedule things in the future too', (done) => {
+  it('should schedule things in the future too', (_, done) => {
     let called = false;
     queue.schedule(() => {
       called = true;
     }, 60);
 
     setTimeout(() => {
-      expect(called).to.be.false;
+      expect(called).toBe(false);
     }, 20);
 
     setTimeout(() => {
-      expect(called).to.be.true;
+      expect(called).toBe(true);
       done();
     }, 100);
   });
 
-  it('should be reusable after an error is thrown during execution', (done) => {
+  it('should be reusable after an error is thrown during execution', (_, done) => {
     const results: number[] = [];
 
     expect(() => {
@@ -64,7 +65,7 @@ describe('Scheduler.queue', () => {
       queue.schedule(() => {
         throw new Error('bad');
       });
-    }).to.throw(Error, 'bad');
+    }).toThrowError('bad');
 
     setTimeout(() => {
       queue.schedule(() => {

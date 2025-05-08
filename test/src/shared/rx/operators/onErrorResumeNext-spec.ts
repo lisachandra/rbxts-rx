@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { onErrorResumeNext, take, finalize, tap } from '@rbxts/rx/out/operators';
 import { concat, throwError, of, Observable } from '@rbxts/rx';
 import { asInteropObservable } from '../helpers/interop-helper';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 describe('onErrorResumeNext', () => {
   let testScheduler: TestScheduler;
@@ -183,7 +184,7 @@ describe('onErrorResumeNext', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should unsubscribe from an interop observable upon explicit unsubscription', () => {
@@ -207,7 +208,7 @@ describe('onErrorResumeNext', () => {
     });
   });
 
-  it('should work with promise', (done) => {
+  it('should work with promise', (_, done) => {
     const expected = [1, 2];
     const source = concat(
       of(1),
@@ -216,13 +217,13 @@ describe('onErrorResumeNext', () => {
 
     source.pipe(onErrorResumeNext(Promise.resolve(2))).subscribe({
       next: (x) => {
-        expect(expected.shift()).to.equal(x);
+        expect(expected.shift()).toEqual(x);
       },
       error: () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected).to.be.empty;
+        expect(expected).toHaveLength(0);
         done();
       },
     });
@@ -238,7 +239,7 @@ describe('onErrorResumeNext', () => {
         complete: () => results.push('complete'),
       });
 
-    expect(results).to.deep.equal([1, 2, 3, 4, 5, 6, 'complete']);
+    expect(results).toEqual([1, 2, 3, 4, 5, 6, 'complete']);
   });
 
   it('should call finalize after each sync observable', () => {
@@ -258,7 +259,7 @@ describe('onErrorResumeNext', () => {
         complete: () => results.push('complete'),
       });
 
-    expect(results).to.deep.equal([1, 'finalize 1', 2, 'finalize 2', 3, 'finalize 3', 4, 'finalize 4', 'complete']);
+    expect(results).toEqual([1, 'finalize 1', 2, 'finalize 2', 3, 'finalize 3', 4, 'finalize 4', 'complete']);
   });
 
   it('should not subscribe to the next source until after the previous is finalized.', () => {
@@ -296,7 +297,7 @@ describe('onErrorResumeNext', () => {
         complete: () => results.push('complete'),
       });
 
-    expect(results).to.deep.equal([
+    expect(results).toEqual([
       'subscribe 1',
       1,
       'finalize 1',

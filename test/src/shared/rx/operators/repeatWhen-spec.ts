@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { repeatWhen, map, mergeMap, takeUntil, takeWhile, take } from '@rbxts/rx/out/operators';
 import { of, EMPTY, Observable, Subscriber } from '@rbxts/rx';
 import { SafeSubscriber } from '@rbxts/rx/out/internal/Subscriber';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {repeatWhen} */
 describe('repeatWhen operator', () => {
@@ -51,7 +52,7 @@ describe('repeatWhen operator', () => {
     });
   });
 
-  it('should repeat when notified via returned notifier on complete', (done) => {
+  it('should repeat when notified via returned notifier on complete', (_, done) => {
     let retried = false;
     const expected = [1, 2, 1, 2];
     let i = 0;
@@ -75,10 +76,10 @@ describe('repeatWhen operator', () => {
         )
         .subscribe({
           next: (x: any) => {
-            expect(x).to.equal(expected[i++]);
+            expect(x).toEqual(expected[i++]);
           },
           error: (err: any) => {
-            expect(err).to.be.an('error', 'done');
+            expect(err).toHaveProperty('message', 'done');
             done();
           },
         });
@@ -87,7 +88,7 @@ describe('repeatWhen operator', () => {
     }
   });
 
-  it('should not repeat when applying an empty notifier', (done) => {
+  it('should not repeat when applying an empty notifier', (_, done) => {
     const expected = [1, 2];
     const nexted: number[] = [];
     of(1, 2)
@@ -99,71 +100,73 @@ describe('repeatWhen operator', () => {
       )
       .subscribe({
         next: (n: number) => {
-          expect(n).to.equal(expected.shift());
+          expect(n).toEqual(expected.shift());
           nexted.push(n);
         },
         error: (err: any) => {
           done(new Error('should not be called'));
         },
         complete: () => {
-          expect(nexted).to.deep.equal([1, 2]);
+          expect(nexted).toEqual([1, 2]);
           done();
         },
       });
   });
 
   it('should not error when applying an empty synchronous notifier', () => {
-    const errors: any[] = [];
+    const errors: defined[] = [];
     // The current Subscriber.prototype.error implementation does nothing for
     // stopped subscribers. This test was written to fail and expose a problem
     // with synchronous notifiers. However, by the time the error occurs the
     // subscriber is stopped, so the test logs errors by both patching the
     // prototype and by using an error callback (for when/if the do-nothing-if-
     // stopped behaviour is fixed).
-    const originalSubscribe = Observable.prototype.subscribe;
-    Observable.prototype.subscribe = function (...args: any[]): any {
+    const originalSubscribe = Observable['subscribe' as never] as Callback;
+    const subscriberError = Subscriber['error' as never] as Callback;
+    (Observable as never as Table).subscribe = function (...args: any[]): any {
       let [subscriber] = args;
       if (!(subscriber instanceof Subscriber)) {
         subscriber = new SafeSubscriber(...args);
       }
       subscriber.error = function (err: any): void {
         errors.push(err);
-        Subscriber.prototype.error.call(this, err);
+        subscriberError(this, err);
       };
-      return originalSubscribe.call(this, subscriber);
+      return originalSubscribe(this, subscriber);
     };
     of(1, 2)
       .pipe(repeatWhen((notifications: any) => EMPTY))
       .subscribe({ error: (err) => errors.push(err) });
-    Observable.prototype.subscribe = originalSubscribe;
-    expect(errors).to.deep.equal([]);
+    (Observable as never as Table).subscribe = originalSubscribe;
+    expect(errors).toEqual([]);
   });
 
   it('should not error when applying a non-empty synchronous notifier', () => {
-    const errors: any[] = [];
+    const errors: defined[] = [];
     // The current Subscriber.prototype.error implementation does nothing for
     // stopped subscribers. This test was written to fail and expose a problem
     // with synchronous notifiers. However, by the time the error occurs the
     // subscriber is stopped, so the test logs errors by both patching the
     // prototype and by using an error callback (for when/if the do-nothing-if-
     // stopped behaviour is fixed).
-    const originalSubscribe = Observable.prototype.subscribe;
-    Observable.prototype.subscribe = function (...args: any[]): any {
+    const originalSubscribe = Observable['subscribe' as never] as Callback;
+    const subscriberError = Subscriber['error' as never] as Callback;
+    (Observable as never as Table).subscribe = function (...args: any[]): any {
       let [subscriber] = args;
       if (!(subscriber instanceof Subscriber)) {
         subscriber = new SafeSubscriber(...args);
       }
       subscriber.error = function (err: any): void {
         errors.push(err);
-        Subscriber.prototype.error.call(this, err);
+        subscriberError(this, err);
       };
-      return originalSubscribe.call(this, subscriber);
+      return originalSubscribe(this, subscriber);
     };
     of(1, 2)
       .pipe(repeatWhen((notifications: any) => of(1)))
       .subscribe({ error: (err) => errors.push(err) });
-    Observable.prototype.subscribe = originalSubscribe;
-    expect(errors).to.deep.equal([]);
+    (Observable as never as Table).subscribe = originalSubscribe;
+    expect(errors).toEqual([]);
   });
 
   it('should apply an empty notifier on an empty source', () => {
@@ -480,13 +483,13 @@ describe('repeatWhen operator', () => {
         results.push('finalizer');
       };
     });
-    const subscription = source.pipe(repeatWhen((completions$) => completions$.pipe(takeWhile((_, i) => i < 3)))).subscribe({
+    const subscription = source.pipe(repeatWhen((completions$) => completions$.pipe(takeWhile((_: any, i: number) => i < 3)))).subscribe({
       next: (value) => results.push(value),
       complete: () => results.push('complete'),
     });
 
-    expect(subscription.closed).to.be.true;
-    expect(results).to.deep.equal([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'complete', 'finalizer']);
+    expect(subscription.closed).toBe(true);
+    expect(results).toEqual([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'complete', 'finalizer']);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -509,6 +512,6 @@ describe('repeatWhen operator', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

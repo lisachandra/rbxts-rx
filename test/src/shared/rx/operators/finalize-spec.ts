@@ -1,18 +1,19 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { finalize, map, share, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { of, timer, interval, NEVER, Observable, noop } from '@rbxts/rx';
 import { asInteropObservable } from '../helpers/interop-helper';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {finalize} */
 describe('finalize', () => {
-  it('should call finalize after complete', (done) => {
+  it('should call finalize after complete', (_, done) => {
     let completed = false;
     of(1, 2, 3)
       .pipe(
         finalize(() => {
-          expect(completed).to.be.true;
+          expect(completed).toBe(true);
           done();
         })
       )
@@ -23,7 +24,7 @@ describe('finalize', () => {
       });
   });
 
-  it('should call finalize after error', (done) => {
+  it('should call finalize after error', (_, done) => {
     let thrown = false;
     of(1, 2, 3)
       .pipe(
@@ -34,7 +35,7 @@ describe('finalize', () => {
           return x;
         }),
         finalize(() => {
-          expect(thrown).to.be.true;
+          expect(thrown).toBe(true);
           done();
         })
       )
@@ -45,12 +46,12 @@ describe('finalize', () => {
       });
   });
 
-  it('should call finalize upon disposal', (done) => {
+  it('should call finalize upon disposal', (_, done) => {
     let disposed = false;
     const subscription = timer(100)
       .pipe(
         finalize(() => {
-          expect(disposed).to.be.true;
+          expect(disposed).toBe(true);
           done();
         })
       )
@@ -59,11 +60,11 @@ describe('finalize', () => {
     subscription.unsubscribe();
   });
 
-  it('should call finalize when synchronously subscribing to and unsubscribing from a shared Observable', (done) => {
+  it('should call finalize when synchronously subscribing to and unsubscribing from a shared Observable', (_, done) => {
     interval(50).pipe(finalize(done), share()).subscribe().unsubscribe();
   });
 
-  it('should call two finalize instances in succession on a shared Observable', (done) => {
+  it('should call two finalize instances in succession on a shared Observable', (_, done) => {
     let invoked = 0;
     function checkFinally() {
       invoked += 1;
@@ -90,7 +91,7 @@ describe('finalize', () => {
 
       // manually flush so `finalize()` has chance to execute before the test is over.
       testScheduler.flush();
-      expect(executed).to.be.true;
+      expect(executed).toBe(true);
     });
   });
 
@@ -109,7 +110,7 @@ describe('finalize', () => {
 
       // manually flush so `finalize()` has chance to execute before the test is over.
       testScheduler.flush();
-      expect(executed).to.be.false;
+      expect(executed).toBe(false);
     });
   });
 
@@ -128,7 +129,7 @@ describe('finalize', () => {
 
       // manually flush so `finalize()` has chance to execute before the test is over.
       testScheduler.flush();
-      expect(executed).to.be.true;
+      expect(executed).toBe(true);
     });
   });
 
@@ -147,7 +148,7 @@ describe('finalize', () => {
 
       // manually flush so `finalize()` has chance to execute before the test is over.
       testScheduler.flush();
-      expect(executed).to.be.true;
+      expect(executed).toBe(true);
     });
   });
 
@@ -166,7 +167,7 @@ describe('finalize', () => {
 
       // manually flush so `finalize()` has chance to execute before the test is over.
       testScheduler.flush();
-      expect(executed).to.be.true;
+      expect(executed).toBe(true);
     });
   });
 
@@ -185,7 +186,7 @@ describe('finalize', () => {
 
       // manually flush so `finalize()` has chance to execute before the test is over.
       testScheduler.flush();
-      expect(executed).to.be.true;
+      expect(executed).toBe(true);
     });
   });
 
@@ -205,7 +206,7 @@ describe('finalize', () => {
 
       // manually flush so `finalize()` has chance to execute before the test is over.
       testScheduler.flush();
-      expect(executed).to.be.true;
+      expect(executed).toBe(true);
     });
   });
 
@@ -216,7 +217,7 @@ describe('finalize', () => {
       .pipe(finalize(() => (finalized = true)))
       .subscribe();
     subscription.unsubscribe();
-    expect(finalized).to.be.true;
+    expect(finalized).toBe(true);
   });
 
   it('should finalize sources before sinks', () => {
@@ -227,7 +228,7 @@ describe('finalize', () => {
         finalize(() => finalized.push('sink'))
       )
       .subscribe();
-    expect(finalized).to.deep.equal(['source', 'sink']);
+    expect(finalized).toEqual(['source', 'sink']);
   });
 
   it('should finalize after the finalization', () => {
@@ -237,7 +238,7 @@ describe('finalize', () => {
     });
     const subscription = source.pipe(finalize(() => order.push('finalize'))).subscribe();
     subscription.unsubscribe();
-    expect(order).to.deep.equal(['finalizer', 'finalize']);
+    expect(order).toEqual(['finalizer', 'finalize']);
   });
 
   it('should finalize after the finalizer with synchronous completion', () => {
@@ -247,7 +248,7 @@ describe('finalize', () => {
       return () => order.push('finalizer');
     });
     source.pipe(finalize(() => order.push('finalize'))).subscribe();
-    expect(order).to.deep.equal(['finalizer', 'finalize']);
+    expect(order).toEqual(['finalizer', 'finalize']);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -272,7 +273,7 @@ describe('finalize', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should execute finalize even with a sync thrown error', () => {
@@ -289,7 +290,7 @@ describe('finalize', () => {
       error: noop,
     });
 
-    expect(called).to.be.true;
+    expect(called).toBe(true);
   });
 
   it('should execute finalize in order even with a sync error', () => {
@@ -309,7 +310,7 @@ describe('finalize', () => {
       error: noop,
     });
 
-    expect(results).to.deep.equal([1, 2]);
+    expect(results).toEqual([1, 2]);
   });
 
   it('should execute finalize in order even with a sync thrown error', () => {
@@ -328,7 +329,7 @@ describe('finalize', () => {
     badObservable.subscribe({
       error: noop,
     });
-    expect(results).to.deep.equal([1, 2]);
+    expect(results).toEqual([1, 2]);
   });
 
   it('should finalize in the proper order', () => {
@@ -342,6 +343,6 @@ describe('finalize', () => {
       )
       .subscribe();
 
-    expect(results).to.deep.equal([1, 2, 3, 4]);
+    expect(results).toEqual([1, 2, 3, 4]);
   });
 });

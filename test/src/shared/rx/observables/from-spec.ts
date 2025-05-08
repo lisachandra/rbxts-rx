@@ -1,12 +1,15 @@
-import { expect } from 'chai';
+/* eslint-disable @typescript-eslint/await-thenable */
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { asyncScheduler, of, from, Observer, observable, Subject, noop, Subscription } from '@rbxts/rx';
 import { first, concatMap, delay, take, tap } from '@rbxts/rx/out/operators';
-import { ReadableStream } from 'web-streams-polyfill';
+import { ReadableStream } from '@rbxts/whatwg-web-streams';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
+import Symbol from '@rbxts/rx/out/internal/polyfill/symbol';
 
 function getArguments<T>(...args: T[]) {
-  return arguments;
+  return args;
 }
 
 /** @test {from} */
@@ -39,10 +42,10 @@ describe('from', () => {
       from({} as any).subscribe();
     };
 
-    expect(r).to.throw();
+    expect(r).toThrow();
   });
 
-  it('should finalize an AsyncGenerator', (done) => {
+  it('should finalize an AsyncGenerator', (_, done) => {
     const results: any[] = [];
     const sideEffects: any[] = [];
 
@@ -65,15 +68,15 @@ describe('from', () => {
       complete: () => {
         results.push('done');
         setTimeout(() => {
-          expect(sideEffects).to.deep.equal([0, 1, 2]);
-          expect(results).to.deep.equal([0, 1, 2, 'done', 'finalized generator']);
+          expect(sideEffects).toEqual([0, 1, 2]);
+          expect(results).toEqual([0, 1, 2, 'done', 'finalized generator']);
           done();
         });
       },
     });
   });
 
-  it('should finalize an AsyncGenerator on error', (done) => {
+  it('should finalize an AsyncGenerator on error', (_, done) => {
     const results: any[] = [];
     const sideEffects: any[] = [];
 
@@ -104,15 +107,15 @@ describe('from', () => {
       error: () => {
         results.push('in error');
         setTimeout(() => {
-          expect(sideEffects).to.deep.equal([0, 1, 2]);
-          expect(results).to.deep.equal([0, 1, 'in error', 'finalized generator']);
+          expect(sideEffects).toEqual([0, 1, 2]);
+          expect(results).toEqual([0, 1, 'in error', 'finalized generator']);
           done();
         });
       },
     });
   });
 
-  it('should finalize an AsyncGenerator on unsubscribe', (done) => {
+  it('should finalize an AsyncGenerator on unsubscribe', (_, done) => {
     const results: any[] = [];
     const sideEffects: any[] = [];
     let subscription: Subscription;
@@ -129,8 +132,8 @@ describe('from', () => {
         }
       } finally {
         results.push('finalized generator');
-        expect(sideEffects).to.deep.equal([0, 1, 2]);
-        expect(results).to.deep.equal([0, 1, 'finalized generator']);
+        expect(sideEffects).toEqual([0, 1, 2]);
+        expect(results).toEqual([0, 1, 'finalized generator']);
         done();
       }
     }
@@ -161,7 +164,7 @@ describe('from', () => {
       complete: () => results.push('done'),
     });
 
-    expect(results).to.deep.equal([0, 1, 2, 'done', 'finalized generator']);
+    expect(results).toEqual([0, 1, 2, 'done', 'finalized generator']);
   });
 
   const fakervable = <T>(...values: T[]) => ({
@@ -191,8 +194,8 @@ describe('from', () => {
   };
 
   const fakerator = <T>(...values: T[]) => ({
-    [Symbol.iterator as symbol]: () => {
-      const clone = [...values];
+    [Symbol.iterator]: () => {
+      const clone = [...values] as defined[];
       return {
         next: () => ({
           done: clone.size() <= 0,
@@ -256,41 +259,41 @@ describe('from', () => {
   }
 
   for (const source of sources) {
-    it(`should accept ${source.name}`, (done) => {
+    it(`should accept ${source.name}`, (_, done) => {
       let nextInvoked = false;
       from(source.createValue()).subscribe({
         next: (x) => {
           nextInvoked = true;
-          expect(x).to.equal('x');
+          expect(x).toEqual('x');
         },
         error: (x) => {
           done(new Error('should not be called'));
         },
         complete: () => {
-          expect(nextInvoked).to.equal(true);
+          expect(nextInvoked).toEqual(true);
           done();
         },
       });
     });
-    it(`should accept ${source.name} and scheduler`, (done) => {
+    it(`should accept ${source.name} and scheduler`, (_, done) => {
       let nextInvoked = false;
       from(source.createValue(), asyncScheduler).subscribe({
         next: (x) => {
           nextInvoked = true;
-          expect(x).to.equal('x');
+          expect(x).toEqual('x');
         },
         error: (x) => {
           done(new Error('should not be called'));
         },
         complete: () => {
-          expect(nextInvoked).to.equal(true);
+          expect(nextInvoked).toEqual(true);
           done();
         },
       });
-      expect(nextInvoked).to.equal(false);
+      expect(nextInvoked).toEqual(false);
     });
 
-    it(`should accept a function that implements [Symbol.observable]`, (done) => {
+    it(`should accept a function that implements [Symbol.observable]`, (_, done) => {
       const subject = new Subject<any>();
       const handler: any = (arg: any) => subject.next(arg);
       handler[observable] = () => subject;
@@ -301,26 +304,26 @@ describe('from', () => {
         .subscribe({
           next: (x) => {
             nextInvoked = true;
-            expect(x).to.equal('x');
+            expect(x).toEqual('x');
           },
           error: (x) => {
             done(new Error('should not be called'));
           },
           complete: () => {
-            expect(nextInvoked).to.equal(true);
+            expect(nextInvoked).toEqual(true);
             done();
           },
         });
       handler('x');
     });
 
-    it('should accept a thennable that happens to have a subscribe method', (done) => {
+    it('should accept a thennable that happens to have a subscribe method', (_, done) => {
       // There was an issue with our old `isPromise` check that caused this to fail
       const input = Promise.resolve('test');
       (input as any).subscribe = noop;
       from(input).subscribe({
         next: (x) => {
-          expect(x).to.equal('test');
+          expect(x).toEqual('test');
           done();
         },
       });
@@ -344,7 +347,7 @@ describe('from', () => {
       error: (err) => results.push(err.message),
     });
 
-    expect(results).to.deep.equal([0, 1, 2, 'bad']);
+    expect(results).toEqual([0, 1, 2, 'bad']);
   });
 
   it('should execute the finally block of a generator', () => {
@@ -359,10 +362,10 @@ describe('from', () => {
 
     from(generator).subscribe();
 
-    expect(finallyExecuted).to.be.true;
+    expect(finallyExecuted).toBe(true);
   });
 
-  it('should support ReadableStream-like objects', (done) => {
+  it('should support ReadableStream-like objects', (_, done) => {
     const input = [0, 1, 2];
     const output: number[] = [];
 
@@ -381,17 +384,17 @@ describe('from', () => {
     from(readableStream).subscribe({
       next: (value) => {
         output.push(value);
-        expect(readableStream.locked).to.equal(true);
+        expect(readableStream.locked).toEqual(true);
       },
       complete: () => {
-        expect(output).to.deep.equal([0, 1, 2]);
-        expect(readableStream.locked).to.equal(false);
+        expect(output).toEqual([0, 1, 2]);
+        expect(readableStream.locked).toEqual(false);
         done();
       },
     });
   });
 
-  it('should lock and release ReadableStream-like objects', (done) => {
+  it('should lock and release ReadableStream-like objects', (_, done) => {
     const input = [0, 1, 2];
     const output: number[] = [];
 
@@ -410,11 +413,11 @@ describe('from', () => {
     from(readableStream).subscribe({
       next: (value) => {
         output.push(value);
-        expect(readableStream.locked).to.equal(true);
+        expect(readableStream.locked).toEqual(true);
       },
       complete: () => {
-        expect(output).to.deep.equal([0, 1, 2]);
-        expect(readableStream.locked).to.equal(false);
+        expect(output).toEqual([0, 1, 2]);
+        expect(readableStream.locked).toEqual(false);
         done();
       },
     });

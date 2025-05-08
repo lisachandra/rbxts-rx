@@ -1,7 +1,7 @@
 import { isArrayLike } from '../util/isArrayLike';
 import { isPromise } from '../util/isPromise';
 import { Observable } from '../Observable';
-import { InteropObservable, ObservableInput, ObservedValueOf } from '../types';
+import { InteropObservable, ObservableInput, ObservedValueOf, ReadableStreamLike } from '../types';
 import { isInteropObservable } from '../util/isInteropObservable';
 import { isAsyncIterable } from '../util/isAsyncIterable';
 import { createInvalidObservableTypeError } from '../util/throwUnobservableError';
@@ -11,6 +11,7 @@ import { isFunction } from '../util/isFunction';
 import { reportUnhandledError } from '../util/reportUnhandledError';
 import { Error } from '@rbxts/luau-polyfill';
 import { getAsyncIterator, getIterator } from 'internal/polyfill/iterable';
+import { isReadableStreamLike, readableStreamLikeToAsyncGenerator } from 'internal/util/isReadableStreamLike';
 
 export function innerFrom<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
@@ -33,11 +34,9 @@ export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
     if (isIterable(input)) {
       return fromIterable(input);
     }
-    /*
     if (isReadableStreamLike(input)) {
       return fromReadableStreamLike(input);
     }
-    */
   }
 
   throw createInvalidObservableTypeError(input);
@@ -121,11 +120,9 @@ export function fromAsyncIterable<T>(asyncIterable: AsyncIterable<T>) {
   });
 }
 
-/*
 export function fromReadableStreamLike<T>(readableStream: ReadableStreamLike<T>) {
   return fromAsyncIterable(readableStreamLikeToAsyncGenerator(readableStream));
 }
-*/
 
 async function process<T>(asyncIterable: AsyncIterable<T>, subscriber: Subscriber<T>) {
   const iterator = getAsyncIterator(asyncIterable);

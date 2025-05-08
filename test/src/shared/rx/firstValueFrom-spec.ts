@@ -1,5 +1,7 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { Error } from '@rbxts/luau-polyfill';
 import { interval, firstValueFrom, EMPTY, EmptyError, throwError, of, Observable } from '@rbxts/rx';
-import { expect } from 'chai';
+
 import { finalize } from '@rbxts/rx/out/operators';
 
 describe('firstValueFrom', () => {
@@ -7,14 +9,14 @@ describe('firstValueFrom', () => {
     let finalized = false;
     const source = interval(10).pipe(finalize(() => (finalized = true)));
     const result = await firstValueFrom(source);
-    expect(result).to.equal(0);
-    expect(finalized).to.be.true;
+    expect(result).toEqual(0);
+    expect(finalized).toBe(true);
   });
 
   it('should support a default value', async () => {
     const source = EMPTY;
     const result = await firstValueFrom(source, { defaultValue: 0 });
-    expect(result).to.equal(0);
+    expect(result).toEqual(0);
   });
 
   it('should support an undefined config', async () => {
@@ -25,7 +27,7 @@ describe('firstValueFrom', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.be.an.instanceOf(EmptyError);
+    expect(error).toBeInstanceOf(EmptyError);
   });
 
   it('should error for empty observables', async () => {
@@ -36,7 +38,7 @@ describe('firstValueFrom', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.be.an.instanceOf(EmptyError);
+    expect(error).toBeInstanceOf(EmptyError);
   });
 
   it('should error for errored observables', async () => {
@@ -47,16 +49,16 @@ describe('firstValueFrom', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.be.an.instanceOf(Error);
-    expect(error.message).to.equal('blorp!');
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toEqual('blorp!');
   });
 
   it('should work with a synchronous observable', async () => {
     let finalized = false;
     const source = of('apples', 'bananas').pipe(finalize(() => (finalized = true)));
     const result = await firstValueFrom(source);
-    expect(result).to.equal('apples');
-    expect(finalized).to.be.true;
+    expect(result).toEqual('apples');
+    expect(finalized).toBe(true);
   });
 
   it('should stop listening to a synchronous observable when resolved', async () => {
@@ -71,6 +73,6 @@ describe('firstValueFrom', () => {
     });
 
     const result = await firstValueFrom(synchronousObservable);
-    expect(sideEffects).to.deep.equal([0]);
+    expect(sideEffects).toEqual([0]);
   });
 });

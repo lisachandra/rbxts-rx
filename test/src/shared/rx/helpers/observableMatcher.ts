@@ -1,6 +1,7 @@
-import * as _ from 'lodash';
-import * as chai from 'chai';
+import { expect } from '@rbxts/jest-globals';
+import { Error, Array } from '@rbxts/luau-polyfill';
 
+/*
 function stringify(x: any): string {
   return JSON.stringify(x, function (key: string, value: any) {
     if (Array.isArray(value)) {
@@ -18,23 +19,33 @@ function stringify(x: any): string {
     .replace(/\\t/g, '\t')
     .replace(/\\n/g, '\n');
 }
+*/
 
-function deleteErrorNotificationStack(marble: any) {
-  const { notification } = marble;
+function deleteErrorNotificationStack(marble: unknown) {
+  const { notification } = marble as never;
   if (notification) {
     const { kind, error } = notification;
-    if (kind === 'E' && error instanceof Error) {
-      notification.error = { name: error.name, message: error.message };
+    if (kind === 'E' && (error as any) instanceof Error) {
+      (notification as { error: unknown }).error = { name: (error as Error).name, message: (error as Error).message };
     }
   }
   return marble;
 }
 
-export function observableMatcher(actual: any, expected: any) {
-  if (Array.isArray(actual) && Array.isArray(expected)) {
-    actual = actual.map(deleteErrorNotificationStack);
-    expected = expected.map(deleteErrorNotificationStack);
-    const passed = _.isEqual(actual, expected);
+function run(fn: Callback) {
+  fn();
+}
+
+export function observableMatcher(actual: unknown, expected: unknown) {
+  if (Array.isArray<defined>(actual) && Array.isArray<defined>(expected)) {
+    run(() => {
+      actual = (actual as defined[]).map(deleteErrorNotificationStack);
+      expected = (expected as defined[]).map(deleteErrorNotificationStack);
+    });
+
+    expect(actual).toEqual(expected);
+    /*
+    const passed = _G.isEqual(actual, expected);
     if (passed) {
       return;
     }
@@ -45,8 +56,9 @@ export function observableMatcher(actual: any, expected: any) {
     message += '\t\nto deep equal \n';
     expected.forEach((x: any) => (message += `\t${stringify(x)}\n`));
 
-    chai.assert(passed, message);
+    assert(passed, message);
+    */
   } else {
-    chai.assert.deepEqual(actual, expected);
+    expect(actual).toEqual(expected);
   }
 }

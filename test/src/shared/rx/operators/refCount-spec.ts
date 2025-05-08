@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { refCount, publish, publishReplay, first } from '@rbxts/rx/out/operators';
 import { NEVER, noop, Observable, Subject } from '@rbxts/rx';
@@ -35,14 +35,14 @@ describe('refCount', () => {
       next: noop,
     });
 
-    expect((connectable as any)._refCount).to.equal(3);
+    expect((connectable as any)._refCount).toEqual(3);
 
     sub1.unsubscribe();
     sub2.unsubscribe();
     sub3.unsubscribe();
   });
 
-  it('should unsub from the source when all other subscriptions are unsubbed', (done) => {
+  it('should unsub from the source when all other subscriptions are unsubbed', (_, done) => {
     let unsubscribeCalled = false;
     const connectable = new Observable<boolean>((observer) => {
       observer.next(true);
@@ -60,15 +60,15 @@ describe('refCount', () => {
       //noop
     });
     const sub3 = refCounted.subscribe(() => {
-      expect((connectable as any)._refCount).to.equal(1);
+      expect((connectable as any)._refCount).toEqual(1);
     });
 
     sub1.unsubscribe();
     sub2.unsubscribe();
     sub3.unsubscribe();
 
-    expect((connectable as any)._refCount).to.equal(0);
-    expect(unsubscribeCalled).to.be.true;
+    expect((connectable as any)._refCount).toEqual(0);
+    expect(unsubscribeCalled).toBe(true);
     done();
   });
 
@@ -86,8 +86,8 @@ describe('refCount', () => {
     refCounted.subscribe();
     refCounted.subscribe().unsubscribe();
 
-    expect((connectable as any)._refCount).to.equal(1);
-    expect(unsubscribeCalled).to.be.false;
+    expect((connectable as any)._refCount).toEqual(1);
+    expect(unsubscribeCalled).toBe(false);
   });
 
   it('should not unsubscribe when a subscriber synchronously unsubscribes if other subscribers are present and the source is a Subject', () => {
@@ -106,8 +106,8 @@ describe('refCount', () => {
 
     subject.next('the number two');
 
-    expect((connectable as any)._refCount).to.equal(1);
-    expect(arr[0]).to.equal('the number one');
-    expect(arr[1]).to.equal('the number two');
+    expect((connectable as any)._refCount).toEqual(1);
+    expect(arr[0]).toEqual('the number one');
+    expect(arr[1]).toEqual('the number two');
   });
 });

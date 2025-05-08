@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { elementAt, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { ArgumentOutOfRangeError, of, range, Observable } from '@rbxts/rx';
@@ -135,7 +135,7 @@ describe('elementAt', () => {
   it('should throw if index is smaller than zero', () => {
     expect(() => {
       range(0, 10).pipe(elementAt(-1));
-    }).to.throw(ArgumentOutOfRangeError);
+    }).toThrow(ArgumentOutOfRangeError);
   });
 
   it('should raise error if index is out of range but does not have default value', () => {
@@ -176,6 +176,6 @@ describe('elementAt', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

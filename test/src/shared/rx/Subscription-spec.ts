@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
 import { Observable, UnsubscriptionError, Subscription, merge } from '@rbxts/rx';
 
 /** @test {Subscription} */
@@ -14,7 +15,7 @@ describe('Subscription', () => {
       main.add(child);
       main.unsubscribe();
 
-      expect(isCalled).to.equal(true);
+      expect(isCalled).toEqual(true);
     });
 
     it('should unsubscribe child subscriptions if it has already been unsubscribed', () => {
@@ -27,7 +28,7 @@ describe('Subscription', () => {
       });
       main.add(child);
 
-      expect(isCalled).to.equal(true);
+      expect(isCalled).toEqual(true);
     });
 
     it('should unsubscribe a finalizer function that was passed', () => {
@@ -37,7 +38,7 @@ describe('Subscription', () => {
         isCalled = true;
       });
       main.unsubscribe();
-      expect(isCalled).to.be.true;
+      expect(isCalled).toBe(true);
     });
 
     it('should unsubscribe a finalizer function that was passed immediately if it has been unsubscribed', () => {
@@ -47,7 +48,7 @@ describe('Subscription', () => {
       main.add(() => {
         isCalled = true;
       });
-      expect(isCalled).to.be.true;
+      expect(isCalled).toBe(true);
     });
 
     it('should unsubscribe an Unsubscribable when unsubscribed', () => {
@@ -59,7 +60,7 @@ describe('Subscription', () => {
         },
       });
       main.unsubscribe();
-      expect(isCalled).to.be.true;
+      expect(isCalled).toBe(true);
     });
 
     it('should unsubscribe an Unsubscribable if it is already unsubscribed', () => {
@@ -71,7 +72,7 @@ describe('Subscription', () => {
           isCalled = true;
         },
       });
-      expect(isCalled).to.be.true;
+      expect(isCalled).toBe(true);
     });
   });
 
@@ -85,7 +86,7 @@ describe('Subscription', () => {
       main.add(child);
       main.remove(child);
       main.unsubscribe();
-      expect(isCalled).to.be.false;
+      expect(isCalled).toBe(false);
     });
 
     it('should remove added functions', () => {
@@ -97,7 +98,7 @@ describe('Subscription', () => {
       main.add(finalizer);
       main.remove(finalizer);
       main.unsubscribe();
-      expect(isCalled).to.be.false;
+      expect(isCalled).toBe(false);
     });
 
     it('should remove added unsubscribables', () => {
@@ -111,12 +112,12 @@ describe('Subscription', () => {
       main.add(unsubscribable);
       main.remove(unsubscribable);
       main.unsubscribe();
-      expect(isCalled).to.be.false;
+      expect(isCalled).toBe(false);
     });
   });
 
   describe('unsubscribe()', () => {
-    it('should unsubscribe from all subscriptions, when some of them throw', (done) => {
+    it('should unsubscribe from all subscriptions, when some of them throw', (_, done) => {
       const finalizers: number[] = [];
 
       const source1 = new Observable(() => {
@@ -143,13 +144,13 @@ describe('Subscription', () => {
       setTimeout(() => {
         expect(() => {
           subscription.unsubscribe();
-        }).to.throw(UnsubscriptionError);
-        expect(finalizers).to.deep.equal([1, 2, 3]);
+        }).toThrow(UnsubscriptionError);
+        expect(finalizers).toEqual([1, 2, 3]);
         done();
       });
     });
 
-    it('should unsubscribe from all subscriptions, when adding a bad custom subscription to a subscription', (done) => {
+    it('should unsubscribe from all subscriptions, when adding a bad custom subscription to a subscription', (_, done) => {
       const finalizers: number[] = [];
 
       const sub = new Subscription();
@@ -165,7 +166,7 @@ describe('Subscription', () => {
           finalizers.push(2);
           sub.add(<any>{
             unsubscribe: () => {
-              expect(sub.closed).to.be.true;
+              expect(sub.closed).toBe(true);
               throw new Error('Who is your daddy, and what does he do?');
             },
           });
@@ -183,8 +184,8 @@ describe('Subscription', () => {
       setTimeout(() => {
         expect(() => {
           sub.unsubscribe();
-        }).to.throw(UnsubscriptionError);
-        expect(finalizers).to.deep.equal([1, 2, 3]);
+        }).toThrow(UnsubscriptionError);
+        expect(finalizers).toEqual([1, 2, 3]);
         done();
       });
     });
@@ -192,13 +193,13 @@ describe('Subscription', () => {
     it('should have idempotent unsubscription', () => {
       let count = 0;
       const subscription = new Subscription(() => ++count);
-      expect(count).to.equal(0);
+      expect(count).toEqual(0);
 
       subscription.unsubscribe();
-      expect(count).to.equal(1);
+      expect(count).toEqual(1);
 
       subscription.unsubscribe();
-      expect(count).to.equal(1);
+      expect(count).toEqual(1);
     });
 
     it('should unsubscribe from all parents', () => {
@@ -221,15 +222,15 @@ describe('Subscription', () => {
       // When d is added to the subscriptions, it's added as a finalizer. The
       // length is 1 because the finalizers passed to the ctors are stored in a
       // separate property.
-      expect((a as any)._finalizers).to.have.size()(1);
-      expect((b as any)._finalizers).to.have.size()(1);
-      expect((c as any)._finalizers).to.have.size()(1);
+      expect((a as any)._finalizers).toHaveLength(1);
+      expect((b as any)._finalizers).toHaveLength(1);
+      expect((c as any)._finalizers).toHaveLength(1);
       d.unsubscribe();
       // When d is unsubscribed, it should remove itself from each of its
       // parents.
-      expect((a as any)._finalizers).to.have.size()(0);
-      expect((b as any)._finalizers).to.have.size()(0);
-      expect((c as any)._finalizers).to.have.size()(0);
+      expect((a as any)._finalizers).toHaveLength(0);
+      expect((b as any)._finalizers).toHaveLength(0);
+      expect((c as any)._finalizers).toHaveLength(0);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { single, mergeMap, tap } from '@rbxts/rx/out/operators';
 import { of, EmptyError, SequenceError, NotFoundError, Observable } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -178,7 +178,7 @@ describe('single operator', () => {
           single(predicate),
           tap({
             complete: () => {
-              expect(indices).to.deep.equal([0, 1, 2]);
+              expect(indices).toEqual([0, 1, 2]);
             },
           })
         )
@@ -351,6 +351,6 @@ describe('single operator', () => {
       },
     });
 
-    expect(sideEffects).to.deep.equal([0, 1]);
+    expect(sideEffects).toEqual([0, 1]);
   });
 });

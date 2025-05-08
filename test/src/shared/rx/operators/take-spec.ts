@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { merge, Observable, of, Subject } from '@rbxts/rx';
 import { mergeMap, take, tap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -165,9 +165,9 @@ describe('take', () => {
 
   it('should unsubscribe from the source when it reaches the limit', () => {
     const source = new Observable<number>((observer) => {
-      expect(observer.closed).to.be.false;
+      expect(observer.closed).toBe(false);
       observer.next(42);
-      expect(observer.closed).to.be.true;
+      expect(observer.closed).toBe(true);
     }).pipe(take(1));
 
     source.subscribe();
@@ -185,7 +185,7 @@ describe('take', () => {
       },
     });
     source.next();
-    expect(completed).to.be.true;
+    expect(completed).toBe(true);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -203,7 +203,7 @@ describe('take', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should complete even if the parameter is a string', () => {

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { max, mergeMap, skip, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, range } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {max} */
 describe('max', () => {
@@ -119,12 +120,12 @@ describe('max', () => {
     });
   });
 
-  it('should max a range() source observable', (done) => {
+  it('should max a range() source observable', (_, done) => {
     range(1, 10000)
       .pipe(max())
       .subscribe({
         next: (value: number) => {
-          expect(value).to.equal(10000);
+          expect(value).toEqual(10000);
         },
         error: () => {
           done(new Error('should not be called'));
@@ -135,12 +136,12 @@ describe('max', () => {
       });
   });
 
-  it('should max a range().pipe(skip(1)) source observable', (done) => {
+  it('should max a range().pipe(skip(1)) source observable', (_, done) => {
     range(1, 10)
       .pipe(skip(1), max())
       .subscribe({
         next: (value: number) => {
-          expect(value).to.equal(10);
+          expect(value).toEqual(10);
         },
         error: () => {
           done(new Error('should not be called'));
@@ -151,12 +152,12 @@ describe('max', () => {
       });
   });
 
-  it('should max a range().pipe(take(1)) source observable', (done) => {
+  it('should max a range().pipe(take(1)) source observable', (_, done) => {
     range(1, 10)
       .pipe(take(1), max())
       .subscribe({
         next: (value: number) => {
-          expect(value).to.equal(1);
+          expect(value).toEqual(1);
         },
         error: () => {
           done(new Error('should not be called'));

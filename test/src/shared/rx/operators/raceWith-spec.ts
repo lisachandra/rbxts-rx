@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { EMPTY, NEVER, of, timer, defer, Observable, throwError } from '@rbxts/rx';
 import { raceWith, mergeMap, map, finalize, startWith, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -177,13 +176,13 @@ describe('raceWith operator', () => {
     });
   });
 
-  it('should allow observable emits immediately', (done) => {
+  it('should allow observable emits immediately', (_, done) => {
     const e1 = of(true);
     const e2 = timer(200).pipe(map((_) => false));
 
     e1.pipe(raceWith(e2)).subscribe({
       next: (x) => {
-        expect(x).to.be.true;
+        expect(x).toBe(true);
       },
       error: done,
       complete: done,
@@ -191,60 +190,60 @@ describe('raceWith operator', () => {
   });
 
   it('should ignore latter observables if a former one emits immediately', () => {
-    const onNext = sinon.spy();
-    const onSubscribe = sinon.spy() as any;
+    const onNext = jest.fn();
+    const onSubscribe = jest.fn();
     const e1 = of('a'); // Wins the race
     const e2 = defer(onSubscribe); // Should be ignored
 
     e1.pipe(raceWith(e2)).subscribe(onNext);
-    expect(onNext.calledWithExactly('a')).to.be.true;
-    expect(onSubscribe.called).to.be.false;
+    expect(onNext).toHaveBeenCalledWith('a');
+    expect(onSubscribe).never.toHaveBeenCalled();
   });
 
   it('should ignore latter observables if a former one completes immediately', () => {
-    const onComplete = sinon.spy();
-    const onSubscribe = sinon.spy() as any;
+    const onComplete = jest.fn();
+    const onSubscribe = jest.fn();
     const e1 = EMPTY; // Wins the race
     const e2 = defer(onSubscribe); // Should be ignored
 
     e1.pipe(raceWith(e2)).subscribe({ complete: onComplete });
-    expect(onComplete.calledWithExactly()).to.be.true;
-    expect(onSubscribe.called).to.be.false;
+    expect(onComplete).toHaveBeenCalledWith();
+    expect(onSubscribe).never.toHaveBeenCalled();
   });
 
   it('should ignore latter observables if a former one errors immediately', () => {
-    const onError = sinon.spy();
-    const onSubscribe = sinon.spy() as any;
+    const onError = jest.fn();
+    const onSubscribe = jest.fn();
     const e1 = throwError(() => 'kaboom'); // Wins the race
     const e2 = defer(onSubscribe); // Should be ignored
 
     e1.pipe(raceWith(e2)).subscribe({ error: onError });
-    expect(onError.calledWithExactly('kaboom')).to.be.true;
-    expect(onSubscribe.called).to.be.false;
+    expect(onError).toHaveBeenCalledWith('kaboom');
+    expect(onSubscribe).never.toHaveBeenCalled();
   });
 
   it('should unsubscribe former observables if a latter one emits immediately', () => {
-    const onNext = sinon.spy();
-    const onUnsubscribe = sinon.spy();
+    const onNext = jest.fn();
+    const onUnsubscribe = jest.fn();
     const e1 = NEVER.pipe(finalize(onUnsubscribe)); // Should be unsubscribed
     const e2 = of('b'); // Wins the race
 
     e1.pipe(raceWith(e2)).subscribe(onNext);
-    expect(onNext.calledWithExactly('b')).to.be.true;
-    expect(onUnsubscribe.calledOnce).to.be.true;
+    expect(onNext).toHaveBeenCalledWith('b');
+    expect(onUnsubscribe).toHaveBeenCalledTimes(1);
   });
 
   it('should unsubscribe from immediately emitting observable on unsubscription', () => {
-    const onNext = sinon.spy();
-    const onUnsubscribe = sinon.spy();
+    const onNext = jest.fn();
+    const onUnsubscribe = jest.fn();
     const e1 = <Observable<never>>NEVER.pipe(startWith('a'), finalize(onUnsubscribe)); // Wins the race
     const e2 = NEVER; // Loses the race
 
     const subscription = e1.pipe(raceWith(e2)).subscribe(onNext);
-    expect(onNext.calledWithExactly('a')).to.be.true;
-    expect(onUnsubscribe.called).to.be.false;
+    expect(onNext).toHaveBeenCalledWith('a');
+    expect(onUnsubscribe).never.toHaveBeenCalled();
     subscription.unsubscribe();
-    expect(onUnsubscribe.calledOnce).to.be.true;
+    expect(onUnsubscribe).toHaveBeenCalledTimes(1);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -262,6 +261,6 @@ describe('raceWith operator', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

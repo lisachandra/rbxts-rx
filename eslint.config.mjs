@@ -93,6 +93,7 @@ export default tseslint.config(
 			"@typescript-eslint/no-floating-promises": "off",
 			"@typescript-eslint/no-unnecessary-type-assertion": "off",
 			"no-empty-pattern": "off",
+			"prefer-const": "off",
 		},
 	},
 	{

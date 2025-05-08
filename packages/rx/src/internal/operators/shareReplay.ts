@@ -152,7 +152,7 @@ export function shareReplay<T>(bufferSize?: number, windowTime?: number, schedul
  * elements of a sequence produced by multicasting the source sequence within a
  * selector function.
  */
-export function shareReplay<T extends defined>(
+export function shareReplay<T>(
   configOrBufferSize?: ShareReplayConfig | number,
   windowTime?: number,
   scheduler?: SchedulerLike

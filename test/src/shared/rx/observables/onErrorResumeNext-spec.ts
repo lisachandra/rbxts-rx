@@ -1,6 +1,7 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { onErrorResumeNext, of } from '@rbxts/rx';
 import { finalize } from '@rbxts/rx/out/operators';
-import { expect } from 'chai';
+
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
@@ -70,7 +71,7 @@ describe('onErrorResumeNext', () => {
       complete: () => results.push('complete'),
     });
 
-    expect(results).to.deep.equal([1, 2, 3, 4, 5, 6, 'complete']);
+    expect(results).toEqual([1, 2, 3, 4, 5, 6, 'complete']);
   });
 
   it('should call finalize after each sync observable', () => {
@@ -86,6 +87,6 @@ describe('onErrorResumeNext', () => {
       complete: () => results.push('complete'),
     });
 
-    expect(results).to.deep.equal([1, 'finalize 1', 2, 'finalize 2', 3, 'finalize 3', 4, 'finalize 4', 'complete']);
+    expect(results).toEqual([1, 'finalize 1', 2, 'finalize 2', 3, 'finalize 3', 4, 'finalize 4', 'complete']);
   });
 });

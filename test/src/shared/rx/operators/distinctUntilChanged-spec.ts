@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { distinctUntilChanged, mergeMap, take } from '@rbxts/rx/out/operators';
 import { of, Observable, Subject } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {distinctUntilChanged} */
 describe('distinctUntilChanged', () => {
@@ -295,7 +296,7 @@ describe('distinctUntilChanged', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   // This test is to cover a corner case where someone might write
@@ -325,6 +326,6 @@ describe('distinctUntilChanged', () => {
     subject.next(1);
 
     // It should only have emitted one value.
-    expect(results).to.deep.equal([1]);
+    expect(results).toEqual([1]);
   });
 });

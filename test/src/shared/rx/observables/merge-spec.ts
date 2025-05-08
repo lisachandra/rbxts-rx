@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { lowerCaseO } from '../helpers/test-helper';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { merge, of, Observable, defer, asyncScheduler } from '@rbxts/rx';
@@ -33,7 +33,7 @@ describe('static merge(...observables)', () => {
     const e1 = of('a');
     const result = merge(e1);
 
-    expect(e1).to.equal(result);
+    expect(e1).toEqual(result);
   });
 
   it('should merge hot and hot', () => {
@@ -253,7 +253,7 @@ describe('static merge(...observables)', () => {
 
       const result = merge(e1);
 
-      expect(result).to.be.instanceof(Observable);
+      expect(result).toBeInstanceOf(Observable);
       expectObservable(result).toBe('(abc|)');
     });
   });
@@ -265,7 +265,7 @@ describe('static merge(...observables)', () => {
 
       const result = merge(e1, e2);
 
-      expect(result).to.be.instanceof(Observable);
+      expect(result).toBeInstanceOf(Observable);
       expectObservable(result).toBe('(abcdef|)');
     });
   });
@@ -284,7 +284,7 @@ describe('merge(...observables, Scheduler)', () => {
 
       const result = merge(e1, rxTestScheduler);
 
-      expect(result).to.be.instanceof(Observable);
+      expect(result).toBeInstanceOf(Observable);
       expectObservable(result).toBe('(abc|)');
     });
   });
@@ -328,7 +328,7 @@ describe('merge(...observables, Scheduler, number)', () => {
     });
   });
 
-  it('should use the scheduler even when one Observable is merged', (done) => {
+  it('should use the scheduler even when one Observable is merged', (_, done) => {
     let e1Subscribed = false;
     const e1 = defer(() => {
       e1Subscribed = true;
@@ -338,12 +338,12 @@ describe('merge(...observables, Scheduler, number)', () => {
     merge(e1, asyncScheduler).subscribe({
       error: done,
       complete: () => {
-        expect(e1Subscribed).to.be.true;
+        expect(e1Subscribed).toBe(true);
         done();
       },
     });
 
-    expect(e1Subscribed).to.be.false;
+    expect(e1Subscribed).toBe(false);
   });
 
   it('should deem a single array argument to be an ObservableInput', () => {

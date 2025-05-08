@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { concat, defer, of, Subject, Observable, interval } from '@rbxts/rx';
 import { skipUntil, mergeMap, take } from '@rbxts/rx/out/operators';
 import { asInteropObservable } from '../helpers/interop-helper';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
 
 /** @test {skipUntil} */
 describe('skipUntil', () => {
@@ -54,7 +55,7 @@ describe('skipUntil', () => {
           throw err;
         },
         complete() {
-          expect(values).to.deep.equal(['a', 'b']);
+          expect(values).toEqual(['a', 'b']);
         },
       });
   });
@@ -347,7 +348,7 @@ describe('skipUntil', () => {
       .subscribe(() => {
         /* noop */
       });
-    expect(sideEffects).to.deep.equal([1]);
+    expect(sideEffects).toEqual([1]);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -365,26 +366,26 @@ describe('skipUntil', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
-  it('should skip until Promise resolves', (done) => {
+  it('should skip until Promise resolves', (_, done) => {
     const e1 = interval(3).pipe(take(5));
     const expected = [2, 3, 4];
 
     e1.pipe(skipUntil(new Promise<void>((resolve) => setTimeout(() => resolve(), 8)))).subscribe({
       next: (x) => {
-        expect(x).to.deep.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: () => done(new Error('should not be called')),
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         done();
       },
     });
   });
 
-  it('should raise error when Promise rejects', (done) => {
+  it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(5));
     const error = new Error('err');
 
@@ -393,7 +394,7 @@ describe('skipUntil', () => {
         done(new Error('should not be called'));
       },
       error: (err: any) => {
-        expect(err).to.be.an('error');
+        expect(err).toBeInstanceOf(Error);
         done();
       },
       complete: () => {

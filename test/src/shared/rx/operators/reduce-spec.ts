@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { reduce, mergeMap } from '@rbxts/rx/out/operators';
 import { range, of } from '@rbxts/rx';
@@ -71,13 +71,13 @@ describe('reduce', () => {
     range(0, 6)
       .pipe(
         reduce((acc, value, index) => {
-          expect(idx.shift()).to.equal(index);
+          expect(idx.shift()).toEqual(index);
           return value;
         })
       )
       .subscribe({
         complete() {
-          expect(idx).to.be.empty;
+          expect(idx).toHaveLength(0);
         },
       });
   });
@@ -88,13 +88,13 @@ describe('reduce', () => {
     range(0, 6)
       .pipe(
         reduce((acc, value, index) => {
-          expect(idx.shift()).to.equal(index);
+          expect(idx.shift()).toEqual(index);
           return value;
         }, -1)
       )
       .subscribe({
         complete() {
-          expect(idx).to.be.empty;
+          expect(idx).toHaveLength(0);
         },
       });
   });

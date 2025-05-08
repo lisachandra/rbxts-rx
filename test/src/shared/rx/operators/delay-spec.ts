@@ -1,8 +1,8 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, concat } from '@rbxts/rx';
 import { delay, repeatWhen, skip, take, tap, mergeMap, ignoreElements } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
-import * as sinon from 'sinon';
-import { expect } from 'chai';
+
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {delay} */
@@ -49,7 +49,7 @@ describe('delay', () => {
       const t = time('  --------------------|                           ');
       const expected = '--------------------(aaaaa)-----b---b---b---b--|';
 
-      const absoluteDelay = new Date(testScheduler.now() + t);
+      const absoluteDelay = DateTime.fromUnixTimestampMillis(testScheduler.now() + t);
       const result = e1.pipe(delay(absoluteDelay));
 
       expectObservable(result).toBe(expected);
@@ -64,7 +64,7 @@ describe('delay', () => {
       const t = -10000;
       const expected = '--a--a---a----a----a------------b---b---b---b--|';
 
-      const absoluteDelay = new Date(testScheduler.now() + t);
+      const absoluteDelay = DateTime.fromUnixTimestampMillis(testScheduler.now() + t);
       const result = e1.pipe(delay(absoluteDelay));
 
       expectObservable(result).toBe(expected);
@@ -79,7 +79,7 @@ describe('delay', () => {
       const t = time('   ------------------------------|      ');
       const expected = ' ------------------------------(aaaa|)';
 
-      const absoluteDelay = new Date(testScheduler.now() + t);
+      const absoluteDelay = DateTime.fromUnixTimestampMillis(testScheduler.now() + t);
       const result = e1.pipe(delay(absoluteDelay));
 
       expectObservable(result).toBe(expected);
@@ -109,7 +109,7 @@ describe('delay', () => {
       const t = time('  --------------------|');
       const expected = '---------------#     ';
 
-      const absoluteDelay = new Date(testScheduler.now() + t);
+      const absoluteDelay = DateTime.fromUnixTimestampMillis(testScheduler.now() + t);
       const result = e1.pipe(delay(absoluteDelay));
 
       expectObservable(result).toBe(expected);
@@ -124,7 +124,7 @@ describe('delay', () => {
       const t = time('   -----------------|                  ');
       const expected = ' -----------------(aaaa)-b---b---b--#';
 
-      const absoluteDelay = new Date(testScheduler.now() + t);
+      const absoluteDelay = DateTime.fromUnixTimestampMillis(testScheduler.now() + t);
       const result = e1.pipe(delay(absoluteDelay));
 
       expectObservable(result).toBe(expected);
@@ -226,7 +226,7 @@ describe('delay', () => {
 
   it('should unsubscribe scheduled actions after execution', () => {
     testScheduler.run(({ cold, time, expectObservable, expectSubscriptions }) => {
-      let subscribeSpy: any = undefined;
+      let subscribeSpy: jest.SpyInstance;
       const counts: number[] = [];
 
       const e1 = cold(' a|      ');
@@ -236,18 +236,18 @@ describe('delay', () => {
       const result = e1.pipe(
         repeatWhen((notifications) => {
           const delayed = notifications.pipe(delay(t));
-          subscribeSpy = sinon.spy((delayed as any)['source'], 'subscribe');
+          subscribeSpy = jest.spyOn(delayed.source as never, 'subscribe' as never);
           return delayed;
         }),
         skip(1),
         take(2),
         tap({
           next() {
-            const [[subscriber]] = subscribeSpy.args;
+            const [[subscriber]] = subscribeSpy.mock.calls;
             counts.push(subscriber._finalizers.size());
           },
           complete() {
-            expect(counts).to.deep.equal([1, 1]);
+            expect(counts).toEqual([1, 1]);
           },
         })
       );

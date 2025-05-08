@@ -1,11 +1,12 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { concat, defer, Observable, of, throwError, EMPTY, from } from '@rbxts/rx';
 import { catchError, map, mergeMap, takeWhile, delay, take } from '@rbxts/rx/out/operators';
-import * as sinon from 'sinon';
+
 import { createObservableInputs } from '../helpers/test-helper';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { asInteropObservable } from '../helpers/interop-helper';
+import LuauPolyfill, { Error, setTimeout } from '@rbxts/luau-polyfill';
 
 /** @test {catch} */
 describe('catchError operator', () => {
@@ -181,13 +182,14 @@ describe('catchError operator', () => {
     throwError(() => new Error('Some error'))
       .pipe(
         catchError(() => synchronousObservable),
+
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([1, 2]);
+    expect(sideEffects).toEqual([1, 2]);
   });
 
   it('should catch error and replace it with a hot Observable', () => {
@@ -342,11 +344,11 @@ describe('catchError operator', () => {
     });
   });
 
-  it('should pass the error as the first argument', (done) => {
+  it('should pass the error as the first argument', (_, done) => {
     throwError(() => 'bad')
       .pipe(
         catchError((err: any) => {
-          expect(err).to.equal('bad');
+          expect(err).toEqual('bad');
           return EMPTY;
         })
       )
@@ -363,12 +365,12 @@ describe('catchError operator', () => {
       });
   });
 
-  it('should accept selector returns any ObservableInput', (done) => {
+  it('should accept selector returns any ObservableInput', (_, done) => {
     const input$ = createObservableInputs(42);
 
     input$.pipe(mergeMap((input) => throwError(() => 'bad').pipe(catchError((err) => input)))).subscribe({
       next: (x) => {
-        expect(x).to.be.equal(42);
+        expect(x).toEqual(42);
       },
       error: (err: any) => {
         done(new Error('should not be called'));
@@ -394,41 +396,33 @@ describe('catchError operator', () => {
     });
   });
 
-  context('fromPromise', () => {
-    type SetTimeout = (callback: (...args: any[]) => void, ms: number, ...args: any[]) => NodeJS.Timer;
-
-    let trueSetTimeout: SetTimeout;
-    let sandbox: sinon.SinonSandbox;
-    let timers: sinon.SinonFakeTimers;
-
+  describe('fromPromise', () => {
     beforeEach(() => {
-      trueSetTimeout = global.setTimeout;
-      sandbox = sinon.createSandbox();
-      timers = sandbox.useFakeTimers();
+      jest.useFakeTimers();
     });
 
     afterEach(() => {
-      sandbox.restore();
+      jest.restoreAllMocks();
     });
 
-    it('should chain a throw from a promise using Observable.throw', (done) => {
-      const subscribeSpy = sinon.spy();
-      const errorSpy = sinon.spy();
+    it('should chain a throw from a promise using Observable.throw', (_, done) => {
+      const subscribeSpy = jest.fn();
+      const errorSpy = jest.fn();
       const thrownError = new Error('BROKEN THROW');
       const testError = new Error('BROKEN PROMISE');
       from(Promise.reject(testError))
         .pipe(catchError((err) => throwError(() => thrownError)))
         .subscribe({ next: subscribeSpy, error: errorSpy });
 
-      trueSetTimeout(() => {
+      setTimeout(() => {
         try {
-          timers.tick(1);
+          jest.advanceTimersByTime(1);
         } catch (e) {
           return done(new Error('This should not have thrown an error'));
         }
-        expect(subscribeSpy).not.to.be.called;
-        expect(errorSpy).to.have.been.called;
-        expect(errorSpy).to.have.been.calledWith(thrownError);
+        expect(subscribeSpy).never.toHaveBeenCalled();
+        expect(errorSpy).toHaveBeenCalled();
+        expect(errorSpy).toHaveBeenCalledWith(thrownError);
         done();
       }, 0);
     });
@@ -438,7 +432,7 @@ describe('catchError operator', () => {
   // The re-implementation in version 8 should fix the problem in the
   // referenced issue. Closed subscribers should remain closed.
 
-  it('Properly handle async handled result if source is synchronous', (done) => {
+  it('Properly handle async handled result if source is synchronous', (_, done) => {
     const source = new Observable<string>((observer) => {
       observer.error(new Error('kaboom!'));
       observer.complete();
@@ -454,7 +448,7 @@ describe('catchError operator', () => {
       next: (value) => values.push(value),
       error: (err) => done(err),
       complete: () => {
-        expect(values).to.deep.equal(['delayed']);
+        expect(values).toEqual(['delayed']);
         done();
       },
     });
@@ -480,6 +474,6 @@ describe('catchError operator', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

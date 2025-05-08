@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of } from '@rbxts/rx';
 import { auditTime, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -28,12 +28,12 @@ describe('auditTime', () => {
     });
   });
 
-  it('should auditTime events by 5 time units', (done) => {
+  it('should auditTime events by 5 time units', (_, done) => {
     const expected = 3;
     of(1, 2, 3)
       .pipe(auditTime(5))
       .subscribe((x: number) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       });
   });

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { Observable, of } from '@rbxts/rx';
 import { switchMapTo, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -42,7 +42,7 @@ describe('switchMapTo', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([
+          expect(results).toEqual([
             [1, 4, 0, 0],
             [1, 5, 0, 1],
             [1, 6, 0, 2],
@@ -61,7 +61,7 @@ describe('switchMapTo', () => {
     const results: number[] = [];
 
     of(1, 2, 3)
-      .pipe(switchMapTo(of(4, 5, 6), void 0))
+      .pipe(switchMapTo(of(4, 5, 6), undefined))
       .subscribe({
         next(value) {
           results.push(value);
@@ -70,17 +70,17 @@ describe('switchMapTo', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([4, 5, 6, 4, 5, 6, 4, 5, 6]);
+          expect(results).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6]);
         },
       });
   });
 
-  it('should switch a synchronous many outer to a synchronous many inner', (done) => {
+  it('should switch a synchronous many outer to a synchronous many inner', (_, done) => {
     const a = of(1, 2, 3);
     const expected = ['a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c'];
     a.pipe(switchMapTo(of('a', 'b', 'c'))).subscribe({
       next(x) {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       complete: done,
     });
@@ -102,7 +102,7 @@ describe('switchMapTo', () => {
       )
       .subscribe();
 
-    expect(unsubbed).to.equal(2);
+    expect(unsubbed).toEqual(2);
   });
 
   it('should switch to an inner cold observable', () => {
@@ -347,6 +347,6 @@ describe('switchMapTo', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

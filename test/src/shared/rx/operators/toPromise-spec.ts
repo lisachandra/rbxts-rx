@@ -1,25 +1,26 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, EMPTY, throwError, config } from '@rbxts/rx';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {toPromise} */
 describe('Observable.toPromise', () => {
-  it('should convert an Observable to a promise of its last value', (done) => {
+  it('should convert an Observable to a promise of its last value', (_, done) => {
     of(1, 2, 3)
       .toPromise(Promise)
       .then((x) => {
-        expect(x).to.equal(3);
+        expect(x).toEqual(3);
         done();
       });
   });
 
-  it('should convert an empty Observable to a promise of undefined', (done) => {
+  it('should convert an empty Observable to a promise of undefined', (_, done) => {
     EMPTY.toPromise(Promise).then((x) => {
-      expect(x).to.be.undefined;
+      expect(x).toBeUndefined();
       done();
     });
   });
 
-  it('should handle errors properly', (done) => {
+  it('should handle errors properly', (_, done) => {
     throwError(() => 'bad')
       .toPromise(Promise)
       .then(
@@ -27,7 +28,7 @@ describe('Observable.toPromise', () => {
           done(new Error('should not be called'));
         },
         (err: any) => {
-          expect(err).to.equal('bad');
+          expect(err).toEqual('bad');
           done();
         }
       );
@@ -36,14 +37,15 @@ describe('Observable.toPromise', () => {
   it('should allow for global config via config.Promise', async () => {
     try {
       let wasCalled = false;
-      config.Promise = function MyPromise(callback: Function) {
+      function MyPromise(callback: Callback) {
         wasCalled = true;
         return new Promise(callback as any);
-      } as any;
+      }
+      config.Promise = MyPromise as any;
 
       const x = await of(42).toPromise();
-      expect(wasCalled).to.be.true;
-      expect(x).to.equal(42);
+      expect(wasCalled).toBe(true);
+      expect(x).toEqual(42);
     } finally {
       config.Promise = undefined;
     }

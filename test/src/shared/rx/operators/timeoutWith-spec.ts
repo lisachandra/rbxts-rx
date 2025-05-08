@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { timeoutWith, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, Observable, EMPTY } from '@rbxts/rx';
@@ -39,7 +39,7 @@ describe('timeoutWith operator', () => {
       const expected = '     ------------x--y--z--|';
 
       // The the current frame is zero.
-      const result = source.pipe(timeoutWith(new Date(t), switchTo, rxTestScheduler));
+      const result = source.pipe(timeoutWith(DateTime.fromUnixTimestampMillis(t), switchTo, rxTestScheduler));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(source.subscriptions).toBe(sourceSubs);
@@ -250,7 +250,7 @@ describe('timeoutWith operator', () => {
       const expected = '  --a--b--c--d--e--|   ';
 
       // Start frame is zero.
-      const result = source.pipe(timeoutWith(new Date(t), switchTo, rxTestScheduler));
+      const result = source.pipe(timeoutWith(DateTime.fromUnixTimestampMillis(t), switchTo, rxTestScheduler));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(source.subscriptions).toBe(sourceSubs);
@@ -267,7 +267,7 @@ describe('timeoutWith operator', () => {
       const expected = '  ---a---#           ';
 
       // Start frame is zero.
-      const result = source.pipe(timeoutWith(new Date(t), switchTo, rxTestScheduler));
+      const result = source.pipe(timeoutWith(DateTime.fromUnixTimestampMillis(t), switchTo, rxTestScheduler));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(source.subscriptions).toBe(sourceSubs);
@@ -290,6 +290,6 @@ describe('timeoutWith operator', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

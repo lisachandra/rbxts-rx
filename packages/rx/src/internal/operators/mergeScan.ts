@@ -67,7 +67,7 @@ import { mergeInternals } from './mergeInternals';
  * concurrently.
  * @return A function that returns an Observable of the accumulated values.
  */
-export function mergeScan<T extends defined, R>(
+export function mergeScan<T, R>(
   accumulator: (acc: R, value: T, index: number) => ObservableInput<R>,
   seed: R,
   concurrent = math.huge

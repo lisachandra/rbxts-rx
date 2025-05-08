@@ -1,4 +1,4 @@
-import { from, of, animationFrameScheduler } from 'rxjs';
+import { from, of, animationFrameScheduler, ReadableStreamLike } from 'rxjs';
 
 it('should accept an array', () => {
   const o = from([1, 2, 3, 4]); // $ExpectType Observable<number>
@@ -56,9 +56,8 @@ it('should support scheduler', () => {
   const a = from([1, 2, 3], animationFrameScheduler); // $ExpectType Observable<number>
 });
 
-/*
 it('should accept a ReadableStream', () => {
-  const stream: ReadableStreamLike<string> = new ReadableStream<string>({
+  const stream = new ReadableStream<string>({
     pull(controller) {
       controller.enqueue('x');
       controller.close();
@@ -66,4 +65,3 @@ it('should accept a ReadableStream', () => {
   });
   const o = from(stream); // ExpectType Observable<string>
 });
-*/

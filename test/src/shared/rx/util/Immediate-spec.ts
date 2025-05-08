@@ -1,9 +1,9 @@
-import { expect } from 'chai';
-// TODO: import was changed due to the fact that at startup the test referred to rxjs from node_modules
-import { Immediate, TestTools } from '../../packages/rx/out/internal/util/Immediate';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals'; // TODO: import was changed due to the fact that at startup the test referred to rxjs from node_modules
+import { setTimeout } from '@rbxts/luau-polyfill';
+import { Immediate, TestTools } from '@rbxts/rx/out/internal/util/Immediate';
 
 describe('Immediate', () => {
-  it('should schedule on the next microtask', (done) => {
+  it('should schedule on the next microtask', (_, done) => {
     const results: number[] = [];
     results.push(1);
     setTimeout(() => results.push(5));
@@ -12,12 +12,12 @@ describe('Immediate', () => {
     Promise.resolve().then(() => results.push(4));
 
     setTimeout(() => {
-      expect(results).to.deep.equal([1, 2, 3, 4, 5]);
+      expect(results).toEqual([1, 2, 3, 4, 5]);
       done();
     });
   });
 
-  it('should cancel the task with clearImmediate', (done) => {
+  it('should cancel the task with clearImmediate', (_, done) => {
     const results: number[] = [];
     results.push(1);
     setTimeout(() => results.push(5));
@@ -27,19 +27,19 @@ describe('Immediate', () => {
     Promise.resolve().then(() => results.push(4));
 
     setTimeout(() => {
-      expect(results).to.deep.equal([1, 2, 4, 5]);
+      expect(results).toEqual([1, 2, 4, 5]);
       done();
     });
   });
 
-  it('should clear the task after execution', (done) => {
+  it('should clear the task after execution', (_, done) => {
     const results: number[] = [];
     Immediate.setImmediate(() => results.push(1));
     Immediate.setImmediate(() => results.push(2));
 
     setTimeout(() => {
       const number = TestTools.pending();
-      expect(number).to.equal(0);
+      expect(number).toEqual(0);
       done();
     });
   });

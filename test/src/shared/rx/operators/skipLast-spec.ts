@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { skipLast, mergeMap, take } from '@rbxts/rx/out/operators';
 import { of, Observable } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -214,6 +214,6 @@ describe('skipLast operator', () => {
     // This expectation might seem a little strange, but the implementation of
     // skipLast works by eating the number of elements that are to be skipped,
     // so it will consume the number skipped in addition to the number taken.
-    expect(sideEffects).to.deep.equal([0, 1, 2, 3]);
+    expect(sideEffects).toEqual([0, 1, 2, 3]);
   });
 });

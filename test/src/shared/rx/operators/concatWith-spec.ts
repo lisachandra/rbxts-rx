@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, Observable } from '@rbxts/rx';
 import { concatWith, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { NO_SUBS } from '../helpers/test-helper';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
 
 /** @test {concat} */
 describe('concat operator', () => {
@@ -23,7 +24,7 @@ describe('concat operator', () => {
     });
   });
 
-  it('should work properly with scalar observables', (done) => {
+  it('should work properly with scalar observables', (_, done) => {
     const results: string[] = [];
 
     const s1 = new Observable<number>((observer) => {
@@ -42,7 +43,7 @@ describe('concat operator', () => {
       },
       complete: () => {
         results.push('Completed');
-        expect(results).to.deep.equal(['Next: 1', 'Next: 2', 'Completed']);
+        expect(results).toEqual(['Next: 1', 'Next: 2', 'Completed']);
         done();
       },
     });
@@ -348,6 +349,6 @@ describe('concat operator', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

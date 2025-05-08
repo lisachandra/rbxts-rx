@@ -1,8 +1,8 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import * as index from '@rbxts/rx/out/testing';
-import { expect } from 'chai';
 
 describe('index', () => {
   it('should export TestScheduler', () => {
-    expect(index.TestScheduler).to.exist;
+    expect(index.TestScheduler).toBeDefined();
   });
 });

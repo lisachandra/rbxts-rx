@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { lowerCaseO } from '../helpers/test-helper';
 import { withLatestFrom, mergeMap, delay } from '@rbxts/rx/out/operators';
 import { of } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {withLatestFrom} */
 describe('withLatestFrom', () => {
@@ -21,7 +22,7 @@ describe('withLatestFrom', () => {
       const e1subs = '  ^---------------!';
       const expected = '----B-----C-D-E-|';
 
-      const result = e1.pipe(withLatestFrom(e2, (a: string, b: string) => String(a) + String(b)));
+      const result = e1.pipe(withLatestFrom(e2, (a: string, b: string) => tostring(a) + tostring(b)));
 
       expectObservable(result).toBe(expected, { B: 'b1', C: 'c4', D: 'd4', E: 'e4' });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -274,12 +275,12 @@ describe('withLatestFrom', () => {
     });
   });
 
-  it('should handle promises', (done) => {
+  it('should handle promises', (_, done) => {
     of(1)
       .pipe(delay(1), withLatestFrom(Promise.resolve(2), Promise.resolve(3)))
       .subscribe({
         next(x: any) {
-          expect(x).to.deep.equal([1, 2, 3]);
+          expect(x).toEqual([1, 2, 3]);
         },
         complete: done,
       });
@@ -289,7 +290,7 @@ describe('withLatestFrom', () => {
     of(1)
       .pipe(delay(1), withLatestFrom([2, 3, 4], [4, 5, 6]))
       .subscribe((x: any) => {
-        expect(x).to.deep.equal([1, 4, 6]);
+        expect(x).toEqual([1, 4, 6]);
       });
   });
 
@@ -297,7 +298,7 @@ describe('withLatestFrom', () => {
     of(1)
       .pipe(delay(1), withLatestFrom(lowerCaseO(2, 3, 4), lowerCaseO(4, 5, 6)))
       .subscribe((x: any) => {
-        expect(x).to.deep.equal([1, 4, 6]);
+        expect(x).toEqual([1, 4, 6]);
       });
   });
 
@@ -309,9 +310,9 @@ describe('withLatestFrom', () => {
         result.push(x);
       });
 
-    expect(result.size()).to.equal(3);
-    expect(result[0]).to.deep.equal([1, 5]);
-    expect(result[1]).to.deep.equal([2, 5]);
-    expect(result[2]).to.deep.equal([3, 5]);
+    expect(result.size()).toEqual(3);
+    expect(result[0]).toEqual([1, 5]);
+    expect(result[1]).toEqual([2, 5]);
+    expect(result[2]).toEqual([3, 5]);
   });
 });

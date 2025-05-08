@@ -105,7 +105,7 @@ export function groupBy<T, K, R>(
  * ).pipe(
  *   groupBy(p => p.id, { element: p => p.name }),
  *   mergeMap(group$ => group$.pipe(reduce((acc, cur) => [...acc, cur], [`${ group$.key }`]))),
- *   map(arr => ({ id: parseInt(arr[0], 10), values: arr.slice(1) }))
+ *   map(arr => ({ id: tonumber(arr[0], 10), values: arr.slice(1) }))
  * )
  * .subscribe(p => console.log(p));
  *

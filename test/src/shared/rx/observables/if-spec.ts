@@ -1,7 +1,8 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { iif, of } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 describe('iif', () => {
   let rxTestScheduler: TestScheduler;
@@ -53,7 +54,7 @@ describe('iif', () => {
     });
   });
 
-  it('should accept resolved promise as thenSource', (done) => {
+  it('should accept resolved promise as thenSource', (_, done) => {
     const expected = 42;
     const e1 = iif(
       () => true,
@@ -65,7 +66,7 @@ describe('iif', () => {
 
     e1.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
       },
       error: (x) => {
         done(new Error('should not be called'));
@@ -76,7 +77,7 @@ describe('iif', () => {
     });
   });
 
-  it('should accept resolved promise as elseSource', (done) => {
+  it('should accept resolved promise as elseSource', (_, done) => {
     const expected = 42;
     const e1 = iif(
       () => false,
@@ -88,7 +89,7 @@ describe('iif', () => {
 
     e1.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
       },
       error: (x) => {
         done(new Error('should not be called'));
@@ -99,7 +100,7 @@ describe('iif', () => {
     });
   });
 
-  it('should accept rejected promise as elseSource', (done) => {
+  it('should accept rejected promise as elseSource', (_, done) => {
     const expected = 42;
     const e1 = iif(
       () => false,
@@ -114,7 +115,7 @@ describe('iif', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       },
       complete: () => {
@@ -123,7 +124,7 @@ describe('iif', () => {
     });
   });
 
-  it('should accept rejected promise as thenSource', (done) => {
+  it('should accept rejected promise as thenSource', (_, done) => {
     const expected = 42;
     const e1 = iif(
       () => true,
@@ -138,7 +139,7 @@ describe('iif', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       },
       complete: () => {

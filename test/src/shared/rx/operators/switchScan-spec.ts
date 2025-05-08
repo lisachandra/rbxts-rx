@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { concat, defer, Observable, of } from '@rbxts/rx';
 import { switchScan, map, mergeMap, takeWhile } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -22,7 +22,7 @@ describe('switchScan', () => {
       const expected = '--x-x-x-y-yz-z-z---|';
       const values = { x: 10, y: 40, z: 90 };
 
-      const result = e1.pipe(switchScan((acc, x) => e2.pipe(map((i) => i * Number(x) + acc)), 0));
+      const result = e1.pipe(switchScan((acc, x) => e2.pipe(map((i) => i * tonumber(x)! + acc)), 0));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -41,7 +41,7 @@ describe('switchScan', () => {
       )
       .subscribe();
 
-    expect(accs).to.deep.equal([100, 101, 104]);
+    expect(accs).toEqual([100, 101, 104]);
   });
 
   it('should unsub inner observables', () => {
@@ -62,7 +62,7 @@ describe('switchScan', () => {
       )
       .subscribe();
 
-    expect(unsubbed).to.deep.equal(['a', 'b']);
+    expect(unsubbed).toEqual(['a', 'b']);
   });
 
   it('should switch inner cold observables', () => {
@@ -169,13 +169,14 @@ describe('switchScan', () => {
     of(undefined)
       .pipe(
         switchScan(() => synchronousObservable, undefined),
+
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([1, 2]);
+    expect(sideEffects).toEqual([1, 2]);
   });
 
   it('should switch inner cold observables, inner never completes', () => {
@@ -433,7 +434,7 @@ describe('switchScan', () => {
     source.subscribe(observer);
     source.subscribe(observer);
 
-    expect(seeds).to.deep.equal(['a', 'ab', 'a', 'ab']);
+    expect(seeds).toEqual(['a', 'ab', 'a', 'ab']);
   });
 
   it('should pass index to the accumulator function', () => {
@@ -448,6 +449,6 @@ describe('switchScan', () => {
       )
       .subscribe();
 
-    expect(indices).to.deep.equal([0, 1, 2, 3]);
+    expect(indices).toEqual([0, 1, 2, 3]);
   });
 });

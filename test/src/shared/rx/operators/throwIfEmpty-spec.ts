@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { EMPTY, of, EmptyError, defer, throwError, Observable } from '@rbxts/rx';
 import { throwIfEmpty, mergeMap, retry, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {throwIfEmpty} */
 describe('throwIfEmpty', () => {
@@ -34,7 +35,7 @@ describe('throwIfEmpty', () => {
         },
       });
 
-      expect(thrown).to.equal(error);
+      expect(thrown).toEqual(error);
     });
 
     it('should NOT throw if NOT empty', () => {
@@ -49,7 +50,7 @@ describe('throwIfEmpty', () => {
           },
         });
 
-      expect(thrown).to.be.undefined;
+      expect(thrown).toBeUndefined();
     });
 
     it('should pass values through', () => {
@@ -122,7 +123,7 @@ describe('throwIfEmpty', () => {
           },
         });
 
-      expect(thrown).to.equal(error);
+      expect(thrown).toEqual(error);
     });
   });
 
@@ -136,7 +137,7 @@ describe('throwIfEmpty', () => {
         },
       });
 
-      expect(thrown).to.be.instanceof(EmptyError);
+      expect(thrown).toBeInstanceOf(EmptyError);
     });
 
     it('should NOT throw if NOT empty', () => {
@@ -150,7 +151,7 @@ describe('throwIfEmpty', () => {
           },
         });
 
-      expect(thrown).to.be.undefined;
+      expect(thrown).toBeUndefined();
     });
 
     it('should pass values through', () => {
@@ -222,7 +223,7 @@ describe('throwIfEmpty', () => {
           },
         });
 
-      expect(thrown).to.be.instanceof(EmptyError);
+      expect(thrown).toBeInstanceOf(EmptyError);
     });
   });
 
@@ -241,6 +242,6 @@ describe('throwIfEmpty', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { groupBy, delay, tap, map, take, mergeMap, materialize, skip, ignoreElements } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { ReplaySubject, of, Observable, Operator, Observer, Subject } from '@rbxts/rx';
 import { createNotification } from '@rbxts/rx/out/internal/NotificationFactories';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, Array, String } from '@rbxts/luau-polyfill';
 
 /** @test {groupBy} */
 describe('groupBy operator', () => {
@@ -21,26 +22,26 @@ describe('groupBy operator', () => {
       const y = cold('  2-------4-------|');
       const expectedValues = { x: x, y: y };
 
-      const source = e1.pipe(groupBy((val: string) => parseInt(val) % 2));
+      const source = e1.pipe(groupBy((val: string) => tonumber(val)! % 2));
       expectObservable(source).toBe(expected, expectedValues);
     });
   });
 
   function reverseString(str: string) {
-    return str.split('').reverse().join('');
+    return Array.reverse(str.split('')).join('');
   }
 
-  function mapObject(obj: Record<string, any>, fn: Function) {
+  function mapObject(obj: Record<string, any>, fn: Callback) {
     const out: Record<string, any> = {};
-    for (const p in obj) {
-      if (obj.hasOwnProperty(p)) {
-        out[p] = fn(obj[p]);
-      }
+    for (const [p] of pairs(obj)) {
+      // if (obj.hasOwnProperty(p)) {
+      out[p] = fn(obj[p]);
+      // }
     }
     return out;
   }
 
-  it('should group values', (done) => {
+  it('should group values', (_, done) => {
     const expectedGroups = [
       { key: 1, values: [1, 3] },
       { key: 0, values: [2] },
@@ -51,17 +52,17 @@ describe('groupBy operator', () => {
       .subscribe({
         next: (g: any) => {
           const expectedGroup = expectedGroups.shift()!;
-          expect(g.key).to.equal(expectedGroup.key);
+          expect(g.key).toEqual(expectedGroup.key);
 
           g.subscribe((x: any) => {
-            expect(x).to.deep.equal(expectedGroup.values.shift());
+            expect(x).toEqual(expectedGroup.values.shift());
           });
         },
         complete: done,
       });
   });
 
-  it('should group values with an element selector', (done) => {
+  it('should group values with an element selector', (_, done) => {
     const expectedGroups = [
       { key: 1, values: ['1!', '3!'] },
       { key: 0, values: ['2!'] },
@@ -77,10 +78,10 @@ describe('groupBy operator', () => {
       .subscribe({
         next: (g: any) => {
           const expectedGroup = expectedGroups.shift()!;
-          expect(g.key).to.equal(expectedGroup.key);
+          expect(g.key).toEqual(expectedGroup.key);
 
           g.subscribe((x: any) => {
-            expect(x).to.deep.equal(expectedGroup.values.shift());
+            expect(x).toEqual(expectedGroup.values.shift());
           });
         },
         complete: done,
@@ -113,10 +114,10 @@ describe('groupBy operator', () => {
         resultingGroups.push(group);
       });
 
-    expect(resultingGroups).to.deep.equal(expectedGroups);
+    expect(resultingGroups).toEqual(expectedGroups);
   });
 
-  it('should group values with a subject selector', (done) => {
+  it('should group values with a subject selector', (_, done) => {
     const expectedGroups = [
       { key: 1, values: [3] },
       { key: 0, values: [2] },
@@ -134,10 +135,10 @@ describe('groupBy operator', () => {
       .subscribe({
         next: (g: any) => {
           const expectedGroup = expectedGroups.shift()!;
-          expect(g.key).to.equal(expectedGroup.key);
+          expect(g.key).toEqual(expectedGroup.key);
 
           g.subscribe((x: any) => {
-            expect(x).to.deep.equal(expectedGroup.values.shift());
+            expect(x).toEqual(expectedGroup.values.shift());
           });
         },
         complete: done,
@@ -150,7 +151,7 @@ describe('groupBy operator', () => {
       const e1subs = '  (^!)';
       const expected = '|   ';
 
-      const source = e1.pipe(groupBy((val: string) => val.toLowerCase().trim()));
+      const source = e1.pipe(groupBy((val: string) => String.trim(val.lower())));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -163,7 +164,7 @@ describe('groupBy operator', () => {
       const e1subs = '  ^';
       const expected = '-';
 
-      const source = e1.pipe(groupBy((val: string) => val.toLowerCase().trim()));
+      const source = e1.pipe(groupBy((val: string) => String.trim(val.lower())));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -176,7 +177,7 @@ describe('groupBy operator', () => {
       const e1subs = '  (^!)';
       const expected = '#   ';
 
-      const source = e1.pipe(groupBy((val: string) => val.toLowerCase().trim()));
+      const source = e1.pipe(groupBy((val: string) => String.trim(val.lower())));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -192,7 +193,7 @@ describe('groupBy operator', () => {
       const g = cold('     a--|', values);
       const expectedValues = { g: g };
 
-      const source = e1.pipe(groupBy((val: string) => val.toLowerCase().trim()));
+      const source = e1.pipe(groupBy((val: string) => String.trim(val.lower())));
 
       expectObservable(source).toBe(expected, expectedValues);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -224,7 +225,7 @@ describe('groupBy operator', () => {
       const z = cold('                   f-------------|', values);
       const expectedValues = { w: w, x: x, y: y, z: z };
 
-      const source = e1.pipe(groupBy((val: string) => val.toLowerCase().trim()));
+      const source = e1.pipe(groupBy((val: string) => String.trim(val.lower())));
 
       expectObservable(source).toBe(expected, expectedValues);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -243,10 +244,10 @@ describe('groupBy operator', () => {
       const expectedValues = { g: 'foo' };
 
       const source = e1.pipe(
-        groupBy((val: string) => val.toLowerCase().trim()),
+        groupBy((val: string) => String.trim(val.lower())),
         tap((group: any) => {
-          expect(group.key).to.equal('foo');
-          expect(group instanceof Observable).to.be.true;
+          expect(group.key).toEqual('foo');
+          expect(group instanceof Observable).toBe(true);
         }),
         map((group: any) => {
           return group.key;
@@ -280,7 +281,7 @@ describe('groupBy operator', () => {
       const expectedValues = { w: 'foo', x: 'bar', y: 'baz', z: 'qux' };
 
       const source = e1.pipe(
-        groupBy((val: string) => val.toLowerCase().trim()),
+        groupBy((val: string) => String.trim(val.lower())),
         map((g: any) => g.key)
       );
 
@@ -311,7 +312,7 @@ describe('groupBy operator', () => {
       const expectedValues = { w: 'foo', x: 'bar', y: 'baz', z: 'qux' };
 
       const source = e1.pipe(
-        groupBy((val: string) => val.toLowerCase().trim()),
+        groupBy((val: string) => String.trim(val.lower())),
         map((g: any) => g.key)
       );
 
@@ -345,7 +346,7 @@ describe('groupBy operator', () => {
       const z = cold('                   f-------------#', values);
       const expectedValues = { w: w, x: x, y: y, z: z };
 
-      const source = e1.pipe(groupBy((val: string) => val.toLowerCase().trim()));
+      const source = e1.pipe(groupBy((val: string) => String.trim(val.lower())));
 
       expectObservable(source).toBe(expected, expectedValues);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -375,7 +376,7 @@ describe('groupBy operator', () => {
       const expectedValues = { w: 'foo', x: 'bar', y: 'baz' };
 
       const source = e1.pipe(
-        groupBy((val: string) => val.toLowerCase().trim()),
+        groupBy((val: string) => String.trim(val.lower())),
         map((group: any) => group.key)
       );
 
@@ -405,7 +406,7 @@ describe('groupBy operator', () => {
       const expected = '     --(a|)                     ';
 
       const source = e1.pipe(
-        groupBy((val) => val.toLowerCase().trim()),
+        groupBy((val) => String.trim(val.lower())),
         take(1),
         mergeMap((group) => group.pipe(take(1)))
       );
@@ -439,7 +440,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         mergeMap((x: string) => of(x)),
-        groupBy((x: string) => x.toLowerCase().trim()),
+        groupBy((x: string) => String.trim(x.lower())),
         mergeMap((group: any) => of(group.key))
       );
 
@@ -480,7 +481,7 @@ describe('groupBy operator', () => {
           if (invoked === 10) {
             throw 'error';
           }
-          return val.toLowerCase().trim();
+          return String.trim(val.lower());
         })
       );
 
@@ -518,7 +519,7 @@ describe('groupBy operator', () => {
       let invoked = 0;
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => {
             invoked++;
             if (invoked === 10) {
@@ -557,7 +558,7 @@ describe('groupBy operator', () => {
       const x = cold('            c-------g-h---------| ', values);
       const expectedValues = { w: w, x: x };
 
-      const source = e1.pipe(groupBy((val: string) => val.toLowerCase().trim()));
+      const source = e1.pipe(groupBy((val: string) => String.trim(val.lower())));
 
       expectObservable(source, unsub).toBe(expected, expectedValues);
     });
@@ -597,7 +598,7 @@ describe('groupBy operator', () => {
       const fooUnsubscriptionFrame = TestScheduler.parseMarblesAsSubscriptions(unsubw, true).unsubscribedFrame;
 
       const source = e1.pipe(
-        groupBy((val) => val.toLowerCase().trim()),
+        groupBy((val) => String.trim(val.lower())),
         map((group) => {
           const arr: any[] = [];
 
@@ -660,7 +661,7 @@ describe('groupBy operator', () => {
       };
 
       const source = e1.pipe(
-        groupBy((val: string) => val.toLowerCase().trim()),
+        groupBy((val: string) => String.trim(val.lower())),
         map((group: any) => {
           const arr: any[] = [];
 
@@ -693,7 +694,7 @@ describe('groupBy operator', () => {
       const subDuration = time('--------------------------|  ');
       const expected = '        ----------------------------|';
 
-      e1.pipe(groupBy((val: string) => val.toLowerCase().trim())).subscribe((group: any) => {
+      e1.pipe(groupBy((val: string) => String.trim(val.lower()))).subscribe((group: any) => {
         testScheduler.schedule(() => {
           expectObservable(group).toBe(expected);
         }, subDuration);
@@ -716,7 +717,7 @@ describe('groupBy operator', () => {
       const subsDuration = time('--------------------------| ');
       const expected = '         ----------------------------#';
 
-      e1.pipe(groupBy((val: string) => val.toLowerCase().trim())).subscribe({
+      e1.pipe(groupBy((val: string) => String.trim(val.lower()))).subscribe({
         next: (group: any) => {
           testScheduler.schedule(() => {
             expectObservable(group).toBe(expected);
@@ -748,7 +749,7 @@ describe('groupBy operator', () => {
       const outerValues = { w: 'foo' };
 
       const source = e1.pipe(
-        groupBy((val: string) => val.toLowerCase().trim()),
+        groupBy((val: string) => String.trim(val.lower())),
         tap((group: any) => {
           testScheduler.schedule(() => {
             expectObservable(group).toBe(expectedInner);
@@ -793,7 +794,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => reverseString(val),
           (group: any) => group.pipe(skip(2))
         )
@@ -832,7 +833,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => reverseString(val),
           (group: any) =>
             group.pipe(
@@ -874,7 +875,7 @@ describe('groupBy operator', () => {
       const expectedValues = { v: v, w: w, x: x, y: y, z: z };
 
       const source = e1.pipe(
-        groupBy((val) => val.toLowerCase().trim(), {
+        groupBy((val) => String.trim(val.lower()), {
           duration: (group) => group.pipe(skip(2)),
         })
       );
@@ -909,7 +910,7 @@ describe('groupBy operator', () => {
       const expectedValues = { v: v, w: w, x: x };
 
       const source = e1.pipe(
-        groupBy((val) => val.toLowerCase().trim(), {
+        groupBy((val) => String.trim(val.lower()), {
           duration: (group) => group.pipe(skip(2)),
         })
       );
@@ -950,7 +951,7 @@ describe('groupBy operator', () => {
       const unsubscriptionFrame = TestScheduler.parseMarblesAsSubscriptions(unsub, true).unsubscribedFrame;
 
       const source = e1.pipe(
-        groupBy((val) => val.toLowerCase().trim(), {
+        groupBy((val) => String.trim(val.lower()), {
           duration: (group) => group.pipe(skip(2)),
         }),
         map((group) => {
@@ -989,7 +990,7 @@ describe('groupBy operator', () => {
       obs
         .pipe(
           groupBy((val) => val, {
-            duration: (group) => durations[Number(group.key)],
+            duration: (group) => durations[tonumber(group.key)!],
           })
         )
         .subscribe();
@@ -1036,7 +1037,7 @@ describe('groupBy operator', () => {
             if (invoked === 10) {
               throw 'error';
             }
-            return val.toLowerCase().trim();
+            return String.trim(val.lower());
           },
           (val: string) => val,
           (group: any) => group.pipe(skip(2))
@@ -1077,7 +1078,7 @@ describe('groupBy operator', () => {
       let invoked = 0;
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => {
             invoked++;
             if (invoked === 10) {
@@ -1122,7 +1123,7 @@ describe('groupBy operator', () => {
       let invoked = 0;
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => val,
           (group: any) => {
             invoked++;
@@ -1178,7 +1179,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => reverseString(val),
           (group: any) => group.pipe(skip(2))
         ),
@@ -1252,7 +1253,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => val,
           (group: any) => group.pipe(skip(2))
         ),
@@ -1321,7 +1322,7 @@ describe('groupBy operator', () => {
 
       const result = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => val
         ),
         map((group: any) => {
@@ -1366,7 +1367,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => val,
           (group: any) => group.pipe(skip(7))
         ),
@@ -1411,7 +1412,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy(
-          (val: string) => val.toLowerCase().trim(),
+          (val: string) => String.trim(val.lower()),
           (val: string) => val,
           (group: any) => group.pipe(skip(7))
         ),
@@ -1463,7 +1464,7 @@ describe('groupBy operator', () => {
     });
   });
 
-  it('should not break lift() composability', (done) => {
+  it('should not break lift() composability', (_, done) => {
     class MyCustomObservable<T> extends Observable<T> {
       lift<R>(operator: Operator<T, R>): Observable<R> {
         const observable = new MyCustomObservable<R>();
@@ -1485,7 +1486,7 @@ describe('groupBy operator', () => {
       )
     );
 
-    expect(result instanceof MyCustomObservable).to.be.true;
+    expect(result instanceof MyCustomObservable).toBe(true);
 
     const expectedGroups = [
       { key: 1, values: ['1!', '3!'] },
@@ -1495,10 +1496,10 @@ describe('groupBy operator', () => {
     result.subscribe({
       next: (g: any) => {
         const expectedGroup = expectedGroups.shift()!;
-        expect(g.key).to.equal(expectedGroup.key);
+        expect(g.key).toEqual(expectedGroup.key);
 
         g.subscribe((x: any) => {
-          expect(x).to.deep.equal(expectedGroup.values.shift());
+          expect(x).toEqual(expectedGroup.values.shift());
         });
       },
       error: (x) => {
@@ -1530,7 +1531,7 @@ describe('groupBy operator', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });
 

@@ -1,8 +1,9 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, EMPTY, interval, take } from '@rbxts/rx';
 import { delayWhen, tap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { expect } from 'chai';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {delayWhen} */
 describe('delayWhen', () => {
@@ -305,8 +306,8 @@ describe('delayWhen', () => {
       .pipe(delayWhen(() => of(2)))
       .subscribe({ next: () => (next = true), complete: () => (complete = true) });
 
-    expect(next).to.be.true;
-    expect(complete).to.be.true;
+    expect(next).toBe(true);
+    expect(complete).toBe(true);
   });
 
   it('should call predicate with indices starting at 0', () => {
@@ -330,7 +331,7 @@ describe('delayWhen', () => {
         result.pipe(
           tap({
             complete: () => {
-              expect(indices).to.deep.equal([0, 1, 2]);
+              expect(indices).toEqual([0, 1, 2]);
             },
           })
         )
@@ -339,36 +340,36 @@ describe('delayWhen', () => {
     });
   });
 
-  it('should delayWhen Promise resolves', (done) => {
+  it('should delayWhen Promise resolves', (_, done) => {
     const e1 = interval(1).pipe(take(5));
     const expected = [0, 1, 2, 3, 4];
 
     e1.pipe(delayWhen(() => Promise.resolve(42))).subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         done();
       },
     });
   });
 
-  it('should raise error when Promise rejects', (done) => {
+  it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(10));
     const expected = [0, 1, 2];
     const error = new Error('err');
 
     e1.pipe(delayWhen((x) => (x === 3 ? Promise.reject(error) : Promise.resolve(42)))).subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: (err: any) => {
-        expect(err).to.be.an('error');
-        expect(expected.size()).to.equal(0);
+        expect(err).toBeInstanceOf(Error);
+        expect(expected.size()).toEqual(0);
         done();
       },
       complete: () => {

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { defer, of } from '@rbxts/rx';
 import { mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {defer} */
 describe('defer', () => {
@@ -46,7 +47,7 @@ describe('defer', () => {
     });
   });
 
-  it('should accept factory returns promise resolves', (done) => {
+  it('should accept factory returns promise resolves', (_, done) => {
     const expected = 42;
     const e1 = defer(() => {
       return new Promise<number>((resolve: any) => {
@@ -56,7 +57,7 @@ describe('defer', () => {
 
     e1.subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       },
       error: (x: any) => {
@@ -65,7 +66,7 @@ describe('defer', () => {
     });
   });
 
-  it('should accept factory returns promise rejects', (done) => {
+  it('should accept factory returns promise rejects', (_, done) => {
     const expected = 42;
     const e1 = defer(() => {
       return new Promise<number>((resolve: any, reject: any) => {
@@ -78,7 +79,7 @@ describe('defer', () => {
         done(new Error('should not be called'));
       },
       error: (x: any) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       },
       complete: () => {
@@ -114,8 +115,9 @@ describe('defer', () => {
     });
   });
 
-  it('should error when factory throws', (done) => {
+  it('should error when factory throws', (_, done) => {
     const e1 = defer(() => {
+      // eslint-disable-next-line no-constant-condition
       if (1 + 2 === 3) {
         throw 'error';
       }

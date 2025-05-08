@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { asapScheduler, concat, config, defer, EMPTY, NEVER, Observable, of, scheduled, Subject, throwError, pipe } from '@rbxts/rx';
 import {
   map,
@@ -18,17 +18,17 @@ import {
 } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { SinonSpy, spy } from 'sinon';
+import { Error } from '@rbxts/luau-polyfill';
 
 const syncNotify = of(1);
 const asapNotify = scheduled(syncNotify, asapScheduler);
 const syncError = throwError(() => new Error());
 
-function spyOnUnhandledError(fn: (spy: SinonSpy) => void): void {
+function spyOnUnhandledError(fn: (spy: jest.Mock) => void): void {
   const prevOnUnhandledError = config.onUnhandledError;
 
   try {
-    const onUnhandledError = spy();
+    const onUnhandledError = jest.fn();
     config.onUnhandledError = onUnhandledError;
 
     fn(onUnhandledError);
@@ -102,12 +102,12 @@ describe('share', () => {
 
         const source = obs.pipe(share(options));
 
-        expect(subscriptionCount).to.equal(0);
+        expect(subscriptionCount).toEqual(0);
 
         source.subscribe();
         source.subscribe();
 
-        expect(subscriptionCount).to.equal(1);
+        expect(subscriptionCount).toEqual(1);
       });
 
       it('should not change the output of the observable when error', () => {
@@ -495,7 +495,7 @@ describe('share', () => {
           /* noop */
         });
 
-        expect(sideEffects).to.deep.equal([0, 1, 2]);
+        expect(sideEffects).toEqual([0, 1, 2]);
       });
 
       it('should not fail on reentrant subscription', () => {
@@ -508,7 +508,7 @@ describe('share', () => {
           const deferred = defer(() => shared).pipe(startWith(0));
           const shared: Observable<string> = source.pipe(
             withLatestFrom(deferred),
-            map(([a, b]) => String(Number(a) + Number(b))),
+            map(([a, b]) => tostring(tonumber(a)! + tonumber(b)!)),
             share(options)
           );
 
@@ -647,7 +647,7 @@ describe('share', () => {
 
   describe('share(config)', () => {
     it('should use the connector function provided', () => {
-      const connector = spy(() => new Subject());
+      const connector = jest.fn(() => new Subject());
 
       rxTest.run(({ hot, expectObservable }) => {
         const source = hot('  ---v---v---v---E--v---v---v---C---v----v--------v----v---');
@@ -674,7 +674,7 @@ describe('share', () => {
         expectObservable(result, subs2).toBe(expResult2);
       });
 
-      expect(connector).to.have.callCount(4);
+      expect(connector).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -694,10 +694,10 @@ describe('share', () => {
       let result;
       source
         .pipe(share({ resetOnRefCountZero: () => syncNotify }), take(2), repeat(2), toArray())
-        .subscribe((numbers) => void (result = numbers));
+        .subscribe((numbers) => (result = numbers));
 
-      expect(subscriptionCount).to.equal(2);
-      expect(result).to.deep.equal([0, 1, 0, 1]);
+      expect(subscriptionCount).toEqual(2);
+      expect(result).toEqual([0, 1, 0, 1]);
     });
 
     it('should reset on refCount 0 when synchronously resubscribing and using a sync reset notifier', () => {
@@ -831,9 +831,9 @@ describe('share', () => {
           expectSubscriptions(source.subscriptions).toBe(sourceSubs);
         });
 
-        expect(onUnhandledError).to.have.been.calledTwice;
-        expect(onUnhandledError.getCall(0)).to.have.been.calledWithExactly(error);
-        expect(onUnhandledError.getCall(1)).to.have.been.calledWithExactly(error);
+        expect(onUnhandledError).toHaveBeenCalledTimes(2);
+        expect(onUnhandledError.mock.calls[0]).toEqual([error]);
+        expect(onUnhandledError.mock.calls[1]).toEqual([error]);
       });
     });
 
@@ -857,8 +857,7 @@ describe('share', () => {
           expectSubscriptions(source.subscriptions).toBe(sourceSubs);
         });
 
-        expect(onUnhandledError).to.have.been.calledOnce;
-        expect(onUnhandledError.getCall(0)).to.have.been.calledWithExactly(error);
+        expect(onUnhandledError).toHaveBeenCalledWith(error);
       });
     });
 
@@ -882,14 +881,13 @@ describe('share', () => {
           expectSubscriptions(source.subscriptions).toBe(sourceSubs);
         });
 
-        expect(onUnhandledError).to.have.been.calledOnce;
-        expect(onUnhandledError.getCall(0)).to.have.been.calledWithExactly(error);
+        expect(onUnhandledError).toHaveBeenCalledWith(error);
       });
     });
 
     it('should not call "resetOnRefCountZero" on error', () => {
       rxTest.run(({ cold, expectObservable, expectSubscriptions }) => {
-        const resetOnRefCountZero = spy(() => EMPTY);
+        const resetOnRefCountZero = jest.fn(() => EMPTY);
 
         const source = cold('    ---1---(2#)                ');
         // source: '                           ---1---(2#)  '
@@ -910,13 +908,13 @@ describe('share', () => {
 
         expectObservable(result, subscription).toBe(expected);
         expectSubscriptions(source.subscriptions).toBe(sourceSubs);
-        expect(resetOnRefCountZero).to.not.have.been.called;
+        expect(resetOnRefCountZero).never.toHaveBeenCalled();
       });
     });
 
     it('should not call "resetOnRefCountZero" on complete', () => {
       rxTest.run(({ cold, expectObservable, expectSubscriptions }) => {
-        const resetOnRefCountZero = spy(() => EMPTY);
+        const resetOnRefCountZero = jest.fn(() => EMPTY);
 
         const source = cold('    ---1---(2|)                ');
         // source: '                           ---1---(2|)  '
@@ -937,7 +935,7 @@ describe('share', () => {
 
         expectObservable(result, subscription).toBe(expected);
         expectSubscriptions(source.subscriptions).toBe(sourceSubs);
-        expect(resetOnRefCountZero).to.not.have.been.called;
+        expect(resetOnRefCountZero).never.toHaveBeenCalled();
       });
     });
   });

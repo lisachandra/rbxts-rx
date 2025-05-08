@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { Error } from '@rbxts/luau-polyfill';
 import { AsyncSubject, Observer } from '@rbxts/rx';
 
 class TestObserver implements Observer<number> {
@@ -25,11 +26,11 @@ describe('AsyncSubject', () => {
     subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.next(2);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.complete();
-    expect(observer.results).to.deep.equal([2, 'done']);
+    expect(observer.results).toEqual([2, 'done']);
   });
 
   it('should emit the last value when subscribing after complete', () => {
@@ -41,7 +42,7 @@ describe('AsyncSubject', () => {
     subject.complete();
 
     subject.subscribe(observer);
-    expect(observer.results).to.deep.equal([2, 'done']);
+    expect(observer.results).toEqual([2, 'done']);
   });
 
   it('should keep emitting the last value to subsequent subscriptions', () => {
@@ -50,17 +51,17 @@ describe('AsyncSubject', () => {
     const subscription = subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.next(2);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.complete();
-    expect(observer.results).to.deep.equal([2, 'done']);
+    expect(observer.results).toEqual([2, 'done']);
 
     subscription.unsubscribe();
 
     observer.results = [];
     subject.subscribe(observer);
-    expect(observer.results).to.deep.equal([2, 'done']);
+    expect(observer.results).toEqual([2, 'done']);
   });
 
   it('should not emit values after complete', () => {
@@ -70,12 +71,12 @@ describe('AsyncSubject', () => {
     subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.next(2);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.complete();
     subject.next(3);
-    expect(observer.results).to.deep.equal([2, 'done']);
+    expect(observer.results).toEqual([2, 'done']);
   });
 
   it('should not allow change value after complete', () => {
@@ -85,12 +86,12 @@ describe('AsyncSubject', () => {
     subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.complete();
-    expect(observer.results).to.deep.equal([1, 'done']);
+    expect(observer.results).toEqual([1, 'done']);
     subject.next(2);
     subject.subscribe(otherObserver);
-    expect(otherObserver.results).to.deep.equal([1, 'done']);
+    expect(otherObserver.results).toEqual([1, 'done']);
   });
 
   it('should not emit values if unsubscribed before complete', () => {
@@ -99,16 +100,16 @@ describe('AsyncSubject', () => {
     const subscription = subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.next(2);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
 
     subscription.unsubscribe();
 
     subject.next(3);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.complete();
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
   });
 
   it('should just complete if no value has been nexted into it', () => {
@@ -116,9 +117,9 @@ describe('AsyncSubject', () => {
     const observer = new TestObserver();
     subject.subscribe(observer);
 
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.complete();
-    expect(observer.results).to.deep.equal(['done']);
+    expect(observer.results).toEqual(['done']);
   });
 
   it('should keep emitting complete to subsequent subscriptions', () => {
@@ -126,9 +127,9 @@ describe('AsyncSubject', () => {
     const observer = new TestObserver();
     const subscription = subject.subscribe(observer);
 
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
     subject.complete();
-    expect(observer.results).to.deep.equal(['done']);
+    expect(observer.results).toEqual(['done']);
 
     subscription.unsubscribe();
     observer.results = [];
@@ -136,7 +137,7 @@ describe('AsyncSubject', () => {
     subject.error(new Error(''));
 
     subject.subscribe(observer);
-    expect(observer.results).to.deep.equal(['done']);
+    expect(observer.results).toEqual(['done']);
   });
 
   it('should only error if an error is passed into it', () => {
@@ -146,10 +147,10 @@ describe('AsyncSubject', () => {
     subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
 
     subject.error(expected);
-    expect(observer.results).to.deep.equal([expected]);
+    expect(observer.results).toEqual([expected]);
   });
 
   it('should keep emitting error to subsequent subscriptions', () => {
@@ -159,16 +160,16 @@ describe('AsyncSubject', () => {
     const subscription = subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
 
     subject.error(expected);
-    expect(observer.results).to.deep.equal([expected]);
+    expect(observer.results).toEqual([expected]);
 
     subscription.unsubscribe();
 
     observer.results = [];
     subject.subscribe(observer);
-    expect(observer.results).to.deep.equal([expected]);
+    expect(observer.results).toEqual([expected]);
   });
 
   it('should not allow send complete after error', () => {
@@ -178,10 +179,10 @@ describe('AsyncSubject', () => {
     const subscription = subject.subscribe(observer);
 
     subject.next(1);
-    expect(observer.results).to.deep.equal([]);
+    expect(observer.results).toEqual([]);
 
     subject.error(expected);
-    expect(observer.results).to.deep.equal([expected]);
+    expect(observer.results).toEqual([expected]);
 
     subscription.unsubscribe();
 
@@ -189,7 +190,7 @@ describe('AsyncSubject', () => {
 
     subject.complete();
     subject.subscribe(observer);
-    expect(observer.results).to.deep.equal([expected]);
+    expect(observer.results).toEqual([expected]);
   });
 
   it('should not be reentrant via complete', () => {
@@ -208,7 +209,7 @@ describe('AsyncSubject', () => {
     subject.next(1);
     subject.complete();
 
-    expect(calls).to.equal(1);
+    expect(calls).toEqual(1);
   });
 
   it('should not be reentrant via next', () => {
@@ -227,12 +228,12 @@ describe('AsyncSubject', () => {
     subject.next(1);
     subject.complete();
 
-    expect(calls).to.equal(1);
+    expect(calls).toEqual(1);
   });
 
   it('should allow reentrant subscriptions', () => {
     const subject = new AsyncSubject<number>();
-    let results: any[] = [];
+    const results: defined[] = [];
 
     subject.subscribe({
       next: (value) => {
@@ -246,8 +247,8 @@ describe('AsyncSubject', () => {
     });
 
     subject.next(1);
-    expect(results).to.deep.equal([]);
+    expect(results).toEqual([]);
     subject.complete();
-    expect(results).to.deep.equal(['inner: 2', 'inner: done', 'outer: 1', 'outer: done']);
+    expect(results).toEqual(['inner: 2', 'inner: done', 'outer: 1', 'outer: done']);
   });
 });

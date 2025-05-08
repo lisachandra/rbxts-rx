@@ -1,4 +1,5 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { Error } from '@rbxts/luau-polyfill';
 import { UnsubscriptionError, Observable, timer, merge } from '@rbxts/rx';
 
 /** @test {UnsubscriptionError} */
@@ -19,13 +20,14 @@ describe('UnsubscriptionError', () => {
 
     try {
       subscription.unsubscribe();
-    } catch (err) {
-      if (err instanceof UnsubscriptionError) {
-        expect(err.errors).to.deep.equal([err1, err2]);
-        expect(err.name).to.equal('UnsubscriptionError');
-        expect(err.stack).to.be.a('string');
+    } catch (arg) {
+      if (arg instanceof UnsubscriptionError) {
+        const err: UnsubscriptionError = arg;
+        expect(err.errors).toEqual([err1, err2]);
+        expect(err.name).toEqual('UnsubscriptionError');
+        expect(type(err.stack)).toBe('string');
       } else {
-        throw new TypeError('Invalid error type');
+        throw new Error('Invalid error type');
       }
     }
   });

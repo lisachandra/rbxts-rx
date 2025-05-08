@@ -65,7 +65,6 @@ it('should accept iterable notifier', () => {
   of(1, 2, 3).pipe(retryWhen(() => syncRange)); // $ExpectType Observable<number>
 });
 
-/*
 it('should accept readable stream notifier', () => {
   const readableStream = new ReadableStream<string>({
     pull(controller) {
@@ -75,7 +74,6 @@ it('should accept readable stream notifier', () => {
   });
   of(1, 2, 3).pipe(retryWhen(() => readableStream)); // ExpectType Observable<number>
 });
-*/
 
 it('should enforce types of the notifier', () => {
   of(1, 2, 3).pipe(retryWhen(() => 8)); // $ExpectError

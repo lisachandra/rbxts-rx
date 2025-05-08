@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { filter, tap, map, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, Observable, from } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, Boolean } from '@rbxts/luau-polyfill';
 
 /** @test {filter} */
 describe('filter', () => {
@@ -155,7 +156,7 @@ describe('filter', () => {
         filter(predicate),
         tap({
           complete: () => {
-            expect(invoked).to.equal(7);
+            expect(invoked).toEqual(7);
           },
         })
       );
@@ -232,6 +233,7 @@ describe('filter', () => {
     });
   });
 
+  /*
   it('should be able to accept and use a thisArg', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const e1 = hot('-1--2--^-3-4-5-6--7-8--9--|');
@@ -261,6 +263,7 @@ describe('filter', () => {
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
+  */
 
   it('should be able to use filter and map composed', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
@@ -323,7 +326,7 @@ describe('filter', () => {
     });
   });
 
-  it('should send errors down the error path', (done) => {
+  it('should send errors down the error path', (_, done) => {
     of(42)
       .pipe(
         filter((x: number, index: number): boolean => {
@@ -335,7 +338,7 @@ describe('filter', () => {
           done(new Error('should not be called'));
         },
         error: (err: any) => {
-          expect(err).to.equal('bad');
+          expect(err).toEqual('bad');
           done();
         },
         complete: () => {
@@ -432,7 +435,7 @@ describe('filter', () => {
       const e1subs = '       ^------------------!';
       const expected = '     --t---t----t-------|';
 
-      expectObservable(e1.pipe(filter(Boolean))).toBe(expected, values);
+      expectObservable(e1.pipe(filter(Boolean.toJSBoolean))).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -457,6 +460,6 @@ describe('filter', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

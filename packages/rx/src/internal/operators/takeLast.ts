@@ -1,3 +1,4 @@
+import { typeAssertIs } from 'internal/polyfill/type';
 import { EMPTY } from '../observable/empty';
 import { MonoTypeOperatorFunction } from '../types';
 import { operate } from '../util/lift';
@@ -42,7 +43,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * @return A function that returns an Observable that emits at most the last
  * `count` values emitted by the source Observable.
  */
-export function takeLast<T extends defined>(count: number): MonoTypeOperatorFunction<T> {
+export function takeLast<T>(count: number): MonoTypeOperatorFunction<T> {
   return count <= 0
     ? () => EMPTY
     : operate((source, subscriber) => {
@@ -55,6 +56,7 @@ export function takeLast<T extends defined>(count: number): MonoTypeOperatorFunc
           createOperatorSubscriber(
             subscriber,
             (value) => {
+              typeAssertIs<defined[]>(buffer);
               // Add the most recent value onto the end of our buffer.
               buffer.push(value);
               // If our buffer is now larger than the number of values we

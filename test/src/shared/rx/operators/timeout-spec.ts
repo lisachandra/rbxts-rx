@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { timeout, mergeMap, take, concatWith } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { TimeoutError, of, Observable, NEVER } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {timeout} */
 describe('timeout operator', () => {
@@ -46,9 +47,9 @@ describe('timeout operator', () => {
         },
       });
       rxTestScheduler.flush();
-      expect(error).to.be.an.instanceof(TimeoutError);
-      expect(error).to.have.property('name', 'TimeoutError');
-      expect(error!.info).to.deep.equal({
+      expect(error).toBeInstanceOf(TimeoutError);
+      expect(error).toHaveProperty('name', 'TimeoutError');
+      expect(error!.info).toEqual({
         seen: 0,
         meta: undefined,
         lastValue: undefined,
@@ -62,7 +63,7 @@ describe('timeout operator', () => {
       const t = time(' ----|');
 
       // 4ms from "now", considering "now" with the rxTestScheduler is currently frame 0.
-      const dueDate = new Date(t);
+      const dueDate = DateTime.fromUnixTimestampMillis(t);
 
       const result = e1.pipe(timeout(dueDate, rxTestScheduler));
       let error: any;
@@ -78,9 +79,9 @@ describe('timeout operator', () => {
         },
       });
       rxTestScheduler.flush();
-      expect(error).to.be.an.instanceof(TimeoutError);
-      expect(error).to.have.property('name', 'TimeoutError');
-      expect(error!.info).to.deep.equal({
+      expect(error).toBeInstanceOf(TimeoutError);
+      expect(error).toHaveProperty('name', 'TimeoutError');
+      expect(error!.info).toEqual({
         seen: 0,
         meta: undefined,
         lastValue: undefined,
@@ -96,7 +97,7 @@ describe('timeout operator', () => {
       const expected = '--a--b--c--d--e--|';
 
       // Start frame is zero.
-      const timeoutValue = new Date(t);
+      const timeoutValue = DateTime.fromUnixTimestampMillis(t);
 
       expectObservable(e1.pipe(timeout(timeoutValue, rxTestScheduler))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -171,7 +172,7 @@ describe('timeout operator', () => {
       const expected = '----------#';
 
       // Start time is zero
-      const result = e1.pipe(timeout(new Date(t), rxTestScheduler));
+      const result = e1.pipe(timeout(DateTime.fromUnixTimestampMillis(t), rxTestScheduler));
 
       expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -181,7 +182,7 @@ describe('timeout operator', () => {
   it('should work with synchronous observable', () => {
     expect(() => {
       of(1).pipe(timeout(10)).subscribe();
-    }).to.not.throw();
+    }).never.toThrow();
   });
 
   describe('config', () => {
@@ -221,9 +222,9 @@ describe('timeout operator', () => {
           },
         });
         rxTestScheduler.flush();
-        expect(error).to.be.an.instanceof(TimeoutError);
-        expect(error).to.have.property('name', 'TimeoutError');
-        expect(error!.info).to.deep.equal({
+        expect(error).toBeInstanceOf(TimeoutError);
+        expect(error).toHaveProperty('name', 'TimeoutError');
+        expect(error!.info).toEqual({
           seen: 0,
           meta: undefined,
           lastValue: undefined,
@@ -237,7 +238,7 @@ describe('timeout operator', () => {
         const t = time(' ----|');
 
         // 4ms from "now", considering "now" with the rxTestScheduler is currently frame 0.
-        const dueDate = new Date(t);
+        const dueDate = DateTime.fromUnixTimestampMillis(t);
 
         const result = e1.pipe(timeout({ first: dueDate }));
         let error: any;
@@ -253,9 +254,9 @@ describe('timeout operator', () => {
           },
         });
         rxTestScheduler.flush();
-        expect(error).to.be.an.instanceof(TimeoutError);
-        expect(error).to.have.property('name', 'TimeoutError');
-        expect(error!.info).to.deep.equal({
+        expect(error).toBeInstanceOf(TimeoutError);
+        expect(error).toHaveProperty('name', 'TimeoutError');
+        expect(error!.info).toEqual({
           seen: 0,
           meta: undefined,
           lastValue: undefined,
@@ -270,7 +271,7 @@ describe('timeout operator', () => {
         const e1subs = '  ^----------------!';
         const expected = '--a--b--c--d--e--|';
 
-        expectObservable(e1.pipe(timeout({ first: new Date(t) }))).toBe(expected);
+        expectObservable(e1.pipe(timeout({ first: DateTime.fromUnixTimestampMillis(t) }))).toBe(expected);
         expectSubscriptions(e1.subscriptions).toBe(e1subs);
       });
     });
@@ -343,7 +344,7 @@ describe('timeout operator', () => {
         const expected = '----------#';
 
         // Start time is zero
-        const result = e1.pipe(timeout({ first: new Date(t) }));
+        const result = e1.pipe(timeout({ first: DateTime.fromUnixTimestampMillis(t) }));
 
         expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
         expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -388,7 +389,7 @@ describe('timeout operator', () => {
         const expected = '---a-----------------------b---|';
 
         // Start time is zero
-        const result = e1.pipe(timeout({ first: new Date(t) }));
+        const result = e1.pipe(timeout({ first: DateTime.fromUnixTimestampMillis(t) }));
 
         expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
         expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -404,7 +405,7 @@ describe('timeout operator', () => {
         const expected = '  ---a-----#';
 
         // Start time is zero
-        const result = e1.pipe(timeout({ first: new Date(first), each }));
+        const result = e1.pipe(timeout({ first: DateTime.fromUnixTimestampMillis(first), each }));
 
         expectObservable(result).toBe(expected, undefined, defaultTimeoutError);
         expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -447,7 +448,7 @@ describe('timeout operator', () => {
         // The current frame is zero.
         const result = source.pipe(
           timeout({
-            first: new Date(t),
+            first: DateTime.fromUnixTimestampMillis(t),
             with: () => inner,
           })
         );
@@ -666,7 +667,7 @@ describe('timeout operator', () => {
         const expected = '  --a--b--c--d--e--|   ';
 
         // Start frame is zero.
-        const result = source.pipe(timeout({ first: new Date(t), with: () => inner }));
+        const result = source.pipe(timeout({ first: DateTime.fromUnixTimestampMillis(t), with: () => inner }));
 
         expectObservable(result).toBe(expected);
         expectSubscriptions(source.subscriptions).toBe(sourceSubs);
@@ -683,7 +684,7 @@ describe('timeout operator', () => {
         const expected = '  ---a---#           ';
 
         // Start frame is zero.
-        const result = source.pipe(timeout({ first: new Date(t), with: () => inner }));
+        const result = source.pipe(timeout({ first: DateTime.fromUnixTimestampMillis(t), with: () => inner }));
 
         expectObservable(result).toBe(expected);
         expectSubscriptions(source.subscriptions).toBe(sourceSubs);
@@ -696,7 +697,7 @@ describe('timeout operator', () => {
         const source = of('a').pipe(concatWith(NEVER));
         const t = time('  ---|');
         const expected = 'a---';
-        expectObservable(source.pipe(timeout({ first: new Date(t) }))).toBe(expected);
+        expectObservable(source.pipe(timeout({ first: DateTime.fromUnixTimestampMillis(t) }))).toBe(expected);
       });
     });
   });
@@ -716,6 +717,6 @@ describe('timeout operator', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { throwError, ConnectableObservable, EMPTY, NEVER, of, Observable, Subscription, pipe } from '@rbxts/rx';
 import { publishReplay, mergeMapTo, tap, mergeMap, refCount, retry, repeat, map } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {publishReplay} */
 describe('publishReplay operator', () => {
@@ -28,10 +29,10 @@ describe('publishReplay operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publishReplay()) as ConnectableObservable<number>;
-    expect(typeIs((<any>source)._subscribe, 'function')).to.be.true;
-    expect(typeIs((<any>source).getSubject, 'function')).to.be.true;
-    expect(typeIs(source.connect, 'function')).to.be.true;
-    expect(typeIs(source.refCount, 'function')).to.be.true;
+    expect(typeIs((<any>source)._subscribe, 'function')).toBe(true);
+    expect(typeIs((<any>source).getSubject, 'function')).toBe(true);
+    expect(typeIs(source.connect, 'function')).toBe(true);
+    expect(typeIs(source.refCount, 'function')).toBe(true);
   });
 
   it('should do nothing if connect is not called, despite subscriptions', () => {
@@ -253,7 +254,7 @@ describe('publishReplay operator', () => {
     });
   });
 
-  it('should multicast one observable to multiple observers', (done) => {
+  it('should multicast one observable to multiple observers', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -276,18 +277,18 @@ describe('publishReplay operator', () => {
       results2.push(x);
     });
 
-    expect(results1).to.deep.equal([]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([]);
+    expect(results2).toEqual([]);
 
     connectable.connect();
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([1, 2, 3, 4]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([1, 2, 3, 4]);
+    expect(subscriptions).toEqual(1);
     done();
   });
 
-  it('should replay as many events as specified by the bufferSize', (done) => {
+  it('should replay as many events as specified by the bufferSize', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -307,8 +308,8 @@ describe('publishReplay operator', () => {
       results1.push(x);
     });
 
-    expect(results1).to.deep.equal([]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([]);
+    expect(results2).toEqual([]);
 
     connectable.connect();
 
@@ -316,9 +317,9 @@ describe('publishReplay operator', () => {
       results2.push(x);
     });
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([3, 4]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([3, 4]);
+    expect(subscriptions).toEqual(1);
     done();
   });
 
@@ -341,15 +342,15 @@ describe('publishReplay operator', () => {
       results1.push(x);
     });
 
-    expect(results1).to.deep.equal([]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([]);
+    expect(results2).toEqual([]);
 
     connectable.connect().unsubscribe();
     subscription1.unsubscribe();
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([]);
+    expect(subscriptions).toEqual(1);
 
     const subscription2 = connectable.subscribe((x) => {
       results2.push(x);
@@ -358,12 +359,12 @@ describe('publishReplay operator', () => {
     connectable.connect().unsubscribe();
     subscription2.unsubscribe();
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([3, 4, 1, 2, 3, 4]);
-    expect(subscriptions).to.equal(2);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([3, 4, 1, 2, 3, 4]);
+    expect(subscriptions).toEqual(2);
   });
 
-  it('should emit replayed values plus completed when subscribed after completed', (done) => {
+  it('should emit replayed values plus completed when subscribed after completed', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -383,14 +384,14 @@ describe('publishReplay operator', () => {
       results1.push(x);
     });
 
-    expect(results1).to.deep.equal([]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([]);
+    expect(results2).toEqual([]);
 
     connectable.connect();
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([]);
+    expect(subscriptions).toEqual(1);
 
     connectable.subscribe({
       next: (x) => {
@@ -400,7 +401,7 @@ describe('publishReplay operator', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(results2).to.deep.equal([3, 4]);
+        expect(results2).toEqual([3, 4]);
         done();
       },
     });

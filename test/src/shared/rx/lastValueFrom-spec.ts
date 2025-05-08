@@ -1,5 +1,7 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { Error } from '@rbxts/luau-polyfill';
 import { interval, lastValueFrom, EMPTY, EmptyError, throwError, of } from '@rbxts/rx';
-import { expect } from 'chai';
+
 import { finalize, take } from '@rbxts/rx/out/operators';
 
 describe('lastValueFrom', () => {
@@ -10,14 +12,14 @@ describe('lastValueFrom', () => {
       finalize(() => (finalized = true))
     );
     const result = await lastValueFrom(source);
-    expect(result).to.equal(9);
-    expect(finalized).to.be.true;
+    expect(result).toEqual(9);
+    expect(finalized).toBe(true);
   });
 
   it('should support a default value', async () => {
     const source = EMPTY;
     const result = await lastValueFrom(source, { defaultValue: 0 });
-    expect(result).to.equal(0);
+    expect(result).toEqual(0);
   });
 
   it('should support an undefined config', async () => {
@@ -28,7 +30,7 @@ describe('lastValueFrom', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.be.an.instanceOf(EmptyError);
+    expect(error).toBeInstanceOf(EmptyError);
   });
 
   it('should error for empty observables', async () => {
@@ -39,7 +41,7 @@ describe('lastValueFrom', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.be.an.instanceOf(EmptyError);
+    expect(error).toBeInstanceOf(EmptyError);
   });
 
   it('should error for errored observables', async () => {
@@ -50,15 +52,15 @@ describe('lastValueFrom', () => {
     } catch (err) {
       error = err;
     }
-    expect(error).to.be.an.instanceOf(Error);
-    expect(error.message).to.equal('blorp!');
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toEqual('blorp!');
   });
 
   it('should work with a synchronous observable', async () => {
     let finalized = false;
     const source = of('apples', 'bananas').pipe(finalize(() => (finalized = true)));
     const result = await lastValueFrom(source);
-    expect(result).to.equal('bananas');
-    expect(finalized).to.be.true;
+    expect(result).toEqual('bananas');
+    expect(finalized).toBe(true);
   });
 });

@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { BehaviorSubject, Subject, ObjectUnsubscribedError, of } from '@rbxts/rx';
 import { tap, mergeMapTo } from '@rbxts/rx/out/operators';
 import { asInteropSubject } from '../helpers/interop-helper';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {BehaviorSubject} */
 describe('BehaviorSubject', () => {
@@ -15,7 +16,7 @@ describe('BehaviorSubject', () => {
 
   it('should extend Subject', () => {
     const subject = new BehaviorSubject(undefined);
-    expect(subject).to.be.instanceof(Subject);
+    expect(subject).toBeInstanceOf(Subject);
   });
 
   it('should throw if it has received an error and getValue() is called', () => {
@@ -23,7 +24,7 @@ describe('BehaviorSubject', () => {
     subject.error(new Error('derp'));
     expect(() => {
       subject.getValue();
-    }).to.throw(Error, 'derp');
+    }).toThrowError('derp');
   });
 
   it('should throw an ObjectUnsubscribedError if getValue() is called and the BehaviorSubject has been unsubscribed', () => {
@@ -31,16 +32,16 @@ describe('BehaviorSubject', () => {
     subject.unsubscribe();
     expect(() => {
       subject.getValue();
-    }).to.throw(ObjectUnsubscribedError);
+    }).toThrow(ObjectUnsubscribedError);
   });
 
   it('should have a getValue() method to retrieve the current value', () => {
     const subject = new BehaviorSubject('staltz');
-    expect(subject.getValue()).to.equal('staltz');
+    expect(subject.getValue()).toEqual('staltz');
 
     subject.next('oj');
 
-    expect(subject.getValue()).to.equal('oj');
+    expect(subject.getValue()).toEqual('oj');
   });
 
   it('should not allow you to set `value` directly', () => {
@@ -53,25 +54,25 @@ describe('BehaviorSubject', () => {
       //noop
     }
 
-    expect(subject.getValue()).to.equal('flibberty');
-    expect(subject.value).to.equal('flibberty');
+    expect(subject.getValue()).toEqual('flibberty');
+    expect(subject.getValue()).toEqual('flibberty');
   });
 
   it('should still allow you to retrieve the value from the value property', () => {
     const subject = new BehaviorSubject('fuzzy');
-    expect(subject.value).to.equal('fuzzy');
+    expect(subject.getValue()).toEqual('fuzzy');
     subject.next('bunny');
-    expect(subject.value).to.equal('bunny');
+    expect(subject.getValue()).toEqual('bunny');
   });
 
-  it('should start with an initialization value', (done) => {
+  it('should start with an initialization value', (_, done) => {
     const subject = new BehaviorSubject('foo');
     const expected = ['foo', 'bar'];
     let i = 0;
 
     subject.subscribe({
       next: (x: string) => {
-        expect(x).to.equal(expected[i++]);
+        expect(x).toEqual(expected[i++]);
       },
       complete: done,
     });
@@ -80,24 +81,24 @@ describe('BehaviorSubject', () => {
     subject.complete();
   });
 
-  it('should pump values to multiple subscribers', (done) => {
+  it('should pump values to multiple subscribers', (_, done) => {
     const subject = new BehaviorSubject('init');
     const expected = ['init', 'foo', 'bar'];
     let i = 0;
     let j = 0;
 
     subject.subscribe((x: string) => {
-      expect(x).to.equal(expected[i++]);
+      expect(x).toEqual(expected[i++]);
     });
 
     subject.subscribe({
       next: (x: string) => {
-        expect(x).to.equal(expected[j++]);
+        expect(x).toEqual(expected[j++]);
       },
       complete: done,
     });
 
-    expect(subject.observers.size()).to.equal(2);
+    expect(subject.observers.size()).toEqual(2);
     subject.next('foo');
     subject.next('bar');
     subject.complete();
@@ -110,34 +111,34 @@ describe('BehaviorSubject', () => {
     subject.subscribe((x: string) => {
       results.push(x);
     });
-    expect(results).to.deep.equal(['init']);
+    expect(results).toEqual(['init']);
 
     subject.next('foo');
-    expect(results).to.deep.equal(['init', 'foo']);
+    expect(results).toEqual(['init', 'foo']);
 
     subject.complete();
-    expect(results).to.deep.equal(['init', 'foo']);
+    expect(results).toEqual(['init', 'foo']);
 
     subject.next('bar');
-    expect(results).to.deep.equal(['init', 'foo']);
+    expect(results).toEqual(['init', 'foo']);
   });
 
-  it('should clean out unsubscribed subscribers', (done) => {
+  it('should clean out unsubscribed subscribers', (_, done) => {
     const subject = new BehaviorSubject('init');
 
     const sub1 = subject.subscribe((x: string) => {
-      expect(x).to.equal('init');
+      expect(x).toEqual('init');
     });
 
     const sub2 = subject.subscribe((x: string) => {
-      expect(x).to.equal('init');
+      expect(x).toEqual('init');
     });
 
-    expect(subject.observers.size()).to.equal(2);
+    expect(subject.observers.size()).toEqual(2);
     sub1.unsubscribe();
-    expect(subject.observers.size()).to.equal(1);
+    expect(subject.observers.size()).toEqual(1);
     sub2.unsubscribe();
-    expect(subject.observers.size()).to.equal(0);
+    expect(subject.observers.size()).toEqual(0);
     done();
   });
 
@@ -197,20 +198,20 @@ describe('BehaviorSubject', () => {
     });
   });
 
-  it('should be an Observer which can be given to Observable.subscribe', (done) => {
+  it('should be an Observer which can be given to Observable.subscribe', (_, done) => {
     const source = of(1, 2, 3, 4, 5);
     const subject = new BehaviorSubject(0);
     const expected = [0, 1, 2, 3, 4, 5];
 
     subject.subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: (x) => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(subject.value).to.equal(5);
+        expect(subject.getValue()).toEqual(5);
         done();
       },
     });
@@ -218,7 +219,7 @@ describe('BehaviorSubject', () => {
     source.subscribe(subject);
   });
 
-  it('should be an Observer which can be given to an interop source', (done) => {
+  it('should be an Observer which can be given to an interop source', (_, done) => {
     // This test reproduces a bug reported in this issue:
     // https://github.com/ReactiveX/rxjs/issues/5105
     // However, it cannot easily be fixed. See this comment:
@@ -229,13 +230,13 @@ describe('BehaviorSubject', () => {
 
     subject.subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: (x) => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(subject.value).to.equal(5);
+        expect(subject.getValue()).toEqual(5);
         done();
       },
     });

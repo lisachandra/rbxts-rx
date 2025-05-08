@@ -1,11 +1,11 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { SchedulerAction, VirtualAction, VirtualTimeScheduler } from '@rbxts/rx';
 
 /** @test {VirtualTimeScheduler} */
 describe('VirtualTimeScheduler', () => {
   it('should exist', () => {
-    expect(VirtualTimeScheduler).exist;
-    expect(VirtualTimeScheduler).to.be.a('function');
+    expect(VirtualTimeScheduler).toBeDefined();
+    expect(type(VirtualTimeScheduler)).toBe('function');
   });
 
   it('should schedule things in order when flushed if each this is scheduled synchronously', () => {
@@ -22,7 +22,7 @@ describe('VirtualTimeScheduler', () => {
 
     v.flush();
 
-    expect(invoked).to.deep.equal([1, 2, 3, 4, 5]);
+    expect(invoked).toEqual([1, 2, 3, 4, 5]);
   });
 
   it('should schedule things in order when flushed if each this is scheduled at random', () => {
@@ -40,7 +40,7 @@ describe('VirtualTimeScheduler', () => {
 
     v.flush();
 
-    expect(invoked).to.deep.equal([1, 3, 5, 2, 6, 4]);
+    expect(invoked).toEqual([1, 3, 5, 2, 6, 4]);
   });
 
   it('should schedule things in order when there are negative delays', () => {
@@ -58,7 +58,7 @@ describe('VirtualTimeScheduler', () => {
 
     v.flush();
 
-    expect(invoked).to.deep.equal([6, 4, 1, 3, 5, 2]);
+    expect(invoked).toEqual([6, 4, 1, 3, 5, 2]);
   });
 
   it('should support recursive scheduling', () => {
@@ -72,7 +72,7 @@ describe('VirtualTimeScheduler', () => {
           return;
         }
         const virtualAction = this as VirtualAction<string>;
-        expect(virtualAction.delay).to.equal(expected.shift());
+        expect(virtualAction.delay).toEqual(expected.shift());
         this.schedule(state, virtualAction.delay);
       },
       100,
@@ -80,7 +80,7 @@ describe('VirtualTimeScheduler', () => {
     );
 
     v.flush();
-    expect(count).to.equal(3);
+    expect(count).toEqual(3);
   });
 
   it('should not execute virtual actions that have been rescheduled before flush', () => {
@@ -92,7 +92,7 @@ describe('VirtualTimeScheduler', () => {
     action.schedule('second message', 10);
     v.flush();
 
-    expect(messages).to.deep.equal(['second message']);
+    expect(messages).toEqual(['second message']);
   });
 
   it('should execute only those virtual actions that fall into the maxFrames timespan', function () {
@@ -108,8 +108,8 @@ describe('VirtualTimeScheduler', () => {
 
     v.flush();
 
-    expect(actualMessages).to.deep.equal(['first message', 'second message']);
-    expect(v.actions.map((a) => a.state)).to.deep.equal(['third message']);
+    expect(actualMessages).toEqual(['first message', 'second message']);
+    expect(v.actions.map((a) => a.state)).toEqual(['third message']);
   });
 
   it('should pick up actions execution where it left off after reaching previous maxFrames limit', function () {
@@ -127,6 +127,6 @@ describe('VirtualTimeScheduler', () => {
     v.maxFrames = 2 * MAX_FRAMES;
     v.flush();
 
-    expect(actualMessages).to.deep.equal(messages);
+    expect(actualMessages).toEqual(messages);
   });
 });

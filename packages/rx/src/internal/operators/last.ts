@@ -77,7 +77,7 @@ export function last<T, D = T>(
  * satisfying the given condition from the source, or an error notification
  * with an `EmptyError` object if no such items are emitted.
  */
-export function last<T extends defined, D>(
+export function last<T, D>(
   predicate?: ((value: T, index: number, source: Observable<T>) => boolean) | null,
   defaultValue?: D
 ): OperatorFunction<T, T | D> {

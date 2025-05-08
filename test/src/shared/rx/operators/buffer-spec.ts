@@ -1,8 +1,9 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { buffer, mergeMap, take, window, toArray } from '@rbxts/rx/out/operators';
 import { EMPTY, NEVER, throwError, of, Subject, interval } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { expect } from 'chai';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
 
 /** @test {buffer} */
 describe('Observable.prototype.buffer', () => {
@@ -317,14 +318,14 @@ describe('Observable.prototype.buffer', () => {
     });
 
     subject.next(1);
-    expect(results).to.deep.equal([[1]]);
+    expect(results).toEqual([[1]]);
     subject.next(2);
-    expect(results).to.deep.equal([[1], [2]]);
+    expect(results).toEqual([[1], [2]]);
     subject.complete();
-    expect(results).to.deep.equal([[1], [2], [], 'complete']);
+    expect(results).toEqual([[1], [2], [], 'complete']);
   });
 
-  it('should buffer when Promise resolves', (done) => {
+  it('should buffer when Promise resolves', (_, done) => {
     const e1 = interval(3).pipe(take(5));
     const expected = [
       [0, 1],
@@ -333,17 +334,17 @@ describe('Observable.prototype.buffer', () => {
 
     e1.pipe(buffer(new Promise<void>((resolve) => setTimeout(() => resolve(), 8)))).subscribe({
       next: (x) => {
-        expect(x).to.deep.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: () => done(new Error('should not be called')),
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         done();
       },
     });
   });
 
-  it('should raise error when Promise rejects', (done) => {
+  it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(5));
     const error = new Error('err');
 
@@ -352,7 +353,7 @@ describe('Observable.prototype.buffer', () => {
         done(new Error('should not be called'));
       },
       error: (err: any) => {
-        expect(err).to.be.an('error');
+        expect(err).toBeInstanceOf(Error);
         done();
       },
       complete: () => {

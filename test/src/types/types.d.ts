@@ -3,8 +3,9 @@ declare global {
   type Table = Record<number | string | symbol, unknown>;
 
   /** A general type for a value that may be nil (undefined). */
-
   type N<T> = T | undefined;
+
+  type ValueOf<T> = T[keyof T];
 
   /**
    * Converts a type T into a Map where keys are the type's keys and values

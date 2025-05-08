@@ -5,4 +5,4 @@ packages:
 patchedDependencies:
     roblox-ts@3.0.0: patches/roblox-ts@3.0.0.patch
 overrides:
-    typescript: ^5.7.3
+    typescript: $typescript

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { NEVER, timer, of, EMPTY, concat, Subject, Observable } from '@rbxts/rx';
 import { debounce, mergeMap, mapTo, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {debounce} */
 describe('debounce', () => {
@@ -458,7 +459,7 @@ describe('debounce', () => {
     });
   });
 
-  it('should delay by promise resolves', (done) => {
+  it('should delay by promise resolves', (_, done) => {
     const e1 = concat(of(1), timer(10).pipe(mapTo(2)), timer(10).pipe(mapTo(3)), timer(100).pipe(mapTo(4)));
     const expected = [1, 2, 3, 4];
 
@@ -470,19 +471,19 @@ describe('debounce', () => {
       })
     ).subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: (x) => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         done();
       },
     });
   });
 
-  it('should raises error when promise rejects', (done) => {
+  it('should raises error when promise rejects', (_, done) => {
     const e1 = concat(of(1), timer(10).pipe(mapTo(2)), timer(10).pipe(mapTo(3)), timer(100).pipe(mapTo(4)));
     const expected = [1, 2];
     const error = new Error('error');
@@ -501,11 +502,11 @@ describe('debounce', () => {
       })
     ).subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: (err: any) => {
-        expect(err).to.be.an('error', 'error');
-        expect(expected.size()).to.equal(0);
+        expect(err).toHaveProperty('message', 'error');
+        expect(expected.size()).toEqual(0);
         done();
       },
       complete: () => {
@@ -527,7 +528,7 @@ describe('debounce', () => {
     });
     source.next(1);
 
-    expect(results).to.deep.equal([1, 2]);
+    expect(results).toEqual([1, 2]);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -550,6 +551,6 @@ describe('debounce', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { ReplaySubject, Subject, of } from '@rbxts/rx';
 import { mergeMapTo, tap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {ReplaySubject} */
 describe('ReplaySubject', () => {
@@ -14,7 +15,7 @@ describe('ReplaySubject', () => {
 
   it('should extend Subject', () => {
     const subject = new ReplaySubject();
-    expect(subject).to.be.instanceof(Subject);
+    expect(subject).toBeInstanceOf(Subject);
   });
 
   it('should add the observer before running subscription code', () => {
@@ -29,10 +30,10 @@ describe('ReplaySubject', () => {
       }
     });
 
-    expect(results).to.deep.equal([1, 2, 3]);
+    expect(results).toEqual([1, 2, 3]);
   });
 
-  it('should replay values upon subscription', (done) => {
+  it('should replay values upon subscription', (_, done) => {
     const subject = new ReplaySubject<number>();
     const expects = [1, 2, 3];
     let i = 0;
@@ -41,7 +42,7 @@ describe('ReplaySubject', () => {
     subject.next(3);
     subject.subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expects[i++]);
+        expect(x).toEqual(expects[i++]);
         if (i === 3) {
           subject.complete();
         }
@@ -55,7 +56,7 @@ describe('ReplaySubject', () => {
     });
   });
 
-  it('should replay values and complete', (done) => {
+  it('should replay values and complete', (_, done) => {
     const subject = new ReplaySubject<number>();
     const expects = [1, 2, 3];
     let i = 0;
@@ -65,13 +66,13 @@ describe('ReplaySubject', () => {
     subject.complete();
     subject.subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expects[i++]);
+        expect(x).toEqual(expects[i++]);
       },
       complete: done,
     });
   });
 
-  it('should replay values and error', (done) => {
+  it('should replay values and error', (_, done) => {
     const subject = new ReplaySubject<number>();
     const expects = [1, 2, 3];
     let i = 0;
@@ -81,16 +82,16 @@ describe('ReplaySubject', () => {
     subject.error('fooey');
     subject.subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expects[i++]);
+        expect(x).toEqual(expects[i++]);
       },
       error: (err: any) => {
-        expect(err).to.equal('fooey');
+        expect(err).toEqual('fooey');
         done();
       },
     });
   });
 
-  it('should only replay values within its buffer size', (done) => {
+  it('should only replay values within its buffer size', (_, done) => {
     const subject = new ReplaySubject<number>(2);
     const expects = [2, 3];
     let i = 0;
@@ -99,7 +100,7 @@ describe('ReplaySubject', () => {
     subject.next(3);
     subject.subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expects[i++]);
+        expect(x).toEqual(expects[i++]);
         if (i === 2) {
           subject.complete();
         }
@@ -235,9 +236,9 @@ describe('ReplaySubject', () => {
 
       subscription3.unsubscribe();
 
-      expect(results1).to.deep.equal([3, 4, 5, 6, 7]);
-      expect(results2).to.deep.equal([4, 5, 6, 7, 8]);
-      expect(results3).to.deep.equal([9, 10, 11]);
+      expect(results1).toEqual([3, 4, 5, 6, 7]);
+      expect(results2).toEqual([4, 5, 6, 7, 8]);
+      expect(results3).toEqual([9, 10, 11]);
 
       subject.complete();
     });
@@ -334,13 +335,13 @@ describe('ReplaySubject', () => {
 
     source.subscribe(subject);
 
-    expect(results).to.deep.equal([1, 2, 3, 4, 5, 'done']);
+    expect(results).toEqual([1, 2, 3, 4, 5, 'done']);
 
     results = [];
 
     subject.subscribe({ next: (x) => results.push(x), complete: () => results.push('done') });
 
-    expect(results).to.deep.equal([3, 4, 5, 'done']);
+    expect(results).toEqual([3, 4, 5, 'done']);
   });
 
   it('should not buffer nexted values after complete', () => {
@@ -354,7 +355,7 @@ describe('ReplaySubject', () => {
       next: (value) => results.push(value),
       complete: () => results.push('C'),
     });
-    expect(results).to.deep.equal([1, 2, 'C']);
+    expect(results).toEqual([1, 2, 'C']);
   });
 
   it('should not buffer nexted values after error', () => {
@@ -368,6 +369,6 @@ describe('ReplaySubject', () => {
       next: (value) => results.push(value),
       error: () => results.push('E'),
     });
-    expect(results).to.deep.equal([1, 2, 'E']);
+    expect(results).toEqual([1, 2, 'E']);
   });
 });

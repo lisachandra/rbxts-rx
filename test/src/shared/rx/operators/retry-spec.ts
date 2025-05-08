@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { retry, map, take, mergeMap, concat, multicast, refCount } from '@rbxts/rx/out/operators';
 import { Observable, Observer, defer, range, of, throwError, Subject, timer, EMPTY } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {retry} */
 describe('retry', () => {
@@ -29,7 +30,7 @@ describe('retry', () => {
     });
   });
 
-  it('should retry a number of times, without error, then complete', (done) => {
+  it('should retry a number of times, without error, then complete', (_, done) => {
     let errors = 0;
     const retries = 2;
     new Observable((observer: Observer<number>) => {
@@ -48,16 +49,16 @@ describe('retry', () => {
       )
       .subscribe({
         next(x: number) {
-          expect(x).to.equal(42);
+          expect(x).toEqual(42);
         },
         error() {
-          expect('this was called').to.be.true;
+          expect('this was called').toBe(true);
         },
         complete: done,
       });
   });
 
-  it('should retry a number of times, then call error handler', (done) => {
+  it('should retry a number of times, then call error handler', (_, done) => {
     let errors = 0;
     const retries = 2;
     new Observable((observer: Observer<number>) => {
@@ -76,7 +77,7 @@ describe('retry', () => {
           done("shouldn't next");
         },
         error() {
-          expect(errors).to.equal(2);
+          expect(errors).toEqual(2);
           done();
         },
         complete() {
@@ -85,7 +86,7 @@ describe('retry', () => {
       });
   });
 
-  it('should retry a number of times, then call error handler (with resetOnSuccess)', (done) => {
+  it('should retry a number of times, then call error handler (with resetOnSuccess)', (_, done) => {
     let errors = 0;
     const retries = 2;
     new Observable((observer: Observer<number>) => {
@@ -104,7 +105,7 @@ describe('retry', () => {
           done("shouldn't next");
         },
         error() {
-          expect(errors).to.equal(2);
+          expect(errors).toEqual(2);
           done();
         },
         complete() {
@@ -113,7 +114,7 @@ describe('retry', () => {
       });
   });
 
-  it('should retry a number of times, then call next handler without error, then retry and complete', (done) => {
+  it('should retry a number of times, then call next handler without error, then retry and complete', (_, done) => {
     let index = 0;
     let errors = 0;
     const retries = 2;
@@ -132,13 +133,13 @@ describe('retry', () => {
       )
       .subscribe({
         next(x: number) {
-          expect(x).to.equal(42);
+          expect(x).toEqual(42);
         },
         error() {
           done("shouldn't error");
         },
         complete() {
-          expect(errors).to.equal(retries);
+          expect(errors).toEqual(retries);
           done();
         },
       });
@@ -159,11 +160,11 @@ describe('retry', () => {
       error: (err) => results.push(err),
     });
 
-    expect(subscription.closed).to.be.true;
-    expect(results).to.deep.equal([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'bad', 'finalizer']);
+    expect(subscription.closed).toBe(true);
+    expect(results).toEqual([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'bad', 'finalizer']);
   });
 
-  it('should retry a number of times, then call next handler without error, then retry and error', (done) => {
+  it('should retry a number of times, then call next handler without error, then retry and error', (_, done) => {
     let index = 0;
     let errors = 0;
     const retries = 2;
@@ -182,10 +183,10 @@ describe('retry', () => {
       )
       .subscribe({
         next(x: number) {
-          expect(x).to.equal(42);
+          expect(x).toEqual(42);
         },
         error() {
-          expect(errors).to.equal(retries);
+          expect(errors).toEqual(retries);
           done();
         },
         complete() {
@@ -194,7 +195,7 @@ describe('retry', () => {
       });
   });
 
-  it('should retry until successful completion', (done) => {
+  it('should retry until successful completion', (_, done) => {
     let errors = 0;
     const retries = 10;
     new Observable((observer: Observer<number>) => {
@@ -214,10 +215,10 @@ describe('retry', () => {
       )
       .subscribe({
         next(x: number) {
-          expect(x).to.equal(42);
+          expect(x).toEqual(42);
         },
         error() {
-          expect('this was called').to.be.true;
+          expect('this was called').toBe(true);
         },
         complete: done,
       });
@@ -353,7 +354,7 @@ describe('retry', () => {
     });
   });
 
-  it('should retry a synchronous source (multicasted and refCounted) multiple times', (done) => {
+  it('should retry a synchronous source (multicasted and refCounted) multiple times', (_, done) => {
     const expected = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
 
     of(1, 2, 3)
@@ -365,11 +366,11 @@ describe('retry', () => {
       )
       .subscribe({
         next(x: number) {
-          expect(x).to.equal(expected.shift());
+          expect(x).toEqual(expected.shift());
         },
         error(err: any) {
-          expect(err).to.equal('bad!');
-          expect(expected.size()).to.equal(0);
+          expect(err).toEqual('bad!');
+          expect(expected.size()).toEqual(0);
           done();
         },
         complete() {
@@ -393,7 +394,7 @@ describe('retry', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should not alter the source when the number of retries is smaller than 1', () => {

@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { NEVER, interval, asapScheduler, animationFrameScheduler, queueScheduler } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { take, concat } from '@rbxts/rx/out/operators';
-import * as sinon from 'sinon';
+
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {interval} */
 describe('interval', () => {
@@ -46,7 +47,7 @@ describe('interval', () => {
     });
   });
 
-  it('should emit values until unsubscribed', (done) => {
+  it('should emit values until unsubscribed', (_, done) => {
     const values: number[] = [];
     const expected = [0, 1, 2, 3, 4, 5, 6];
     const e1 = interval(5);
@@ -55,7 +56,7 @@ describe('interval', () => {
         values.push(x);
         if (x === 6) {
           subscription.unsubscribe();
-          expect(values).to.deep.equal(expected);
+          expect(values).toEqual(expected);
           done();
         }
       },
@@ -68,87 +69,84 @@ describe('interval', () => {
     });
   });
 
-  it('should create an observable emitting periodically with the AsapScheduler', (done) => {
-    const sandbox = sinon.createSandbox();
-    const fakeTimer = sandbox.useFakeTimers();
+  it('should create an observable emitting periodically with the AsapScheduler', (_, done) => {
+    jest.useFakeTimers();
     const period = 10;
     const events = [0, 1, 2, 3, 4, 5];
     const source = interval(period, asapScheduler).pipe(take(6));
     source.subscribe({
       next(x) {
-        expect(x).to.equal(events.shift());
+        expect(x).toEqual(events.shift());
       },
       error(e) {
-        sandbox.restore();
+        jest.useRealTimers();
         done(e);
       },
       complete() {
-        expect(asapScheduler.actions.size()).to.equal(0);
-        expect(asapScheduler._scheduled).to.equal(undefined);
-        sandbox.restore();
+        expect(asapScheduler.actions.size()).toEqual(0);
+        expect(asapScheduler._scheduled).toEqual(undefined);
+        jest.useRealTimers();
         done();
       },
     });
     let i = -1,
       n = events.size();
     while (++i < n) {
-      fakeTimer.tick(period);
+      jest.advanceTimersByTime(period);
     }
   });
 
-  it('should create an observable emitting periodically with the QueueScheduler', (done) => {
-    const sandbox = sinon.createSandbox();
-    const fakeTimer = sandbox.useFakeTimers();
+  it('should create an observable emitting periodically with the QueueScheduler', (_, done) => {
+    jest.useFakeTimers();
     const period = 10;
     const events = [0, 1, 2, 3, 4, 5];
     const source = interval(period, queueScheduler).pipe(take(6));
     source.subscribe({
       next(x) {
-        expect(x).to.equal(events.shift());
+        expect(x).toEqual(events.shift());
       },
       error(e) {
-        sandbox.restore();
+        jest.useRealTimers();
         done(e);
       },
       complete() {
-        expect(queueScheduler.actions.size()).to.equal(0);
-        expect(queueScheduler._scheduled).to.equal(undefined);
-        sandbox.restore();
+        expect(queueScheduler.actions.size()).toEqual(0);
+        expect(queueScheduler._scheduled).toEqual(undefined);
+        jest.useRealTimers();
         done();
       },
     });
     let i = -1,
       n = events.size();
     while (++i < n) {
-      fakeTimer.tick(period);
+      jest.advanceTimersByTime(period);
     }
   });
 
-  it('should create an observable emitting periodically with the AnimationFrameScheduler', (done) => {
-    const sandbox = sinon.createSandbox();
-    const fakeTimer = sandbox.useFakeTimers();
+  it('should create an observable emitting periodically with the AnimationFrameScheduler', (_, done) => {
+    jest.useFakeTimers();
     const period = 10;
     const events = [0, 1, 2, 3, 4, 5];
     const source = interval(period, animationFrameScheduler).pipe(take(6));
     source.subscribe({
       next(x) {
-        expect(x).to.equal(events.shift());
+        expect(x).toEqual(events.shift());
       },
       error(e) {
-        sandbox.restore();
+        jest.useRealTimers();
         done(e);
       },
       complete() {
-        expect(animationFrameScheduler.actions.size()).to.equal(0);
-        expect(animationFrameScheduler._scheduled).to.equal(undefined);
-        sandbox.restore();
+        expect(animationFrameScheduler.actions.size()).toEqual(0);
+        expect(animationFrameScheduler._scheduled).toEqual(undefined);
+        jest.useRealTimers();
         done();
       },
     });
     let i = -1,
       n = events.size();
     while (++i < n) {
-      fakeTimer.tick(period);
+      jest.advanceTimersByTime(period);
     }
   });
 });

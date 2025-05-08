@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/internal/testing/TestScheduler';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { throttle, mergeMap, take } from '@rbxts/rx/out/operators';
 import { of, Observable } from '@rbxts/rx';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {throttle} */
 describe('throttle', () => {
@@ -43,7 +44,7 @@ describe('throttle', () => {
       complete: () => results.push('done'),
     });
 
-    expect(results).to.deep.equal([1, 'done']);
+    expect(results).toEqual([1, 'done']);
   });
 
   it('should simply mirror the source if values are not emitted often enough', () => {
@@ -579,6 +580,6 @@ describe('throttle', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

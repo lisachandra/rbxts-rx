@@ -5,6 +5,7 @@ import { innerFrom } from '../observable/innerFrom';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 import { noop } from '../util/noop';
 import { arrRemove } from '../util/arrRemove';
+import { typeAssertIs } from 'internal/polyfill/type';
 
 /**
  * Buffers the source Observable values starting from an emission from
@@ -49,7 +50,7 @@ import { arrRemove } from '../util/arrRemove';
  * and cleared.
  * @return A function that returns an Observable of arrays of buffered values.
  */
-export function bufferToggle<T extends defined, O>(
+export function bufferToggle<T, O>(
   openings: ObservableInput<O>,
   closingSelector: (value: O) => ObservableInput<any>
 ): OperatorFunction<T, T[]> {
@@ -86,6 +87,7 @@ export function bufferToggle<T extends defined, O>(
         (value) => {
           // Value from our source. Add it to all pending buffers.
           for (const buffer of buffers) {
+            typeAssertIs<defined[]>(buffer);
             buffer.push(value);
           }
         },

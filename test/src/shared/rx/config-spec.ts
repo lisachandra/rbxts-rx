@@ -1,12 +1,13 @@
-import { config } from '../packages/rx/out/internal/config';
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
+import { config } from '@rbxts/rx/out/internal/config';
+
 import { Observable } from '@rbxts/rx';
 import { timeoutProvider } from '@rbxts/rx/out/internal/scheduler/timeoutProvider';
 
 describe('config', () => {
   it('should have a Promise property that defaults to nothing', () => {
-    expect(config).to.have.property('Promise');
-    expect(config.Promise).to.be.undefined;
+    expect(config).toHaveProperty('Promise');
+    expect(config.Promise).toBeUndefined();
   });
 
   describe('onUnhandledError', () => {
@@ -15,16 +16,16 @@ describe('config', () => {
     });
 
     it('should default to undefined', () => {
-      expect(config.onUnhandledError).to.be.undefined;
+      expect(config.onUnhandledError).toBeUndefined();
     });
 
-    it('should call asynchronously if an error is emitted and not handled by the consumer observer', (done) => {
+    it('should call asynchronously if an error is emitted and not handled by the consumer observer', (_, done) => {
       let called = false;
       const results: any[] = [];
 
       config.onUnhandledError = (err) => {
         called = true;
-        expect(err).to.equal('bad');
+        expect(err).toEqual('bad');
         done();
       };
 
@@ -36,17 +37,17 @@ describe('config', () => {
       source.subscribe({
         next: (value) => results.push(value),
       });
-      expect(called).to.be.false;
-      expect(results).to.deep.equal([1]);
+      expect(called).toBe(false);
+      expect(results).toEqual([1]);
     });
 
-    it('should call asynchronously if an error is emitted and not handled by the consumer next callback', (done) => {
+    it('should call asynchronously if an error is emitted and not handled by the consumer next callback', (_, done) => {
       let called = false;
       const results: any[] = [];
 
       config.onUnhandledError = (err) => {
         called = true;
-        expect(err).to.equal('bad');
+        expect(err).toEqual('bad');
         done();
       };
 
@@ -56,15 +57,15 @@ describe('config', () => {
       });
 
       source.subscribe((value) => results.push(value));
-      expect(called).to.be.false;
-      expect(results).to.deep.equal([1]);
+      expect(called).toBe(false);
+      expect(results).toEqual([1]);
     });
 
-    it('should call asynchronously if an error is emitted and not handled by the consumer in the empty case', (done) => {
+    it('should call asynchronously if an error is emitted and not handled by the consumer in the empty case', (_, done) => {
       let called = false;
       config.onUnhandledError = (err) => {
         called = true;
-        expect(err).to.equal('bad');
+        expect(err).toEqual('bad');
         done();
       };
 
@@ -73,7 +74,7 @@ describe('config', () => {
       });
 
       source.subscribe();
-      expect(called).to.be.false;
+      expect(called).toBe(false);
     });
 
     /**
@@ -84,7 +85,7 @@ describe('config', () => {
      * for two calls of `complete`? This is really something a build-time tool like a linter should
      * capture. Not a run time error reporting event.
      */
-    it('should not be called if two errors are sent to the subscriber', (done) => {
+    it('should not be called if two errors are sent to the subscriber', (_, done) => {
       let called = false;
       config.onUnhandledError = () => {
         called = true;
@@ -102,12 +103,12 @@ describe('config', () => {
         },
       });
 
-      expect(syncSentError).to.equal('handled');
+      expect(syncSentError).toEqual('handled');
       // When called, onUnhandledError is called on a timeout, so delay the
       // the assertion of the expectation until after the point at which
       // onUnhandledError would have been called.
       timeoutProvider.setTimeout(() => {
-        expect(called).to.be.false;
+        expect(called).toBe(false);
         done();
       });
     });
@@ -119,15 +120,15 @@ describe('config', () => {
     });
 
     it('should default to undefined', () => {
-      expect(config.onStoppedNotification).to.be.undefined;
+      expect(config.onStoppedNotification).toBeUndefined();
     });
 
-    it('should be called asynchronously if a subscription setup errors after the subscription is closed by an error', (done) => {
+    it('should be called asynchronously if a subscription setup errors after the subscription is closed by an error', (_, done) => {
       let called = false;
       config.onStoppedNotification = (notification) => {
         called = true;
-        expect(notification.kind).to.equal('E');
-        expect(notification).to.have.property('error', 'bad');
+        expect(notification.kind).toEqual('E');
+        expect(notification).toHaveProperty('error', 'bad');
         done();
       };
 
@@ -143,17 +144,17 @@ describe('config', () => {
         },
       });
 
-      expect(syncSentError).to.equal('handled');
-      expect(called).to.be.false;
+      expect(syncSentError).toEqual('handled');
+      expect(called).toBe(false);
     });
 
-    it('should be called asynchronously if a subscription setup errors after the subscription is closed by a completion', (done) => {
+    it('should be called asynchronously if a subscription setup errors after the subscription is closed by a completion', (_, done) => {
       let called = false;
       let completed = false;
       config.onStoppedNotification = (notification) => {
         called = true;
-        expect(notification.kind).to.equal('E');
-        expect(notification).to.have.property('error', 'bad');
+        expect(notification.kind).toEqual('E');
+        expect(notification).toHaveProperty('error', 'bad');
         done();
       };
 
@@ -171,16 +172,16 @@ describe('config', () => {
         },
       });
 
-      expect(completed).to.be.true;
-      expect(called).to.be.false;
+      expect(completed).toBe(true);
+      expect(called).toBe(false);
     });
 
-    it('should be called if a next is sent to the stopped subscriber', (done) => {
+    it('should be called if a next is sent to the stopped subscriber', (_, done) => {
       let called = false;
       config.onStoppedNotification = (notification) => {
         called = true;
-        expect(notification.kind).to.equal('N');
-        expect(notification).to.have.property('value', 2);
+        expect(notification.kind).toEqual('N');
+        expect(notification).toHaveProperty('value', 2);
         done();
       };
 
@@ -197,16 +198,16 @@ describe('config', () => {
         },
       });
 
-      expect(syncSentValue).to.equal(1);
-      expect(called).to.be.false;
+      expect(syncSentValue).toEqual(1);
+      expect(called).toBe(false);
     });
 
-    it('should be called if two errors are sent to the subscriber', (done) => {
+    it('should be called if two errors are sent to the subscriber', (_, done) => {
       let called = false;
       config.onStoppedNotification = (notification) => {
         called = true;
-        expect(notification.kind).to.equal('E');
-        expect(notification).to.have.property('error', 'swallowed');
+        expect(notification.kind).toEqual('E');
+        expect(notification).toHaveProperty('error', 'swallowed');
         done();
       };
 
@@ -222,15 +223,15 @@ describe('config', () => {
         },
       });
 
-      expect(syncSentError).to.equal('handled');
-      expect(called).to.be.false;
+      expect(syncSentError).toEqual('handled');
+      expect(called).toBe(false);
     });
 
-    it('should be called if two completes are sent to the subscriber', (done) => {
+    it('should be called if two completes are sent to the subscriber', (_, done) => {
       let called = false;
       config.onStoppedNotification = (notification) => {
         called = true;
-        expect(notification.kind).to.equal('C');
+        expect(notification.kind).toEqual('C');
         done();
       };
 
@@ -241,7 +242,7 @@ describe('config', () => {
 
       source.subscribe();
 
-      expect(called).to.be.false;
+      expect(called).toBe(false);
     });
   });
 });

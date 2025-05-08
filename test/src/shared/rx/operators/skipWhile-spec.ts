@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { skipWhile, mergeMap, tap, take } from '@rbxts/rx/out/operators';
 import { of, Observable } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {skipWhile} */
 describe('skipWhile', () => {
@@ -196,7 +197,7 @@ describe('skipWhile', () => {
         skipWhile(predicate),
         tap({
           complete() {
-            expect(invoked).to.equal(3);
+            expect(invoked).toEqual(3);
           },
         })
       );
@@ -279,13 +280,13 @@ describe('skipWhile', () => {
 
     synchronousObservable
       .pipe(
-        skipWhile((value) => value < 2),
+        skipWhile((value: number) => value < 2),
         take(1)
       )
       .subscribe(() => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

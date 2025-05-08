@@ -1,3 +1,4 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { timer, NEVER, merge } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { mergeMap, take, concat } from '@rbxts/rx/out/operators';
@@ -90,7 +91,7 @@ describe('timer', () => {
       const offset = 4; // ----|
       const expected = '   ----(a|)';
 
-      const dueTime = new Date(rxTest.now() + offset);
+      const dueTime = DateTime.fromUnixTimestampMillis(rxTest.now() + offset);
       const source = timer(dueTime, undefined, rxTest);
       expectObservable(source).toBe(expected, { a: 0 });
     });
@@ -102,7 +103,7 @@ describe('timer', () => {
       const period = 2; //      -|-|-|-|
       const expected = '   ----a-b-c-d-(e|)';
 
-      const dueTime = new Date(rxTest.now() + offset);
+      const dueTime = DateTime.fromUnixTimestampMillis(rxTest.now() + offset);
       const source = timer(dueTime, period, rxTest).pipe(take(5));
       const values = { a: 0, b: 1, c: 2, d: 3, e: 4 };
       expectObservable(source).toBe(expected, values);
@@ -116,7 +117,7 @@ describe('timer', () => {
       const t2 = cold('    --a|     ');
       const expected = '   ----(aa|)';
 
-      const dueTime = new Date(rxTest.now() + offset);
+      const dueTime = DateTime.fromUnixTimestampMillis(rxTest.now() + offset);
       const source = timer(dueTime, undefined, rxTest);
 
       const testSource = merge(t1, t2).pipe(mergeMap(() => source));
@@ -161,7 +162,7 @@ describe('timer', () => {
   it('should emit after a delay of 0 for Date objects in the past', () => {
     rxTest.run(({ expectObservable }) => {
       const expected = '(a|)';
-      const threeSecondsInThePast = new Date(rxTest.now() - 3000);
+      const threeSecondsInThePast = DateTime.fromUnixTimestampMillis(rxTest.now() - 3000);
       const source = timer(threeSecondsInThePast, undefined, rxTest);
       expectObservable(source).toBe(expected, { a: 0 });
     });

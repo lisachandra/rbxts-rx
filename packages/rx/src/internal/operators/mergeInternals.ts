@@ -1,3 +1,4 @@
+import { typeAssertIs } from 'internal/polyfill/type';
 import { Observable } from '../Observable';
 import { innerFrom } from '../observable/innerFrom';
 import { Subscriber } from '../Subscriber';
@@ -18,7 +19,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  * @param innerSubScheduler A scheduler to use to schedule inner subscriptions,
  * this is to support the expand strategy, mostly, and should be deprecated
  */
-export function mergeInternals<T extends defined, R>(
+export function mergeInternals<T, R>(
   source: Observable<T>,
   subscriber: Subscriber<R>,
   project: (value: T, index: number) => ObservableInput<R>,
@@ -30,6 +31,7 @@ export function mergeInternals<T extends defined, R>(
 ) {
   // Buffered values, in the event of going over our concurrency limit
   const buffer: T[] = [];
+  typeAssertIs<defined[]>(buffer);
   // The number of active inner subscriptions.
   let active = 0;
   // An index to pass to our accumulator function

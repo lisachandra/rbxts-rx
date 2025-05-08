@@ -1,3 +1,4 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import {
   Observable,
   ConnectableObservable,

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, interval, EMPTY, Observable } from '@rbxts/rx';
 import { audit, take, mergeMap } from '@rbxts/rx/out/operators';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {audit} */
 describe('audit operator', () => {
@@ -394,25 +395,25 @@ describe('audit operator', () => {
     });
   });
 
-  it('should audit by promise resolves', (done) => {
+  it('should audit by promise resolves', (_, done) => {
     const e1 = interval(1).pipe(take(5));
     const expected = [0, 1, 2, 3, 4];
 
     e1.pipe(audit(() => Promise.resolve(42))).subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         done();
       },
     });
   });
 
-  it('should raise error when promise rejects', (done) => {
+  it('should raise error when promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(10));
     const expected = [0, 1, 2];
     const error = new Error('error');
@@ -431,11 +432,11 @@ describe('audit operator', () => {
       })
     ).subscribe({
       next: (x: number) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: (err: any) => {
-        expect(err).to.be.an('error', 'error');
-        expect(expected.size()).to.equal(0);
+        expect(err).toHaveProperty('message', 'error');
+        expect(expected.size()).toEqual(0);
         done();
       },
       complete: () => {
@@ -464,7 +465,7 @@ describe('audit operator', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should emit last value after duration completes if source completes first', () => {

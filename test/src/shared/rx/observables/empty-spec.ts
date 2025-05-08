@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { empty, EMPTY } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -12,7 +12,7 @@ describe('empty', () => {
   });
 
   it('should return EMPTY', () => {
-    expect(empty()).to.equal(EMPTY);
+    expect(empty()).toEqual(EMPTY);
   });
 
   it('should create a cold observable with only complete', () => {
@@ -26,7 +26,7 @@ describe('empty', () => {
   it('should return the same instance EMPTY', () => {
     const s1 = empty();
     const s2 = empty();
-    expect(s1).to.equal(s2);
+    expect(s1).toEqual(s2);
   });
 
   it('should be synchronous by default', () => {
@@ -37,11 +37,11 @@ describe('empty', () => {
         hit = true;
       },
     });
-    expect(hit).to.be.true;
+    expect(hit).toBe(true);
   });
 
   it('should equal EMPTY', () => {
-    expect(empty()).to.equal(EMPTY);
+    expect(empty()).toEqual(EMPTY);
   });
 
   it('should take a scheduler', () => {
@@ -52,8 +52,8 @@ describe('empty', () => {
         hit = true;
       },
     });
-    expect(hit).to.be.false;
+    expect(hit).toBe(false);
     rxTestScheduler.flush();
-    expect(hit).to.be.true;
+    expect(hit).toBe(true);
   });
 });

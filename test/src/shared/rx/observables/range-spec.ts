@@ -1,9 +1,9 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { asapScheduler as asap, range, of } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { concatMap, delay } from '@rbxts/rx/out/operators';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {range} */
 describe('range', () => {
@@ -72,26 +72,26 @@ describe('range', () => {
     range(12, 4).subscribe(function (x) {
       results.push(x);
     });
-    expect(results).to.deep.equal([12, 13, 14, 15]);
+    expect(results).toEqual([12, 13, 14, 15]);
   });
 
-  it('should accept a scheduler', (done) => {
+  it('should accept a scheduler', (_, done) => {
     const expected = [12, 13, 14, 15];
-    sinon.spy(asap, 'schedule');
+    const spy = jest.spyOn(asap, 'schedule');
 
     const source = range(12, 4, asap);
 
     source.subscribe({
       next: function (x) {
-        expect(asap.schedule).have.been.called;
+        expect(asap.schedule).toHaveBeenCalled();
         const exp = expected.shift();
-        expect(x).to.equal(exp);
+        expect(x).toEqual(exp);
       },
       error: function (x) {
         done(new Error('should not be called'));
       },
       complete: () => {
-        (<any>asap.schedule).restore();
+        spy.mockRestore();
         done();
       },
     });
@@ -124,7 +124,7 @@ describe('range', () => {
       next: (value) => results.push(value),
       complete: () => results.push('done'),
     });
-    expect(results).to.deep.equal(['done']);
+    expect(results).toEqual(['done']);
   });
 
   it('should return empty for range with a negative count', () => {
@@ -133,6 +133,6 @@ describe('range', () => {
       next: (value) => results.push(value),
       complete: () => results.push('done'),
     });
-    expect(results).to.deep.equal(['done']);
+    expect(results).toEqual(['done']);
   });
 });

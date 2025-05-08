@@ -1,16 +1,16 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { ArgumentOutOfRangeError } from '@rbxts/rx';
 
 /** @test {ArgumentOutOfRangeError} */
 describe('ArgumentOutOfRangeError', () => {
   const error = new ArgumentOutOfRangeError();
   it('Should have a name', () => {
-    expect(error.name).to.be.equal('ArgumentOutOfRangeError');
+    expect(error.name).toEqual('ArgumentOutOfRangeError');
   });
   it('Should have a message', () => {
-    expect(error.message).to.be.equal('argument out of range');
+    expect(error.message).toEqual('argument out of range');
   });
   it('Should have a stack', () => {
-    expect(error.stack).to.be.a('string');
+    expect(type(error.stack)).toBe('string');
   });
 });

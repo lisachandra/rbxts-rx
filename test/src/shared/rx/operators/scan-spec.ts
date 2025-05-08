@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { scan, mergeMap, finalize, take } from '@rbxts/rx/out/operators';
 import { of, Observable } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Array } from '@rbxts/luau-polyfill';
 
 /** @test {scan} */
 describe('scan', () => {
@@ -47,7 +48,7 @@ describe('scan', () => {
         z: ['b', 'c', 'd', 'e', 'f', 'g'],
       };
 
-      const source = e1.pipe(scan((acc, x) => acc.concat(x), [] as string[]));
+      const source = e1.pipe(scan((acc, x) => Array.concat(acc, x), [] as string[]));
 
       expectObservable(source).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -59,7 +60,7 @@ describe('scan', () => {
     of(3, 3, 3)
       .pipe(
         scan((_: any, __, i) => {
-          expect(i).to.equal(expected.shift());
+          expect(i).toEqual(expected.shift());
           return undefined;
         })
       )
@@ -119,7 +120,7 @@ describe('scan', () => {
         w: ['b', 'c', 'd'],
       };
 
-      const source = e1.pipe(scan((acc, x) => acc.concat(x), [] as string[]));
+      const source = e1.pipe(scan((acc, x) => Array.concat(acc, x), [] as string[]));
 
       expectObservable(source).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -146,7 +147,7 @@ describe('scan', () => {
           if (x === 'd') {
             throw 'bad!';
           }
-          return acc.concat(x);
+          return Array.concat(acc, x);
         }, [] as string[])
       );
 
@@ -161,7 +162,7 @@ describe('scan', () => {
       const e1subs = '  (^!)';
       const expected = '|   ';
 
-      const source = e1.pipe(scan((acc, x) => acc.concat(x), [] as string[]));
+      const source = e1.pipe(scan((acc, x) => Array.concat(acc, x), [] as string[]));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -174,7 +175,7 @@ describe('scan', () => {
       const e1subs = '  ^';
       const expected = '-';
 
-      const source = e1.pipe(scan((acc, x) => acc.concat(x), [] as string[]));
+      const source = e1.pipe(scan((acc, x) => Array.concat(acc, x), [] as string[]));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -187,7 +188,7 @@ describe('scan', () => {
       const e1subs = '  (^!)';
       const expected = '#   ';
 
-      const source = e1.pipe(scan((acc, x) => acc.concat(x), [] as string[]));
+      const source = e1.pipe(scan((acc, x) => Array.concat(acc, x), [] as string[]));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -209,7 +210,7 @@ describe('scan', () => {
         z: ['b', 'c', 'd', 'e', 'f', 'g'],
       };
 
-      const source = e1.pipe(scan((acc, x) => acc.concat(x), [] as string[]));
+      const source = e1.pipe(scan((acc, x) => Array.concat(acc, x), [] as string[]));
 
       expectObservable(source, unsub).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -233,7 +234,7 @@ describe('scan', () => {
 
       const source = e1.pipe(
         mergeMap((x: string) => of(x)),
-        scan((acc, x) => acc.concat(x), [] as string[]),
+        scan((acc, x) => Array.concat(acc, x), [] as string[]),
         mergeMap((x: string[]) => of(x))
       );
 
@@ -256,14 +257,14 @@ describe('scan', () => {
       const expected = '--x--y--z--|';
 
       const scanFunction = (o: number, value: number, index: number) => {
-        expect(index).to.equal(idx.shift());
+        expect(index).toEqual(idx.shift());
         return o + value;
       };
 
       const scanObs = e1.pipe(
         scan(scanFunction, 0),
         finalize(() => {
-          expect(idx).to.be.empty;
+          expect(idx).toHaveLength(0);
         })
       );
 
@@ -292,6 +293,6 @@ describe('scan', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

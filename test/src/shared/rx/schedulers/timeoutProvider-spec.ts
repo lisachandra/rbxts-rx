@@ -1,25 +1,19 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { timeoutProvider } from '@rbxts/rx/out/internal/scheduler/timeoutProvider';
 
 describe('timeoutProvider', () => {
-  const originalSet = global.setTimeout;
-  const originalClear = global.clearTimeout;
-
-  afterEach(() => {
-    global.setTimeout = originalSet;
-    global.clearTimeout = originalClear;
-  });
-
   it('should be monkey patchable', () => {
     let setCalled = false;
     let clearCalled = false;
 
-    global.setTimeout = (() => {
-      setCalled = true;
-      return 0 as any;
-    }) as any;
-    global.clearTimeout = () => {
-      clearCalled = true;
+    timeoutProvider.delegate = {
+      setTimeout: (() => {
+        setCalled = true;
+        return 0 as any;
+      }) as any,
+      clearTimeout: () => {
+        clearCalled = true;
+      },
     };
 
     const handle = timeoutProvider.setTimeout(() => {
@@ -27,7 +21,7 @@ describe('timeoutProvider', () => {
     });
     timeoutProvider.clearTimeout(handle);
 
-    expect(setCalled).to.be.true;
-    expect(clearCalled).to.be.true;
+    expect(setCalled).toBe(true);
+    expect(clearCalled).toBe(true);
   });
 });

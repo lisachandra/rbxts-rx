@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { publishBehavior, mergeMapTo, tap, mergeMap, refCount, retry, repeat } from '@rbxts/rx/out/operators';
 import { ConnectableObservable, of, Subscription, Observable, pipe } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {publishBehavior} */
 describe('publishBehavior operator', () => {
@@ -28,10 +29,10 @@ describe('publishBehavior operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publishBehavior(1)) as ConnectableObservable<number>;
-    expect(typeIs((<any>source)._subscribe, 'function')).to.be.true;
-    expect(typeIs((<any>source).getSubject, 'function')).to.be.true;
-    expect(typeIs(source.connect, 'function')).to.be.true;
-    expect(typeIs(source.refCount, 'function')).to.be.true;
+    expect(typeIs((<any>source)._subscribe, 'function')).toBe(true);
+    expect(typeIs((<any>source).getSubject, 'function')).toBe(true);
+    expect(typeIs(source.connect, 'function')).toBe(true);
+    expect(typeIs(source.refCount, 'function')).toBe(true);
   });
 
   it('should only emit default value if connect is not called, despite subscriptions', () => {
@@ -232,7 +233,7 @@ describe('publishBehavior operator', () => {
     });
   });
 
-  it('should emit completed when subscribed after completed', (done) => {
+  it('should emit completed when subscribed after completed', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -252,14 +253,14 @@ describe('publishBehavior operator', () => {
       results1.push(x);
     });
 
-    expect(results1).to.deep.equal([0]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([0]);
+    expect(results2).toEqual([]);
 
     connectable.connect();
 
-    expect(results1).to.deep.equal([0, 1, 2, 3, 4]);
-    expect(results2).to.deep.equal([]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([0, 1, 2, 3, 4]);
+    expect(results2).toEqual([]);
+    expect(subscriptions).toEqual(1);
 
     connectable.subscribe({
       next: function (x) {
@@ -269,7 +270,7 @@ describe('publishBehavior operator', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(results2).to.deep.equal([]);
+        expect(results2).toEqual([]);
         done();
       },
     });
@@ -317,7 +318,7 @@ describe('publishBehavior operator', () => {
     });
   });
 
-  it('should multicast one observable to multiple observers', (done) => {
+  it('should multicast one observable to multiple observers', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -336,23 +337,23 @@ describe('publishBehavior operator', () => {
       results1.push(x);
     });
 
-    expect(results1).to.deep.equal([0]);
+    expect(results1).toEqual([0]);
 
     connectable.connect();
 
-    expect(results2).to.deep.equal([]);
+    expect(results2).toEqual([]);
 
     connectable.subscribe((x) => {
       results2.push(x);
     });
 
-    expect(results1).to.deep.equal([0, 1, 2, 3, 4]);
-    expect(results2).to.deep.equal([4]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([0, 1, 2, 3, 4]);
+    expect(results2).toEqual([4]);
+    expect(subscriptions).toEqual(1);
     done();
   });
 
-  it('should follow the RxJS 4 behavior and emit nothing to observer after completed', (done) => {
+  it('should follow the RxJS 4 behavior and emit nothing to observer after completed', (_, done) => {
     const results: number[] = [];
 
     const source = new Observable<number>((observer) => {
@@ -371,7 +372,7 @@ describe('publishBehavior operator', () => {
       results.push(x);
     });
 
-    expect(results).to.deep.equal([]);
+    expect(results).toEqual([]);
     done();
   });
 

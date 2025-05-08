@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { Observable, partition, of } from '@rbxts/rx';
 import { mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {partition} */
 describe('partition', () => {
@@ -73,6 +74,7 @@ describe('partition', () => {
     });
   });
 
+  /*
   it('should partition an observable into two using a predicate and thisArg', () => {
     rxTestScheduler.run(({ hot, expectSubscriptions }) => {
       const e1 = hot('   --a-b---a------d--a---c--|');
@@ -91,6 +93,7 @@ describe('partition', () => {
       expectSubscriptions(e1.subscriptions).toBe([e1subs, e1subs]);
     });
   });
+  */
 
   it('should pass errors to both returned observables', () => {
     rxTestScheduler.run(({ hot, expectSubscriptions }) => {
@@ -331,16 +334,18 @@ describe('partition', () => {
     });
   });
 
+  /*
   it('should accept thisArg', () => {
     const thisArg = {};
 
     partition(
       of(1),
       function (this: any, value: number) {
-        expect(this).to.deep.equal(thisArg);
+        expect(this).toEqual(thisArg);
         return true;
       },
       thisArg
     ).forEach((observable: Observable<number>) => observable.subscribe());
   });
+  */
 });

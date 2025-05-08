@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { Observable, NEVER, of, ObjectUnsubscribedError, EMPTY } from '@rbxts/rx';
 import { windowToggle, tap, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -64,7 +64,7 @@ describe('windowToggle', () => {
 
       const source = e1.pipe(
         windowToggle(e2, (value: string) => {
-          expect(value).to.equal('x');
+          expect(value).toEqual('x');
           return e3;
         })
       );
@@ -267,7 +267,7 @@ describe('windowToggle', () => {
       rxTestScheduler.schedule(() => {
         expect(() => {
           window.subscribe();
-        }).to.throw(ObjectUnsubscribedError);
+        }).toThrow(ObjectUnsubscribedError);
       }, late);
     });
   });

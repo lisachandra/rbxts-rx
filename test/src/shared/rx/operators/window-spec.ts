@@ -1,8 +1,9 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { window, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { EMPTY, of, Observable, interval } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
-import { expect } from 'chai';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
 
 /** @test {window} */
 describe('window', () => {
@@ -282,7 +283,7 @@ describe('window', () => {
     });
   });
 
-  it('should window when Promise resolves', (done) => {
+  it('should window when Promise resolves', (_, done) => {
     const e1 = interval(3).pipe(take(5));
     let pos = 0;
     const result: number[][] = [[], []];
@@ -300,19 +301,19 @@ describe('window', () => {
       },
       error: () => done(new Error('should not be called')),
       complete: () => {
-        expect(result).to.deep.equal(expected);
+        expect(result).toEqual(expected);
         done();
       },
     });
   });
 
-  it('should raise error when Promise rejects', (done) => {
+  it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(5));
     const error = new Error('err');
 
     e1.pipe(window(Promise.reject(error))).subscribe({
       error: (err) => {
-        expect(err).to.be.an('error');
+        expect(err).toBeInstanceOf(Error);
         done();
       },
       complete: () => {

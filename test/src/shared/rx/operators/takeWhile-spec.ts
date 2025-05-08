@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { takeWhile, tap, mergeMap } from '@rbxts/rx/out/operators';
 import { of, Observable, from } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {takeWhile} */
 describe('takeWhile', () => {
@@ -18,7 +19,7 @@ describe('takeWhile', () => {
       const e1subs = '   ^------!         ';
       const expected = ' -2--3--|         ';
 
-      const result = e1.pipe(takeWhile((v) => +v < 4));
+      const result = e1.pipe(takeWhile((v) => +v! < 4));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -227,7 +228,7 @@ describe('takeWhile', () => {
         takeWhile(predicate),
         tap({
           complete: () => {
-            expect(invoked).to.equal(3);
+            expect(invoked).toEqual(3);
           },
         })
       );
@@ -309,11 +310,11 @@ describe('takeWhile', () => {
         ) {}
       }
 
-      const isBar = (x: any): x is Bar => x && (<Bar>x).bar !== undefined;
+      const isBar = (x: Bar): x is Bar => x && (<Bar>x).bar !== undefined;
 
       const foo: Foo = new Foo();
       of(foo)
-        .pipe(takeWhile((foo) => foo.baz === 42))
+        .pipe(takeWhile((foo: Foo) => foo.baz === 42))
         .subscribe((x) => x.baz); // x is still Foo
       of(foo)
         .pipe(takeWhile(isBar))
@@ -321,7 +322,7 @@ describe('takeWhile', () => {
 
       const foobar: Bar = new Foo(); // type is interface, not the class
       of(foobar)
-        .pipe(takeWhile((foobar) => foobar.bar === 'name'))
+        .pipe(takeWhile((foobar: Bar) => foobar.bar === 'name'))
         .subscribe((x) => x.bar); // <-- x is still Bar
       of(foobar)
         .pipe(takeWhile(isBar))
@@ -329,7 +330,7 @@ describe('takeWhile', () => {
 
       const barish = { bar: 'quack', baz: 42 }; // type can quack like a Bar
       of(barish)
-        .pipe(takeWhile((x) => x.bar === 'quack'))
+        .pipe(takeWhile((x: Bar) => x.bar === 'quack'))
         .subscribe((x) => x.bar); // x is still { bar: string; baz: number; }
       of(barish)
         .pipe(takeWhile(isBar))
@@ -362,10 +363,10 @@ describe('takeWhile', () => {
       }
     });
 
-    synchronousObservable.pipe(takeWhile((value) => value < 2)).subscribe(() => {
+    synchronousObservable.pipe(takeWhile((value: number) => value < 2)).subscribe(() => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

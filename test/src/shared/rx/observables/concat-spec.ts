@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { lowerCaseO } from '../helpers/test-helper';
 import { asyncScheduler, queueScheduler, concat, of, defer, Observable } from '@rbxts/rx';
 import { mergeMap } from '@rbxts/rx/out/operators';
@@ -388,20 +388,20 @@ describe('static concat', () => {
     });
   });
 
-  it('should concat an immediately-scheduled source with an immediately-scheduled second', (done) => {
+  it('should concat an immediately-scheduled source with an immediately-scheduled second', (_, done) => {
     const a = of(1, 2, 3, queueScheduler);
     const b = of(4, 5, 6, 7, 8, queueScheduler);
     const r = [1, 2, 3, 4, 5, 6, 7, 8];
 
     concat(a, b, queueScheduler).subscribe({
       next: (vals) => {
-        expect(vals).to.equal(r.shift());
+        expect(vals).toEqual(r.shift());
       },
       complete: done,
     });
   });
 
-  it("should use the scheduler even when one Observable is concat'd", (done) => {
+  it("should use the scheduler even when one Observable is concat'd", (_, done) => {
     let e1Subscribed = false;
     const e1 = defer(() => {
       e1Subscribed = true;
@@ -411,12 +411,12 @@ describe('static concat', () => {
     concat(e1, asyncScheduler).subscribe({
       error: done,
       complete: () => {
-        expect(e1Subscribed).to.be.true;
+        expect(e1Subscribed).toBe(true);
         done();
       },
     });
 
-    expect(e1Subscribed).to.be.false;
+    expect(e1Subscribed).toBe(false);
   });
 
   it('should return passed observable if no scheduler was passed', () => {
@@ -434,7 +434,7 @@ describe('static concat', () => {
       const source = lowerCaseO('a', 'b', 'c');
       const result = concat(source);
 
-      expect(result).to.be.an.instanceof(Observable);
+      expect(result).toBeInstanceOf(Observable);
       expectObservable(result).toBe('(abc|)');
     });
   });

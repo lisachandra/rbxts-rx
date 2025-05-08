@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { windowCount, mergeMap, mergeAll, take } from '@rbxts/rx/out/operators';
 import { of, Observable } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -190,6 +190,6 @@ describe('windowCount', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

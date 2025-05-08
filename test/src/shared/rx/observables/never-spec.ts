@@ -1,5 +1,6 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { NEVER } from '@rbxts/rx';
-import { expect } from 'chai';
+
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 
@@ -20,6 +21,6 @@ describe('NEVER', () => {
   });
 
   it('should return the same instance every time', () => {
-    expect(NEVER).to.equal(NEVER);
+    expect(NEVER).toEqual(NEVER);
   });
 });

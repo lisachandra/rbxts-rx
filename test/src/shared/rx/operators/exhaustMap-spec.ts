@@ -1,7 +1,8 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { concat, defer, Observable, of, BehaviorSubject } from '@rbxts/rx';
 import { exhaustMap, mergeMap, takeWhile, map, take } from '@rbxts/rx/out/operators';
-import { expect } from 'chai';
+
 import { asInteropObservable } from '../helpers/interop-helper';
 import { observableMatcher } from '../helpers/observableMatcher';
 
@@ -48,7 +49,7 @@ describe('exhaustMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([
+          expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
             [1, 3, 0, 2],
@@ -67,7 +68,7 @@ describe('exhaustMap', () => {
     const results: number[] = [];
 
     of(1, 2, 3)
-      .pipe(exhaustMap((x) => of(x, x + 1, x + 2), void 0))
+      .pipe(exhaustMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
         next(value) {
           results.push(value);
@@ -76,7 +77,7 @@ describe('exhaustMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([1, 2, 3, 2, 3, 4, 3, 4, 5]);
+          expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
   });
@@ -279,13 +280,14 @@ describe('exhaustMap', () => {
     of(undefined)
       .pipe(
         exhaustMap(() => synchronousObservable),
+
         takeWhile((x) => x != 2) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([1, 2]);
+    expect(sideEffects).toEqual([1, 2]);
   });
 
   it('should switch inner cold observables, inner never completes', () => {
@@ -500,7 +502,7 @@ describe('exhaustMap', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   it('should ignore subsequent synchronous reentrances during subscribing the inner sub', () => {
@@ -518,6 +520,6 @@ describe('exhaustMap', () => {
       )
     ).subscribe((value) => results.push(value));
 
-    expect(results).to.deep.equal([1]);
+    expect(results).toEqual([1]);
   });
 });

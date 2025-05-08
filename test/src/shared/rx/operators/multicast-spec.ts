@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { multicast, tap, mergeMapTo, takeLast, mergeMap, refCount, retry, repeat, switchMap, map, take } from '@rbxts/rx/out/operators';
 import { Subject, ReplaySubject, of, ConnectableObservable, zip, concat, Subscription, Observable, from } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {multicast} */
 describe('multicast', () => {
@@ -27,14 +28,14 @@ describe('multicast', () => {
     });
   });
 
-  it('should accept Subjects', (done) => {
+  it('should accept Subjects', (_, done) => {
     const expected = [1, 2, 3, 4];
 
     const connectable = of(1, 2, 3, 4).pipe(multicast(new Subject<number>())) as ConnectableObservable<number>;
 
     connectable.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: () => {
         done(new Error('should not be called'));
@@ -47,7 +48,7 @@ describe('multicast', () => {
     connectable.connect();
   });
 
-  it('should multicast a ConnectableObservable', (done) => {
+  it('should multicast a ConnectableObservable', (_, done) => {
     const expected = [1, 2, 3, 4];
 
     const source = new Subject<number>();
@@ -67,24 +68,24 @@ describe('multicast', () => {
       .pipe(
         tap({
           next(x) {
-            expect(x).to.equal(expected.shift());
+            expect(x).toEqual(expected.shift());
           },
           complete() {
-            expect(expected.size()).to.equal(0);
+            expect(expected.size()).toEqual(0);
           },
         })
       )
       .subscribe({ error: done, complete: done });
   });
 
-  it('should accept Subject factory functions', (done) => {
+  it('should accept Subject factory functions', (_, done) => {
     const expected = [1, 2, 3, 4];
 
     const connectable = of(1, 2, 3, 4).pipe(multicast(() => new Subject<number>())) as ConnectableObservable<number>;
 
     connectable.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       error: () => {
         done(new Error('should not be called'));
@@ -100,7 +101,7 @@ describe('multicast', () => {
   it('should accept a multicast selector and connect to a hot source for each subscriber', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const subjectFactory = () => new Subject<string>();
-      const selector = (x: Observable<string>) => zip(x, x).pipe(map(([a, b]) => (parseInt(a) + parseInt(b)).toString()));
+      const selector = (x: Observable<string>) => zip(x, x).pipe(map(([a, b]) => tostring(tonumber(a)! + tonumber(b)!)));
 
       const e1 = hot('         -1-2-3----4-|');
       // prettier-ignore
@@ -127,7 +128,7 @@ describe('multicast', () => {
   it('should accept a multicast selector and connect to a cold source for each subscriber', () => {
     testScheduler.run(({ cold, hot, expectObservable, expectSubscriptions }) => {
       const subjectFactory = () => new Subject<string>();
-      const selector = (x: Observable<string>) => zip(x, x).pipe(map(([a, b]) => (parseInt(a) + parseInt(b)).toString()));
+      const selector = (x: Observable<string>) => zip(x, x).pipe(map(([a, b]) => tostring(tonumber(a)! + tonumber(b)!)));
 
       const e1 = cold('        -1-2-3----4-|        ');
       //                           -1-2-3----4-|
@@ -689,7 +690,7 @@ describe('multicast', () => {
     });
   });
 
-  it('should multicast one observable to multiple observers', (done) => {
+  it('should multicast one observable to multiple observers', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -717,14 +718,14 @@ describe('multicast', () => {
       results2.push(x);
     });
 
-    expect(results1).to.deep.equal([]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([]);
+    expect(results2).toEqual([]);
 
     connectable.connect();
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([1, 2, 3, 4]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([1, 2, 3, 4]);
+    expect(subscriptions).toEqual(1);
     done();
   });
 
@@ -736,15 +737,15 @@ describe('multicast', () => {
     const source = from([1, 2, 3, 4]).pipe(multicast(subject)) as ConnectableObservable<number>;
 
     source.subscribe((x) => {
-      expect(x).to.equal(expected[i++]);
+      expect(x).toEqual(expected[i++]);
     });
 
     source.connect();
-    expect(subject.observers.size()).to.equal(0);
+    expect(subject.observers.size()).toEqual(0);
   });
 
   describe('when given a subject factory', () => {
-    it('should allow you to reconnect by subscribing again', (done) => {
+    it('should allow you to reconnect by subscribing again', (_, done) => {
       const expected = [1, 2, 3, 4];
       let i = 0;
 
@@ -752,14 +753,14 @@ describe('multicast', () => {
 
       source.subscribe({
         next: (x) => {
-          expect(x).to.equal(expected[i++]);
+          expect(x).toEqual(expected[i++]);
         },
         complete: () => {
           i = 0;
 
           source.subscribe({
             next: (x) => {
-              expect(x).to.equal(expected[i++]);
+              expect(x).toEqual(expected[i++]);
             },
             complete: done,
           });
@@ -771,7 +772,7 @@ describe('multicast', () => {
       source.connect();
     });
 
-    it('should not throw ObjectUnsubscribedError when used in a switchMap', (done) => {
+    it('should not throw ObjectUnsubscribedError when used in a switchMap', (_, done) => {
       const source = of(1, 2, 3).pipe(
         multicast(() => new Subject<number>()),
         refCount()
@@ -780,16 +781,16 @@ describe('multicast', () => {
       const expected = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3'];
 
       of('a', 'b', 'c')
-        .pipe(switchMap((letter) => source.pipe(map((n) => String(letter + n)))))
+        .pipe(switchMap((letter) => source.pipe(map((n) => tostring(letter + n)))))
         .subscribe({
           next: (x) => {
-            expect(x).to.equal(expected.shift());
+            expect(x).toEqual(expected.shift());
           },
           error: () => {
             done(new Error('should not be called'));
           },
           complete: () => {
-            expect(expected.size()).to.equal(0);
+            expect(expected.size()).toEqual(0);
             done();
           },
         });
@@ -797,22 +798,22 @@ describe('multicast', () => {
   });
 
   describe('when given a subject', () => {
-    it('should not throw ObjectUnsubscribedError when used in a switchMap', (done) => {
+    it('should not throw ObjectUnsubscribedError when used in a switchMap', (_, done) => {
       const source = of(1, 2, 3).pipe(multicast(new Subject<number>()), refCount());
 
       const expected = ['a1', 'a2', 'a3'];
 
       of('a', 'b', 'c')
-        .pipe(switchMap((letter) => source.pipe(map((n) => String(letter + n)))))
+        .pipe(switchMap((letter) => source.pipe(map((n) => tostring(letter + n)))))
         .subscribe({
           next: (x) => {
-            expect(x).to.equal(expected.shift());
+            expect(x).toEqual(expected.shift());
           },
           error: () => {
             done(new Error('should not be called'));
           },
           complete: () => {
-            expect(expected.size()).to.equal(0);
+            expect(expected.size()).toEqual(0);
             done();
           },
         });

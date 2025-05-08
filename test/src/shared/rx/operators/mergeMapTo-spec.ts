@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { mergeMapTo, map, take } from '@rbxts/rx/out/operators';
 import { from, of, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {mergeMapTo} */
 describe('mergeMapTo', () => {
@@ -48,7 +49,7 @@ describe('mergeMapTo', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([
+          expect(results).toEqual([
             [1, 4, 0, 0],
             [1, 5, 0, 1],
             [1, 6, 0, 2],
@@ -67,7 +68,7 @@ describe('mergeMapTo', () => {
     const results: number[] = [];
 
     of(1, 2, 3)
-      .pipe(mergeMapTo(of(4, 5, 6), void 0))
+      .pipe(mergeMapTo(of(4, 5, 6), undefined))
       .subscribe({
         next(value) {
           results.push(value);
@@ -76,7 +77,7 @@ describe('mergeMapTo', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([4, 5, 6, 4, 5, 6, 4, 5, 6]);
+          expect(results).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6]);
         },
       });
   });
@@ -105,7 +106,7 @@ describe('mergeMapTo', () => {
     });
   });
 
-  it('should map values to constant resolved promises and merge', (done) => {
+  it('should map values to constant resolved promises and merge', (_, done) => {
     const source = from([4, 3, 2, 1]);
 
     const results: number[] = [];
@@ -117,13 +118,13 @@ describe('mergeMapTo', () => {
         done(new Error('Subscriber error handler not supposed to be called.'));
       },
       complete: () => {
-        expect(results).to.deep.equal([42, 42, 42, 42]);
+        expect(results).toEqual([42, 42, 42, 42]);
         done();
       },
     });
   });
 
-  it('should map values to constant rejected promises and merge', (done) => {
+  it('should map values to constant rejected promises and merge', (_, done) => {
     const source = from([4, 3, 2, 1]);
 
     source.pipe(mergeMapTo(from(Promise.reject(42)))).subscribe({
@@ -131,7 +132,7 @@ describe('mergeMapTo', () => {
         done(new Error('Subscriber next handler not supposed to be called.'));
       },
       error: (err) => {
-        expect(err).to.equal(42);
+        expect(err).toEqual(42);
         done();
       },
       complete: () => {
@@ -423,15 +424,15 @@ describe('mergeMapTo', () => {
 
     source.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         completed = true;
       },
     });
 
-    expect(completed).to.be.true;
+    expect(completed).toBe(true);
   });
 
   it('should map and flatten an Array', () => {
@@ -442,15 +443,15 @@ describe('mergeMapTo', () => {
 
     source.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         completed = true;
       },
     });
 
-    expect(completed).to.be.true;
+    expect(completed).toBe(true);
   });
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
@@ -468,6 +469,6 @@ describe('mergeMapTo', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

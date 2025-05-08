@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { sample, mergeMap } from '@rbxts/rx/out/operators';
 import { Subject, of } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -50,7 +50,7 @@ describe('sample', () => {
     item$.next(2);
     item$.next(3);
 
-    expect(results).to.deep.equal([1, 2, 3]);
+    expect(results).toEqual([1, 2, 3]);
   });
 
   it('should sample nothing if source has nexted after all notifications, but notifier does not complete', () => {

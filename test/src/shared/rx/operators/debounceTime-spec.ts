@@ -1,10 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { NEVER, of, Subject } from '@rbxts/rx';
 import { AnimationFrameAction } from '@rbxts/rx/out/internal/scheduler/AnimationFrameAction';
 import { AnimationFrameScheduler } from '@rbxts/rx/out/internal/scheduler/AnimationFrameScheduler';
 import { debounceTime, mergeMap, startWith } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
-import { VirtualTimeScheduler } from '../../packages/rx/out/internal/scheduler/VirtualTimeScheduler';
+import { VirtualTimeScheduler } from '@rbxts/rx/out/internal/scheduler/VirtualTimeScheduler';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {debounceTime} */
@@ -220,23 +220,23 @@ describe('debounceTime', () => {
     source.next(1);
     scheduler.flush();
 
-    expect(results).to.deep.equal([1, 2]);
+    expect(results).toEqual([1, 2]);
   });
 
   it('should unsubscribe from the scheduled debounce action when downstream unsubscribes', () => {
     const scheduler = new AnimationFrameScheduler(AnimationFrameAction);
 
-    expect(scheduler._scheduled).to.not.exist;
-    expect(scheduler.actions).to.be.empty;
+    expect(scheduler._scheduled).never.toBeDefined();
+    expect(scheduler.actions).toHaveLength(0);
 
     const subscription = NEVER.pipe(startWith(1), debounceTime(0, scheduler)).subscribe();
 
-    expect(scheduler._scheduled).to.exist;
-    expect(scheduler.actions.size()).to.equal(1);
+    expect(scheduler._scheduled).toBeDefined();
+    expect(scheduler.actions.size()).toEqual(1);
 
     subscription.unsubscribe();
 
-    expect(scheduler._scheduled).to.not.exist;
-    expect(scheduler.actions).to.be.empty;
+    expect(scheduler._scheduled).never.toBeDefined();
+    expect(scheduler.actions).toHaveLength(0);
   });
 });

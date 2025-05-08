@@ -70,7 +70,7 @@ export function expand<T, O extends ObservableInput<unknown>>(
  * the output Observable and merging the results of the Observables obtained
  * from this transformation.
  */
-export function expand<T extends defined, O extends ObservableInput<unknown>>(
+export function expand<T, O extends ObservableInput<unknown>>(
   project: (value: T, index: number) => O,
   concurrent = math.huge,
   scheduler?: SchedulerLike

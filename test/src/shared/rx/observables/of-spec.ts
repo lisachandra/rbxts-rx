@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { concatMap, delay, concatAll } from '@rbxts/rx/out/operators';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {of} */
 describe('of', () => {
@@ -25,14 +26,14 @@ describe('of', () => {
     });
   });
 
-  it('should create an observable from the provided values', (done) => {
+  it('should create an observable from the provided values', (_, done) => {
     const x = { foo: 'bar' };
     const expected = [1, 'a', x];
     let i = 0;
 
     of(1, 'a', x).subscribe({
       next: (y: any) => {
-        expect(y).to.equal(expected[i++]);
+        expect(y).toEqual(expected[i++]);
       },
       error: (x) => {
         done(new Error('should not be called'));
@@ -43,13 +44,13 @@ describe('of', () => {
     });
   });
 
-  it('should emit one value', (done) => {
+  it('should emit one value', (_, done) => {
     let calls = 0;
 
     of(42).subscribe({
       next: (x: number) => {
-        expect(++calls).to.equal(1);
-        expect(x).to.equal(42);
+        expect(++calls).toEqual(1);
+        expect(x).toEqual(42);
       },
       error: (err: any) => {
         done(new Error('should not be called'));

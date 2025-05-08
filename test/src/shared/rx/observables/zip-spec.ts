@@ -1,7 +1,8 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { queueScheduler as rxQueueScheduler, zip, from, of } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 const queueScheduler = rxQueueScheduler;
 
@@ -27,13 +28,13 @@ describe('zip', () => {
     });
   });
 
-  it('should zip the provided observables', (done) => {
+  it('should zip the provided observables', (_, done) => {
     const expected = ['a1', 'b2', 'c3'];
     let i = 0;
 
     zip(from(['a', 'b', 'c']), from([1, 2, 3]), (a: string, b: number) => a + b).subscribe({
       next: (x: string) => {
-        expect(x).to.equal(expected[i++]);
+        expect(x).toEqual(expected[i++]);
       },
       complete: done,
     });
@@ -589,7 +590,7 @@ describe('zip', () => {
     });
   });
 
-  it('should combine an immediately-scheduled source with an immediately-scheduled second', (done) => {
+  it('should combine an immediately-scheduled source with an immediately-scheduled second', (_, done) => {
     const a = of(1, 2, 3, queueScheduler);
     const b = of(4, 5, 6, 7, 8, queueScheduler);
     const r = [
@@ -601,7 +602,7 @@ describe('zip', () => {
 
     zip(a, b).subscribe({
       next: (vals: Array<number>) => {
-        expect(vals).to.deep.equal(r[i++]);
+        expect(vals).toEqual(r[i++]);
       },
       complete: done,
     });
@@ -613,7 +614,7 @@ describe('zip', () => {
       next: (value) => results.push(value),
       complete: () => results.push('complete'),
     });
-    expect(results).to.deep.equal([['a', '1', 'x'], ['b', '2', 'y'], ['c', '3', 'z'], 'complete']);
+    expect(results).toEqual([['a', '1', 'x'], ['b', '2', 'y'], ['c', '3', 'z'], 'complete']);
   });
 
   it('should return EMPTY if passed an empty array as the only argument', () => {
@@ -627,6 +628,6 @@ describe('zip', () => {
       },
     });
 
-    expect(results).to.deep.equal(['done']);
+    expect(results).toEqual(['done']);
   });
 });

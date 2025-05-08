@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { connectable, of, ReplaySubject } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -48,13 +48,13 @@ describe('connectable', () => {
 
     obs.subscribe((value) => values.push(value));
     const connection = obs.connect();
-    expect(values).to.deep.equal([1, 2, 3]);
+    expect(values).toEqual([1, 2, 3]);
 
     connection.unsubscribe();
 
     obs.subscribe((value) => values.push(value));
     obs.connect();
-    expect(values).to.deep.equal([1, 2, 3, 1, 2, 3]);
+    expect(values).toEqual([1, 2, 3, 1, 2, 3]);
   });
 
   it('should support resetOnDisconnect = false', () => {
@@ -67,12 +67,12 @@ describe('connectable', () => {
 
     obs.subscribe((value) => values.push(value));
     const connection = obs.connect();
-    expect(values).to.deep.equal([1, 2, 3]);
+    expect(values).toEqual([1, 2, 3]);
 
     connection.unsubscribe();
 
     obs.subscribe((value) => values.push(value));
     obs.connect();
-    expect(values).to.deep.equal([1, 2, 3, 3]);
+    expect(values).toEqual([1, 2, 3, 3]);
   });
 });

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, from, Observable, defer } from '@rbxts/rx';
 import { concatMap, mergeMap, map, take, finalize, delay } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {concatMap} */
 describe('Observable.prototype.concatMap', () => {
@@ -20,7 +21,7 @@ describe('Observable.prototype.concatMap', () => {
       const expected = ' --x-x-x-y-y-yz-z-z-|';
       const values = { x: 10, y: 30, z: 50 };
 
-      const result = e1.pipe(concatMap((x) => e2.pipe(map((i) => i * parseInt(x)))));
+      const result = e1.pipe(concatMap((x) => e2.pipe(map((i) => i * tonumber(x)!))));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -45,7 +46,7 @@ describe('Observable.prototype.concatMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([
+          expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
             [1, 3, 0, 2],
@@ -64,7 +65,7 @@ describe('Observable.prototype.concatMap', () => {
     const results: number[] = [];
 
     of(1, 2, 3)
-      .pipe(concatMap((x) => of(x, x + 1, x + 2), void 0))
+      .pipe(concatMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
         next(value) {
           results.push(value);
@@ -73,7 +74,7 @@ describe('Observable.prototype.concatMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([1, 2, 3, 2, 3, 4, 3, 4, 5]);
+          expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
   });
@@ -702,17 +703,7 @@ describe('Observable.prototype.concatMap', () => {
 
     testScheduler.flush();
 
-    expect(results).to.deep.equal([
-      'init 1',
-      'next 1',
-      'finalized 1',
-      'init 2',
-      'next 2',
-      'finalized 2',
-      'init 3',
-      'next 3',
-      'finalized 3',
-    ]);
+    expect(results).toEqual(['init 1', 'next 1', 'finalized 1', 'init 2', 'next 2', 'finalized 2', 'init 3', 'next 3', 'finalized 3']);
   });
 
   function arrayRepeat(value: string, times: number) {
@@ -772,7 +763,7 @@ describe('Observable.prototype.concatMap', () => {
     });
   });
 
-  it('should map values to constant resolved promises and concatenate', (done) => {
+  it('should map values to constant resolved promises and concatenate', (_, done) => {
     const source = from([4, 3, 2, 1]);
     const project = (value: number) => from(Promise.resolve(42));
 
@@ -785,13 +776,13 @@ describe('Observable.prototype.concatMap', () => {
         done(new Error('Subscriber error handler not supposed to be called.'));
       },
       complete: () => {
-        expect(results).to.deep.equal([42, 42, 42, 42]);
+        expect(results).toEqual([42, 42, 42, 42]);
         done();
       },
     });
   });
 
-  it('should map values to constant rejected promises and concatenate', (done) => {
+  it('should map values to constant rejected promises and concatenate', (_, done) => {
     const source = from([4, 3, 2, 1]);
     const project = (value: any) => from(Promise.reject(42));
 
@@ -800,7 +791,7 @@ describe('Observable.prototype.concatMap', () => {
         done(new Error('Subscriber next handler not supposed to be called.'));
       },
       error: (err) => {
-        expect(err).to.deep.equal(42);
+        expect(err).toEqual(42);
         done();
       },
       complete: () => {
@@ -809,7 +800,7 @@ describe('Observable.prototype.concatMap', () => {
     });
   });
 
-  it('should map values to resolved promises and concatenate', (done) => {
+  it('should map values to resolved promises and concatenate', (_, done) => {
     const source = from([4, 3, 2, 1]);
     const project = (value: number, index: number) => from(Promise.resolve(value + index));
 
@@ -822,13 +813,13 @@ describe('Observable.prototype.concatMap', () => {
         done(new Error('Subscriber error handler not supposed to be called.'));
       },
       complete: () => {
-        expect(results).to.deep.equal([4, 4, 4, 4]);
+        expect(results).toEqual([4, 4, 4, 4]);
         done();
       },
     });
   });
 
-  it('should map values to rejected promises and concatenate', (done) => {
+  it('should map values to rejected promises and concatenate', (_, done) => {
     const source = from([4, 3, 2, 1]);
     const project = (value: number, index: number) => from(Promise.reject('' + value + '-' + index));
 
@@ -837,7 +828,7 @@ describe('Observable.prototype.concatMap', () => {
         done(new Error('Subscriber next handler not supposed to be called.'));
       },
       error: (err) => {
-        expect(err).to.deep.equal('4-0');
+        expect(err).toEqual('4-0');
         done();
       },
       complete: () => {
@@ -866,6 +857,6 @@ describe('Observable.prototype.concatMap', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { tap, mergeMap, take } from '@rbxts/rx/out/operators';
 import { Subject, of, throwError, Observer, EMPTY, Observable, noop } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {tap} */
 describe('tap', () => {
@@ -39,7 +40,7 @@ describe('tap', () => {
       )
       .subscribe();
 
-    expect(value).to.equal(42);
+    expect(value).toEqual(42);
   });
 
   it('should error with a callback', () => {
@@ -54,14 +55,14 @@ describe('tap', () => {
       )
       .subscribe({
         error(ex) {
-          expect(ex).to.equal('bad');
+          expect(ex).toEqual('bad');
         },
       });
 
-    expect(err).to.equal('bad');
+    expect(err).toEqual('bad');
   });
 
-  it('should handle everything with an observer', (done) => {
+  it('should handle everything with an observer', (_, done) => {
     const expected = [1, 2, 3];
     const results: number[] = [];
 
@@ -75,7 +76,7 @@ describe('tap', () => {
             done(new Error('should not be called'));
           },
           complete: () => {
-            expect(results).to.deep.equal(expected);
+            expect(results).toEqual(expected);
             done();
           },
         })
@@ -83,7 +84,7 @@ describe('tap', () => {
       .subscribe();
   });
 
-  it('should handle everything with a Subject', (done) => {
+  it('should handle everything with a Subject', (_, done) => {
     const expected = [1, 2, 3];
     const results: number[] = [];
     const subject = new Subject<number>();
@@ -96,7 +97,7 @@ describe('tap', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(results).to.deep.equal(expected);
+        expect(results).toEqual(expected);
         done();
       },
     });
@@ -110,18 +111,18 @@ describe('tap', () => {
       .pipe(
         tap({
           error: (err: any) => {
-            expect(err).to.equal('bad');
+            expect(err).toEqual('bad');
           },
         })
       )
       .subscribe({
         error(err: any) {
           errored = true;
-          expect(err).to.equal('bad');
+          expect(err).toEqual('bad');
         },
       });
 
-    expect(errored).to.be.true;
+    expect(errored).toBe(true);
   });
 
   it('should handle an error with observer', () => {
@@ -130,18 +131,18 @@ describe('tap', () => {
       .pipe(
         tap(<any>{
           error: function (err: string) {
-            expect(err).to.equal('bad');
+            expect(err).toEqual('bad');
           },
         })
       )
       .subscribe({
         error(err) {
           errored = true;
-          expect(err).to.equal('bad');
+          expect(err).toEqual('bad');
         },
       });
 
-    expect(errored).to.be.true;
+    expect(errored).toBe(true);
   });
 
   it('should handle complete with observer', () => {
@@ -155,7 +156,7 @@ describe('tap', () => {
       })
     ).subscribe();
 
-    expect(completed).to.be.true;
+    expect(completed).toBe(true);
   });
 
   it('should handle next with observer', () => {
@@ -171,7 +172,7 @@ describe('tap', () => {
       )
       .subscribe();
 
-    expect(value).to.equal('hi');
+    expect(value).toEqual('hi');
   });
 
   it('should raise error if next handler raises error', () => {
@@ -185,7 +186,7 @@ describe('tap', () => {
       )
       .subscribe({
         error(err: any) {
-          expect(err.message).to.equal('bad');
+          expect(err.message).toEqual('bad');
         },
       });
   });
@@ -201,7 +202,7 @@ describe('tap', () => {
       )
       .subscribe({
         error(err: any) {
-          expect(err.message).to.equal('bad');
+          expect(err.message).toEqual('bad');
         },
       });
   });
@@ -215,7 +216,7 @@ describe('tap', () => {
       })
     ).subscribe({
       error(err: any) {
-        expect(err.message).to.equal('bad');
+        expect(err.message).toEqual('bad');
       },
     });
   });
@@ -311,7 +312,7 @@ describe('tap', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 
   describe('lifecycle handlers', () => {
@@ -334,11 +335,11 @@ describe('tap', () => {
 
       subject.next(1);
       subject.next(2);
-      expect(results).to.deep.equal(['subscribe', 'next 1', 'next 2']);
+      expect(results).toEqual(['subscribe', 'next 1', 'next 2']);
 
       subscription.unsubscribe();
 
-      expect(results).to.deep.equal(['subscribe', 'next 1', 'next 2', 'unsubscribe', 'finalize']);
+      expect(results).toEqual(['subscribe', 'next 1', 'next 2', 'unsubscribe', 'finalize']);
     });
 
     it('should not call unsubscribe if source completes', () => {
@@ -360,12 +361,12 @@ describe('tap', () => {
 
       subject.next(1);
       subject.next(2);
-      expect(results).to.deep.equal(['subscribe', 'next 1', 'next 2']);
+      expect(results).toEqual(['subscribe', 'next 1', 'next 2']);
       subject.complete();
       // should have no effect
       subscription.unsubscribe();
 
-      expect(results).to.deep.equal(['subscribe', 'next 1', 'next 2', 'complete', 'finalize']);
+      expect(results).toEqual(['subscribe', 'next 1', 'next 2', 'complete', 'finalize']);
     });
 
     it('should not call unsubscribe if source errors', () => {
@@ -389,12 +390,12 @@ describe('tap', () => {
 
       subject.next(1);
       subject.next(2);
-      expect(results).to.deep.equal(['subscribe', 'next 1', 'next 2']);
+      expect(results).toEqual(['subscribe', 'next 1', 'next 2']);
       subject.error(new Error('bad'));
       // should have no effect
       subscription.unsubscribe();
 
-      expect(results).to.deep.equal(['subscribe', 'next 1', 'next 2', 'error: bad', 'finalize']);
+      expect(results).toEqual(['subscribe', 'next 1', 'next 2', 'error: bad', 'finalize']);
     });
   });
 });

@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { mergeMap, map, delay, take } from '@rbxts/rx/out/operators';
 import { asapScheduler, defer, Observable, from, of, timer } from '@rbxts/rx';
 import { asInteropObservable } from '../helpers/interop-helper';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error, setTimeout } from '@rbxts/luau-polyfill';
 
 /** @test {mergeMap} */
 describe('mergeMap', () => {
@@ -54,7 +55,7 @@ describe('mergeMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([
+          expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
             [1, 3, 0, 2],
@@ -73,7 +74,7 @@ describe('mergeMap', () => {
     const results: number[] = [];
 
     of(1, 2, 3)
-      .pipe(mergeMap((x) => of(x, x + 1, x + 2), void 0))
+      .pipe(mergeMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
         next(value) {
           results.push(value);
@@ -82,7 +83,7 @@ describe('mergeMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([1, 2, 3, 2, 3, 4, 3, 4, 5]);
+          expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
   });
@@ -91,7 +92,7 @@ describe('mergeMap', () => {
     const results: number[] = [];
 
     of(1, 2, 3)
-      .pipe(mergeMap((x) => of(x, x + 1, x + 2), void 0, 1))
+      .pipe(mergeMap((x) => of(x, x + 1, x + 2), undefined, 1))
       .subscribe({
         next(value) {
           results.push(value);
@@ -100,7 +101,7 @@ describe('mergeMap', () => {
           throw err;
         },
         complete() {
-          expect(results).to.deep.equal([1, 2, 3, 2, 3, 4, 3, 4, 5]);
+          expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
   });
@@ -131,7 +132,7 @@ describe('mergeMap', () => {
     });
   });
 
-  it('should map values to constant resolved promises and merge', (done) => {
+  it('should map values to constant resolved promises and merge', (_, done) => {
     const source = from([4, 3, 2, 1]);
     const project = () => from(Promise.resolve(42));
 
@@ -144,22 +145,22 @@ describe('mergeMap', () => {
         done(new Error('Subscriber error handler not supposed to be called.'));
       },
       complete: () => {
-        expect(results).to.deep.equal([42, 42, 42, 42]);
+        expect(results).toEqual([42, 42, 42, 42]);
         done();
       },
     });
   });
 
-  it('should map values to constant rejected promises and merge', (done) => {
+  it('should map values to constant rejected promises and merge', (_, done) => {
     const source = from([4, 3, 2, 1]);
-    const project = () => from(Promise.reject<number>(42));
+    const project = () => from(Promise.reject(42));
 
     source.pipe(mergeMap(project)).subscribe({
       next: (x) => {
         done(new Error('Subscriber next handler not supposed to be called.'));
       },
       error: (err) => {
-        expect(err).to.equal(42);
+        expect(err).toEqual(42);
         done();
       },
       complete: () => {
@@ -168,7 +169,7 @@ describe('mergeMap', () => {
     });
   });
 
-  it('should map values to resolved promises and merge', (done) => {
+  it('should map values to resolved promises and merge', (_, done) => {
     const source = from([4, 3, 2, 1]);
     const project = (value: number, index: number) => from(Promise.resolve(value + index));
 
@@ -181,22 +182,22 @@ describe('mergeMap', () => {
         done(new Error('Subscriber error handler not supposed to be called.'));
       },
       complete: () => {
-        expect(results).to.deep.equal([4, 4, 4, 4]);
+        expect(results).toEqual([4, 4, 4, 4]);
         done();
       },
     });
   });
 
-  it('should map values to rejected promises and merge', (done) => {
+  it('should map values to rejected promises and merge', (_, done) => {
     const source = from([4, 3, 2, 1]);
-    const project = (value: number, index: number) => from(Promise.reject<string>('' + value + '-' + index));
+    const project = (value: number, index: number) => from(Promise.reject('' + value + '-' + index));
 
     source.pipe(mergeMap(project)).subscribe({
       next: (x) => {
         done(new Error('Subscriber next handler not supposed to be called.'));
       },
       error: (err) => {
-        expect(err).to.equal('4-0');
+        expect(err).toEqual('4-0');
         done();
       },
       complete: () => {
@@ -797,7 +798,7 @@ describe('mergeMap', () => {
   function arrayRepeat<T>(value: T, times: number): T[] {
     const results: T[] = [];
     for (let i = 0; i < times; i++) {
-      results.push(value);
+      (results as defined[]).push(value as defined);
     }
     return results;
   }
@@ -870,15 +871,15 @@ describe('mergeMap', () => {
 
     source.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         completed = true;
       },
     });
 
-    expect(completed).to.be.true;
+    expect(completed).toBe(true);
   });
 
   it('should map and flatten an Array', () => {
@@ -889,18 +890,18 @@ describe('mergeMap', () => {
 
     source.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected.shift());
+        expect(x).toEqual(expected.shift());
       },
       complete: () => {
-        expect(expected.size()).to.equal(0);
+        expect(expected.size()).toEqual(0);
         completed = true;
       },
     });
 
-    expect(completed).to.be.true;
+    expect(completed).toBe(true);
   });
 
-  it('should support nested merges', (done) => {
+  it('should support nested merges', (_, done) => {
     // Added as a failing test when investigating:
     // https://github.com/ReactiveX/rxjs/issues/4071
 
@@ -918,12 +919,12 @@ describe('mergeMap', () => {
       });
 
     setTimeout(() => {
-      expect(results).to.deep.equal([3, 'done']);
+      expect(results).toEqual([3, 'done']);
       done();
     }, 0);
   });
 
-  it('should support nested merges with promises', (done) => {
+  it('should support nested merges with promises', (_, done) => {
     // Added as a failing test when investigating:
     // https://github.com/ReactiveX/rxjs/issues/4071
 
@@ -941,12 +942,12 @@ describe('mergeMap', () => {
       });
 
     setTimeout(() => {
-      expect(results).to.deep.equal([3, 'done']);
+      expect(results).toEqual([3, 'done']);
       done();
     }, 0);
   });
 
-  it('should support wrapped sources', (done) => {
+  it('should support wrapped sources', (_, done) => {
     // Added as a failing test when investigating:
     // https://github.com/ReactiveX/rxjs/issues/4095
 
@@ -966,7 +967,7 @@ describe('mergeMap', () => {
     });
 
     setTimeout(() => {
-      expect(results).to.deep.equal([0, 'done']);
+      expect(results).toEqual([0, 'done']);
       done();
     }, 0);
   });
@@ -1014,6 +1015,6 @@ describe('mergeMap', () => {
         /* noop */
       });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

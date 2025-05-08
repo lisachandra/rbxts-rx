@@ -1,4 +1,4 @@
-import { InteropObservable, observable, Observable, ObservableInput, of } from 'rxjs';
+import { InteropObservable, observable, Observable, ObservableInput, of, ReadableStreamLike } from 'rxjs';
 import { asInteropObservable } from '../../test/src/shared/rx/helpers/interop-helper';
 import { distinct } from 'rxjs/operators';
 // import { ReadableStreamLike } from '../../src/internal/types';
@@ -71,9 +71,8 @@ it('should accept iterable flush', () => {
   of(1, 2, 3).pipe(distinct(n => n, syncRange)); // $ExpectType Observable<number>
 });
 
-/*
 it('should accept readable stream flush', () => {
-  const readable: ReadableStreamLike<string> = new ReadableStream<string>({
+  const readable = new ReadableStream<string>({
     pull(controller) {
       controller.enqueue('x');
       controller.close();
@@ -81,7 +80,6 @@ it('should accept readable stream flush', () => {
   });
   of(1, 2, 3).pipe(distinct(n => n, readable)); // ExpectType Observable<number>
 });
-*/
 
 it('should error with unsupported flush', () => {
   of(1, 2, 3).pipe(distinct(n => n, {} as never as object)); // $ExpectError

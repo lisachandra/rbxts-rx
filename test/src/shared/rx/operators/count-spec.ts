@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of, range } from '@rbxts/rx';
 import { count, skip, take, mergeMap } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {count} */
 describe('count', () => {
@@ -89,12 +90,12 @@ describe('count', () => {
     });
   });
 
-  it('should count a range() source observable', (done) => {
+  it('should count a range() source observable', (_, done) => {
     range(1, 10)
       .pipe(count())
       .subscribe({
         next: (value: number) => {
-          expect(value).to.equal(10);
+          expect(value).toEqual(10);
         },
         error: (x) => {
           done(new Error('should not be called'));
@@ -105,12 +106,12 @@ describe('count', () => {
       });
   });
 
-  it('should count a range().skip(1) source observable', (done) => {
+  it('should count a range().skip(1) source observable', (_, done) => {
     range(1, 10)
       .pipe(skip(1), count())
       .subscribe({
         next: (value: number) => {
-          expect(value).to.equal(9);
+          expect(value).toEqual(9);
         },
         error: (x) => {
           done(new Error('should not be called'));
@@ -121,12 +122,12 @@ describe('count', () => {
       });
   });
 
-  it('should count a range().take(1) source observable', (done) => {
+  it('should count a range().take(1) source observable', (_, done) => {
     range(1, 10)
       .pipe(take(1), count())
       .subscribe({
         next: (value: number) => {
-          expect(value).to.equal(1);
+          expect(value).toEqual(1);
         },
         error: (x) => {
           done(new Error('should not be called'));
@@ -222,7 +223,7 @@ describe('count', () => {
       const expected = ' -------    ';
       const unsub = '    ------!    ';
 
-      const result = e1.pipe(count((value: string) => parseInt(value) < 10));
+      const result = e1.pipe(count((value: string) => tonumber(value)! < 10));
 
       expectObservable(result, unsub).toBe(expected, { w: 3 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -238,7 +239,7 @@ describe('count', () => {
 
       const result = e1.pipe(
         mergeMap((x: string) => of(x)),
-        count((value: string) => parseInt(value) < 10),
+        count((value: string) => tonumber(value)! < 10),
         mergeMap((x: number) => of(x))
       );
 
@@ -252,7 +253,7 @@ describe('count', () => {
       const e1 = hot('-1-^-2--3--4-|');
       const e1subs = '   ^---------!';
       const expected = ' ----------(w|)';
-      const predicate = (value: string) => parseInt(value) < 10;
+      const predicate = (value: string) => tonumber(value)! < 10;
 
       expectObservable(e1.pipe(count(predicate))).toBe(expected, { w: 3 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -264,7 +265,7 @@ describe('count', () => {
       const e1 = hot('-1-^-2--3--4-|');
       const e1subs = '   ^---------!';
       const expected = ' ----------(w|)';
-      const predicate = (value: string) => parseInt(value) > 10;
+      const predicate = (value: string) => tonumber(value)! > 10;
 
       expectObservable(e1.pipe(count(predicate))).toBe(expected, { w: 0 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);

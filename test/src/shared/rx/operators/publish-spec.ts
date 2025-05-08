@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { publish, zip, mergeMapTo, mergeMap, tap, refCount, retry, repeat } from '@rbxts/rx/out/operators';
 import { ConnectableObservable, of, Subscription, Observable, pipe } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /** @test {publish} */
 describe('publish operator', () => {
@@ -28,10 +29,10 @@ describe('publish operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publish()) as ConnectableObservable<number>;
-    expect(typeIs((<any>source)._subscribe, 'function')).to.be.true;
-    expect(typeIs((<any>source).getSubject, 'function')).to.be.true;
-    expect(typeIs(source.connect, 'function')).to.be.true;
-    expect(typeIs(source.refCount, 'function')).to.be.true;
+    expect(typeIs((<any>source)._subscribe, 'function')).toBe(true);
+    expect(typeIs((<any>source).getSubject, 'function')).toBe(true);
+    expect(typeIs(source.connect, 'function')).toBe(true);
+    expect(typeIs(source.refCount, 'function')).toBe(true);
   });
 
   it('should do nothing if connect is not called, despite subscriptions', () => {
@@ -75,7 +76,7 @@ describe('publish operator', () => {
         '                      ----^-------!',
         '                      --------^---!',
       ];
-      const published = source.pipe(publish((x) => x.pipe(zip(x, (a, b) => (parseInt(a) + parseInt(b)).toString()))));
+      const published = source.pipe(publish((x) => x.pipe(zip(x, (a, b) => tostring(tonumber(a)! + tonumber(b)!)))));
       const subscriber1 = hot('a|           ').pipe(mergeMapTo(published));
       const expected1 = '      -2-4-6----8-|';
       const subscriber2 = hot('----b|       ').pipe(mergeMapTo(published));
@@ -255,7 +256,7 @@ describe('publish operator', () => {
     });
   });
 
-  it('should emit completed when subscribed after completed', (done) => {
+  it('should emit completed when subscribed after completed', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -275,14 +276,14 @@ describe('publish operator', () => {
       results1.push(x);
     });
 
-    expect(results1).to.deep.equal([]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([]);
+    expect(results2).toEqual([]);
 
     connectable.connect();
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([]);
+    expect(subscriptions).toEqual(1);
 
     connectable.subscribe({
       next: (x) => {
@@ -292,7 +293,7 @@ describe('publish operator', () => {
         done(new Error('should not be called'));
       },
       complete: () => {
-        expect(results2).to.deep.equal([]);
+        expect(results2).toEqual([]);
         done();
       },
     });
@@ -340,7 +341,7 @@ describe('publish operator', () => {
     });
   });
 
-  it('should multicast one observable to multiple observers', (done) => {
+  it('should multicast one observable to multiple observers', (_, done) => {
     const results1: number[] = [];
     const results2: number[] = [];
     let subscriptions = 0;
@@ -364,14 +365,14 @@ describe('publish operator', () => {
       results2.push(x);
     });
 
-    expect(results1).to.deep.equal([]);
-    expect(results2).to.deep.equal([]);
+    expect(results1).toEqual([]);
+    expect(results2).toEqual([]);
 
     connectable.connect();
 
-    expect(results1).to.deep.equal([1, 2, 3, 4]);
-    expect(results2).to.deep.equal([1, 2, 3, 4]);
-    expect(subscriptions).to.equal(1);
+    expect(results1).toEqual([1, 2, 3, 4]);
+    expect(results2).toEqual([1, 2, 3, 4]);
+    expect(subscriptions).toEqual(1);
     done();
   });
 

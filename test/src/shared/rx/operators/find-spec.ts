@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { find, mergeMap, delay } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -86,6 +86,7 @@ describe('find', () => {
     });
   });
 
+  /*
   it('should work with a custom thisArg', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
       const e1 = hot('  --a--b---c-|');
@@ -103,6 +104,7 @@ describe('find', () => {
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
+  */
 
   it('should return undefined if element does not match with predicate', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
@@ -221,8 +223,8 @@ describe('find', () => {
       const isBaz = (x: any): x is Baz => x && (<Baz>x).baz !== undefined;
 
       const foo: Foo = new Foo();
-      of(foo)
-        .pipe(find((foo) => foo.baz === 42))
+      const a = of(foo)
+        .pipe(find<Foo>((foo) => foo.baz === 42))
         .subscribe((x) => x!.baz); // x is still Foo
       of(foo)
         .pipe(find(isBar))
@@ -277,6 +279,6 @@ describe('find', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

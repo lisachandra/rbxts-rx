@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/internal/testing/TestScheduler';
 import { pluck, map, mergeMap, take } from '@rbxts/rx/out/operators';
 import { of, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Symbol } from '@rbxts/luau-polyfill';
 
 /** @test {pluck} */
 describe('pluck', () => {
@@ -126,7 +127,7 @@ describe('pluck', () => {
   it('should throw an error if not property is passed', () => {
     expect(() => {
       of({ prop: 1 }, { prop: 2 }).pipe(pluck());
-    }).to.throw(Error, 'list of properties cannot be empty.');
+    }).toThrowError('list of properties cannot be empty.');
   });
 
   it('should propagate errors from observable that emits only errors', () => {
@@ -267,6 +268,6 @@ describe('pluck', () => {
       /* noop */
     });
 
-    expect(sideEffects).to.deep.equal([0, 1, 2]);
+    expect(sideEffects).toEqual([0, 1, 2]);
   });
 });

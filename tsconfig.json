@@ -1,5 +1,10 @@
 {
 	"extends": "./tsconfig.options.json",
 	"files": [],
-	"references": [{ "path": "packages/rx" }, { "path": "test-dts" }, { "path": "test" }]
+	"references": [
+		{ "path": "packages/rx" },
+		{ "path": "packages/web-streams" },
+		{ "path": "test-dts" },
+		{ "path": "test" }
+	]
 }

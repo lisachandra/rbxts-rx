@@ -1,8 +1,9 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { zip } from '@rbxts/rx/out/operators';
 import { from } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
+import { Error } from '@rbxts/luau-polyfill';
 
 /**
  * zip legacy still supports a mapping function, but it's deprecated
@@ -14,7 +15,7 @@ describe('zip legacy', () => {
     rxTestScheduler = new TestScheduler(observableMatcher);
   });
 
-  it('should zip the provided observables', (done) => {
+  it('should zip the provided observables', (_, done) => {
     const expected = ['a1', 'b2', 'c3'];
     let i = 0;
 
@@ -22,7 +23,7 @@ describe('zip legacy', () => {
       .pipe(zip(from([1, 2, 3]), (a, b): string => a + b))
       .subscribe({
         next(x) {
-          expect(x).to.equal(expected[i++]);
+          expect(x).toEqual(expected[i++]);
         },
         complete: done,
       });

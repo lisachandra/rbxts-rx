@@ -1,3 +1,4 @@
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { of } from '@rbxts/rx';
 import { combineLatest, mergeMap, distinct, count } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -17,7 +18,7 @@ describe('combineLatest', () => {
       const e2 = cold(' --1--2-3-4---|   ');
       const expected = '--A-BC-D-EF-G-H-|';
 
-      const result = e1.pipe(combineLatest(e2, (a, b) => String(a) + String(b)));
+      const result = e1.pipe(combineLatest(e2, (a, b) => tostring(a) + tostring(b)));
 
       expectObservable(result).toBe(expected, {
         A: 'a1',

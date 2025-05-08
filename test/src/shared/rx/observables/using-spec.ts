@@ -1,9 +1,10 @@
-import { expect } from 'chai';
+import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { using, range, Subscription } from '@rbxts/rx';
 import { take } from '@rbxts/rx/out/operators';
+import { Error } from '@rbxts/luau-polyfill';
 
 describe('using', () => {
-  it('should dispose of the resource when the subscription is disposed', (done) => {
+  it('should dispose of the resource when the subscription is disposed', (_, done) => {
     let disposed = false;
     const source = using(
       () => new Subscription(() => (disposed = true)),
@@ -19,7 +20,7 @@ describe('using', () => {
     }
   });
 
-  it('should accept factory returns promise resolves', (done) => {
+  it('should accept factory returns promise resolves', (_, done) => {
     const expected = 42;
 
     let disposed = false;
@@ -33,7 +34,7 @@ describe('using', () => {
 
     e1.subscribe({
       next: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
       },
       error: (x) => {
         done(new Error('should not be called'));
@@ -44,7 +45,7 @@ describe('using', () => {
     });
   });
 
-  it('should accept factory returns promise rejects', (done) => {
+  it('should accept factory returns promise rejects', (_, done) => {
     const expected = 42;
 
     let disposed = false;
@@ -61,7 +62,7 @@ describe('using', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).to.equal(expected);
+        expect(x).toEqual(expected);
         done();
       },
       complete: () => {
@@ -70,7 +71,7 @@ describe('using', () => {
     });
   });
 
-  it('should raise error when resource factory throws', (done) => {
+  it('should raise error when resource factory throws', (_, done) => {
     const expectedError = 'expected';
     const error = 'error';
 
@@ -88,7 +89,7 @@ describe('using', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).to.equal(expectedError);
+        expect(x).toEqual(expectedError);
         done();
       },
       complete: () => {
@@ -97,7 +98,7 @@ describe('using', () => {
     });
   });
 
-  it('should raise error when observable factory throws', (done) => {
+  it('should raise error when observable factory throws', (_, done) => {
     const error = 'error';
     let disposed = false;
 
@@ -113,7 +114,7 @@ describe('using', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).to.equal(error);
+        expect(x).toEqual(error);
         done();
       },
       complete: () => {

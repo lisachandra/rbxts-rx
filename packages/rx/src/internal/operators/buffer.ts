@@ -3,6 +3,7 @@ import { operate } from '../util/lift';
 import { noop } from '../util/noop';
 import { createOperatorSubscriber } from './OperatorSubscriber';
 import { innerFrom } from '../observable/innerFrom';
+import { typeAssertIs } from 'internal/polyfill/type';
 
 /**
  * Buffers the source Observable values until `closingNotifier` emits.
@@ -42,7 +43,7 @@ import { innerFrom } from '../observable/innerFrom';
  * @return A function that returns an Observable of buffers, which are arrays
  * of values.
  */
-export function buffer<T extends defined>(closingNotifier: ObservableInput<any>): OperatorFunction<T, T[]> {
+export function buffer<T>(closingNotifier: ObservableInput<any>): OperatorFunction<T, T[]> {
   return operate((source, subscriber) => {
     // The current buffered values.
     let currentBuffer: T[] = [];
@@ -51,7 +52,10 @@ export function buffer<T extends defined>(closingNotifier: ObservableInput<any>)
     source.subscribe(
       createOperatorSubscriber(
         subscriber,
-        (value) => currentBuffer.push(value),
+        (value) => {
+          typeAssertIs<defined[]>(currentBuffer);
+          currentBuffer.push(value);
+        },
         () => {
           subscriber.next(currentBuffer);
           subscriber.complete();
