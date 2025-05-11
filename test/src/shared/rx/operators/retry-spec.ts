@@ -48,10 +48,10 @@ describe('retry', () => {
         retry(retries)
       )
       .subscribe({
-        next(x: number) {
+        next: (x: number) => {
           expect(x).toEqual(42);
         },
-        error() {
+        error: () => {
           expect('this was called').toBe(true);
         },
         complete: done,
@@ -73,14 +73,14 @@ describe('retry', () => {
         retry(retries - 1)
       )
       .subscribe({
-        next() {
+        next: () => {
           done("shouldn't next");
         },
-        error() {
+        error: () => {
           expect(errors).toEqual(2);
           done();
         },
-        complete() {
+        complete: () => {
           done("shouldn't complete");
         },
       });
@@ -101,14 +101,14 @@ describe('retry', () => {
         retry({ count: retries - 1, resetOnSuccess: true })
       )
       .subscribe({
-        next() {
+        next: () => {
           done("shouldn't next");
         },
-        error() {
+        error: () => {
           expect(errors).toEqual(2);
           done();
         },
-        complete() {
+        complete: () => {
           done("shouldn't complete");
         },
       });
@@ -132,13 +132,13 @@ describe('retry', () => {
         retry({ count: retries - 1, resetOnSuccess: true })
       )
       .subscribe({
-        next(x: number) {
+        next: (x: number) => {
           expect(x).toEqual(42);
         },
-        error() {
+        error: () => {
           done("shouldn't error");
         },
-        complete() {
+        complete: () => {
           expect(errors).toEqual(retries);
           done();
         },
@@ -146,7 +146,7 @@ describe('retry', () => {
   });
 
   it('should always finalize before starting the next cycle, even when synchronous', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const source = new Observable<number>((subscriber) => {
       subscriber.next(1);
       subscriber.next(2);
@@ -182,14 +182,14 @@ describe('retry', () => {
         retry({ count: retries - 1, resetOnSuccess: false })
       )
       .subscribe({
-        next(x: number) {
+        next: (x: number) => {
           expect(x).toEqual(42);
         },
-        error() {
+        error: () => {
           expect(errors).toEqual(retries);
           done();
         },
-        complete() {
+        complete: () => {
           done("shouldn't complete");
         },
       });
@@ -214,10 +214,10 @@ describe('retry', () => {
         take(retries)
       )
       .subscribe({
-        next(x: number) {
+        next: (x: number) => {
           expect(x).toEqual(42);
         },
-        error() {
+        error: () => {
           expect('this was called').toBe(true);
         },
         complete: done,
@@ -365,15 +365,15 @@ describe('retry', () => {
         retry(4)
       )
       .subscribe({
-        next(x: number) {
+        next: (x: number) => {
           expect(x).toEqual(expected.shift());
         },
-        error(err: any) {
+        error: (err: any) => {
           expect(err).toEqual('bad!');
           expect(expected.size()).toEqual(0);
           done();
         },
-        complete() {
+        complete: () => {
           done(new Error('should not be called'));
         },
       });

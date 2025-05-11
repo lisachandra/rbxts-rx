@@ -21,7 +21,7 @@ describe('config', () => {
 
     it('should call asynchronously if an error is emitted and not handled by the consumer observer', (_, done) => {
       let called = false;
-      const results: any[] = [];
+      const results: defined[] = [];
 
       config.onUnhandledError = (err) => {
         called = true;
@@ -43,7 +43,7 @@ describe('config', () => {
 
     it('should call asynchronously if an error is emitted and not handled by the consumer next callback', (_, done) => {
       let called = false;
-      const results: any[] = [];
+      const results: defined[] = [];
 
       config.onUnhandledError = (err) => {
         called = true;

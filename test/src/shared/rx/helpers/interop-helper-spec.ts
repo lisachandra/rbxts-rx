@@ -4,9 +4,9 @@ import { asInteropObservable, asInteropSubscriber } from './interop-helper';
 
 describe('interop helper', () => {
   it('should simulate interop observables', () => {
-    const observable: any = asInteropObservable(of(42));
+    const observable = asInteropObservable(of(42));
     expect(observable).never.toBeInstanceOf(Observable);
-    expect(type(observable[symbolObservable])).toBe('function');
+    expect(type(observable[symbolObservable as never])).toBe('function');
   });
 
   it('should simulate interop subscribers', () => {

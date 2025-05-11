@@ -470,13 +470,13 @@ describe('mergeAll', () => {
   });
 
   it('should raise error when promise rejects', (_, done) => {
-    const error = 'error';
+    const err = 'error';
     const e1 = from([
       new Promise<string>((res) => {
         res('a');
       }),
       new Promise<string>((res: any, rej) => {
-        rej(error);
+        rej(err);
       }),
       new Promise<string>((res) => {
         res('c');
@@ -505,7 +505,7 @@ describe('mergeAll', () => {
   it('should finalize generators when merged if the subscription ends', () => {
     const iterable = {
       finalized: false,
-      next() {
+      next: () => {
         return { value: 'duck', done: false };
       },
       return() {

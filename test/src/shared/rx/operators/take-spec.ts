@@ -177,10 +177,10 @@ describe('take', () => {
     let completed = false;
     const source = new Subject<void>();
     source.pipe(take(5)).subscribe({
-      next() {
+      next: () => {
         source.next();
       },
-      complete() {
+      complete: () => {
         completed = true;
       },
     });

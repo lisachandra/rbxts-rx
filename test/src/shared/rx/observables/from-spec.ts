@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/await-thenable */
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { asyncScheduler, of, from, Observer, observable, Subject, noop, Subscription } from '@rbxts/rx';
@@ -7,6 +6,7 @@ import { observableMatcher } from '../helpers/observableMatcher';
 import { Error, setTimeout } from '@rbxts/luau-polyfill';
 import Symbol from '@rbxts/rx/out/internal/polyfill/symbol';
 import { ReadableStream } from '../helpers/readableStream';
+import { callable } from '../helpers/callable';
 
 function getArguments<T>(...args: T[]) {
   return args;
@@ -46,15 +46,15 @@ describe('from', () => {
   });
 
   it('should finalize an AsyncGenerator', (_, done) => {
-    const results: any[] = [];
-    const sideEffects: any[] = [];
+    const results: defined[] = [];
+    const sideEffects: defined[] = [];
 
-    async function* gen() {
+    function* gen() {
       try {
         let i = 0;
         while (true) {
           sideEffects.push(i);
-          yield await i++;
+          yield i++;
         }
       } finally {
         results.push('finalized generator');
@@ -77,15 +77,15 @@ describe('from', () => {
   });
 
   it('should finalize an AsyncGenerator on error', (_, done) => {
-    const results: any[] = [];
-    const sideEffects: any[] = [];
+    const results: defined[] = [];
+    const sideEffects: defined[] = [];
 
-    async function* gen() {
+    function* gen() {
       try {
         let i = 0;
         while (true) {
           sideEffects.push(i);
-          yield await i++;
+          yield i++;
         }
       } finally {
         results.push('finalized generator');
@@ -116,16 +116,16 @@ describe('from', () => {
   });
 
   it('should finalize an AsyncGenerator on unsubscribe', (_, done) => {
-    const results: any[] = [];
-    const sideEffects: any[] = [];
+    const results: defined[] = [];
+    const sideEffects: defined[] = [];
     let subscription: Subscription;
 
-    async function* gen() {
+    function* gen() {
       try {
         let i = 0;
         while (true) {
           sideEffects.push(i);
-          yield await i++;
+          yield i++;
           if (i === 2) {
             subscription.unsubscribe();
           }
@@ -144,7 +144,7 @@ describe('from', () => {
   });
 
   it('should finalize a generator', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
 
     function* gen() {
       try {
@@ -231,12 +231,12 @@ describe('from', () => {
   ];
 
   if (Symbol && Symbol.asyncIterator) {
-    const fakeAsyncIterator = (...values: any[]) => {
+    const fakeAsyncIterator = (...values: defined[]) => {
       return {
         [Symbol.asyncIterator]() {
           let i = 0;
           return {
-            next() {
+            next: () => {
               const index = i++;
               if (index < values.size()) {
                 return Promise.resolve({ done: false, value: values[index] });
@@ -295,7 +295,7 @@ describe('from', () => {
 
     it(`should accept a function that implements [Symbol.observable]`, (_, done) => {
       const subject = new Subject<any>();
-      const handler: any = (arg: any) => subject.next(arg);
+      const handler = callable((arg: any) => subject.next(arg));
       handler[observable] = () => subject;
       let nextInvoked = false;
 
@@ -314,7 +314,7 @@ describe('from', () => {
             done();
           },
         });
-      handler('x');
+      (handler as Callback)('x');
     });
 
     it('should accept a thennable that happens to have a subscribe method', (_, done) => {
@@ -340,11 +340,11 @@ describe('from', () => {
       }
     })();
 
-    const results: any[] = [];
+    const results: defined[] = [];
 
     from(erroringIterator).subscribe({
       next: (x) => results.push(x),
-      error: (err) => results.push(err.message),
+      error: (err: Error) => results.push(err.message),
     });
 
     expect(results).toEqual([0, 1, 2, 'bad']);

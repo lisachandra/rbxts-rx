@@ -465,7 +465,7 @@ describe('debounce', () => {
 
     e1.pipe(
       debounce(() => {
-        return new Promise((resolve: any) => {
+        return new Promise((resolve) => {
           resolve(42);
         });
       })
@@ -486,16 +486,16 @@ describe('debounce', () => {
   it('should raises error when promise rejects', (_, done) => {
     const e1 = concat(of(1), timer(10).pipe(mapTo(2)), timer(10).pipe(mapTo(3)), timer(100).pipe(mapTo(4)));
     const expected = [1, 2];
-    const error = new Error('error');
+    const err = new Error('error');
 
     e1.pipe(
       debounce((x: number) => {
         if (x === 3) {
-          return new Promise((resolve: any, reject: any) => {
-            reject(error);
+          return new Promise((resolve, reject) => {
+            reject(err);
           });
         } else {
-          return new Promise((resolve: any) => {
+          return new Promise((resolve) => {
             resolve(42);
           });
         }
@@ -504,8 +504,8 @@ describe('debounce', () => {
       next: (x: number) => {
         expect(x).toEqual(expected.shift());
       },
-      error: (err: any) => {
-        expect(err).toHaveProperty('message', 'error');
+      error: (err: Error) => {
+        expect(err.message).toEqual('error');
         expect(expected.size()).toEqual(0);
         done();
       },

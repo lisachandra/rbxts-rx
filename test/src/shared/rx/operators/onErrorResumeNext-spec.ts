@@ -230,12 +230,12 @@ describe('onErrorResumeNext', () => {
   });
 
   it('should skip invalid sources and move on', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
 
     of(1)
       .pipe(onErrorResumeNext([2, 3, 4], { notValid: 'LOL' } as any, of(5, 6)))
       .subscribe({
-        next: (value) => results.push(value),
+        next: (value) => results.push(value as defined),
         complete: () => results.push('complete'),
       });
 
@@ -243,7 +243,7 @@ describe('onErrorResumeNext', () => {
   });
 
   it('should call finalize after each sync observable', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
 
     of(1)
       .pipe(
@@ -263,7 +263,7 @@ describe('onErrorResumeNext', () => {
   });
 
   it('should not subscribe to the next source until after the previous is finalized.', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
 
     of(1)
       .pipe(

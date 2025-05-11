@@ -57,11 +57,11 @@ it('should support scheduler', () => {
 });
 
 it('should accept a ReadableStream', () => {
-  const stream = new ReadableStream<string>({
+  const stream: ReadableStreamLike<string> = new ReadableStream<string>({
     pull(controller) {
       controller.enqueue('x');
       controller.close();
     },
   });
-  const o = from(stream); // ExpectType Observable<string>
+  const o = from(stream); // $ExpectType Observable<string>
 });

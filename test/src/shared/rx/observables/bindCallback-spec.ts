@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { bindCallback } from '@rbxts/rx';
+import { bindCallback, Observable } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { Error, setTimeout, clearTimeout } from '@rbxts/luau-polyfill';
@@ -23,7 +23,7 @@ describe('bindCallback', () => {
         },
       });
 
-      expect(results).toEqual(['undefined', 'done']);
+      expect(results).toEqual(['nil', 'done']);
     });
 
     it('should support a resultSelector', () => {
@@ -31,15 +31,15 @@ describe('bindCallback', () => {
         cb(datum);
       }
 
-      const boundCallback = bindCallback(callback, (datum: any) => datum + 1);
+      const boundCallback = bindCallback(callback, (datum: number) => datum + 1);
 
       const results: Array<string | number> = [];
 
       boundCallback(42).subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        complete() {
+        complete: () => {
           results.push('done');
         },
       });
@@ -57,10 +57,10 @@ describe('bindCallback', () => {
       const results: Array<string | number> = [];
 
       boundCallback(42).subscribe({
-        next(value: any) {
+        next: (value: any) => {
           results.push(value);
         },
-        complete() {
+        complete: () => {
           results.push('done');
         },
       });
@@ -88,14 +88,17 @@ describe('bindCallback', () => {
     });
 
     it('should set callback function context to context of returned function', () => {
-      function callback(this: any, cb: (arg: number) => void) {
-        cb(this.datum);
+      function callback(itself: { datum: number }, cb: (arg: number) => void) {
+        cb(itself.datum);
       }
 
       const boundCallback = bindCallback(callback);
       const results: Array<string | number> = [];
 
-      boundCallback({ datum: 5 }).subscribe({ next: (x: number) => results.push(x), complete: () => results.push('done') });
+      boundCallback({ datum: 5 }).subscribe({
+        next: (x: number) => results.push(x),
+        complete: () => results.push('done'),
+      });
 
       expect(results).toEqual([5, 'done']);
     });
@@ -177,7 +180,7 @@ describe('bindCallback', () => {
 
       rxTestScheduler.flush();
 
-      expect(results).toEqual(['undefined', 'done']);
+      expect(results).toEqual(['nil', 'done']);
     });
 
     it('should emit one value from a callback', () => {
@@ -202,14 +205,17 @@ describe('bindCallback', () => {
     });
 
     it('should set callback function context to context of returned function', () => {
-      function callback(this: { datum: number }, cb: (num: number) => void) {
-        cb(this.datum);
+      function callback(itself: { datum: number }, cb: (num: number) => void) {
+        cb(itself.datum);
       }
 
       const boundCallback = bindCallback(callback, rxTestScheduler);
       const results: Array<string | number> = [];
 
-      boundCallback({ datum: 5 }).subscribe({ next: (x: number) => results.push(x), complete: () => results.push('done') });
+      boundCallback({ datum: 5 }).subscribe({
+        next: (x: number) => results.push(x),
+        complete: () => results.push('done'),
+      });
 
       rxTestScheduler.flush();
 
@@ -329,10 +335,10 @@ describe('bindCallback', () => {
       callback(42);
       throw 'kaboom';
     }
-    let receivedError: any;
+    let receivedError: unknown;
 
     bindCallback(badFunction)().subscribe({
-      error: (err) => (receivedError = err),
+      error: (err: unknown) => (receivedError = err),
     });
 
     expect(receivedError).toEqual('kaboom');

@@ -329,14 +329,14 @@ describe('shareReplay', () => {
     const expected = [1, 2, 3];
 
     result.subscribe({
-      next(n: any) {
+      next: (n: any) => {
         expect(expected.size()).toBeGreaterThan(0);
         expect(n).toEqual(expected.shift());
       },
-      error() {
+      error: () => {
         done(new Error('should not be called'));
       },
-      complete() {
+      complete: () => {
         done();
       },
     });

@@ -5,11 +5,11 @@ import { sinkSuspense } from '@rbxts/rx-state/out';
 
 describe('sinkSuspense', () => {
   it('propagates SUSPENSE as errors', () => {
-    const test$ = from([1, SUSPENSE, 3, SUSPENSE, 5] as const).pipe(sinkSuspense());
+    const test = from([1, SUSPENSE, 3, SUSPENSE, 5] as const).pipe(sinkSuspense());
 
     const values: Array<number> = [];
-    const errors = new Array<any>();
-    test$.subscribe(
+    const errors = new Array<defined>();
+    test.subscribe(
       (x) => {
         values.push(x);
       },
@@ -24,24 +24,24 @@ describe('sinkSuspense', () => {
 
   it('keeps the source subscription alive after synchronously re-subscribing upon receiving a SUSPENSE', () => {
     let nSubscriptions = 0;
-    const source$ = new Observable<number | SUSPENSE>((observer) => {
+    const source = new Observable<number | SUSPENSE>((observer) => {
       nSubscriptions++;
       for (let i = 0; i < 10 && !observer.closed; i++) {
         observer.next(i === 3 ? SUSPENSE : i);
       }
     });
 
-    const values: Array<number | null> = [];
-    const errors = new Array<any>();
-    const sinked$ = source$.pipe(sinkSuspense());
-    sinked$.subscribe(
+    const values: Array<number> = [];
+    const errors = new Array<defined>();
+    const sinked = source.pipe(sinkSuspense());
+    sinked.subscribe(
       (x) => {
         values.push(x);
       },
-      (e) => {
+      (e: defined) => {
         if (e === SUSPENSE) {
           errors.push(e);
-          sinked$.subscribe((x) => {
+          sinked.subscribe((x) => {
             values.push(x);
           });
         } else {
@@ -57,7 +57,7 @@ describe('sinkSuspense', () => {
 
   it('propagates errors', () => {
     let nSubscriptions = 0;
-    const source$ = new Observable<number | SUSPENSE>((observer) => {
+    const source = new Observable<number | SUSPENSE>((observer) => {
       nSubscriptions++;
       for (let i = 0; i < 10 && !observer.closed; i++) {
         if (i === 2) observer.error(2);
@@ -65,17 +65,17 @@ describe('sinkSuspense', () => {
       }
     });
 
-    const values: Array<number | null> = [];
-    const errors = new Array<any>();
-    const sinked$ = source$.pipe(sinkSuspense());
-    sinked$.subscribe(
+    const values: Array<number> = [];
+    const errors = new Array<defined>();
+    const sinked = source.pipe(sinkSuspense());
+    sinked.subscribe(
       (x) => {
         values.push(x);
       },
-      (e) => {
+      (e: defined) => {
         if (e === SUSPENSE) {
           errors.push(e);
-          sinked$.subscribe((x) => {
+          sinked.subscribe((x) => {
             values.push(x);
           });
         } else {
@@ -91,7 +91,7 @@ describe('sinkSuspense', () => {
 
   it('propagates completes', () => {
     let nSubscriptions = 0;
-    const source$ = new Observable<number | SUSPENSE>((observer) => {
+    const source = new Observable<number | SUSPENSE>((observer) => {
       nSubscriptions++;
       for (let i = 0; i < 10 && !observer.closed; i++) {
         if (i === 2) observer.complete();
@@ -99,17 +99,17 @@ describe('sinkSuspense', () => {
       }
     });
 
-    const values: Array<number | null> = [];
-    const errors = new Array<any>();
-    const sinked$ = source$.pipe(sinkSuspense());
-    sinked$.subscribe(
+    const values: Array<number> = [];
+    const errors = new Array<defined>();
+    const sinked = source.pipe(sinkSuspense());
+    sinked.subscribe(
       (x) => {
         values.push(x);
       },
-      (e) => {
+      (e: defined) => {
         if (e === SUSPENSE) {
           errors.push(e);
-          sinked$.subscribe((x) => {
+          sinked.subscribe((x) => {
             values.push(x);
           });
         } else {

@@ -21,36 +21,36 @@ describe('firstValueFrom', () => {
 
   it('should support an undefined config', async () => {
     const source = EMPTY;
-    let error: any = undefined;
+    let err: any = undefined;
     try {
       await firstValueFrom(source, undefined as any);
-    } catch (err) {
-      error = err;
+    } catch (e) {
+      err = e as Error;
     }
-    expect(error).toBeInstanceOf(EmptyError);
+    expect(err).toBeInstanceOf(EmptyError);
   });
 
   it('should error for empty observables', async () => {
     const source = EMPTY;
-    let error: any = undefined;
+    let err: Error = undefined as never;
     try {
       await firstValueFrom(source);
-    } catch (err) {
-      error = err;
+    } catch (e) {
+      err = e as Error;
     }
-    expect(error).toBeInstanceOf(EmptyError);
+    expect(err).toBeInstanceOf(EmptyError);
   });
 
   it('should error for errored observables', async () => {
     const source = throwError(() => new Error('blorp!'));
-    let error: any = undefined;
+    let err: Error = undefined as never;
     try {
       await firstValueFrom(source);
-    } catch (err) {
-      error = err;
+    } catch (e) {
+      err = e as Error;
     }
-    expect(error).toBeInstanceOf(Error);
-    expect(error.message).toEqual('blorp!');
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('blorp!');
   });
 
   it('should work with a synchronous observable', async () => {

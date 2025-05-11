@@ -24,7 +24,7 @@ describe('exhaustMap', () => {
       //                            x-x-x|
       const expected = ' --x-x-x-y-y-y------|';
 
-      const result = e1.pipe(exhaustMap((x) => e2.pipe(map((i) => i * +x))));
+      const result = e1.pipe(exhaustMap((x) => e2.pipe(map((i) => i * tonumber(x)!))));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -42,13 +42,13 @@ describe('exhaustMap', () => {
         )
       )
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
@@ -70,13 +70,13 @@ describe('exhaustMap', () => {
     of(1, 2, 3)
       .pipe(exhaustMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
@@ -280,8 +280,7 @@ describe('exhaustMap', () => {
     of(undefined)
       .pipe(
         exhaustMap(() => synchronousObservable),
-
-        takeWhile((x) => x != 2) // unsubscribe at the second side-effect
+        takeWhile((x) => x !== 2 && (!typeIs(x, "string") || tonumber(x) !== 2)) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */

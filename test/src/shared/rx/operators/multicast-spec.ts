@@ -1,5 +1,17 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { multicast, tap, mergeMapTo, takeLast, mergeMap, refCount, retry, repeat, switchMap, map, take } from '@rbxts/rx/out/operators';
+import {
+  multicast,
+  tap,
+  mergeMapTo,
+  takeLast,
+  mergeMap,
+  refCount,
+  retry,
+  repeat as repeat0,
+  switchMap,
+  map,
+  take,
+} from '@rbxts/rx/out/operators';
 import { Subject, ReplaySubject, of, ConnectableObservable, zip, concat, Subscription, Observable, from } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -67,10 +79,10 @@ describe('multicast', () => {
     replayed
       .pipe(
         tap({
-          next(x) {
+          next: (x) => {
             expect(x).toEqual(expected.shift());
           },
-          complete() {
+          complete: () => {
             expect(expected.size()).toEqual(0);
           },
         })
@@ -497,7 +509,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe1).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(5))).toBe(expected1);
+              expectObservable(multicasted.pipe(repeat0(5))).toBe(expected1);
             })
           )
         ).toBe(subscribe1);
@@ -505,7 +517,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe2).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(5))).toBe(expected2);
+              expectObservable(multicasted.pipe(repeat0(5))).toBe(expected2);
             })
           )
         ).toBe(subscribe2);
@@ -540,7 +552,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe1).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(5))).toBe(expected1);
+              expectObservable(multicasted.pipe(repeat0(5))).toBe(expected1);
             })
           )
         ).toBe(subscribe1);
@@ -548,7 +560,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe2).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(5))).toBe(expected2);
+              expectObservable(multicasted.pipe(repeat0(5))).toBe(expected2);
             })
           )
         ).toBe(subscribe2);
@@ -637,7 +649,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe1).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(3))).toBe(expected1);
+              expectObservable(multicasted.pipe(repeat0(3))).toBe(expected1);
             })
           )
         ).toBe(subscribe1);
@@ -645,7 +657,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe2).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(3))).toBe(expected2);
+              expectObservable(multicasted.pipe(repeat0(3))).toBe(expected2);
             })
           )
         ).toBe(subscribe2);
@@ -672,7 +684,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe1).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(3))).toBe(expected1);
+              expectObservable(multicasted.pipe(repeat0(3))).toBe(expected1);
             })
           )
         ).toBe(subscribe1);
@@ -680,7 +692,7 @@ describe('multicast', () => {
         expectObservable(
           hot(subscribe2).pipe(
             tap(() => {
-              expectObservable(multicasted.pipe(repeat(3))).toBe(expected2);
+              expectObservable(multicasted.pipe(repeat0(3))).toBe(expected2);
             })
           )
         ).toBe(subscribe2);

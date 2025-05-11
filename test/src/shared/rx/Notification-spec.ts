@@ -57,8 +57,8 @@ describe('Notification', () => {
     it('should create observable from a next Notification', () => {
       rxTestScheduler.run(({ expectObservable }) => {
         const value = 'a';
-        const next = Notification.createNext(value);
-        expectObservable(next.toObservable()).toBe('(a|)');
+        const next0 = Notification.createNext(value);
+        expectObservable(next0.toObservable()).toBe('(a|)');
       });
     });
 
@@ -71,8 +71,8 @@ describe('Notification', () => {
 
     it('should create observable from a error Notification', () => {
       rxTestScheduler.run(({ expectObservable }) => {
-        const error = Notification.createError('error');
-        expectObservable(error.toObservable()).toBe('#');
+        const err = Notification.createError('error');
+        expectObservable(err.toObservable()).toBe('#');
       });
     });
   });
@@ -239,15 +239,15 @@ describe('Notification', () => {
 
     it('should accept function for error Notification', () => {
       let observed = false;
-      const error = 'error';
-      const n = Notification.createError(error);
+      const err = 'error';
+      const n = Notification.createError(err);
 
       n.accept(
         () => {
           throw 'should not be called';
         },
         (err: any) => {
-          expect(err).toEqual(error);
+          expect(err).toEqual(err);
           observed = true;
         },
         () => {

@@ -182,8 +182,7 @@ describe('catchError operator', () => {
     throwError(() => new Error('Some error'))
       .pipe(
         catchError(() => synchronousObservable),
-
-        takeWhile((x) => x != 2) // unsubscribe at the second side-effect
+        takeWhile((x) => x !== 2 && (!typeIs(x, 'string') || tonumber(x) !== 2)) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */
@@ -220,7 +219,7 @@ describe('catchError operator', () => {
 
       let retries = 0;
       const result = e1.pipe(
-        map((n: any) => {
+        map((n: unknown) => {
           if (n === 'c') {
             throw 'bad';
           }
@@ -251,7 +250,7 @@ describe('catchError operator', () => {
 
       let retries = 0;
       const result = e1.pipe(
-        map((n: any) => {
+        map((n: unknown) => {
           if (n === 'c') {
             throw 'bad';
           }
@@ -366,9 +365,9 @@ describe('catchError operator', () => {
   });
 
   it('should accept selector returns any ObservableInput', (_, done) => {
-    const input$ = createObservableInputs(42);
+    const input = createObservableInputs(42);
 
-    input$.pipe(mergeMap((input) => throwError(() => 'bad').pipe(catchError((err) => input)))).subscribe({
+    input.pipe(mergeMap((input) => throwError(() => 'bad').pipe(catchError((err) => input)))).subscribe({
       next: (x) => {
         expect(x).toEqual(42);
       },

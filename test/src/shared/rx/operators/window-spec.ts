@@ -309,9 +309,9 @@ describe('window', () => {
 
   it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(5));
-    const error = new Error('err');
+    const err = new Error('err');
 
-    e1.pipe(window(Promise.reject(error))).subscribe({
+    e1.pipe(window(Promise.reject(err))).subscribe({
       error: (err) => {
         expect(err).toBeInstanceOf(Error);
         done();

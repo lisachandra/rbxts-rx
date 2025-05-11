@@ -28,8 +28,8 @@ describe('publishLast operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publishLast()) as ConnectableObservable<number>;
-    expect(typeIs((<any>source)._subscribe, 'function')).toBe(true);
-    expect(typeIs((<any>source).getSubject, 'function')).toBe(true);
+    expect(typeIs(source['_subscribe' as never], 'function')).toBe(true);
+    expect(typeIs(source['getSubject' as never], 'function')).toBe(true);
     expect(typeIs(source.connect, 'function')).toBe(true);
     expect(typeIs(source.refCount, 'function')).toBe(true);
   });

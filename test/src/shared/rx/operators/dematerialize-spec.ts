@@ -30,7 +30,7 @@ describe('dematerialize', () => {
           if (x === '|') {
             return Notification.createComplete();
           } else {
-            return Notification.createNext(x.replace('{', '').replace('}', ''));
+            return Notification.createNext(x.gsub('{', '')[0].gsub('}', '')[0]);
           }
         }),
         dematerialize()
@@ -123,12 +123,12 @@ describe('dematerialize', () => {
 
   it('should dematerialize stream throws', () => {
     testScheduler.run(({ hot, expectObservable, expectSubscriptions }) => {
-      const error = 'error';
-      const e1 = hot('  (x|)', { x: Notification.createError(error) });
+      const err = 'error';
+      const e1 = hot('  (x|)', { x: Notification.createError(err) });
       const e1subs = '  (^!)';
       const expected = '#   ';
 
-      expectObservable(e1.pipe(dematerialize())).toBe(expected, undefined, error);
+      expectObservable(e1.pipe(dematerialize())).toBe(expected, undefined, err);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

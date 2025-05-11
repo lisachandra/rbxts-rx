@@ -1,6 +1,6 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { min, skip, take, mergeMap } from '@rbxts/rx/out/operators';
-import { range, of } from '@rbxts/rx';
+import { range, of, MonoTypeOperatorFunction } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { Error } from '@rbxts/luau-polyfill';
@@ -19,7 +19,7 @@ describe('min', () => {
       const subs = '      ^----------!';
       const expected = '  -----------(x|)';
 
-      expectObservable((<any>source).pipe(min())).toBe(expected, { x: -1 });
+      expectObservable(source.pipe(min())).toBe(expected, { x: -1 });
       expectSubscriptions(source.subscriptions).toBe(subs);
     });
   });
@@ -30,7 +30,7 @@ describe('min', () => {
       const e1subs = '  ^';
       const expected = '-';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected);
+      expectObservable(e1.pipe(min())).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -41,7 +41,7 @@ describe('min', () => {
       const e1subs = '  (^!)';
       const expected = '|';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected);
+      expectObservable(e1.pipe(min())).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -52,7 +52,7 @@ describe('min', () => {
       const e1subs = '     ^     ';
       const expected = '   ------';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected);
+      expectObservable(e1.pipe(min())).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -63,7 +63,7 @@ describe('min', () => {
       const e1subs = '   ^---!';
       const expected = ' ----|';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected);
+      expectObservable(e1.pipe(min())).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -74,7 +74,7 @@ describe('min', () => {
       const e1subs = '   ^-----!';
       const expected = ' ------(w|)';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected, { w: 42 });
+      expectObservable(e1.pipe(min())).toBe(expected, { w: 42 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -85,7 +85,7 @@ describe('min', () => {
       const subs = '      ^----------!';
       const expected = '  -----------(x|)';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected, { x: -1 });
+      expectObservable(e1.pipe(min())).toBe(expected, { x: -1 });
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -138,7 +138,7 @@ describe('min', () => {
       const e1subs = '   ^--------!';
       const expected = ' ---------#';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected, undefined, 'too bad');
+      expectObservable(e1.pipe(min())).toBe(expected, undefined, 'too bad');
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -149,7 +149,7 @@ describe('min', () => {
       const e1subs = '  (^!)';
       const expected = '#';
 
-      expectObservable((<any>e1).pipe(min())).toBe(expected);
+      expectObservable(e1.pipe(min())).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -164,7 +164,7 @@ describe('min', () => {
         return 42;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate))).toBe(expected);
+      expectObservable(e1.pipe(min(predicate))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -179,7 +179,7 @@ describe('min', () => {
         return 42;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate))).toBe(expected);
+      expectObservable(e1.pipe(min(predicate))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -194,7 +194,7 @@ describe('min', () => {
         return 42;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate))).toBe(expected, { w: 1 });
+      expectObservable(e1.pipe(min(predicate))).toBe(expected, { w: 1 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -210,7 +210,7 @@ describe('min', () => {
         return 42;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate)), unsub).toBe(expected);
+      expectObservable(e1.pipe(min(predicate)), unsub).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -226,9 +226,9 @@ describe('min', () => {
         return 42;
       };
 
-      const result = (<any>e1).pipe(
+      const result = e1.pipe(
         mergeMap((x: string) => of(x)),
-        min(predicate),
+        min(predicate) as never,
         mergeMap((x: number) => of(x))
       );
 
@@ -243,11 +243,11 @@ describe('min', () => {
       const e1subs = '   ^---------!';
       const expected = ' ----------(w|)';
 
-      const predicate = function <T>(x: T, y: T) {
+      const predicate = function <T extends number>(x: T, y: T) {
         return x > y ? -1 : 1;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate))).toBe(expected, { w: 666 });
+      expectObservable(e1.pipe(min(predicate))).toBe(expected, { w: 666 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -258,11 +258,11 @@ describe('min', () => {
       const e1subs = '   ^---------!';
       const expected = ' ----------(w|)';
 
-      const predicate = function <T>(x: T, y: T) {
+      const predicate = function <T extends string>(x: T, y: T) {
         return x > y ? -1 : 1;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate))).toBe(expected, { w: 'd' });
+      expectObservable(e1.pipe(min(predicate))).toBe(expected, { w: 'd' });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -277,7 +277,7 @@ describe('min', () => {
         return 42;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate))).toBe(expected);
+      expectObservable(e1.pipe(min(predicate))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -295,7 +295,7 @@ describe('min', () => {
         return x > y ? -1 : 1;
       };
 
-      expectObservable((<any>e1).pipe(min(predicate))).toBe(expected);
+      expectObservable(e1.pipe(min(predicate))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });

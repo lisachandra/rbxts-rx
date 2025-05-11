@@ -65,7 +65,7 @@ describe('retryWhen', () => {
           }
           return n;
         }),
-        retryWhen((errors: any) =>
+        retryWhen((errors) =>
           errors.pipe(
             map((x: any) => {
               expect(x).toEqual('bad');
@@ -79,10 +79,10 @@ describe('retryWhen', () => {
         )
       )
       .subscribe({
-        next(x: any) {
+        next: (x: any) => {
           expect(x).toEqual(expected[i++]);
         },
-        error(err: any) {
+        error: (err: any) => {
           expect(err).toBeInstanceOf(Error);
           done();
         },
@@ -102,13 +102,13 @@ describe('retryWhen', () => {
         retryWhen(() => EMPTY)
       )
       .subscribe({
-        next(n: number) {
+        next: (n: number) => {
           expect(n).toEqual(expected.shift());
         },
-        error() {
+        error: () => {
           done(new Error('should not be called'));
         },
-        complete() {
+        complete: () => {
           done();
         },
       });
@@ -374,7 +374,7 @@ describe('retryWhen', () => {
 
       let invoked = 0;
       const result = source.pipe(
-        retryWhen((errors: any) =>
+        retryWhen((errors) =>
           errors.pipe(
             map(() => {
               if (++invoked === 3) {
@@ -406,7 +406,7 @@ describe('retryWhen', () => {
 
       let invoked = 0;
       const result = source.pipe(
-        retryWhen((errors: any) =>
+        retryWhen((errors) =>
           errors.pipe(
             map(() => 'x'),
             takeUntil(
@@ -430,7 +430,7 @@ describe('retryWhen', () => {
   });
 
   it('should always finalize before starting the next cycle, even when synchronous', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const source = new Observable<number>((subscriber) => {
       subscriber.next(1);
       subscriber.next(2);
@@ -440,7 +440,7 @@ describe('retryWhen', () => {
       };
     });
     const subscription = source
-      .pipe(retryWhen((errors$) => errors$.pipe(mergeMap((err, i) => (i < 3 ? of(true) : throwError(() => err))))))
+      .pipe(retryWhen((errors) => errors.pipe(mergeMap((err, i) => (i < 3 ? of(true) : throwError(() => err))))))
       .subscribe({
         next: (value) => results.push(value),
         error: (err) => results.push(err),

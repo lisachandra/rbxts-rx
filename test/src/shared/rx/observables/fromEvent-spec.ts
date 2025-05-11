@@ -220,7 +220,7 @@ describe('fromEvent', () => {
   });
 
   it('should pass through events that occur', (_, done) => {
-    let send: any;
+    let send: Callback = undefined as never;
     const obj = {
       on: (name: string, handler: Callback) => {
         send = handler;
@@ -248,7 +248,7 @@ describe('fromEvent', () => {
   });
 
   it('should pass through events that occur and use the selector if provided', (_, done) => {
-    let send: any;
+    let send: Callback = undefined as never;
     const obj = {
       on: (name: string, handler: Callback) => {
         send = handler;
@@ -280,7 +280,7 @@ describe('fromEvent', () => {
   });
 
   it('should not fail if no event arguments are passed and the selector does not return', (_, done) => {
-    let send: any;
+    let send: Callback = undefined as never;
     const obj = {
       on: (name: string, handler: Callback) => {
         send = handler;
@@ -312,7 +312,7 @@ describe('fromEvent', () => {
   });
 
   it('should return a value from the selector if no event arguments are passed', (_, done) => {
-    let send: any;
+    let send: Callback = undefined as never;
     const obj = {
       on: (name: string, handler: Callback) => {
         send = handler;
@@ -344,7 +344,7 @@ describe('fromEvent', () => {
   });
 
   it('should pass multiple arguments to selector from event emitter', (_, done) => {
-    let send: any;
+    let send: Callback = undefined as never;
     const obj = {
       on: (name: string, handler: Callback) => {
         send = handler;
@@ -376,7 +376,7 @@ describe('fromEvent', () => {
   });
 
   it('should emit multiple arguments from event as an array', (_, done) => {
-    let send: any;
+    let send: Callback = undefined as never;
     const obj = {
       on: (name: string, handler: Callback) => {
         send = handler;
@@ -432,8 +432,8 @@ describe('fromEvent', () => {
         removeEventListener(...args: any[]) {
           this._removeEventListenerArgs = args;
         },
-        _addEventListenerArgs: undefined as any,
-        _removeEventListenerArgs: undefined as any,
+        _addEventListenerArgs: undefined as any as defined[],
+        _removeEventListenerArgs: undefined as any as defined[],
       },
       [1]: {
         addEventListener(...args: any[]) {
@@ -442,8 +442,8 @@ describe('fromEvent', () => {
         removeEventListener(...args: any[]) {
           this._removeEventListenerArgs = args;
         },
-        _addEventListenerArgs: undefined as any,
-        _removeEventListenerArgs: undefined as any,
+        _addEventListenerArgs: undefined as any as defined[],
+        _removeEventListenerArgs: undefined as any as defined[],
       },
     };
 

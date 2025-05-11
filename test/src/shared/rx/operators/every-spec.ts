@@ -17,7 +17,7 @@ describe('every', () => {
   }
 
   function predicate(x: number | string) {
-    return +x % 5 === 0;
+    return tonumber(x)! % 5 === 0;
   }
 
   it('should return false if only one of elements does not match with predicate', () => {

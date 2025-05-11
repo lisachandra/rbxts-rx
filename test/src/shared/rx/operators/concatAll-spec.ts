@@ -59,7 +59,7 @@ describe('concatAll operator', () => {
   });
 
   it('should finalize before moving to the next observable', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
 
     const create = (n: number) =>
       defer(() => {

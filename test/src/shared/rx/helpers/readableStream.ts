@@ -154,8 +154,8 @@ class MockReadableStreamImpl<R = any> {
     // Call underlyingSource.start asynchronously
     this._startedPromise = Promise.resolve()
       .then(() => {
-        if (this._underlyingSource.start) {
-          return this._underlyingSource.start(this._controller);
+        if (this._underlyingSource['start' as never]) {
+          return this._underlyingSource.start!(this._controller);
         }
       })
       .then(() => {
@@ -300,12 +300,12 @@ class MockReadableStreamImpl<R = any> {
     }
 
     try {
-      if (this._underlyingSource.cancel) {
-        await Promise.resolve(this._underlyingSource.cancel(reason));
+      if (this._underlyingSource['cancel' as never]) {
+        await Promise.resolve(this._underlyingSource.cancel!(reason));
       }
       // If cancel succeeds, stream is confirmed closed. Settle reader's promise.
       if (readerToSettle) readerToSettle._settleClosedPromise(true);
-    } catch (e) {
+    } catch (e: unknown) {
       // If cancel fails, stream becomes errored.
       this._state = 'errored';
       this._storedError = e;

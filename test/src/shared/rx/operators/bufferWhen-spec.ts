@@ -375,7 +375,7 @@ describe('bufferWhen operator', () => {
         takeWhile((val: any, index: number) => index < TOO_MANY_INVOCATIONS)
       )
       .subscribe({
-        next: (val: any) => {
+        next: (val: defined[]) => {
           expect(Array.isArray(val)).toBe(true);
           expect(val.size()).toEqual(0);
         },

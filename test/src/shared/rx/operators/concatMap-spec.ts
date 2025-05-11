@@ -39,13 +39,13 @@ describe('Observable.prototype.concatMap', () => {
         )
       )
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
@@ -67,13 +67,13 @@ describe('Observable.prototype.concatMap', () => {
     of(1, 2, 3)
       .pipe(concatMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
@@ -682,7 +682,7 @@ describe('Observable.prototype.concatMap', () => {
   });
 
   it('should finalize before moving to the next observable', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
 
     const create = (n: number) =>
       defer(() => {
@@ -720,7 +720,7 @@ describe('Observable.prototype.concatMap', () => {
       const e1subs = '  ^-------------------------------!';
       const expected = '(22)--(4444)---(333)----(22)----|';
 
-      const result = e1.pipe(concatMap((value) => arrayRepeat(value, +value)));
+      const result = e1.pipe(concatMap((value) => arrayRepeat(value, tonumber(value)!)));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -734,7 +734,7 @@ describe('Observable.prototype.concatMap', () => {
       const unsub = '   ^------------!                   ';
       const expected = '(22)--(4444)--                   ';
 
-      const result = e1.pipe(concatMap((value) => arrayRepeat(value, +value)));
+      const result = e1.pipe(concatMap((value) => arrayRepeat(value, tonumber(value)!)));
 
       expectObservable(result, unsub).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -754,7 +754,7 @@ describe('Observable.prototype.concatMap', () => {
           if (invoked === 3) {
             throw 'error';
           }
-          return arrayRepeat(value, +value);
+          return arrayRepeat(value, tonumber(value)!);
         })
       );
 

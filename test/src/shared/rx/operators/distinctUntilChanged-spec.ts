@@ -305,11 +305,11 @@ describe('distinctUntilChanged', () => {
   // the duplicate non-distinct values to be emitted repeatedly.
   it('should work properly with reentrant streams', () => {
     const subject = new Subject<number | undefined>();
-    const results: any[] = [];
+    const results: defined[] = [];
     let count = 0;
 
     subject.pipe(distinctUntilChanged()).subscribe((n) => {
-      results.push(n);
+      results.push(n!);
 
       // Protect against an infinite loop in this test.
       // That shouldn't happen.

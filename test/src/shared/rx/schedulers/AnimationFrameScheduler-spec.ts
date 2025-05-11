@@ -203,7 +203,7 @@ describe('Scheduler.animationFrame', () => {
     let flushCount = 0;
     const scheduledIndices: number[] = [];
 
-    const originalFlush = animationFrame.flush;
+    const originalFlush = animationFrame['flush' as never];
     animationFrame.flush = (...args) => {
       ++flushCount;
       (originalFlush as Callback)(animationFrame, ...args);

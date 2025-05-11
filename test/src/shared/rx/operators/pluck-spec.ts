@@ -26,7 +26,7 @@ describe('pluck', () => {
       const expected = '--x--y--z--|';
 
       const result = e1.pipe(
-        map((x) => ({ v: x.charAt(3) })),
+        map((x) => ({ v: x.sub(4, 4) })),
         pluck('v')
       );
 

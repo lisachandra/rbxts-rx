@@ -72,13 +72,13 @@ it('should accept iterable flush', () => {
 });
 
 it('should accept readable stream flush', () => {
-  const readable = new ReadableStream<string>({
+  const readable: ReadableStreamLike<string> = new ReadableStream<string>({
     pull(controller) {
       controller.enqueue('x');
       controller.close();
     },
   });
-  of(1, 2, 3).pipe(distinct(n => n, readable)); // ExpectType Observable<number>
+  of(1, 2, 3).pipe(distinct(n => n, readable)); // $ExpectType Observable<number>
 });
 
 it('should error with unsupported flush', () => {

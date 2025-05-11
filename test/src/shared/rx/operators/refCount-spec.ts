@@ -35,7 +35,7 @@ describe('refCount', () => {
       next: noop,
     });
 
-    expect((connectable as any)._refCount).toEqual(3);
+    expect(connectable['_refCount' as never]).toEqual(3);
 
     sub1.unsubscribe();
     sub2.unsubscribe();
@@ -60,14 +60,14 @@ describe('refCount', () => {
       //noop
     });
     const sub3 = refCounted.subscribe(() => {
-      expect((connectable as any)._refCount).toEqual(1);
+      expect(connectable['_refCount' as never]).toEqual(1);
     });
 
     sub1.unsubscribe();
     sub2.unsubscribe();
     sub3.unsubscribe();
 
-    expect((connectable as any)._refCount).toEqual(0);
+    expect(connectable['_refCount' as never]).toEqual(0);
     expect(unsubscribeCalled).toBe(true);
     done();
   });
@@ -86,7 +86,7 @@ describe('refCount', () => {
     refCounted.subscribe();
     refCounted.subscribe().unsubscribe();
 
-    expect((connectable as any)._refCount).toEqual(1);
+    expect(connectable['_refCount' as never]).toEqual(1);
     expect(unsubscribeCalled).toBe(false);
   });
 
@@ -106,7 +106,7 @@ describe('refCount', () => {
 
     subject.next('the number two');
 
-    expect((connectable as any)._refCount).toEqual(1);
+    expect(connectable['_refCount' as never]).toEqual(1);
     expect(arr[0]).toEqual('the number one');
     expect(arr[1]).toEqual('the number two');
   });

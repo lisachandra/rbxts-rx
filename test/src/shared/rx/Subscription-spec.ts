@@ -222,15 +222,24 @@ describe('Subscription', () => {
       // When d is added to the subscriptions, it's added as a finalizer. The
       // length is 1 because the finalizers passed to the ctors are stored in a
       // separate property.
-      expect((a as any)._finalizers).toHaveLength(1);
-      expect((b as any)._finalizers).toHaveLength(1);
-      expect((c as any)._finalizers).toHaveLength(1);
+
+      // @ts-expect-error
+      expect(a._finalizers).toHaveLength(1);
+      // @ts-expect-error
+      expect(b._finalizers).toHaveLength(1);
+      // @ts-expect-error
+      expect(c._finalizers).toHaveLength(1);
+
       d.unsubscribe();
       // When d is unsubscribed, it should remove itself from each of its
       // parents.
-      expect((a as any)._finalizers).toHaveLength(0);
-      expect((b as any)._finalizers).toHaveLength(0);
-      expect((c as any)._finalizers).toHaveLength(0);
+
+      // @ts-expect-error
+      expect(a._finalizers).toHaveLength(0);
+      // @ts-expect-error
+      expect(b._finalizers).toHaveLength(0);
+      // @ts-expect-error
+      expect(c._finalizers).toHaveLength(0);
     });
   });
 });

@@ -80,7 +80,7 @@ describe('bufferTime operator', () => {
     // async relative to what it is scheduling, but synchronous relative to its container) will
     // cause your thread to lock up. Don't be weird. This test is just to prove behavior.
     const source = scheduled([0, 1, 2, 3, 4], asapScheduler);
-    const results: any[] = [];
+    const results: defined[] = [];
     source.pipe(bufferTime(0, 0, asapScheduler)).subscribe({
       next: (value) => results.push(value),
       complete: () => {

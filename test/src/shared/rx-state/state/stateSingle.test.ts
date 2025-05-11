@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { defer, EMPTY, firstValueFrom, from, merge, NEVER, noop, Observable, of, Subject, throwError } from '@rbxts/rx';
+import { defer, EMPTY, firstValueFrom, from, merge, NEVER, noop, Observable, ObservableInput, of, Subject, throwError } from '@rbxts/rx';
 import { map, scan, startWith, take, takeUntil, tap, withLatestFrom } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { liftSuspense, sinkSuspense, EmptyObservableError, NoSubscribersError, state, SUSPENSE } from '@rbxts/rx-state/out';
@@ -80,10 +79,10 @@ describe('stateSingle', () => {
         const trigger = cold('-----a|');
         const expected = '    a-b-c|';
 
-        const shared$ = state(source);
-        const result$ = shared$.pipe(takeUntil(trigger));
+        const shared = state(source);
+        const result = shared.pipe(takeUntil(trigger));
 
-        expectObservable(result$).toBe(expected);
+        expectObservable(result).toBe(expected);
       });
     });
 
@@ -92,7 +91,7 @@ describe('stateSingle', () => {
       let errors: string[] = [];
 
       let thrown = false;
-      const result$ = state(
+      const result = state(
         defer(() => {
           if (!thrown) {
             thrown = true;
@@ -108,7 +107,7 @@ describe('stateSingle', () => {
         })
       );
 
-      const subscribe = () => result$.subscribe({ next: (v) => nexts.push(v), error: subscribe });
+      const subscribe = () => result.subscribe({ next: (v) => nexts.push(v), error: subscribe });
       subscribe();
 
       expect(nexts).toEqual([]);
@@ -119,7 +118,7 @@ describe('stateSingle', () => {
       let nexts: number[] = [];
 
       let count = 0;
-      const result$ = state(
+      const result = state(
         new Observable<number>((obs) => {
           if (count === 0)
             setTimeout(() => {
@@ -130,9 +129,9 @@ describe('stateSingle', () => {
       );
 
       const subscriber = () =>
-        result$.subscribe({
+        result.subscribe({
           error: () => {
-            result$.subscribe({
+            result.subscribe({
               next: (v) => nexts.push(v),
             });
           },
@@ -150,7 +149,7 @@ describe('stateSingle', () => {
 
     it('handles reentrant subscriptions on empty observable error', (_, done) => {
       let firstSub = true;
-      const result$ = state(
+      const result = state(
         new Observable<string>((obs) => {
           if (firstSub) {
             firstSub = false;
@@ -163,7 +162,7 @@ describe('stateSingle', () => {
 
       let received: string;
       const subscribe = () =>
-        result$.subscribe({
+        result.subscribe({
           next: (v) => (received = v),
           error: subscribe,
         });
@@ -266,20 +265,20 @@ describe('stateSingle', () => {
 
     it('handles recursively synchronous subscriptions', () => {
       scheduler().run(({ expectObservable, hot }) => {
-        const values$ = hot('----b-c-d---');
-        const latest$ = hot('----------x-');
+        const values = hot('----b-c-d---');
+        const latest = hot('----------x-');
         const expected = '   a---b-c-d-d-';
-        const input$: any = merge(
-          values$,
-          latest$.pipe(
-            withLatestFrom(defer(() => result$)),
-            map(([, latest]) => latest)
+        const input: Observable<any> = merge(
+          values,
+          latest.pipe(
+            withLatestFrom(defer(() => result)),
+            map(([, latest]: [string, unknown]) => latest)
           )
         );
 
-        const result$: any = state(input$.pipe(startWith('a')));
+        const result: Observable<any> = state(input.pipe(startWith('a')));
 
-        expectObservable(result$, '^').toBe(expected);
+        expectObservable(result, '^').toBe(expected);
       });
     });
 
@@ -482,7 +481,7 @@ describe('stateSingle', () => {
         const source = subjet.pipe(sinkSuspense());
         const sourceState = state(source);
 
-        sourceState.subscribe({ error() {} });
+        sourceState.subscribe({ error: () => {} });
         const value = sourceState.getValue();
         sourceState.pipe(liftSuspense()).subscribe();
 
@@ -499,9 +498,9 @@ describe('stateSingle', () => {
         const source = subjet.pipe(sinkSuspense());
         const sourceState = state(source);
 
-        sourceState.subscribe({ error() {} });
+        sourceState.subscribe({ error: () => {} });
         const value = sourceState.getValue() as Promise<any>;
-        sourceState.subscribe({ error() {} });
+        sourceState.subscribe({ error: () => {} });
 
         subjet.next(SUSPENSE);
 
@@ -515,12 +514,12 @@ describe('stateSingle', () => {
 
         let promise: any;
         sourceState.subscribe({
-          error() {
+          error: () => {
             promise = sourceState.getValue();
           },
         });
         const subscription = sourceState.pipeState(liftSuspense()).subscribe({
-          next() {
+          next: () => {
             Promise.resolve().then(() => {
               subscription.unsubscribe();
             });
@@ -583,25 +582,25 @@ describe('stateSingle', () => {
       const sourceState = state(source);
 
       let value = 0;
-      let error: any = undefined;
+      let err: any = undefined;
       sourceState
         .pipe(
           map((x) => x + (sourceState.getValue() as number)),
           take(1)
         )
         .subscribe({
-          next(v) {
+          next: (v) => {
             value = v;
           },
-          error(e) {
-            error = e;
+          error: (e) => {
+            err = e;
           },
         });
 
       sourceState.getValue();
       source.next(3);
 
-      expect(error).toBe(null);
+      expect(err).toBeNull();
       expect(value).toBe(6);
     });
   });

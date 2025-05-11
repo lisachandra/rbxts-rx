@@ -10,14 +10,12 @@ export function asInteropObservable<T>(observable: Observable<T>): Observable<T>
   return setmetatable({} as Observable<T>, {
     __index: (target, key) => {
       if (key === 'lift') {
-        const { lift } = target;
-        return interopLift(lift);
+        return interopLift(target['lift' as never]);
       }
       if (key === 'subscribe') {
-        const { subscribe } = target;
-        return interopSubscribe(subscribe);
+        return interopSubscribe(target['subscribe' as never]);
       }
-      return observable[key as keyof typeof observable];
+      return observable[key as never];
     },
   }) as Observable<T>;
 }
@@ -42,7 +40,7 @@ export function asInteropSubscriber<T>(subscriber: Subscriber<T>): Subscriber<T>
 
 function interopLift<T, R>(lift: (this: Observable<T>, operator: Operator<T, R>) => Observable<R>) {
   return function (this: Observable<T>, operator: Operator<T, R>): Observable<R> {
-    const observable = (lift as Callback)(this, operator);
+    const observable: Observable<any> = (lift as Callback)(this, operator);
     const call = observable.operator!;
     observable.operator! = function (this: Operator<T, R>, subscriber: Subscriber<R>, source: any) {
       return call(asInteropSubscriber(subscriber), source);
@@ -52,8 +50,8 @@ function interopLift<T, R>(lift: (this: Observable<T>, operator: Operator<T, R>)
   };
 }
 
-function interopSubscribe<T>(subscribe: (...args: any[]) => Subscription) {
-  return function (this: Observable<T>, ...args: any[]): Subscription {
+function interopSubscribe<T>(subscribe: (...args: defined[]) => Subscription) {
+  return function (this: Observable<T>, ...args: defined[]): Subscription {
     const [arg] = args;
     if (arg instanceof Subscriber) {
       return subscribe(this, asInteropSubscriber(arg));

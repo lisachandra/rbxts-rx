@@ -299,14 +299,14 @@ describe('delayWhen', () => {
   });
 
   it('should complete when duration selector returns synchronous observable', () => {
-    let next: boolean = false;
+    let next0: boolean = false;
     let complete: boolean = false;
 
     of(1)
       .pipe(delayWhen(() => of(2)))
-      .subscribe({ next: () => (next = true), complete: () => (complete = true) });
+      .subscribe({ next: () => (next0 = true), complete: () => (complete = true) });
 
-    expect(next).toBe(true);
+    expect(next0).toBe(true);
     expect(complete).toBe(true);
   });
 
@@ -361,9 +361,9 @@ describe('delayWhen', () => {
   it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(10));
     const expected = [0, 1, 2];
-    const error = new Error('err');
+    const err = new Error('err');
 
-    e1.pipe(delayWhen((x) => (x === 3 ? Promise.reject(error) : Promise.resolve(42)))).subscribe({
+    e1.pipe(delayWhen((x) => (x === 3 ? Promise.reject(err) : Promise.resolve(42)))).subscribe({
       next: (x: number) => {
         expect(x).toEqual(expected.shift());
       },

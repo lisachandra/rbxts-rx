@@ -47,7 +47,7 @@ describe('zipAll operator', () => {
     of(of('a', 'b', 'c'), of(1, 2, 3))
       .pipe(zipAll((a: string, b: number) => a + b))
       .subscribe({
-        next(x) {
+        next: (x) => {
           expect(x).toEqual(expected[i++]);
         },
         complete: done,
@@ -742,7 +742,7 @@ describe('zipAll operator', () => {
       const result = scheduled([a, b], queueScheduler).pipe(zipAll());
 
       result.subscribe({
-        next(vals) {
+        next: (vals) => {
           expect(vals).toEqual(r[i++]);
         },
         complete: done,
@@ -763,7 +763,7 @@ describe('zipAll operator', () => {
     const result = scheduled([a, b], queueScheduler).pipe(zipAll());
 
     result.subscribe({
-      next(vals) {
+      next: (vals) => {
         expect(vals).toEqual(r[i++]);
       },
       complete: done,

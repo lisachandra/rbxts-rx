@@ -3,14 +3,14 @@ import { TimeoutError } from '@rbxts/rx';
 
 /** @test {TimeoutError} */
 describe('TimeoutError', () => {
-  const error = new TimeoutError();
+  const err = new TimeoutError();
   it('Should have a name', () => {
-    expect(error.name).toEqual('TimeoutError');
+    expect(err.name).toEqual('TimeoutError');
   });
   it('Should have a message', () => {
-    expect(error.message).toEqual('Timeout has occurred');
+    expect(err.message).toEqual('Timeout has occurred');
   });
   it('Should have a stack', () => {
-    expect(type(error.stack)).toBe('string');
+    expect(type(err.stack)).toBe('string');
   });
 });

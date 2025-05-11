@@ -609,7 +609,7 @@ describe('zip', () => {
   });
 
   it('should be able to zip all iterables', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     zip('abc', '123', 'xyz').subscribe({
       next: (value) => results.push(value),
       complete: () => results.push('complete'),

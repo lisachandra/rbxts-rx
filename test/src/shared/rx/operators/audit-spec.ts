@@ -416,16 +416,16 @@ describe('audit operator', () => {
   it('should raise error when promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(10));
     const expected = [0, 1, 2];
-    const error = new Error('error');
+    const err = new Error('error');
 
     e1.pipe(
       audit((x: number) => {
         if (x === 3) {
-          return new Promise((resolve: any, reject: any) => {
-            reject(error);
+          return new Promise((resolve, reject) => {
+            reject(err);
           });
         } else {
-          return new Promise((resolve: any) => {
+          return new Promise((resolve) => {
             resolve(42);
           });
         }
@@ -434,8 +434,8 @@ describe('audit operator', () => {
       next: (x: number) => {
         expect(x).toEqual(expected.shift());
       },
-      error: (err: any) => {
-        expect(err).toHaveProperty('message', 'error');
+      error: (err: Error) => {
+        expect(err.message).toEqual('error');
         expect(expected.size()).toEqual(0);
         done();
       },

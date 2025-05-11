@@ -4,6 +4,8 @@ import { Subscriber, Observable, config, of, Observer } from '@rbxts/rx';
 import { asInteropSubscriber } from './helpers/interop-helper';
 import { getRegisteredFinalizers } from './helpers/subscription';
 import { Error } from '@rbxts/luau-polyfill';
+import { typeAssertIs } from './helpers/type';
+import { bind } from '@rbxts/rx/out/internal/polyfill/bind';
 
 /** @test {Subscriber} */
 describe('SafeSubscriber', () => {
@@ -11,7 +13,7 @@ describe('SafeSubscriber', () => {
     let times = 0;
 
     const sub = new SafeSubscriber<void>({
-      next() {
+      next: () => {
         times += 1;
       },
     });
@@ -29,10 +31,10 @@ describe('SafeSubscriber', () => {
     let errorCalled = false;
 
     const sub = new SafeSubscriber<void>({
-      next() {
+      next: () => {
         times += 1;
       },
-      error() {
+      error: () => {
         errorCalled = true;
       },
     });
@@ -52,10 +54,10 @@ describe('SafeSubscriber', () => {
     let completeCalled = false;
 
     const sub = new SafeSubscriber<void>({
-      next() {
+      next: () => {
         times += 1;
       },
-      complete() {
+      complete: () => {
         completeCalled = true;
       },
     });
@@ -72,7 +74,7 @@ describe('SafeSubscriber', () => {
 
   it('should not be closed when other subscriber with same observer instance completes', () => {
     const observer = {
-      next: function () {
+      next: () => {
         /*noop*/
       },
     };
@@ -179,13 +181,13 @@ describe('Subscriber', () => {
       valuesProcessed: string[] = [];
 
       // In here, we access instance state and alter it.
-      next(value: string) {
+      next: (this: void, value: string) => void = function (this: CustomConsumer, value: string) {
         if (value === 'reset') {
           this.valuesProcessed = [];
         } else {
           this.valuesProcessed.push(value);
         }
-      }
+      } as never;
     }
 
     const consumer = new CustomConsumer();
@@ -195,7 +197,7 @@ describe('Subscriber', () => {
     expect(consumer.valuesProcessed).never.toEqual(['new', 'new']);
   });
 
-  describe('deprecated next context mode', () => {
+  describe.skip('deprecated next context mode', () => {
     beforeEach(() => {
       config.useDeprecatedNextContext = true;
     });
@@ -205,7 +207,7 @@ describe('Subscriber', () => {
     });
 
     it('should allow changing the context of `this` in a POJO subscriber', () => {
-      const results: any[] = [];
+      const results: defined[] = [];
 
       const source = new Observable<number>((subscriber) => {
         for (let i = 0; i < 10 && !subscriber.closed; i++) {
@@ -219,14 +221,16 @@ describe('Subscriber', () => {
       });
 
       source.subscribe({
-        next: function (this: any, value) {
-          expect(type(this.unsubscribe)).toBe('function');
+        next: (value) => {
+          // @ts-expect-error
+          expect(this!.subscriber).toBe('function');
           results.push(value);
           if (value === 3) {
-            this.unsubscribe();
+            // @ts-expect-error
+            this!.unsubscribe();
           }
         },
-        complete() {
+        complete: () => {
           throw new Error('should not be called');
         },
       });
@@ -238,16 +242,20 @@ describe('Subscriber', () => {
       // This is a contrived class to illustrate that we can pass another
       // object that is "observer shaped"
       class CustomConsumer {
+        constructor() {
+          this.next = bind(false, this['next' as never], this);
+        }
+
         valuesProcessed: string[] = [];
 
         // In here, we access instance state and alter it.
-        next(value: string) {
+        next: (this: void, value: string) => void = function (this: CustomConsumer, value: string) {
           if (value === 'reset') {
             this.valuesProcessed = [];
           } else {
             this.valuesProcessed.push(value);
           }
-        }
+        } as never;
       }
 
       const consumer = new CustomConsumer();

@@ -252,8 +252,8 @@ describe('first', () => {
         ) {}
       }
 
-      const isBar = (x: any): x is Bar => x && (x as Bar).bar !== undefined;
-      const isBaz = (x: any): x is Baz => x && (x as Baz).baz !== undefined;
+      const isBar = (x: unknown): x is Bar => !!x && (x as Bar).bar !== undefined;
+      const isBaz = (x: unknown): x is Baz => !!x && (x as Baz).baz !== undefined;
 
       const foo: Foo = new Foo();
       of(foo)

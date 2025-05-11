@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { repeat, mergeMap, map, multicast, refCount, take } from '@rbxts/rx/out/operators';
+import { repeat as repeat0, mergeMap, map, multicast, refCount, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { of, Subject, Observable, timer } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -23,7 +23,7 @@ describe('repeat operator', () => {
       ];
       const expected = '--a--b----a--b----a--b--|';
 
-      expectObservable(e1.pipe(repeat(3))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(3))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -39,7 +39,7 @@ describe('repeat operator', () => {
       ];
       const expected = '--a--b----a--b----a--b----a--b--|';
 
-      expectObservable(e1.pipe(repeat(2), repeat(2))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(2), repeat0(2))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -50,7 +50,7 @@ describe('repeat operator', () => {
       const subs: string[] = [];
       const expected = '|';
 
-      expectObservable(e1.pipe(repeat(0))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(0))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -61,7 +61,7 @@ describe('repeat operator', () => {
       const subs = '    ^-------!';
       const expected = '--a--b--|';
 
-      expectObservable(e1.pipe(repeat(1))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(1))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -76,7 +76,7 @@ describe('repeat operator', () => {
       const unsub = '   ---------------!';
       const expected = '--a--b----a--b-';
 
-      expectObservable(e1.pipe(repeat(10)), unsub).toBe(expected);
+      expectObservable(e1.pipe(repeat0(10)), unsub).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -95,7 +95,7 @@ describe('repeat operator', () => {
       const unsub = '   --------------------------------------------!';
       const expected = '--a--b----a--b----a--b----a--b----a--b----a--';
 
-      expectObservable(e1.pipe(repeat()), unsub).toBe(expected);
+      expectObservable(e1.pipe(repeat0()), unsub).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -116,7 +116,7 @@ describe('repeat operator', () => {
 
       const result = e1.pipe(
         mergeMap((x: string) => of(x)),
-        repeat(),
+        repeat0(),
         mergeMap((x: string) => of(x))
       );
 
@@ -130,13 +130,13 @@ describe('repeat operator', () => {
       const e1 = cold('--a--b--|                                    ');
       const expected = '|';
 
-      expectObservable(e1.pipe(repeat(-1))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(-1))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe([]);
     });
   });
 
   it('should always finalization before starting the next cycle', async () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const source = new Observable<number>((subscriber) => {
       Promise.resolve().then(() => {
         subscriber.next(1);
@@ -152,13 +152,13 @@ describe('repeat operator', () => {
       };
     });
 
-    await source.pipe(repeat(3)).forEach((value) => results.push(value));
+    await source.pipe(repeat0(3)).forEach((value) => results.push(value));
 
     expect(results).toEqual([1, 2, 'finalizer', 1, 2, 'finalizer', 1, 2, 'finalizer']);
   });
 
   it('should always finalize before starting the next cycle, even when synchronous', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const source = new Observable<number>((subscriber) => {
       subscriber.next(1);
       subscriber.next(2);
@@ -167,7 +167,7 @@ describe('repeat operator', () => {
         results.push('finalizer');
       };
     });
-    const subscription = source.pipe(repeat(3)).subscribe({
+    const subscription = source.pipe(repeat0(3)).subscribe({
       next: (value) => results.push(value),
       complete: () => results.push('complete'),
     });
@@ -182,7 +182,7 @@ describe('repeat operator', () => {
       const e1subs = '^';
       const expected = '-';
 
-      expectObservable(e1.pipe(repeat(3))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(3))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -194,7 +194,7 @@ describe('repeat operator', () => {
       const subs = ' ^-----------------------------!';
       const expected = '-';
 
-      expectObservable(e1.pipe(repeat(3)), unsub).toBe(expected);
+      expectObservable(e1.pipe(repeat0(3)), unsub).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -205,7 +205,7 @@ describe('repeat operator', () => {
       const subs: string[] = [];
       const expected = '|';
 
-      expectObservable(e1.pipe(repeat(0))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(0))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -216,7 +216,7 @@ describe('repeat operator', () => {
       const subs: string[] = [];
       const expected = '|';
 
-      expectObservable(e1.pipe(repeat(0))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(0))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -227,7 +227,7 @@ describe('repeat operator', () => {
       const subs = ['   ^-------'];
       const expected = '--a--b--';
 
-      expectObservable(e1.pipe(repeat(3))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(3))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -238,7 +238,7 @@ describe('repeat operator', () => {
       const e1subs = ['(^!)', '(^!)', '(^!)'];
       const expected = '|';
 
-      expectObservable(e1.pipe(repeat(3))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(3))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -253,7 +253,7 @@ describe('repeat operator', () => {
       ];
       const expected = '------------|';
 
-      expectObservable(e1.pipe(repeat(3))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(3))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -264,7 +264,7 @@ describe('repeat operator', () => {
       const subs: string[] = [];
       const expected = '|';
 
-      expectObservable(e1.pipe(repeat(0))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(0))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -275,7 +275,7 @@ describe('repeat operator', () => {
       const subs = '    ^-------!';
       const expected = '--a--b--#';
 
-      expectObservable(e1.pipe(repeat(2))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(2))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -286,7 +286,7 @@ describe('repeat operator', () => {
       const e1subs = '(^!)';
       const expected = '#';
 
-      expectObservable(e1.pipe(repeat(3))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(3))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -297,7 +297,7 @@ describe('repeat operator', () => {
       const e1subs = '(^!)';
       const expected = '#';
 
-      expectObservable(e1.pipe(repeat())).toBe(expected);
+      expectObservable(e1.pipe(repeat0())).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -318,7 +318,7 @@ describe('repeat operator', () => {
       );
       const expected = '--a----#';
 
-      expectObservable(e1.pipe(repeat(2))).toBe(expected);
+      expectObservable(e1.pipe(repeat0(2))).toBe(expected);
     });
   });
 
@@ -329,7 +329,7 @@ describe('repeat operator', () => {
       .pipe(
         multicast(() => new Subject<number>()),
         refCount(),
-        repeat(5)
+        repeat0(5)
       )
       .subscribe({
         next: (x: number) => {
@@ -356,7 +356,7 @@ describe('repeat operator', () => {
       }
     });
 
-    synchronousObservable.pipe(repeat(), take(3)).subscribe(() => {
+    synchronousObservable.pipe(repeat0(), take(3)).subscribe(() => {
       /* noop */
     });
 
@@ -373,7 +373,7 @@ describe('repeat operator', () => {
       ];
       const expected = '--a--b----a--b----a--b--|';
 
-      expectObservable(e1.pipe(repeat({ count: 3 }))).toBe(expected);
+      expectObservable(e1.pipe(repeat0({ count: 3 }))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -389,7 +389,7 @@ describe('repeat operator', () => {
       ];
       const expected = '--a--b-------a--b-------a--b--|';
 
-      expectObservable(e1.pipe(repeat({ count: 3, delay }))).toBe(expected);
+      expectObservable(e1.pipe(repeat0({ count: 3, delay }))).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(subs);
     });
   });
@@ -409,7 +409,7 @@ describe('repeat operator', () => {
 
       expectObservable(
         e1.pipe(
-          repeat({
+          repeat0({
             count: 3,
             delay: (count) => {
               expect(count).toEqual(expectedCounts.shift());
@@ -436,7 +436,7 @@ describe('repeat operator', () => {
 
       expectObservable(
         e1.pipe(
-          repeat({
+          repeat0({
             count: 3,
             delay: (count) => {
               if (count === 2) {

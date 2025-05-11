@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { bindNodeCallback } from '@rbxts/rx';
+import { bindNodeCallback, Observable } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { Error, setTimeout, clearTimeout } from '@rbxts/luau-polyfill';
@@ -30,7 +30,7 @@ describe('bindNodeCallback', () => {
         },
       });
 
-      expect(results).toEqual(['undefined', 'done']);
+      expect(results).toEqual(['nil', 'done']);
     });
 
     it('should a resultSelector', () => {
@@ -73,22 +73,25 @@ describe('bindNodeCallback', () => {
     });
 
     it('should set context of callback to context of boundCallback', () => {
-      function callback(this: { datum: number }, cb: (err: any, n: number) => void) {
-        cb(undefined, this.datum);
+      function callback(itself: { datum: number }, cb: (err: any, n: number) => void) {
+        cb(undefined, itself.datum);
       }
       const boundCallback = bindNodeCallback(callback);
       const results: Array<number | string> = [];
 
-      boundCallback({ datum: 42 }).subscribe({ next: (x: number) => results.push(x), complete: () => results.push('done') });
+      boundCallback({ datum: 42 }).subscribe({
+        next: (x: number) => results.push(x),
+        complete: () => results.push('done'),
+      });
 
       expect(results).toEqual([42, 'done']);
     });
 
     it('should raise error from callback', () => {
-      const error = new Error();
+      const err = new Error();
 
       function callback(cb: Callback) {
-        cb(error);
+        cb(err);
       }
 
       const boundCallback = bindNodeCallback(callback);
@@ -106,7 +109,7 @@ describe('bindNodeCallback', () => {
         },
       });
 
-      expect(results).toEqual([error]);
+      expect(results).toEqual([err]);
     });
 
     it('should not emit, throw or complete if immediately unsubscribed', (_, done) => {
@@ -181,7 +184,7 @@ describe('bindNodeCallback', () => {
 
       rxTestScheduler.flush();
 
-      expect(results).toEqual(['undefined', 'done']);
+      expect(results).toEqual(['nil', 'done']);
     });
 
     it('should emit one value from a callback', () => {
@@ -206,13 +209,16 @@ describe('bindNodeCallback', () => {
     });
 
     it('should set context of callback to context of boundCallback', () => {
-      function callback(this: { datum: number }, cb: (err: any, n: number) => void) {
-        cb(undefined, this.datum);
+      function callback(itself: { datum: number }, cb: (err: any, n: number) => void) {
+        cb(undefined, itself.datum);
       }
       const boundCallback = bindNodeCallback(callback, rxTestScheduler);
       const results: Array<number | string> = [];
 
-      boundCallback({ datum: 42 }).subscribe({ next: (x: number) => results.push(x), complete: () => results.push('done') });
+      boundCallback({ datum: 42 }).subscribe({
+        next: (x: number) => results.push(x),
+        complete: () => results.push('done'),
+      });
 
       rxTestScheduler.flush();
 
@@ -242,10 +248,10 @@ describe('bindNodeCallback', () => {
     });
 
     it('should raise error from callback', () => {
-      const error = new Error();
+      const err = new Error();
 
       function callback(cb: Callback) {
-        cb(error);
+        cb(err);
       }
 
       const boundCallback = bindNodeCallback(callback, rxTestScheduler);
@@ -265,7 +271,7 @@ describe('bindNodeCallback', () => {
 
       rxTestScheduler.flush();
 
-      expect(results).toEqual([error]);
+      expect(results).toEqual([err]);
     });
   });
 
@@ -332,16 +338,16 @@ describe('bindNodeCallback', () => {
       callback(undefined as any, 42);
       throw 'kaboom';
     }
-    let receivedError: any;
+    let receivedError: unknown;
     bindNodeCallback(badFunction)().subscribe({
-      error: (err) => (receivedError = err),
+      error: (err: unknown) => (receivedError = err),
     });
 
     expect(receivedError).toEqual('kaboom');
   });
 
   it('should not call the function if subscribed twice in a row before it resolves', () => {
-    let executeCallback: any;
+    let executeCallback: Callback = undefined as never;
     let calls = 0;
     function myFunc(callback: (error: any, result: any) => void) {
       calls++;
@@ -351,12 +357,12 @@ describe('bindNodeCallback', () => {
       executeCallback = callback;
     }
 
-    const source$ = bindNodeCallback(myFunc)();
+    const source = bindNodeCallback(myFunc)();
 
-    let result1: any;
-    let result2: any;
-    source$.subscribe((value) => (result1 = value));
-    source$.subscribe((value) => (result2 = value));
+    let result1: unknown;
+    let result2: unknown;
+    source.subscribe((value: unknown) => (result1 = value));
+    source.subscribe((value: unknown) => (result2 = value));
 
     expect(calls).toEqual(1);
     executeCallback(undefined, 'test');

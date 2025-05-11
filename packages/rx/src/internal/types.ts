@@ -8,6 +8,7 @@ declare global {
     new (value?: any): Boolean;
     <T>(value?: T): boolean;
     readonly prototype: Boolean;
+    readonly _nominal_BooleanConstructor: unique symbol;
   }
 }
 

@@ -279,7 +279,7 @@ describe('withLatestFrom', () => {
     of(1)
       .pipe(delay(1), withLatestFrom(Promise.resolve(2), Promise.resolve(3)))
       .subscribe({
-        next(x: any) {
+        next: (x: any) => {
           expect(x).toEqual([1, 2, 3]);
         },
         complete: done,

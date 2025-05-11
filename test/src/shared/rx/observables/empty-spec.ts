@@ -33,7 +33,7 @@ describe('empty', () => {
     const source = empty();
     let hit = false;
     source.subscribe({
-      complete() {
+      complete: () => {
         hit = true;
       },
     });
@@ -48,7 +48,7 @@ describe('empty', () => {
     const source = empty(rxTestScheduler);
     let hit = false;
     source.subscribe({
-      complete() {
+      complete: () => {
         hit = true;
       },
     });

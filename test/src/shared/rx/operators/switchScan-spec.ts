@@ -170,7 +170,7 @@ describe('switchScan', () => {
       .pipe(
         switchScan(() => synchronousObservable, undefined),
 
-        takeWhile((x) => x != 2) // unsubscribe at the second side-effect
+        takeWhile((x) => x !== 2 && (!typeIs(x, "string") || tonumber(x) !== 2)) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */

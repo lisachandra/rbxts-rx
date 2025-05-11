@@ -35,13 +35,13 @@ describe('switchMapTo', () => {
     of(1, 2, 3)
       .pipe(switchMapTo(of(4, 5, 6), (a, b, i, ii) => [a, b, i, ii]))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([
             [1, 4, 0, 0],
             [1, 5, 0, 1],
@@ -63,13 +63,13 @@ describe('switchMapTo', () => {
     of(1, 2, 3)
       .pipe(switchMapTo(of(4, 5, 6), undefined))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6]);
         },
       });
@@ -79,7 +79,7 @@ describe('switchMapTo', () => {
     const a = of(1, 2, 3);
     const expected = ['a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c'];
     a.pipe(switchMapTo(of('a', 'b', 'c'))).subscribe({
-      next(x) {
+      next: (x) => {
         expect(x).toEqual(expected.shift());
       },
       complete: done,

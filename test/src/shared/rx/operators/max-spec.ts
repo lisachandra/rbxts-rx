@@ -241,7 +241,7 @@ describe('max', () => {
       const e1subs = '   ^---------!   ';
       const expected = ' ----------(w|)';
 
-      const predicate = function <T>(x: T, y: T) {
+      const predicate = function <T extends number>(x: T, y: T) {
         return x > y ? -1 : 1;
       };
 
@@ -256,7 +256,7 @@ describe('max', () => {
       const e1subs = '   ^---------!   ';
       const expected = ' ----------(w|)';
 
-      const predicate = function <T>(x: T, y: T) {
+      const predicate = function <T extends string>(x: T, y: T) {
         return x > y ? -1 : 1;
       };
 

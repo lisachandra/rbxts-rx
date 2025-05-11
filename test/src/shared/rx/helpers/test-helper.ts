@@ -1,12 +1,12 @@
-import { of, asyncScheduler, Observable, scheduled, ObservableInput } from '@rbxts/rx';
+import { of, asyncScheduler, Observable, scheduled, ObservableInput, Observer } from '@rbxts/rx';
 import Symbol from '@rbxts/rx/out/internal/polyfill/symbol';
 
 const iterator = Symbol.iterator;
 const observable = Symbol.observable;
 
-export function lowerCaseO<T>(...args: Array<any>): Observable<T> {
+export function lowerCaseO<T>(...args: Array<defined>): Observable<T> {
   const o: any = {
-    subscribe(observer: any) {
+    subscribe(observer: Observer<any>) {
       args.forEach((v) => observer.next(v));
       observer.complete();
       return {

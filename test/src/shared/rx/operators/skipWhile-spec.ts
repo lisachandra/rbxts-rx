@@ -20,7 +20,7 @@ describe('skipWhile', () => {
       const expected = '     -------4--5--6--|';
 
       const predicate = function (v: string) {
-        return +v < 4;
+        return tonumber(v)! < 4;
       };
 
       const result = source.pipe(skipWhile(predicate));
@@ -93,7 +93,7 @@ describe('skipWhile', () => {
       const expected = '         --------5--6--7--8--';
 
       const predicate = function (v: string) {
-        return +v < 5;
+        return tonumber(v)! < 5;
       };
 
       const result = source.pipe(skipWhile(predicate));
@@ -196,7 +196,7 @@ describe('skipWhile', () => {
       const result = source.pipe(
         skipWhile(predicate),
         tap({
-          complete() {
+          complete: () => {
             expect(invoked).toEqual(3);
           },
         })

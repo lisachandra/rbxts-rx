@@ -75,14 +75,14 @@ describe('interval', () => {
     const events = [0, 1, 2, 3, 4, 5];
     const source = interval(period, asapScheduler).pipe(take(6));
     source.subscribe({
-      next(x) {
+      next: (x) => {
         expect(x).toEqual(events.shift());
       },
-      error(e) {
+      error: (e) => {
         jest.useRealTimers();
         done(e);
       },
-      complete() {
+      complete: () => {
         expect(asapScheduler.actions.size()).toEqual(0);
         expect(asapScheduler._scheduled).toEqual(undefined);
         jest.useRealTimers();
@@ -102,14 +102,14 @@ describe('interval', () => {
     const events = [0, 1, 2, 3, 4, 5];
     const source = interval(period, queueScheduler).pipe(take(6));
     source.subscribe({
-      next(x) {
+      next: (x) => {
         expect(x).toEqual(events.shift());
       },
-      error(e) {
+      error: (e) => {
         jest.useRealTimers();
         done(e);
       },
-      complete() {
+      complete: () => {
         expect(queueScheduler.actions.size()).toEqual(0);
         expect(queueScheduler._scheduled).toEqual(undefined);
         jest.useRealTimers();
@@ -129,14 +129,14 @@ describe('interval', () => {
     const events = [0, 1, 2, 3, 4, 5];
     const source = interval(period, animationFrameScheduler).pipe(take(6));
     source.subscribe({
-      next(x) {
+      next: (x) => {
         expect(x).toEqual(events.shift());
       },
-      error(e) {
+      error: (e) => {
         jest.useRealTimers();
         done(e);
       },
-      complete() {
+      complete: () => {
         expect(animationFrameScheduler.actions.size()).toEqual(0);
         expect(animationFrameScheduler._scheduled).toEqual(undefined);
         jest.useRealTimers();

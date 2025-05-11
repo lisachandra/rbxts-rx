@@ -47,7 +47,7 @@ describe('reduce', () => {
 
       const result = e1.pipe(reduce((o: string | undefined, x) => o + ' ' + x, undefined));
 
-      expectObservable(result).toBe(expected, { x: 'undefined b c d e f g' });
+      expectObservable(result).toBe(expected, { x: 'nil b c d e f g' });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
     });
   });
@@ -76,7 +76,7 @@ describe('reduce', () => {
         })
       )
       .subscribe({
-        complete() {
+        complete: () => {
           expect(idx).toHaveLength(0);
         },
       });
@@ -93,7 +93,7 @@ describe('reduce', () => {
         }, -1)
       )
       .subscribe({
-        complete() {
+        complete: () => {
           expect(idx).toHaveLength(0);
         },
       });

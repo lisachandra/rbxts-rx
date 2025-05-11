@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { publishBehavior, mergeMapTo, tap, mergeMap, refCount, retry, repeat } from '@rbxts/rx/out/operators';
+import { publishBehavior, mergeMapTo, tap, mergeMap, refCount, retry, repeat as repeat0 } from '@rbxts/rx/out/operators';
 import { ConnectableObservable, of, Subscription, Observable, pipe } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -29,8 +29,8 @@ describe('publishBehavior operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publishBehavior(1)) as ConnectableObservable<number>;
-    expect(typeIs((<any>source)._subscribe, 'function')).toBe(true);
-    expect(typeIs((<any>source).getSubject, 'function')).toBe(true);
+    expect(typeIs(source['_subscribe' as never], 'function')).toBe(true);
+    expect(typeIs(source['getSubject' as never], 'function')).toBe(true);
     expect(typeIs(source.connect, 'function')).toBe(true);
     expect(typeIs(source.refCount, 'function')).toBe(true);
   });
@@ -217,7 +217,7 @@ describe('publishBehavior operator', () => {
       testScheduler.run(({ cold, hot, expectObservable, expectSubscriptions }) => {
         const source = cold('    -1-2-3----4-|');
         const sourceSubs = '     ^-----------!';
-        const published = source.pipe(publishBehavior('0'), refCount(), repeat(3));
+        const published = source.pipe(publishBehavior('0'), refCount(), repeat0(3));
         const subscriber1 = hot('a|           ').pipe(mergeMapTo(published));
         const expected1 = '      01-2-3----4-|';
         const subscriber2 = hot('----b|       ').pipe(mergeMapTo(published));
@@ -263,7 +263,7 @@ describe('publishBehavior operator', () => {
     expect(subscriptions).toEqual(1);
 
     connectable.subscribe({
-      next: function (x) {
+      next: (x) => {
         results2.push(x);
       },
       error: (x) => {

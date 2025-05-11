@@ -27,13 +27,13 @@ export class Subscription implements SubscriptionLike {
    */
   public closed = false;
 
-  private _parentage: Subscription[] | Subscription | undefined = undefined;
+  protected _parentage: Subscription[] | Subscription | undefined = undefined;
 
   /**
    * The list of registered finalizers to execute upon unsubscription. Adding and removing from this
    * list occurs in the {@link #add} and {@link #remove} methods.
    */
-  private _finalizers: Exclude<TeardownLogic, void>[] | undefined = undefined;
+  protected _finalizers: Exclude<TeardownLogic, void>[] | undefined = undefined;
 
   /**
    * @param initialTeardown A function executed first as part of the finalization

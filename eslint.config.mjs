@@ -94,6 +94,7 @@ export default tseslint.config(
 			"@typescript-eslint/no-unnecessary-type-assertion": "off",
 			"no-empty-pattern": "off",
 			"prefer-const": "off",
+      "eqeqeq": "off",
 		},
 	},
 	{

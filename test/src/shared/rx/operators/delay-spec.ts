@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { of, concat } from '@rbxts/rx';
+import { of, concat, Subscriber } from '@rbxts/rx';
 import { delay, repeatWhen, skip, take, tap, mergeMap, ignoreElements } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 
@@ -242,11 +242,11 @@ describe('delay', () => {
         skip(1),
         take(2),
         tap({
-          next() {
-            const [[subscriber]] = subscribeSpy.mock.calls;
+          next: () => {
+            const [[subscriber]] = subscribeSpy.mock.calls as { _finalizers: unknown[] }[][];
             counts.push(subscriber._finalizers.size());
           },
-          complete() {
+          complete: () => {
             expect(counts).toEqual([1, 1]);
           },
         })

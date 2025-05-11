@@ -23,7 +23,7 @@ describe('switchMap', () => {
       const expected = ' --x-x-x-y-yz-z-z---|';
       const values = { x: 10, y: 30, z: 50 };
 
-      const result = e1.pipe(switchMap((x) => e2.pipe(map((i) => i * +x))));
+      const result = e1.pipe(switchMap((x) => e2.pipe(map((i) => i * tonumber(x)!))));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -41,13 +41,13 @@ describe('switchMap', () => {
         )
       )
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
@@ -69,13 +69,13 @@ describe('switchMap', () => {
     of(1, 2, 3)
       .pipe(switchMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
@@ -236,8 +236,7 @@ describe('switchMap', () => {
     of(undefined)
       .pipe(
         switchMap(() => synchronousObservable),
-
-        takeWhile((x) => x != 2) // unsubscribe at the second side-effect
+        takeWhile((x) => x !== 2 && (!typeIs(x, "string") || tonumber(x) !== 2)) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */

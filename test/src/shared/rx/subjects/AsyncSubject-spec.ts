@@ -5,17 +5,19 @@ import { AsyncSubject, Observer } from '@rbxts/rx';
 class TestObserver implements Observer<number> {
   results: (number | string)[] = [];
 
-  next(value: number): void {
+  constructor() {}
+
+  next: (this: void, value: number) => void = function (this: TestObserver, value: number): void {
     this.results.push(value);
-  }
+  } as never;
 
-  error(err: any): void {
+  error: (this: void, err: any) => void = function (this: TestObserver, err: any): void {
     this.results.push(err);
-  }
+  } as never;
 
-  complete(): void {
+  complete: (this: void) => void = function (this: TestObserver): void {
     this.results.push('done');
-  }
+  } as never;
 }
 
 /** @test {AsyncSubject} */

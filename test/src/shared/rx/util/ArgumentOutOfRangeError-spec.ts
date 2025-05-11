@@ -3,14 +3,14 @@ import { ArgumentOutOfRangeError } from '@rbxts/rx';
 
 /** @test {ArgumentOutOfRangeError} */
 describe('ArgumentOutOfRangeError', () => {
-  const error = new ArgumentOutOfRangeError();
+  const err = new ArgumentOutOfRangeError();
   it('Should have a name', () => {
-    expect(error.name).toEqual('ArgumentOutOfRangeError');
+    expect(err.name).toEqual('ArgumentOutOfRangeError');
   });
   it('Should have a message', () => {
-    expect(error.message).toEqual('argument out of range');
+    expect(err.message).toEqual('argument out of range');
   });
   it('Should have a stack', () => {
-    expect(type(error.stack)).toBe('string');
+    expect(type(err.stack)).toBe('string');
   });
 });

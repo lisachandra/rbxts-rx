@@ -23,12 +23,12 @@ import { FrameRequestCallback } from 'internal/polyfill/animationFrame';
 const defaultMaxFrame: number = 750;
 
 export interface RunHelpers {
-  cold: typeof TestScheduler.prototype.createColdObservable;
-  hot: typeof TestScheduler.prototype.createHotObservable;
-  flush: typeof TestScheduler.prototype.flush;
-  time: typeof TestScheduler.prototype.createTime;
-  expectObservable: typeof TestScheduler.prototype.expectObservable;
-  expectSubscriptions: typeof TestScheduler.prototype.expectSubscriptions;
+  cold: TestScheduler['createColdObservable'];
+  hot: TestScheduler['createHotObservable'];
+  flush: () => void;
+  time: TestScheduler['createTime'];
+  expectObservable: TestScheduler['expectObservable'];
+  expectSubscriptions: TestScheduler['expectSubscriptions'];
   animate: (marbles: string) => void;
 }
 
@@ -39,6 +39,7 @@ interface FlushableTest {
 }
 
 export type observableToBeFn = (marbles: string, values?: any, errorValue?: any) => void;
+export type observableToEqualFn = <T>(other: Observable<T>) => void
 export type subscriptionLogsToBeFn = (marbles: string | string[]) => void;
 
 export class TestScheduler extends VirtualTimeScheduler {
@@ -62,7 +63,7 @@ export class TestScheduler extends VirtualTimeScheduler {
   /**
    * Test meta data to be processed during `flush()`
    */
-  private flushTests: FlushableTest[] = [];
+  protected flushTests: FlushableTest[] = [];
 
   /**
    * Indicates whether the TestScheduler instance is operating in "run mode",
@@ -78,46 +79,48 @@ export class TestScheduler extends VirtualTimeScheduler {
     super(VirtualAction, defaultMaxFrame);
   }
 
-  createTime(marbles: string): number {
+  createTime: (this: void, marbles: string) => number = function (this: TestScheduler, marbles: string): number {
     const indexOf = this.runMode ? String.indexOf(String.trim(marbles), '|') : String.indexOf(marbles, '|');
     if (indexOf === -1) {
       throw new Error('marble diagram for time should have a completion marker "|"');
     }
     return indexOf * TestScheduler.frameTimeFactor;
-  }
+  } as never;
 
   /**
    * @param marbles A diagram in the marble DSL. Letters map to keys in `values` if provided.
    * @param values Values to use for the letters in `marbles`. If omitted, the letters themselves are used.
    * @param err The error to use for the `#` marble (if present).
    */
-  createColdObservable<T = string>(marbles: string, values?: { [marble: string]: T }, err?: any): ColdObservable<T> {
-    if (String.indexOf(marbles, '^') !== -1) {
-      throw new Error('cold observable cannot have subscription offset "^"');
-    }
-    if (String.indexOf(marbles, '!') !== -1) {
-      throw new Error('cold observable cannot have unsubscription marker "!"');
-    }
-    const messages = TestScheduler.parseMarbles(marbles, values, err, undefined, this.runMode);
-    const cold = new ColdObservable<T>(messages, this);
-    this.coldObservables.push(cold);
-    return cold;
-  }
+  createColdObservable: <T = string>(this: void, marbles: string, values?: { [marble: string]: T }, err?: any) => ColdObservable<T> =
+    function <T = string>(this: TestScheduler, marbles: string, values?: { [marble: string]: T }, err?: any): ColdObservable<T> {
+      if (String.indexOf(marbles, '^') !== -1) {
+        throw new Error('cold observable cannot have subscription offset "^"');
+      }
+      if (String.indexOf(marbles, '!') !== -1) {
+        throw new Error('cold observable cannot have unsubscription marker "!"');
+      }
+      const messages = TestScheduler.parseMarbles(marbles, values, err, undefined, this.runMode);
+      const cold = new ColdObservable<T>(messages, this);
+      this.coldObservables.push(cold);
+      return cold;
+    } as never;
 
   /**
    * @param marbles A diagram in the marble DSL. Letters map to keys in `values` if provided.
    * @param values Values to use for the letters in `marbles`. If omitted, the letters themselves are used.
    * @param err The error to use for the `#` marble (if present).
    */
-  createHotObservable<T = string>(marbles: string, values?: { [marble: string]: T }, err?: any): HotObservable<T> {
-    if (String.indexOf(marbles, '!') !== -1) {
-      throw new Error('hot observable cannot have unsubscription marker "!"');
-    }
-    const messages = TestScheduler.parseMarbles(marbles, values, err, undefined, this.runMode);
-    const subject = new HotObservable<T>(messages, this);
-    this.hotObservables.push(subject);
-    return subject;
-  }
+  createHotObservable: <T = string>(this: void, marbles: string, values?: { [marble: string]: T }, err?: any) => HotObservable<T> =
+    function <T = string>(this: TestScheduler, marbles: string, values?: { [marble: string]: T }, err?: any): HotObservable<T> {
+      if (String.indexOf(marbles, '!') !== -1) {
+        throw new Error('hot observable cannot have unsubscription marker "!"');
+      }
+      const messages = TestScheduler.parseMarbles(marbles, values, err, undefined, this.runMode);
+      const subject = new HotObservable<T>(messages, this);
+      this.hotObservables.push(subject);
+      return subject;
+    } as never;
 
   private materializeInnerObservable(observable: Observable<any>, outerFrame: number): TestMessage[] {
     const messages: TestMessage[] = [];
@@ -135,7 +138,11 @@ export class TestScheduler extends VirtualTimeScheduler {
     return messages;
   }
 
-  expectObservable<T>(observable: Observable<T>, subscriptionMarbles: string | undefined = undefined) {
+  expectObservable: <T>(this: void, observable: Observable<T>, subscriptionMarbles?: string) => { toBe: observableToBeFn, toEqual: observableToEqualFn } = function <T>(
+    this: TestScheduler,
+    observable: Observable<T>,
+    subscriptionMarbles: string | undefined = undefined
+  ) {
     const actual: TestMessage[] = [];
     const flushTest: FlushableTest = { actual, ready: false };
     const subscriptionParsed = TestScheduler.parseMarblesAsSubscriptions(subscriptionMarbles, this.runMode);
@@ -167,7 +174,7 @@ export class TestScheduler extends VirtualTimeScheduler {
     const { runMode } = this;
 
     return {
-      toBe(marbles: string, values?: any, errorValue?: any) {
+      toBe: (marbles: string, values?: any, errorValue?: any) => {
         flushTest.ready = true;
         flushTest.expected = TestScheduler.parseMarbles(marbles, values, errorValue, true, runMode);
       },
@@ -191,9 +198,12 @@ export class TestScheduler extends VirtualTimeScheduler {
         }, subscriptionFrame);
       },
     };
-  }
+  } as never;
 
-  expectSubscriptions(actualSubscriptionLogs: SubscriptionLog[]): { toBe: subscriptionLogsToBeFn } {
+  expectSubscriptions: (this: void, actualSubscriptionLogs: SubscriptionLog[]) => { toBe: subscriptionLogsToBeFn } = function (
+    this: TestScheduler,
+    actualSubscriptionLogs: SubscriptionLog[]
+  ): { toBe: subscriptionLogsToBeFn } {
     const flushTest: FlushableTest = { actual: actualSubscriptionLogs, ready: false };
     this.flushTests.push(flushTest);
     const { runMode } = this;
@@ -206,7 +216,7 @@ export class TestScheduler extends VirtualTimeScheduler {
           .filter((marbles) => marbles.subscribedFrame !== math.huge);
       },
     };
-  }
+  } as never;
 
   flush() {
     const hotObservables = this.hotObservables;
@@ -666,12 +676,12 @@ export class TestScheduler extends VirtualTimeScheduler {
     performanceTimestampProvider.delegate = this;
 
     const helpers: RunHelpers = {
-      cold: bind(true, this['createColdObservable' as never], this),
-      hot: bind(true, this['createHotObservable' as never], this),
-      flush: bind(true, this['flush' as never], this),
-      time: bind(true, this['createTime' as never], this),
-      expectObservable: bind(true, this['expectObservable' as never], this),
-      expectSubscriptions: bind(true, this['expectSubscriptions' as never], this),
+      cold: bind(false, this['createColdObservable' as never], this),
+      hot: bind(false, this['createHotObservable' as never], this),
+      flush: bind(false, this['flush' as never], this),
+      time: bind(false, this['createTime' as never], this),
+      expectObservable: bind(false, this['expectObservable' as never], this),
+      expectSubscriptions: bind(false, this['expectSubscriptions' as never], this),
       animate: animator.animate,
     };
     try {

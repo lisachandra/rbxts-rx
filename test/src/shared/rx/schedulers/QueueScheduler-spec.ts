@@ -63,7 +63,7 @@ describe('Scheduler.queue', () => {
     const actions: Subscription[] = [];
     let action2Exec = false;
     let action3Exec = false;
-    let errorValue: any = undefined;
+    let errorValue: Error = undefined as never;
     try {
       queue.schedule(() => {
         actions.push(
@@ -79,12 +79,13 @@ describe('Scheduler.queue', () => {
         );
       });
     } catch (e) {
-      errorValue = e;
+      errorValue = e as Error;
     }
     expect(actions.every((action) => action.closed)).toBe(true);
     expect(action2Exec).toBe(false);
     expect(action3Exec).toBe(false);
     expect(errorValue).toBeDefined();
+    expect(errorValue).toBeInstanceOf(Error);
     expect(errorValue.message).toEqual('oops');
   });
 });

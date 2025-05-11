@@ -309,7 +309,7 @@ describe('Observable.prototype.buffer', () => {
   });
 
   it('should emit properly with an observable using itself as a notifier', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const subject = new Subject<number>();
 
     subject.pipe(buffer(subject)).subscribe({
@@ -346,9 +346,9 @@ describe('Observable.prototype.buffer', () => {
 
   it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(5));
-    const error = new Error('err');
+    const err = new Error('err');
 
-    e1.pipe(buffer(Promise.reject(error))).subscribe({
+    e1.pipe(buffer(Promise.reject(err))).subscribe({
       next: () => {
         done(new Error('should not be called'));
       },

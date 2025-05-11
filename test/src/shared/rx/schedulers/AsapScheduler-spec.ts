@@ -212,7 +212,7 @@ describe('Scheduler.asap', () => {
     let flushCount = 0;
     let scheduledIndices: number[] = [];
 
-    let originalFlush = asap.flush;
+    let originalFlush = asap['flush' as never];
     asap.flush = (...args) => {
       ++flushCount;
       (originalFlush as Callback)(asap, ...args);

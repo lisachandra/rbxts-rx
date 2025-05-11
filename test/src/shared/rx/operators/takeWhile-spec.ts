@@ -19,7 +19,7 @@ describe('takeWhile', () => {
       const e1subs = '   ^------!         ';
       const expected = ' -2--3--|         ';
 
-      const result = e1.pipe(takeWhile((v) => +v! < 4));
+      const result = e1.pipe(takeWhile((v) => tonumber(v)! < 4));
 
       expectObservable(result).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);

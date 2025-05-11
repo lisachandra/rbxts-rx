@@ -26,26 +26,26 @@ describe('throwIfEmpty', () => {
     });
 
     it('should throw if empty', () => {
-      const error = new Error('So empty inside');
+      const err = new Error('So empty inside');
       let thrown: any;
 
-      EMPTY.pipe(throwIfEmpty(() => error)).subscribe({
-        error(err) {
+      EMPTY.pipe(throwIfEmpty(() => err)).subscribe({
+        error: (err) => {
           thrown = err;
         },
       });
 
-      expect(thrown).toEqual(error);
+      expect(thrown).toEqual(err);
     });
 
     it('should NOT throw if NOT empty', () => {
-      const error = new Error('So empty inside');
+      const err = new Error('So empty inside');
       let thrown: any;
 
       of('test')
-        .pipe(throwIfEmpty(() => error))
+        .pipe(throwIfEmpty(() => err))
         .subscribe({
-          error(err) {
+          error: (err) => {
             thrown = err;
           },
         });
@@ -93,7 +93,7 @@ describe('throwIfEmpty', () => {
     });
 
     it('should throw if empty after retry', () => {
-      const error = new Error('So empty inside');
+      const err = new Error('So empty inside');
       let thrown: any;
       let sourceIsEmpty = false;
 
@@ -107,7 +107,7 @@ describe('throwIfEmpty', () => {
 
       source
         .pipe(
-          throwIfEmpty(() => error),
+          throwIfEmpty(() => err),
           mergeMap((value) => {
             if (value > 1) {
               return throwError(() => new Error());
@@ -118,12 +118,12 @@ describe('throwIfEmpty', () => {
           retry(1)
         )
         .subscribe({
-          error(err) {
+          error: (err) => {
             thrown = err;
           },
         });
 
-      expect(thrown).toEqual(error);
+      expect(thrown).toEqual(err);
     });
   });
 
@@ -132,7 +132,7 @@ describe('throwIfEmpty', () => {
       let thrown: any;
 
       EMPTY.pipe(throwIfEmpty()).subscribe({
-        error(err) {
+        error: (err) => {
           thrown = err;
         },
       });
@@ -146,7 +146,7 @@ describe('throwIfEmpty', () => {
       of('test')
         .pipe(throwIfEmpty())
         .subscribe({
-          error(err) {
+          error: (err) => {
             thrown = err;
           },
         });
@@ -218,7 +218,7 @@ describe('throwIfEmpty', () => {
           retry(1)
         )
         .subscribe({
-          error(err) {
+          error: (err) => {
             thrown = err;
           },
         });

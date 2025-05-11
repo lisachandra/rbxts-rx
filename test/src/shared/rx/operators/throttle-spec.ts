@@ -36,7 +36,7 @@ describe('throttle', () => {
   });
 
   it('should handle sync source with sync notifier and trailing appropriately', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const source = of(1).pipe(throttle(() => of(1), { leading: false, trailing: true }));
 
     source.subscribe({

@@ -29,7 +29,7 @@ describe('mergeMap', () => {
       const e1subs = '  ^-------------------!';
       const expected = '--x-x-x-y-yzyz-z----|';
 
-      const result = e1.pipe(mergeMap((value) => x.pipe(map((i) => i * +value))));
+      const result = e1.pipe(mergeMap((value) => x.pipe(map((i) => i * tonumber(value)!))));
 
       expectObservable(result).toBe(expected, values);
       expectSubscriptions(x.subscriptions).toBe(xsubs);
@@ -48,13 +48,13 @@ describe('mergeMap', () => {
         )
       )
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([
             [1, 1, 0, 0],
             [1, 2, 0, 1],
@@ -76,13 +76,13 @@ describe('mergeMap', () => {
     of(1, 2, 3)
       .pipe(mergeMap((x) => of(x, x + 1, x + 2), undefined))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
@@ -94,13 +94,13 @@ describe('mergeMap', () => {
     of(1, 2, 3)
       .pipe(mergeMap((x) => of(x, x + 1, x + 2), undefined, 1))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([1, 2, 3, 2, 3, 4, 3, 4, 5]);
         },
       });
@@ -809,7 +809,7 @@ describe('mergeMap', () => {
       const e1subs = '  ^-------------------------------!';
       const expected = '(22)--(4444)---(333)----(22)----|';
 
-      const source = e1.pipe(mergeMap((value) => arrayRepeat(value, +value)));
+      const source = e1.pipe(mergeMap((value) => arrayRepeat(value, tonumber(value)!)));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -822,7 +822,7 @@ describe('mergeMap', () => {
       const e1subs = '  ^-------------------------------!';
       const expected = '(22)--(4444)---(333)----(22)----#';
 
-      const source = e1.pipe(mergeMap((value) => arrayRepeat(value, +value)));
+      const source = e1.pipe(mergeMap((value) => arrayRepeat(value, tonumber(value)!)));
 
       expectObservable(source).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -836,7 +836,7 @@ describe('mergeMap', () => {
       const expected = '(22)--(4444)--                   ';
       const unsub = '   -------------!                   ';
 
-      const source = e1.pipe(mergeMap((value) => arrayRepeat(value, +value)));
+      const source = e1.pipe(mergeMap((value) => arrayRepeat(value, tonumber(value)!)));
 
       expectObservable(source, unsub).toBe(expected);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -854,7 +854,7 @@ describe('mergeMap', () => {
           if (value === '3') {
             throw 'error';
           }
-          return arrayRepeat(value, +value);
+          return arrayRepeat(value, tonumber(value)!);
         })
       );
 
@@ -910,10 +910,10 @@ describe('mergeMap', () => {
     of(1)
       .pipe(mergeMap(() => defer(() => of(2, asapScheduler)).pipe(mergeMap(() => defer(() => of(3, asapScheduler))))))
       .subscribe({
-        next(value: any) {
+        next: (value: any) => {
           results.push(value);
         },
-        complete() {
+        complete: () => {
           results.push('done');
         },
       });
@@ -933,10 +933,10 @@ describe('mergeMap', () => {
     of(1)
       .pipe(mergeMap(() => from(Promise.resolve(2)).pipe(mergeMap(() => Promise.resolve(3)))))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        complete() {
+        complete: () => {
           results.push('done');
         },
       });
@@ -958,10 +958,10 @@ describe('mergeMap', () => {
       return () => subscription.unsubscribe();
     });
     wrapped.pipe(mergeMap(() => timer(0, asapScheduler))).subscribe({
-      next(value) {
+      next: (value) => {
         results.push(value);
       },
-      complete() {
+      complete: () => {
         results.push('done');
       },
     });

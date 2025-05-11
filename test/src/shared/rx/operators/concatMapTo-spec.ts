@@ -34,13 +34,13 @@ describe('concatMapTo', () => {
     of(1, 2, 3)
       .pipe(concatMapTo(of(4, 5, 6), (a, b, i, ii) => [a, b, i, ii]))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([
             [1, 4, 0, 0],
             [1, 5, 0, 1],
@@ -62,13 +62,13 @@ describe('concatMapTo', () => {
     of(1, 2, 3)
       .pipe(concatMapTo(of(4, 5, 6), undefined))
       .subscribe({
-        next(value) {
+        next: (value) => {
           results.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(results).toEqual([4, 5, 6, 4, 5, 6, 4, 5, 6]);
         },
       });

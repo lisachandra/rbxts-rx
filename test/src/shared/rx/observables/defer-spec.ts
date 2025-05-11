@@ -50,7 +50,7 @@ describe('defer', () => {
   it('should accept factory returns promise resolves', (_, done) => {
     const expected = 42;
     const e1 = defer(() => {
-      return new Promise<number>((resolve: any) => {
+      return new Promise<number>((resolve) => {
         resolve(expected);
       });
     });
@@ -69,7 +69,7 @@ describe('defer', () => {
   it('should accept factory returns promise rejects', (_, done) => {
     const expected = 42;
     const e1 = defer(() => {
-      return new Promise<number>((resolve: any, reject: any) => {
+      return new Promise<number>((resolve, reject) => {
         reject(expected);
       });
     });

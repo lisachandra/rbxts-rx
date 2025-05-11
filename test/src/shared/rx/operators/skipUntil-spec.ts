@@ -48,13 +48,13 @@ describe('skipUntil', () => {
     of('a', 'b')
       .pipe(skipUntil(of('x')))
       .subscribe({
-        next(value) {
+        next: (value) => {
           values.push(value);
         },
-        error(err) {
+        error: (err) => {
           throw err;
         },
-        complete() {
+        complete: () => {
           expect(values).toEqual(['a', 'b']);
         },
       });
@@ -387,9 +387,9 @@ describe('skipUntil', () => {
 
   it('should raise error when Promise rejects', (_, done) => {
     const e1 = interval(1).pipe(take(5));
-    const error = new Error('err');
+    const err = new Error('err');
 
-    e1.pipe(skipUntil(Promise.reject(error))).subscribe({
+    e1.pipe(skipUntil(Promise.reject(err))).subscribe({
       next: () => {
         done(new Error('should not be called'));
       },

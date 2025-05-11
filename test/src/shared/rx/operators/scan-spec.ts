@@ -74,15 +74,15 @@ describe('scan', () => {
       const expected = '   ---u--v--w--x--y--z--|';
 
       const values = {
-        u: 'undefined b',
-        v: 'undefined b c',
-        w: 'undefined b c d',
-        x: 'undefined b c d e',
-        y: 'undefined b c d e f',
-        z: 'undefined b c d e f g',
+        u: 'nil b',
+        v: 'nil b c',
+        w: 'nil b c d',
+        x: 'nil b c d e',
+        y: 'nil b c d e f',
+        z: 'nil b c d e f g',
       };
 
-      const source = e1.pipe(scan((acc: any, x: string) => acc + ' ' + x, undefined));
+      const source = e1.pipe(scan((acc: string | undefined, x: string) => acc + ' ' + x, undefined));
 
       expectObservable(source).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -101,7 +101,7 @@ describe('scan', () => {
         z: 'bcd',
       };
 
-      const source = e1.pipe(scan((acc: any, x: string) => acc + x));
+      const source = e1.pipe(scan((acc: string, x: string) => acc + x));
 
       expectObservable(source).toBe(expected, values);
       expectSubscriptions(e1.subscriptions).toBe(e1subs);

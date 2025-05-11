@@ -282,7 +282,7 @@ describe('TestScheduler', () => {
       it('should append to flushTests array', () => {
         expectObservable(EMPTY);
         // @ts-expect-error
-        expect(_G.rxTestScheduler.flushTests.size()).toEqual(1);
+        expect(_G.rxTestScheduler!.flushTests.size()).toEqual(1);
       });
 
       it('should handle empty', () => {
@@ -582,14 +582,13 @@ describe('TestScheduler', () => {
           animate('--x');
 
           const values: string[] = [];
-          const { schedule } = animationFrameProvider;
 
           testScheduler.schedule(() => {
-            schedule((t) => values.push(`a@${t}`));
+            animationFrameProvider.schedule((t) => values.push(`a@${t}`));
             expect(values).toEqual([]);
           }, 0);
           testScheduler.schedule(() => {
-            schedule((t) => values.push(`b@${t}`));
+            animationFrameProvider.schedule((t) => values.push(`b@${t}`));
             expect(values).toEqual([]);
           }, 1);
           testScheduler.schedule(() => {
@@ -604,11 +603,10 @@ describe('TestScheduler', () => {
           animate('--x');
 
           const values: string[] = [];
-          const { schedule } = animationFrameProvider;
 
           testScheduler.schedule(() => {
-            schedule((t) => values.push(`a@${t}`));
-            schedule((t) => values.push(`b@${t}`));
+            animationFrameProvider.schedule((t) => values.push(`a@${t}`));
+            animationFrameProvider.schedule((t) => values.push(`b@${t}`));
             expect(values).toEqual([]);
           }, 1);
           testScheduler.schedule(() => {
@@ -623,11 +621,10 @@ describe('TestScheduler', () => {
           animate('--x');
 
           const values: string[] = [];
-          const { schedule } = animationFrameProvider;
 
           testScheduler.schedule(() => {
-            const subscription = schedule((t) => values.push(`a@${t}`));
-            schedule((t) => values.push(`b@${t}`));
+            const subscription = animationFrameProvider.schedule((t) => values.push(`a@${t}`));
+            animationFrameProvider.schedule((t) => values.push(`b@${t}`));
             subscription.unsubscribe();
             expect(values).toEqual([]);
           }, 1);

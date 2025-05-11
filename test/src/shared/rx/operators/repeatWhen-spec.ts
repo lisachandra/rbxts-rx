@@ -62,7 +62,7 @@ describe('repeatWhen operator', () => {
           map((n: number) => {
             return n;
           }),
-          repeatWhen((notifications: any) =>
+          repeatWhen((notifications) =>
             notifications.pipe(
               map((x: any) => {
                 if (retried) {
@@ -78,8 +78,8 @@ describe('repeatWhen operator', () => {
           next: (x: any) => {
             expect(x).toEqual(expected[i++]);
           },
-          error: (err: any) => {
-            expect(err).toHaveProperty('message', 'done');
+          error: (err: Error) => {
+            expect(err.message).toEqual('done');
             done();
           },
         });
@@ -123,12 +123,12 @@ describe('repeatWhen operator', () => {
     // stopped behaviour is fixed).
     const originalSubscribe = Observable['subscribe' as never] as Callback;
     const subscriberError = Subscriber['error' as never] as Callback;
-    (Observable as never as Table).subscribe = function (...args: any[]): any {
+    (Observable as never as Table).subscribe = function (...args: defined[]): any {
       let [subscriber] = args;
       if (!(subscriber instanceof Subscriber)) {
         subscriber = new SafeSubscriber(...args);
       }
-      subscriber.error = function (err: any): void {
+      (subscriber as Table).error = function (err: any): void {
         errors.push(err);
         subscriberError(this, err);
       };
@@ -151,12 +151,12 @@ describe('repeatWhen operator', () => {
     // stopped behaviour is fixed).
     const originalSubscribe = Observable['subscribe' as never] as Callback;
     const subscriberError = Subscriber['error' as never] as Callback;
-    (Observable as never as Table).subscribe = function (...args: any[]): any {
+    (Observable as never as Table).subscribe = function (...args: defined[]): any {
       let [subscriber] = args;
       if (!(subscriber instanceof Subscriber)) {
         subscriber = new SafeSubscriber(...args);
       }
-      subscriber.error = function (err: any): void {
+      (subscriber as Table).error = function (err: any): void {
         errors.push(err);
         subscriberError(this, err);
       };
@@ -420,7 +420,7 @@ describe('repeatWhen operator', () => {
 
       let invoked = 0;
       const result = source.pipe(
-        repeatWhen((notifications: any) =>
+        repeatWhen((notifications) =>
           notifications.pipe(
             map((err: any) => {
               if (++invoked === 3) {
@@ -450,7 +450,7 @@ describe('repeatWhen operator', () => {
 
       let invoked = 0;
       const result = source.pipe(
-        repeatWhen((notifications: any) =>
+        repeatWhen((notifications) =>
           notifications.pipe(
             map(() => 'x'),
             takeUntil(
@@ -474,7 +474,7 @@ describe('repeatWhen operator', () => {
   });
 
   it('should always finalize before starting the next cycle, even when synchronous', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const source = new Observable<number>((subscriber) => {
       subscriber.next(1);
       subscriber.next(2);
@@ -483,7 +483,7 @@ describe('repeatWhen operator', () => {
         results.push('finalizer');
       };
     });
-    const subscription = source.pipe(repeatWhen((completions$) => completions$.pipe(takeWhile((_: any, i: number) => i < 3)))).subscribe({
+    const subscription = source.pipe(repeatWhen((completions) => completions.pipe(takeWhile((_: any, i: number) => i < 3)))).subscribe({
       next: (value) => results.push(value),
       complete: () => results.push('complete'),
     });

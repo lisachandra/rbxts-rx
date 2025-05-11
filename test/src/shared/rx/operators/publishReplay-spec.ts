@@ -1,6 +1,6 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { throwError, ConnectableObservable, EMPTY, NEVER, of, Observable, Subscription, pipe } from '@rbxts/rx';
-import { publishReplay, mergeMapTo, tap, mergeMap, refCount, retry, repeat, map } from '@rbxts/rx/out/operators';
+import { publishReplay, mergeMapTo, tap, mergeMap, refCount, retry, repeat as repeat0, map } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { Error } from '@rbxts/luau-polyfill';
@@ -29,8 +29,8 @@ describe('publishReplay operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publishReplay()) as ConnectableObservable<number>;
-    expect(typeIs((<any>source)._subscribe, 'function')).toBe(true);
-    expect(typeIs((<any>source).getSubject, 'function')).toBe(true);
+    expect(typeIs(source['_subscribe' as never], 'function')).toBe(true);
+    expect(typeIs(source['getSubject' as never], 'function')).toBe(true);
     expect(typeIs(source.connect, 'function')).toBe(true);
     expect(typeIs(source.refCount, 'function')).toBe(true);
   });
@@ -238,7 +238,7 @@ describe('publishReplay operator', () => {
       testScheduler.run(({ cold, hot, expectObservable, expectSubscriptions }) => {
         const source = cold('    -1-2-3----4-|    ');
         const sourceSubs = '     ^-----------!    ';
-        const published = source.pipe(publishReplay(1), refCount(), repeat(3));
+        const published = source.pipe(publishReplay(1), refCount(), repeat0(3));
         const subscriber1 = hot('a|               ').pipe(mergeMapTo(published));
         const expected1 = '      -1-2-3----4-(44|)';
         const subscriber2 = hot('----b|           ').pipe(mergeMapTo(published));
@@ -453,7 +453,7 @@ describe('publishReplay operator', () => {
   it('should mirror a simple source Observable with selector', () => {
     testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
       const values = { a: 2, b: 4, c: 6, d: 8 };
-      const selector = (observable: Observable<string>) => observable.pipe(map((v) => 2 * +v));
+      const selector = (observable: Observable<string>) => observable.pipe(map((v) => 2 * tonumber(v)!));
       const source = cold('--1-2---3-4---|');
       const sourceSubs = ' ^-------------!';
       const published = source.pipe(publishReplay(1, math.huge, selector));
@@ -466,9 +466,9 @@ describe('publishReplay operator', () => {
 
   it('should EMIT an error when the selector throws an exception', () => {
     testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
-      const error = "It's broken";
+      const err = "It's broken";
       const selector = () => {
-        throw error;
+        throw err;
       };
       const source = cold('--1-2---3-4---|');
       const published = source.pipe(publishReplay(1, math.huge, selector));
@@ -480,15 +480,15 @@ describe('publishReplay operator', () => {
 
   it('should emit an error when the selector returns an Observable that emits an error', () => {
     testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
-      const error = "It's broken";
-      const innerObservable = cold('--5-6----#', undefined, error);
+      const err = "It's broken";
+      const innerObservable = cold('--5-6----#', undefined, err);
       const selector = (observable: Observable<string>) => observable.pipe(mergeMapTo(innerObservable));
       const source = cold('--1--2---3---|');
       const sourceSubs = ' ^----------!  ';
       const published = source.pipe(publishReplay(1, math.huge, selector));
       const expected = '   ----5-65-6-#  ';
 
-      expectObservable(published).toBe(expected, undefined, error);
+      expectObservable(published).toBe(expected, undefined, err);
       expectSubscriptions(source.subscriptions).toBe(sourceSubs);
     });
   });
@@ -521,14 +521,14 @@ describe('publishReplay operator', () => {
 
   it('should emit error when the selector returns Observable.throw', () => {
     testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
-      const error = "It's broken";
-      const selector = () => throwError(() => error);
+      const err = "It's broken";
+      const selector = () => throwError(() => err);
       const source = cold('--1--2---3---|');
       const sourceSubs = ' (^!)          ';
       const published = source.pipe(publishReplay(1, math.huge, selector));
       const expected = '   #             ';
 
-      expectObservable(published).toBe(expected, undefined, error);
+      expectObservable(published).toBe(expected, undefined, err);
       expectSubscriptions(source.subscriptions).toBe(sourceSubs);
     });
   });

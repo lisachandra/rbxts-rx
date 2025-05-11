@@ -426,7 +426,7 @@ describe('bufferToggle operator', () => {
 
     e1.pipe(
       bufferToggle(
-        new Promise((resolve: any) => {
+        new Promise((resolve) => {
           resolve(42);
         }),
         () => {
@@ -454,7 +454,7 @@ describe('bufferToggle operator', () => {
 
     e1.pipe(
       bufferToggle(
-        new Promise((resolve: any, reject: any) => {
+        new Promise((resolve, reject) => {
           reject(expected);
         }),
         () => {
@@ -483,7 +483,7 @@ describe('bufferToggle operator', () => {
       bufferToggle(
         of(10),
         () =>
-          new Promise((resolve: any) => {
+          new Promise((resolve) => {
             resolve(42);
           })
       )
@@ -510,7 +510,7 @@ describe('bufferToggle operator', () => {
       bufferToggle(
         of(10),
         () =>
-          new Promise((resolve: any, reject: any) => {
+          new Promise((resolve, reject) => {
             reject(expected);
           })
       )

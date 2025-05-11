@@ -24,7 +24,7 @@ import { createOperatorSubscriber } from './OperatorSubscriber';
  *   throwIfEmpty(() => new Error('The document was not clicked within 1 second'))
  * )
  * .subscribe({
- *   next() {
+ *   next: () => {
  *    console.log('The document was clicked');
  *   },
  *   error(err) {

@@ -68,7 +68,7 @@ describe('range', () => {
   });
 
   it('should synchronously create a range of values by default', () => {
-    const results = [] as any[];
+    const results: defined[] = [];
     range(12, 4).subscribe(function (x) {
       results.push(x);
     });
@@ -82,12 +82,12 @@ describe('range', () => {
     const source = range(12, 4, asap);
 
     source.subscribe({
-      next: function (x) {
-        expect(asap.schedule).toHaveBeenCalled();
+      next: (x) => {
+        expect(spy).toHaveBeenCalled();
         const exp = expected.shift();
         expect(x).toEqual(exp);
       },
-      error: function (x) {
+      error: (x) => {
         done(new Error('should not be called'));
       },
       complete: () => {
@@ -119,7 +119,7 @@ describe('range', () => {
   });
 
   it('should return empty for range(0)', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     range(0).subscribe({
       next: (value) => results.push(value),
       complete: () => results.push('done'),
@@ -128,7 +128,7 @@ describe('range', () => {
   });
 
   it('should return empty for range with a negative count', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     range(5, -5).subscribe({
       next: (value) => results.push(value),
       complete: () => results.push('done'),

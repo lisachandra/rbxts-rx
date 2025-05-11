@@ -43,19 +43,19 @@ describe('bufferCount operator', () => {
   });
 
   it('should buffer properly (issue #2062)', () => {
-    const item$ = new Subject<number>();
-    const results: any[] = [];
-    item$.pipe(bufferCount(3, 1)).subscribe((value) => {
+    const item = new Subject<number>();
+    const results: defined[] = [];
+    item.pipe(bufferCount(3, 1)).subscribe((value) => {
       results.push(value);
 
       if (value.join() === '1,2,3') {
-        item$.next(4);
+        item.next(4);
       }
     });
 
-    item$.next(1);
-    item$.next(2);
-    item$.next(3);
+    item.next(1);
+    item.next(2);
+    item.next(3);
 
     expect(results).toEqual([
       [1, 2, 3],

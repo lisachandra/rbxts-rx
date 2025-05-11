@@ -33,7 +33,7 @@ describe('fromEventPattern', () => {
     const addHandler = jest.fn();
     fromEventPattern(addHandler, noop).subscribe(noop);
 
-    const call = addHandler.mock.calls;
+    const call = addHandler.mock.calls as Array<Array<unknown>>;
     expect(addHandler).toHaveBeenCalledTimes(1);
     expect(type(call[0][0])).toBe('function');
   });
@@ -43,7 +43,7 @@ describe('fromEventPattern', () => {
 
     fromEventPattern(noop, removeHandler).subscribe(noop).unsubscribe();
 
-    const call = removeHandler.mock.calls;
+    const call = removeHandler.mock.calls as Array<Array<unknown>>;
     expect(removeHandler).toHaveBeenCalledTimes(1);
     expect(type(call[0][0])).toBe('function');
   });
@@ -91,7 +91,7 @@ describe('fromEventPattern', () => {
     const removeHandler = (handler: any) => {
       target = undefined;
     };
-    const selector = (a: any, b: any) => {
+    const selector = (a: string, b: string) => {
       return a + b + '!';
     };
 
@@ -113,7 +113,7 @@ describe('fromEventPattern', () => {
   });
 
   it('should send errors in the selector down the error path', (_, done) => {
-    let target: any;
+    let target: Callback | undefined = undefined;
     const trigger = (value: any) => {
       if (target) {
         target(value);

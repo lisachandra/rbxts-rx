@@ -27,13 +27,13 @@ describe('forkJoin', () => {
   it('should support a resultSelector with an Array of ObservableInputs', () => {
     const results: Array<number | string> = [];
     forkJoin([of(1, 2, 3), of(4, 5, 6), of(7, 8, 9)], (a: number, b: number, c: number) => a + b + c).subscribe({
-      next(value) {
+      next: (value) => {
         results.push(value);
       },
-      error(err) {
+      error: (err) => {
         throw err;
       },
-      complete() {
+      complete: () => {
         results.push('done');
       },
     });
@@ -44,13 +44,13 @@ describe('forkJoin', () => {
   it('should support a resultSelector with a spread of ObservableInputs', () => {
     const results: Array<number | string> = [];
     forkJoin([of(1, 2, 3), of(4, 5, 6), of(7, 8, 9)], (a: number, b: number, c: number) => a + b + c).subscribe({
-      next(value) {
+      next: (value) => {
         results.push(value);
       },
-      error(err) {
+      error: (err) => {
         throw err;
       },
-      complete() {
+      complete: () => {
         results.push('done');
       },
     });
@@ -303,7 +303,7 @@ describe('forkJoin', () => {
   });
 
   it('should finalize in the proper order', () => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const source = forkJoin(
       [1, 2, 3, 4].map((n) =>
         timer(100, rxTestScheduler).pipe(

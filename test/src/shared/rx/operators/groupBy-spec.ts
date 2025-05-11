@@ -50,7 +50,7 @@ describe('groupBy operator', () => {
     of(1, 2, 3)
       .pipe(groupBy((x) => x % 2))
       .subscribe({
-        next: (g: any) => {
+        next: (g) => {
           const expectedGroup = expectedGroups.shift()!;
           expect(g.key).toEqual(expectedGroup.key);
 
@@ -76,7 +76,7 @@ describe('groupBy operator', () => {
         )
       )
       .subscribe({
-        next: (g: any) => {
+        next: (g) => {
           const expectedGroup = expectedGroups.shift()!;
           expect(g.key).toEqual(expectedGroup.key);
 
@@ -104,7 +104,7 @@ describe('groupBy operator', () => {
           duration: (g) => g.pipe(skip(1)),
         })
       )
-      .subscribe((g: any) => {
+      .subscribe((g) => {
         let group = { key: g.key, values: [] as number[] };
 
         g.subscribe((x: any) => {
@@ -133,7 +133,7 @@ describe('groupBy operator', () => {
         delay(5)
       )
       .subscribe({
-        next: (g: any) => {
+        next: (g) => {
           const expectedGroup = expectedGroups.shift()!;
           expect(g.key).toEqual(expectedGroup.key);
 
@@ -245,11 +245,11 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy((val: string) => String.trim(val.lower())),
-        tap((group: any) => {
+        tap((group) => {
           expect(group.key).toEqual('foo');
           expect(group instanceof Observable).toBe(true);
         }),
-        map((group: any) => {
+        map((group) => {
           return group.key;
         })
       );
@@ -282,7 +282,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy((val: string) => String.trim(val.lower())),
-        map((g: any) => g.key)
+        map((g) => g.key)
       );
 
       expectObservable(source).toBe(expected, expectedValues);
@@ -313,7 +313,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy((val: string) => String.trim(val.lower())),
-        map((g: any) => g.key)
+        map((g) => g.key)
       );
 
       expectObservable(source).toBe(expected, expectedValues);
@@ -377,7 +377,7 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy((val: string) => String.trim(val.lower())),
-        map((group: any) => group.key)
+        map((group) => group.key)
       );
 
       expectObservable(source, unsub).toBe(expected, expectedValues);
@@ -441,7 +441,7 @@ describe('groupBy operator', () => {
       const source = e1.pipe(
         mergeMap((x: string) => of(x)),
         groupBy((x: string) => String.trim(x.lower())),
-        mergeMap((group: any) => of(group.key))
+        mergeMap((group) => of(group.key))
       );
 
       expectObservable(source, unsub).toBe(expected, expectedValues);
@@ -600,7 +600,7 @@ describe('groupBy operator', () => {
       const source = e1.pipe(
         groupBy((val) => String.trim(val.lower())),
         map((group) => {
-          const arr: any[] = [];
+          const arr: defined[] = [];
 
           const subscription = group.pipe(phonyMarbelize(testScheduler)).subscribe((value) => {
             arr.push(value);
@@ -662,8 +662,8 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy((val: string) => String.trim(val.lower())),
-        map((group: any) => {
-          const arr: any[] = [];
+        map((group) => {
+          const arr: defined[] = [];
 
           const subscription = group.pipe(phonyMarbelize(testScheduler)).subscribe((value: any) => {
             arr.push(value);
@@ -694,7 +694,7 @@ describe('groupBy operator', () => {
       const subDuration = time('--------------------------|  ');
       const expected = '        ----------------------------|';
 
-      e1.pipe(groupBy((val: string) => String.trim(val.lower()))).subscribe((group: any) => {
+      e1.pipe(groupBy((val: string) => String.trim(val.lower()))).subscribe((group) => {
         testScheduler.schedule(() => {
           expectObservable(group).toBe(expected);
         }, subDuration);
@@ -718,7 +718,7 @@ describe('groupBy operator', () => {
       const expected = '         ----------------------------#';
 
       e1.pipe(groupBy((val: string) => String.trim(val.lower()))).subscribe({
-        next: (group: any) => {
+        next: (group) => {
           testScheduler.schedule(() => {
             expectObservable(group).toBe(expected);
           }, subsDuration);
@@ -750,12 +750,12 @@ describe('groupBy operator', () => {
 
       const source = e1.pipe(
         groupBy((val: string) => String.trim(val.lower())),
-        tap((group: any) => {
+        tap((group) => {
           testScheduler.schedule(() => {
             expectObservable(group).toBe(expectedInner);
           }, subsDuration);
         }),
-        map((group: any) => {
+        map((group) => {
           return group.key;
         })
       );
@@ -796,7 +796,7 @@ describe('groupBy operator', () => {
         groupBy(
           (val: string) => String.trim(val.lower()),
           (val: string) => reverseString(val),
-          (group: any) => group.pipe(skip(2))
+          (group) => group.pipe(skip(2))
         )
       );
 
@@ -835,7 +835,7 @@ describe('groupBy operator', () => {
         groupBy(
           (val: string) => String.trim(val.lower()),
           (val: string) => reverseString(val),
-          (group: any) =>
+          (group) =>
             group.pipe(
               skip(2),
               map(() => {
@@ -955,7 +955,7 @@ describe('groupBy operator', () => {
           duration: (group) => group.pipe(skip(2)),
         }),
         map((group) => {
-          const arr: any[] = [];
+          const arr: defined[] = [];
 
           const subscription = group.pipe(phonyMarbelize(testScheduler)).subscribe((value) => {
             arr.push(value);
@@ -1032,7 +1032,7 @@ describe('groupBy operator', () => {
       let invoked = 0;
       const source = e1.pipe(
         groupBy(
-          (val: any) => {
+          (val: string) => {
             invoked++;
             if (invoked === 10) {
               throw 'error';
@@ -1040,7 +1040,7 @@ describe('groupBy operator', () => {
             return String.trim(val.lower());
           },
           (val: string) => val,
-          (group: any) => group.pipe(skip(2))
+          (group) => group.pipe(skip(2))
         )
       );
 
@@ -1086,7 +1086,7 @@ describe('groupBy operator', () => {
             }
             return val;
           },
-          (group: any) => group.pipe(skip(2))
+          (group) => group.pipe(skip(2))
         )
       );
 
@@ -1125,7 +1125,7 @@ describe('groupBy operator', () => {
         groupBy(
           (val: string) => String.trim(val.lower()),
           (val: string) => val,
-          (group: any) => {
+          (group) => {
             invoked++;
             if (invoked === 4) {
               throw 'error';
@@ -1181,10 +1181,10 @@ describe('groupBy operator', () => {
         groupBy(
           (val: string) => String.trim(val.lower()),
           (val: string) => reverseString(val),
-          (group: any) => group.pipe(skip(2))
+          (group) => group.pipe(skip(2))
         ),
-        map((group: any, index: number) => {
-          const arr: any[] = [];
+        map((group, index: number) => {
+          const arr: defined[] = [];
 
           const subscription = group.pipe(phonyMarbelize(testScheduler)).subscribe((value: any) => {
             arr.push(value);
@@ -1255,10 +1255,10 @@ describe('groupBy operator', () => {
         groupBy(
           (val: string) => String.trim(val.lower()),
           (val: string) => val,
-          (group: any) => group.pipe(skip(2))
+          (group) => group.pipe(skip(2))
         ),
-        map((group: any) => {
-          const arr: any[] = [];
+        map((group) => {
+          const arr: defined[] = [];
 
           const subscription = group.pipe(phonyMarbelize(testScheduler)).subscribe((value: any) => {
             arr.push(value);
@@ -1325,8 +1325,8 @@ describe('groupBy operator', () => {
           (val: string) => String.trim(val.lower()),
           (val: string) => val
         ),
-        map((group: any) => {
-          const innerNotifications: any[] = [];
+        map((group) => {
+          const innerNotifications: defined[] = [];
           const subscriptionFrame = subscriptionFrames[group.key];
 
           testScheduler.schedule(() => {
@@ -1369,10 +1369,10 @@ describe('groupBy operator', () => {
         groupBy(
           (val: string) => String.trim(val.lower()),
           (val: string) => val,
-          (group: any) => group.pipe(skip(7))
+          (group) => group.pipe(skip(7))
         ),
-        map((group: any) => {
-          const arr: any[] = [];
+        map((group) => {
+          const arr: defined[] = [];
 
           testScheduler.schedule(() => {
             group.pipe(phonyMarbelize(testScheduler)).subscribe((value: any) => {
@@ -1414,10 +1414,10 @@ describe('groupBy operator', () => {
         groupBy(
           (val: string) => String.trim(val.lower()),
           (val: string) => val,
-          (group: any) => group.pipe(skip(7))
+          (group) => group.pipe(skip(7))
         ),
-        map((group: any) => {
-          const arr: any[] = [];
+        map((group) => {
+          const arr: defined[] = [];
 
           testScheduler.schedule(() => {
             group.pipe(phonyMarbelize(testScheduler)).subscribe((value: any) => {
@@ -1494,7 +1494,7 @@ describe('groupBy operator', () => {
     ];
 
     result.subscribe({
-      next: (g: any) => {
+      next: (g) => {
         const expectedGroup = expectedGroups.shift()!;
         expect(g.key).toEqual(expectedGroup.key);
 

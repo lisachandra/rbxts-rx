@@ -41,14 +41,14 @@ describe('sample', () => {
   });
 
   it('should behave properly when notified by the same observable as the source (issue #2075)', () => {
-    const item$ = new Subject<number>();
+    const item = new Subject<number>();
     const results: number[] = [];
 
-    item$.pipe(sample(item$)).subscribe((value) => results.push(value));
+    item.pipe(sample(item)).subscribe((value) => results.push(value));
 
-    item$.next(1);
-    item$.next(2);
-    item$.next(3);
+    item.next(1);
+    item.next(2);
+    item.next(3);
 
     expect(results).toEqual([1, 2, 3]);
   });

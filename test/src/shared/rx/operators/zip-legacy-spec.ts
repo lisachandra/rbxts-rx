@@ -22,7 +22,7 @@ describe('zip legacy', () => {
     from(['a', 'b', 'c'])
       .pipe(zip(from([1, 2, 3]), (a, b): string => a + b))
       .subscribe({
-        next(x) {
+        next: (x) => {
           expect(x).toEqual(expected[i++]);
         },
         complete: done,

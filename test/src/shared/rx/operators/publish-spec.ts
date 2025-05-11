@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { publish, zip, mergeMapTo, mergeMap, tap, refCount, retry, repeat } from '@rbxts/rx/out/operators';
+import { publish, zip, mergeMapTo, mergeMap, tap, refCount, retry, repeat as repeat0 } from '@rbxts/rx/out/operators';
 import { ConnectableObservable, of, Subscription, Observable, pipe } from '@rbxts/rx';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -29,8 +29,8 @@ describe('publish operator', () => {
 
   it('should return a ConnectableObservable-ish', () => {
     const source = of(1).pipe(publish()) as ConnectableObservable<number>;
-    expect(typeIs((<any>source)._subscribe, 'function')).toBe(true);
-    expect(typeIs((<any>source).getSubject, 'function')).toBe(true);
+    expect(typeIs(source['_subscribe' as never], 'function')).toBe(true);
+    expect(typeIs(source['getSubject' as never], 'function')).toBe(true);
     expect(typeIs(source.connect, 'function')).toBe(true);
     expect(typeIs(source.refCount, 'function')).toBe(true);
   });
@@ -240,7 +240,7 @@ describe('publish operator', () => {
       testScheduler.run(({ cold, hot, expectObservable, expectSubscriptions }) => {
         const source = cold('    -1-2-3----4-|');
         const sourceSubs = '     ^-----------!';
-        const published = source.pipe(publish(), refCount(), repeat(3));
+        const published = source.pipe(publish(), refCount(), repeat0(3));
         const subscriber1 = hot('a|           ').pipe(mergeMapTo(published));
         const expected1 = '      -1-2-3----4-|';
         const subscriber2 = hot('----b|       ').pipe(mergeMapTo(published));

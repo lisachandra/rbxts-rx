@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { of, ReadableStreamLike } from 'rxjs';
 import { repeatWhen } from 'rxjs/operators';
 import { asInteropObservable } from '../../test/src/shared/rx/helpers/interop-helper';
 
@@ -66,13 +66,13 @@ it('should accept iterable notifier', () => {
 });
 
 it('should accept readable stream notifier', () => {
-  const readableStream = new ReadableStream<string>({
+  const readableStream: ReadableStreamLike<string> = new ReadableStream<string>({
     pull(controller) {
       controller.enqueue('x');
       controller.close();
     },
   });
-  of(1, 2, 3).pipe(repeatWhen(() => readableStream)); // ExpectType Observable<number>
+  of(1, 2, 3).pipe(repeatWhen(() => readableStream)); // $ExpectType Observable<number>
 });
 
 it('should enforce types of the notifier', () => {

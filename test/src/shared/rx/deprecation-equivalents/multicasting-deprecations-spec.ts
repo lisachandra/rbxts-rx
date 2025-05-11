@@ -19,7 +19,7 @@ import {
   publishBehavior,
   publishLast,
   refCount,
-  repeat,
+  repeat as repeat0,
   retry,
 } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
@@ -119,8 +119,8 @@ describe('multicasting equivalent tests', () => {
     it(`should be equivalent for ${name} for async sources that repeat`, () => {
       rxTest.run(({ cold, expectObservable }) => {
         const source = cold('----a---b---c----d---e----|');
-        const old = oldExpression(source).pipe(repeat(3));
-        const updated = updatedExpression(source).pipe(repeat(3));
+        const old = oldExpression(source).pipe(repeat0(3));
+        const updated = updatedExpression(source).pipe(repeat0(3));
         expectObservable(updated).toEqual(old);
       });
     });
@@ -146,8 +146,8 @@ describe('multicasting equivalent tests', () => {
     it(`should be equivalent for ${name} for async sources that repeat`, () => {
       rxTest.run(({ expectObservable }) => {
         const source = of('a', 'b', 'c');
-        const old = oldExpression(source).pipe(repeat(3));
-        const updated = updatedExpression(source).pipe(repeat(3));
+        const old = oldExpression(source).pipe(repeat0(3));
+        const updated = updatedExpression(source).pipe(repeat0(3));
         expectObservable(updated).toEqual(old);
       });
     });

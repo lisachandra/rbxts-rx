@@ -219,8 +219,8 @@ describe('find', () => {
         ) {}
       }
 
-      const isBar = (x: any): x is Bar => x && (<Bar>x).bar !== undefined;
-      const isBaz = (x: any): x is Baz => x && (<Baz>x).baz !== undefined;
+      const isBar = (x: Bar): x is Bar => x && (<Bar>x).bar !== undefined;
+      const isBaz = (x: Baz): x is Baz => x && (<Baz>x).baz !== undefined;
 
       const foo: Foo = new Foo();
       const a = of(foo)

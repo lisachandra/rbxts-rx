@@ -48,6 +48,7 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
    */
   constructor(destination?: Subscriber<any> | Observer<any>) {
     super();
+
     if (destination) {
       this.destination = destination;
       // Automatically chain subscriptions together here.
@@ -66,14 +67,13 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
    * times.
    * @param value The `next` value.
    */
-  next(this: void, value: T): void {
-    typeAssertIs<Subscriber<T>>(this);
+  next: (this: void, value: T) => void = function (this: Subscriber<T>, value: T): void {
     if (this.isStopped) {
       handleStoppedNotification(nextNotification(value), this);
     } else {
       this._next(value);
     }
-  }
+  } as never;
 
   /**
    * The {@link Observer} callback to receive notifications of type `error` from
@@ -81,30 +81,28 @@ export class Subscriber<T> extends Subscription implements Observer<T> {
    * the Observable has experienced an error condition.
    * @param err The `error` exception.
    */
-  error(this: void, err?: any): void {
-    typeAssertIs<Subscriber<T>>(this);
+  error: (this: void, err?: any) => void = function (this: Subscriber<T>, err?: any): void {
     if (this.isStopped) {
       handleStoppedNotification(errorNotification(err), this);
     } else {
       this.isStopped = true;
       this._error(err);
     }
-  }
+  } as never;
 
   /**
    * The {@link Observer} callback to receive a valueless notification of type
    * `complete` from the Observable. Notifies the Observer that the Observable
    * has finished sending push-based notifications.
    */
-  complete(this: void): void {
-    typeAssertIs<Subscriber<T>>(this);
+  complete: (this: void) => void = function (this: Subscriber<T>) {
     if (this.isStopped) {
       handleStoppedNotification(COMPLETE_NOTIFICATION, this);
     } else {
       this.isStopped = true;
       this._complete();
     }
-  }
+  } as never;
 
   unsubscribe(): void {
     if (!this.closed) {
@@ -152,14 +150,10 @@ function bind<Fn extends (...args: any[]) => any>(fn: Fn, thisArg: any): Fn {
  * @internal
  */
 class ConsumerObserver<T> implements Observer<T> {
-  constructor(private partialObserver: Partial<Observer<T>>) {
-    this.next = bind(false, this['next' as never], this);
-    this.error = bind(false, this['error' as never], this);
-    this.complete = bind(false, this['complete' as never], this);
-  }
+  constructor(private partialObserver: Partial<Observer<T>>) {}
 
-  next(this: void, value: T): void {
-    const { partialObserver } = this as never as ConsumerObserver<T>;
+  next: (this: void, value: T) => void = function (this: ConsumerObserver<T>, value: T): void {
+    const { partialObserver } = this;
     if (partialObserver.next) {
       try {
         partialObserver.next(value);
@@ -167,10 +161,10 @@ class ConsumerObserver<T> implements Observer<T> {
         handleUnhandledError(error);
       }
     }
-  }
+  } as never;
 
-  error(this: void, err: any): void {
-    const { partialObserver } = this as never as ConsumerObserver<T>;
+  error: (this: void, err?: any) => void = function (this: ConsumerObserver<T>, err?: any): void {
+    const { partialObserver } = this;
     if (partialObserver.error) {
       try {
         partialObserver.error(err);
@@ -180,10 +174,10 @@ class ConsumerObserver<T> implements Observer<T> {
     } else {
       handleUnhandledError(err);
     }
-  }
+  } as never;
 
-  complete(this: void): void {
-    const { partialObserver } = this as never as ConsumerObserver<T>;
+  complete: (this: void) => void = function (this: ConsumerObserver<T>) {
+    const { partialObserver } = this;
     if (partialObserver.complete) {
       try {
         partialObserver.complete();
@@ -191,7 +185,7 @@ class ConsumerObserver<T> implements Observer<T> {
         handleUnhandledError(error);
       }
     }
-  }
+  } as never;
 }
 
 export class SafeSubscriber<T> extends Subscriber<T> {
@@ -207,7 +201,7 @@ export class SafeSubscriber<T> extends Subscriber<T> {
       // The first argument is a function, not an observer. The next
       // two arguments *could* be observers, or they could be empty.
       partialObserver = {
-        next: (observerOrNext ?? undefined) as ((value: T) => void) | undefined,
+        next: observerOrNext ?? undefined,
         error: err ?? undefined,
         complete: complete ?? undefined,
       };

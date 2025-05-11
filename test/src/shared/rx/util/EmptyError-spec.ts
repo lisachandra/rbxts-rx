@@ -3,14 +3,14 @@ import { EmptyError } from '@rbxts/rx';
 
 /** @test {EmptyError} */
 describe('EmptyError', () => {
-  const error = new EmptyError();
+  const err = new EmptyError();
   it('Should have a name', () => {
-    expect(error.name).toEqual('EmptyError');
+    expect(err.name).toEqual('EmptyError');
   });
   it('Should have a message', () => {
-    expect(error.message).toEqual('no elements in sequence');
+    expect(err.message).toEqual('no elements in sequence');
   });
   it('Should have a stack', () => {
-    expect(type(error.stack)).toBe('string');
+    expect(type(err.stack)).toBe('string');
   });
 });

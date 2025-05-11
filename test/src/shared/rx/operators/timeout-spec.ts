@@ -34,22 +34,22 @@ describe('timeout operator', () => {
       const e1 = cold('-------a--b--|');
       const t = time(' -----|');
       const result = e1.pipe(timeout(t, rxTestScheduler));
-      let error: any;
+      let err: TimeoutError = undefined as never;
       result.subscribe({
         next: () => {
           throw new Error('this should not next');
         },
-        error: (err) => {
-          error = err;
+        error: (e) => {
+          err = e;
         },
         complete: () => {
           throw new Error('this should not complete');
         },
       });
       rxTestScheduler.flush();
-      expect(error).toBeInstanceOf(TimeoutError);
-      expect(error).toHaveProperty('name', 'TimeoutError');
-      expect(error!.info).toEqual({
+      expect(err).toBeInstanceOf(TimeoutError);
+      expect(err).toHaveProperty('name', 'TimeoutError');
+      expect(err!.info).toEqual({
         seen: 0,
         meta: undefined,
         lastValue: undefined,
@@ -66,22 +66,22 @@ describe('timeout operator', () => {
       const dueDate = DateTime.fromUnixTimestampMillis(t);
 
       const result = e1.pipe(timeout(dueDate, rxTestScheduler));
-      let error: any;
+      let err: TimeoutError = undefined as never;
       result.subscribe({
         next: () => {
           throw new Error('this should not next');
         },
-        error: (err) => {
-          error = err;
+        error: (e) => {
+          err = e;
         },
         complete: () => {
           throw new Error('this should not complete');
         },
       });
       rxTestScheduler.flush();
-      expect(error).toBeInstanceOf(TimeoutError);
-      expect(error).toHaveProperty('name', 'TimeoutError');
-      expect(error!.info).toEqual({
+      expect(err).toBeInstanceOf(TimeoutError);
+      expect(err).toHaveProperty('name', 'TimeoutError');
+      expect(err!.info).toEqual({
         seen: 0,
         meta: undefined,
         lastValue: undefined,
@@ -209,22 +209,22 @@ describe('timeout operator', () => {
         const e1 = cold('-------a--b--|');
         const t = time(' -----|');
         const result = e1.pipe(timeout({ each: t }));
-        let error: any;
+        let err: TimeoutError = undefined as never;
         result.subscribe({
           next: () => {
             throw new Error('this should not next');
           },
-          error: (err) => {
-            error = err;
+          error: (e) => {
+            err = e;
           },
           complete: () => {
             throw new Error('this should not complete');
           },
         });
         rxTestScheduler.flush();
-        expect(error).toBeInstanceOf(TimeoutError);
-        expect(error).toHaveProperty('name', 'TimeoutError');
-        expect(error!.info).toEqual({
+        expect(err).toBeInstanceOf(TimeoutError);
+        expect(err).toHaveProperty('name', 'TimeoutError');
+        expect(err!.info).toEqual({
           seen: 0,
           meta: undefined,
           lastValue: undefined,
@@ -241,22 +241,22 @@ describe('timeout operator', () => {
         const dueDate = DateTime.fromUnixTimestampMillis(t);
 
         const result = e1.pipe(timeout({ first: dueDate }));
-        let error: any;
+        let err: TimeoutError = undefined as never;
         result.subscribe({
           next: () => {
             throw new Error('this should not next');
           },
-          error: (err) => {
-            error = err;
+          error: (e) => {
+            err = e;
           },
           complete: () => {
             throw new Error('this should not complete');
           },
         });
         rxTestScheduler.flush();
-        expect(error).toBeInstanceOf(TimeoutError);
-        expect(error).toHaveProperty('name', 'TimeoutError');
-        expect(error!.info).toEqual({
+        expect(err).toBeInstanceOf(TimeoutError);
+        expect(err).toHaveProperty('name', 'TimeoutError');
+        expect(err!.info).toEqual({
           seen: 0,
           meta: undefined,
           lastValue: undefined,

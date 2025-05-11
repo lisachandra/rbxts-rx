@@ -1,5 +1,5 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
-import { Observable, of, NEVER, queueScheduler, Subject, scheduled } from '@rbxts/rx';
+import { Observable, of, NEVER, queueScheduler, Subject, scheduled, Subscription } from '@rbxts/rx';
 import { map, switchAll, mergeMap, take } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { observableMatcher } from '../helpers/observableMatcher';
@@ -40,7 +40,7 @@ describe('switchAll', () => {
     scheduled([a, b], queueScheduler)
       .pipe(switchAll())
       .subscribe({
-        next(x) {
+        next: (x) => {
           expect(x).toEqual(r[i++]);
         },
         complete: done,
@@ -76,7 +76,7 @@ describe('switchAll', () => {
     of(a, b)
       .pipe(switchAll())
       .subscribe({
-        next(x) {
+        next: (x) => {
           expect(x).toEqual(r[i++]);
         },
         complete: done,
@@ -258,10 +258,10 @@ describe('switchAll', () => {
     of(Promise.resolve(1), Promise.resolve(2), Promise.resolve(3))
       .pipe(switchAll())
       .subscribe({
-        next(x) {
+        next: (x) => {
           expect(x).toEqual(expected.shift());
         },
-        complete() {
+        complete: () => {
           expect(expected.size()).toEqual(0);
           done();
         },
@@ -272,14 +272,14 @@ describe('switchAll', () => {
     of(Promise.resolve(1), Promise.resolve(2), Promise.reject(3))
       .pipe(switchAll())
       .subscribe({
-        next() {
+        next: () => {
           done(new Error('should not be called'));
         },
-        error(err) {
+        error: (err) => {
           expect(err).toEqual(3);
           done();
         },
-        complete() {
+        complete: () => {
           done(new Error('should not be called'));
         },
       });
@@ -292,10 +292,10 @@ describe('switchAll', () => {
     of(NEVER, NEVER, [1, 2, 3, 4])
       .pipe(switchAll())
       .subscribe({
-        next(x) {
+        next: (x) => {
           expect(x).toEqual(expected.shift());
         },
-        complete() {
+        complete: () => {
           completed = true;
           expect(expected.size()).toEqual(0);
         },
@@ -318,7 +318,8 @@ describe('switchAll', () => {
     });
 
     // Expect one child of switchAll(): The oStream
-    expect((sub as any)._finalizers?.[0]._finalizers?.size()).toEqual(1);
+    // @ts-expect-error
+    expect(sub._finalizers?.[0]._finalizers?.size()).toEqual(1);
     sub.unsubscribe();
   });
 
@@ -332,11 +333,14 @@ describe('switchAll', () => {
     [0, 1, 2, 3, 4].forEach((n) => {
       oStreamControl.next(n); // creates inner
     });
+
+    // @ts-expect-error
     // Expect one child of switchAll(): The oStream
-    expect((sub as any)._finalizers?.[0]._finalizers?.size()).toEqual(1);
+    expect(sub._finalizers?.[0]._finalizers?.size()).toEqual(1);
     // Expect two children of subscribe(): The destination and the first inner
     // See #4106 - inner subscriptions are now added to destinations
-    expect((sub as any)._finalizers?.size()).toEqual(2);
+    // @ts-expect-error
+    expect(sub._finalizers?.size()).toEqual(2);
     sub.unsubscribe();
   });
 

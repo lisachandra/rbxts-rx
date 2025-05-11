@@ -228,7 +228,7 @@ describe('sequenceEqual', () => {
 
       let i = 0;
       const source = s1.pipe(
-        sequenceEqual(s2, (a: any, b: any) => {
+        sequenceEqual(s2, (a: { value: unknown }, b: { value: unknown }) => {
           if (++i === 2) {
             throw new Error('shazbot');
           }
@@ -260,7 +260,7 @@ describe('sequenceEqual', () => {
       const s2subs = '     ^------------------------!   ';
       const expected = '   -------------------------(T|)';
 
-      const source = s1.pipe(sequenceEqual(s2, (a: any, b: any) => a.value === b.value));
+      const source = s1.pipe(sequenceEqual(s2, (a: { value: unknown }, b: { value: unknown }) => a.value === b.value));
 
       expectObservable(source).toBe(expected, booleans);
       expectSubscriptions(s1.subscriptions).toBe(s1subs);

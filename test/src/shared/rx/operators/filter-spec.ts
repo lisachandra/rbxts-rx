@@ -14,16 +14,16 @@ describe('filter', () => {
   });
 
   function oddFilter(x: number | string) {
-    return +x % 2 === 1;
+    return tonumber(x)! % 2 === 1;
   }
 
   function isPrime(i: number | string) {
-    if (+i <= 1) {
+    if (tonumber(i)! <= 1) {
       return false;
     }
-    const max = math.floor(math.sqrt(+i));
+    const max = math.floor(math.sqrt(tonumber(i)!));
     for (let j = 2; j <= max; ++j) {
-      if (+i % j === 0) {
+      if (tonumber(i)! % j === 0) {
         return false;
       }
     }
@@ -132,7 +132,7 @@ describe('filter', () => {
       const expected = '     --3--------7-------|';
 
       function predicate(x: any, i: number) {
-        return isPrime(+x + i * 10);
+        return isPrime(tonumber(x)! + i * 10);
       }
 
       expectObservable(e1.pipe(filter(predicate))).toBe(expected);
@@ -174,7 +174,7 @@ describe('filter', () => {
       const unsub = '        ------------!       ';
 
       function predicate(x: any, i: number) {
-        return isPrime(+x + i * 10);
+        return isPrime(tonumber(x)! + i * 10);
       }
 
       expectObservable(e1.pipe(filter(predicate)), unsub).toBe(expected);
@@ -189,7 +189,7 @@ describe('filter', () => {
       const expected = '     --3--------7-------#';
 
       function predicate(x: any, i: number) {
-        return isPrime(+x + i * 10);
+        return isPrime(tonumber(x)! + i * 10);
       }
 
       expectObservable(e1.pipe(filter(predicate))).toBe(expected);
@@ -209,7 +209,7 @@ describe('filter', () => {
         if (invoked === 4) {
           throw 'error';
         }
-        return isPrime(+x + i * 10);
+        return isPrime(tonumber(x)! + i * 10);
       }
 
       expectObservable(e1.pipe(filter(predicate))).toBe(expected);
@@ -224,8 +224,8 @@ describe('filter', () => {
       const expected = '     --------6----------|';
 
       const result = e1.pipe(
-        filter((x: string) => +x % 2 === 0),
-        filter((x: string) => +x % 3 === 0)
+        filter((x: string) => tonumber(x)! % 2 === 0),
+        filter((x: string) => tonumber(x)! % 3 === 0)
       );
 
       expectObservable(result).toBe(expected);
@@ -241,8 +241,8 @@ describe('filter', () => {
       const expected = '     --------6----------|';
 
       class Filterer {
-        filter1 = (x: string) => +x % 2 === 0;
-        filter2 = (x: string) => +x % 3 === 0;
+        filter1 = (x: string) => tonumber(x)! % 2 === 0;
+        filter2 = (x: string) => tonumber(x)! % 3 === 0;
       }
 
       const filterer = new Filterer();
@@ -273,8 +273,8 @@ describe('filter', () => {
       const values = { a: 16, b: 36, c: 64 };
 
       const result = e1.pipe(
-        filter((x: string) => +x % 2 === 0),
-        map((x: string) => +x * +x)
+        filter((x: string) => tonumber(x)! % 2 === 0),
+        map((x: string) => tonumber(x)! * tonumber(x)!)
       );
 
       expectObservable(result).toBe(expected, values);
@@ -329,12 +329,12 @@ describe('filter', () => {
   it('should send errors down the error path', (_, done) => {
     of(42)
       .pipe(
-        filter((x: number, index: number): boolean => {
+        filter((x, index): boolean => {
           throw 'bad';
         })
       )
       .subscribe({
-        next: (x: number) => {
+        next: (x) => {
           done(new Error('should not be called'));
         },
         error: (err: any) => {
@@ -383,8 +383,8 @@ describe('filter', () => {
         ) {}
       }
 
-      const isBar = (x: any): x is Bar => x && (<Bar>x).bar !== undefined;
-      const isBaz = (x: any): x is Baz => x && (<Baz>x).baz !== undefined;
+      const isBar = (x: Bar): x is Bar => x && (<Bar>x).bar !== undefined;
+      const isBaz = (x: Baz): x is Baz => x && (<Baz>x).baz !== undefined;
 
       const foo: Foo = new Foo();
       of(foo)

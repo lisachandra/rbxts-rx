@@ -127,11 +127,11 @@ export class Observable<T> implements Subscribable<T> {
    *     console.log('Adding: ' + value);
    *     this.sum = this.sum + value;
    *   },
-   *   error() {
+   *   error: () => {
    *     // We actually could just remove this method,
    *     // since we do not really care about errors right now.
    *   },
-   *   complete() {
+   *   complete: () => {
    *     console.log('Sum equals: ' + this.sum);
    *   }
    * };
@@ -178,7 +178,7 @@ export class Observable<T> implements Subscribable<T> {
    *   next(num) {
    *     console.log(num)
    *   },
-   *   complete() {
+   *   complete: () => {
    *     // Will not be called, even when cancelling subscription.
    *     console.log('completed!');
    *   }

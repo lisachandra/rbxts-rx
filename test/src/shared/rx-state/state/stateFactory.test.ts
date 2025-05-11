@@ -61,10 +61,10 @@ describe('stateFactory', () => {
     });
 
     it('handles missing optional args as if they were undefined', () => {
-      const getNumber$ = state((x: number, y?: number) => of(x + (y ?? 0)));
+      const getNumber = state((x: number, y?: number) => of(x + (y ?? 0)));
 
-      expect(getNumber$(5)).toBe(getNumber$(5, undefined));
-      expect(getNumber$(6, undefined)).toBe(getNumber$(6));
+      expect(getNumber(5)).toBe(getNumber(5, undefined));
+      expect(getNumber(6, undefined)).toBe(getNumber(6));
     });
 
     /*
@@ -193,30 +193,30 @@ describe('stateFactory', () => {
       });
 
       it('does not crash when the observable lazily references its enhanced self', () => {
-        const obs$ = state(
-          (key: number) => defer(() => obs$(key)).pipe(take(1)),
+        const obs = state(
+          (key: number) => defer(() => obs(key)).pipe(take(1)),
           (key: number) => key
         ) as (key: number) => Observable<number>;
 
-        let error = undefined;
-        obs$(1)
+        let err = undefined;
+        obs(1)
           .subscribe({
             error: (e: any) => {
-              error = e;
+              err = e;
             },
           })
           .unsubscribe();
 
-        expect(error).toBeNull();
+        expect(err).toBeNull();
       });
 
       it('does not crash when the factory function self-references its enhanced self', () => {
         let nSubscriptions = 0;
-        const me$ = state(
+        const me = state(
           (key: number): Observable<number> => {
             nSubscriptions++;
             return defer(() =>
-              me$(key).pipe(
+              me(key).pipe(
                 take(1),
                 map((x) => x * 2)
               )
@@ -226,7 +226,7 @@ describe('stateFactory', () => {
         );
 
         let value = 0;
-        const sub1 = me$(5).subscribe((val) => {
+        const sub1 = me(5).subscribe((val) => {
           value = val;
         });
 
@@ -234,7 +234,7 @@ describe('stateFactory', () => {
         expect(sub1.closed).toBe(false);
 
         value = 0;
-        const sub2 = me$(5).subscribe((val) => {
+        const sub2 = me(5).subscribe((val) => {
           value = val;
         });
 
@@ -244,7 +244,7 @@ describe('stateFactory', () => {
         sub1.unsubscribe();
         sub2.unsubscribe();
 
-        const sub3 = me$(5).subscribe((val) => {
+        const sub3 = me(5).subscribe((val) => {
           value = val;
         });
 
@@ -256,18 +256,18 @@ describe('stateFactory', () => {
 
     it('resubscribes to the same instance on synchronous retries', () => {
       let instances = 0;
-      const source$ = new Subject<number | SUSPENSE>();
-      const state$ = state(() => {
+      const source = new Subject<number | SUSPENSE>();
+      const stateObservable = state(() => {
         instances++;
-        return source$.pipe(sinkSuspense());
+        return source.pipe(sinkSuspense());
       });
 
-      const sub = state$().pipe(liftSuspense()).subscribe();
+      const sub = stateObservable().pipe(liftSuspense()).subscribe();
 
       expect(instances).toBe(1);
-      source$.next(SUSPENSE);
+      source.next(SUSPENSE);
       expect(instances).toBe(1);
-      source$.next(1);
+      source.next(1);
       expect(instances).toBe(1);
 
       sub.unsubscribe();

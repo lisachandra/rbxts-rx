@@ -21,7 +21,7 @@ describe('map', () => {
       const e1subs = '  ^----------!';
       const expected = '--x--y--z--|';
 
-      const result = e1.pipe(map((x) => 10 * +x));
+      const result = e1.pipe(map((x) => 10 * tonumber(x)!));
 
       expectObservable(result).toBe(expected, { x: 10, y: 20, z: 30 });
       expectSubscriptions(e1.subscriptions).toBe(e1subs);
@@ -113,7 +113,7 @@ describe('map', () => {
           return x;
         }),
         tap({
-          complete() {
+          complete: () => {
             expect(invoked).toEqual(0);
           },
         })
@@ -152,7 +152,7 @@ describe('map', () => {
           return tonumber(x)! + 1 + index * 10;
         }),
         tap({
-          complete() {
+          complete: () => {
             expect(invoked).toEqual(4);
           },
         })
@@ -177,7 +177,7 @@ describe('map', () => {
           return tonumber(x)! + 1 + index * 10;
         }),
         tap({
-          complete() {
+          complete: () => {
             expect(invoked).toEqual(4);
           },
         })
@@ -202,7 +202,7 @@ describe('map', () => {
           return tonumber(x)! + 1 + index * 10;
         }),
         tap({
-          error() {
+          error: () => {
             expect(invoked).toEqual(4);
           },
         })
@@ -256,7 +256,7 @@ describe('map', () => {
           return x / 2;
         }),
         tap({
-          complete() {
+          complete: () => {
             expect(invoked1).toEqual(7);
             expect(invoked2).toEqual(7);
           },

@@ -81,7 +81,7 @@ export function expand<T, O extends ObservableInput<unknown>>(
       // General merge params
       source,
       subscriber,
-      project,
+      project as never,
       concurrent,
 
       // onBeforeNext

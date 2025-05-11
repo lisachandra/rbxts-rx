@@ -27,7 +27,7 @@ describe('using', () => {
     const e1 = using(
       () => new Subscription(() => (disposed = true)),
       (resource) =>
-        new Promise((resolve: any) => {
+        new Promise((resolve) => {
           resolve(expected);
         })
     );
@@ -52,7 +52,7 @@ describe('using', () => {
     const e1 = using(
       () => new Subscription(() => (disposed = true)),
       (resource) =>
-        new Promise((resolve: any, reject: any) => {
+        new Promise((resolve, reject) => {
           reject(expected);
         })
     );
@@ -73,14 +73,14 @@ describe('using', () => {
 
   it('should raise error when resource factory throws', (_, done) => {
     const expectedError = 'expected';
-    const error = 'error';
+    const err = 'error';
 
     const source = using(
       () => {
         throw expectedError;
       },
       (resource) => {
-        throw error;
+        throw err;
       }
     );
 
@@ -99,13 +99,13 @@ describe('using', () => {
   });
 
   it('should raise error when observable factory throws', (_, done) => {
-    const error = 'error';
+    const err = 'error';
     let disposed = false;
 
     const source = using(
       () => new Subscription(() => (disposed = true)),
       (resource) => {
-        throw error;
+        throw err;
       }
     );
 
@@ -114,7 +114,7 @@ describe('using', () => {
         done(new Error('should not be called'));
       },
       error: (x) => {
-        expect(x).toEqual(error);
+        expect(x).toEqual(err);
         done();
       },
       complete: () => {

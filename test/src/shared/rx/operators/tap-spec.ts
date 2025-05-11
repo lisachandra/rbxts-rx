@@ -48,13 +48,13 @@ describe('tap', () => {
     throwError(() => 'bad')
       .pipe(
         tap({
-          error: function (x) {
+          error: (x) => {
             err = x;
           },
         })
       )
       .subscribe({
-        error(ex) {
+        error: (ex) => {
           expect(ex).toEqual('bad');
         },
       });
@@ -116,7 +116,7 @@ describe('tap', () => {
         })
       )
       .subscribe({
-        error(err: any) {
+        error: (err: any) => {
           errored = true;
           expect(err).toEqual('bad');
         },
@@ -130,13 +130,13 @@ describe('tap', () => {
     throwError(() => 'bad')
       .pipe(
         tap(<any>{
-          error: function (err: string) {
+          error: (err: string) => {
             expect(err).toEqual('bad');
           },
         })
       )
       .subscribe({
-        error(err) {
+        error: (err) => {
           errored = true;
           expect(err).toEqual('bad');
         },
@@ -185,7 +185,7 @@ describe('tap', () => {
         })
       )
       .subscribe({
-        error(err: any) {
+        error: (err: Error) => {
           expect(err.message).toEqual('bad');
         },
       });
@@ -201,7 +201,7 @@ describe('tap', () => {
         })
       )
       .subscribe({
-        error(err: any) {
+        error: (err: Error) => {
           expect(err.message).toEqual('bad');
         },
       });
@@ -215,7 +215,7 @@ describe('tap', () => {
         },
       })
     ).subscribe({
-      error(err: any) {
+      error: (err: Error) => {
         expect(err.message).toEqual('bad');
       },
     });
@@ -317,7 +317,7 @@ describe('tap', () => {
 
   describe('lifecycle handlers', () => {
     it('should support an unsubscribe event that fires before finalize', () => {
-      const results: any[] = [];
+      const results: defined[] = [];
       const subject = new Subject<number>();
 
       const subscription = subject
@@ -325,7 +325,7 @@ describe('tap', () => {
           tap({
             subscribe: () => results.push('subscribe'),
             next: (value) => results.push(`next ${value}`),
-            error: (err) => results.push(`error: ${err.message}`),
+            error: (err: Error) => results.push(`error: ${err.message}`),
             complete: () => results.push('complete'),
             unsubscribe: () => results.push('unsubscribe'),
             finalize: () => results.push('finalize'),
@@ -343,7 +343,7 @@ describe('tap', () => {
     });
 
     it('should not call unsubscribe if source completes', () => {
-      const results: any[] = [];
+      const results: defined[] = [];
       const subject = new Subject<number>();
 
       const subscription = subject
@@ -351,7 +351,7 @@ describe('tap', () => {
           tap({
             subscribe: () => results.push('subscribe'),
             next: (value) => results.push(`next ${value}`),
-            error: (err) => results.push(`error: ${err.message}`),
+            error: (err: Error) => results.push(`error: ${err.message}`),
             complete: () => results.push('complete'),
             unsubscribe: () => results.push('unsubscribe'),
             finalize: () => results.push('finalize'),
@@ -370,7 +370,7 @@ describe('tap', () => {
     });
 
     it('should not call unsubscribe if source errors', () => {
-      const results: any[] = [];
+      const results: defined[] = [];
       const subject = new Subject<number>();
 
       const subscription = subject
@@ -378,7 +378,7 @@ describe('tap', () => {
           tap({
             subscribe: () => results.push('subscribe'),
             next: (value) => results.push(`next ${value}`),
-            error: (err) => results.push(`error: ${err.message}`),
+            error: (err: Error) => results.push(`error: ${err.message}`),
             complete: () => results.push('complete'),
             unsubscribe: () => results.push('unsubscribe'),
             finalize: () => results.push('finalize'),

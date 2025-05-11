@@ -3,8 +3,7 @@
 	"files": [],
 	"references": [
 		{ "path": "packages/rx" },
-		{ "path": "packages/web-streams" },
-		{ "path": "test-dts" },
+		{ "path": "packages/rx-state" },
 		{ "path": "test" }
 	]
 }

@@ -70,7 +70,7 @@ describe('Subject', () => {
     });
 
     subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         expect(x).toEqual(expected[j++]);
       },
       complete: done,
@@ -94,10 +94,10 @@ describe('Subject', () => {
     subject.next(4);
 
     const subscription1 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results1.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results1.push('E');
       },
       complete: () => {
@@ -108,10 +108,10 @@ describe('Subject', () => {
     subject.next(5);
 
     const subscription2 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results2.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results2.push('E');
       },
       complete: () => {
@@ -132,10 +132,10 @@ describe('Subject', () => {
     subject.next(10);
 
     const subscription3 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results3.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results3.push('E');
       },
       complete: () => {
@@ -164,10 +164,10 @@ describe('Subject', () => {
     subject.next(4);
 
     const subscription1 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results1.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results1.push('E');
       },
       complete: () => {
@@ -178,10 +178,10 @@ describe('Subject', () => {
     subject.next(5);
 
     const subscription2 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results2.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results2.push('E');
       },
       complete: () => {
@@ -199,10 +199,10 @@ describe('Subject', () => {
     subscription2.unsubscribe();
 
     const subscription3 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results3.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results3.push('E');
       },
       complete: () => {
@@ -229,10 +229,10 @@ describe('Subject', () => {
     subject.next(4);
 
     const subscription1 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results1.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results1.push('E');
       },
       complete: () => {
@@ -243,10 +243,10 @@ describe('Subject', () => {
     subject.next(5);
 
     const subscription2 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results2.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results2.push('E');
       },
       complete: () => {
@@ -264,10 +264,10 @@ describe('Subject', () => {
     subscription2.unsubscribe();
 
     const subscription3 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results3.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results3.push('E');
       },
       complete: () => {
@@ -289,10 +289,10 @@ describe('Subject', () => {
     const results3: (number | string)[] = [];
 
     const subscription1 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results1.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results1.push('E');
       },
       complete: () => {
@@ -301,10 +301,10 @@ describe('Subject', () => {
     });
 
     const subscription2 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results2.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results2.push('E');
       },
       complete: () => {
@@ -319,10 +319,10 @@ describe('Subject', () => {
     subscription2.unsubscribe();
 
     const subscription3 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results3.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results3.push('E');
       },
       complete: () => {
@@ -344,10 +344,10 @@ describe('Subject', () => {
     const results3: (number | string)[] = [];
 
     const subscription1 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results1.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results1.push('E');
       },
       complete: () => {
@@ -359,10 +359,10 @@ describe('Subject', () => {
     subject.next(2);
 
     const subscription2 = subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         results2.push(x);
       },
-      error: function (e) {
+      error: (e) => {
         results2.push('E');
       },
       complete: () => {
@@ -380,10 +380,10 @@ describe('Subject', () => {
 
     expect(() => {
       subject.subscribe({
-        next: function (x) {
+        next: (x) => {
           results3.push(x);
         },
-        error: function (err) {
+        error: (err) => {
           expect(false).toEqual('should not throw error: ' + tostring(err));
         },
       });
@@ -457,29 +457,29 @@ describe('Subject', () => {
     const nexts: number[] = [];
     const output: number[] = [];
 
-    let error: any;
+    let err: unknown;
     let complete = false;
     let outputComplete = false;
 
     const destination = {
       closed: false,
-      next: function (x: number) {
+      next: (x: number) => {
         nexts.push(x);
       },
-      error: function (err: any) {
-        error = err;
-        this.closed = true;
+      error: (e: any) => {
+        err = e;
+        destination.closed = true;
       },
-      complete: function () {
+      complete: () => {
         complete = true;
-        this.closed = true;
+        destination.closed = true;
       },
     };
 
     const sub: Subject<any> = Subject.create(destination, source);
 
     sub.subscribe({
-      next: function (x: number) {
+      next: (x: number) => {
         output.push(x);
       },
       complete: () => {
@@ -494,7 +494,7 @@ describe('Subject', () => {
 
     expect(nexts).toEqual(['a', 'b', 'c']);
     expect(complete).toBe(true);
-    expect(type(error)).toBe('nil');
+    expect(type(err)).toBe('nil');
 
     expect(output).toEqual([1, 2, 3, 4, 5]);
     expect(outputComplete).toBe(true);
@@ -506,29 +506,29 @@ describe('Subject', () => {
     const nexts: number[] = [];
     const output: number[] = [];
 
-    let error: any;
+    let err: any;
     let complete = false;
     let outputComplete = false;
 
     const destination = {
       closed: false,
-      next: function (x: number) {
+      next: (x: number) => {
         nexts.push(x);
       },
-      error: function (err: any) {
-        error = err;
-        this.closed = true;
+      error: (e: any) => {
+        err = e;
+        destination.closed = true;
       },
-      complete: function () {
+      complete: () => {
         complete = true;
-        this.closed = true;
+        destination.closed = true;
       },
     };
 
     const sub: Subject<any> = Subject.create(destination, source);
 
     sub.subscribe({
-      next: function (x: number) {
+      next: (x: number) => {
         output.push(x);
       },
       complete: () => {
@@ -543,7 +543,7 @@ describe('Subject', () => {
 
     expect(nexts).toEqual(['a', 'b', 'c']);
     expect(complete).toBe(false);
-    expect(error).toEqual('boom');
+    expect(err).toEqual('boom');
 
     expect(output).toEqual([1, 2, 3, 4, 5]);
     expect(outputComplete).toBe(true);
@@ -555,7 +555,7 @@ describe('Subject', () => {
     const expected = [1, 2, 3, 4, 5];
 
     subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         expect(x).toEqual(expected.shift());
       },
       error: (x) => {
@@ -576,7 +576,7 @@ describe('Subject', () => {
     const expected = [1, 2, 3];
 
     subject.subscribe({
-      next: function (x) {
+      next: (x) => {
         expect(x).toEqual(expected.shift());
       },
       error: (x) => {
@@ -618,14 +618,14 @@ describe('Subject', () => {
   });
 
   it('should not next after error', () => {
-    const error = new Error('wut?');
+    const err = new Error('wut?');
     const subject = new Subject<string>();
     const results: string[] = [];
     subject.subscribe({ next: (x) => results.push(x), error: (err) => results.push(err) });
     subject.next('a');
-    subject.error(error);
+    subject.error(err);
     subject.next('b');
-    expect(results).toEqual(['a', error]);
+    expect(results).toEqual(['a', err]);
   });
 
   describe('asObservable', () => {
@@ -695,7 +695,7 @@ describe('Subject', () => {
     });
 
     it('should not synchronously error when nexted into', (_, done) => {
-      config.onUnhandledError = (err) => {
+      config.onUnhandledError = (err: Error) => {
         expect(err.message).toEqual('Boom!');
         done();
       };
@@ -725,7 +725,7 @@ describe('AnonymousSubject', () => {
   it('should not be eager', () => {
     let subscribed = false;
 
-    const subject = Subject.create(
+    const subject: Subject<any> = Subject.create(
       undefined,
       new Observable((observer: Observer<any>) => {
         subscribed = true;

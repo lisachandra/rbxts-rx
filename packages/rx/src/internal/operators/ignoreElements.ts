@@ -40,6 +40,6 @@ import { noop } from '../util/noop';
  */
 export function ignoreElements(): OperatorFunction<unknown, never> {
   return operate((source, subscriber) => {
-    source.subscribe(createOperatorSubscriber(subscriber, noop));
+    source.subscribe(createOperatorSubscriber(subscriber as never, noop));
   });
 }

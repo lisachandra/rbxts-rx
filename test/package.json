@@ -8,17 +8,23 @@
 		"dev": "shx rm -rf out && rbxtsc --rojo ../default.project.json --includePath out/include --noInclude --allowCommentDirectives -w"
 	},
 	"dependencies": {
+		"@rbxts/dom-testing-library": "^8.14.0-rc.3",
 		"@rbxts/jest": "^0.1.0",
 		"@rbxts/jest-globals": "^0.1.0",
 		"@rbxts/jest-vendor": "^0.1.0",
 		"@rbxts/luau-polyfill": "^1.0.0",
+    "@rbxts/react-vendor": "*",
 		"@rbxts/regexp": "^0.2.1-ts.4",
 		"@rbxts/rx": "^7.8.2-rc.1",
+		"@rbxts/rx-state": "^0.1.4-rc.1",
 		"@rbxts/services": "^1.0.0",
 		"@rbxts/whatwg-event-target": "^6.0.2-rc.3"
 	},
 	"dependenciesMeta": {
 		"@rbxts/rx": {
+			"injected": true
+		},
+		"@rbxts/rx-state": {
 			"injected": true
 		}
 	},

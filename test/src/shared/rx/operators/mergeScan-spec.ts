@@ -182,7 +182,7 @@ describe('mergeScan', () => {
       .pipe(
         mergeScan(() => synchronousObservable, 0),
 
-        takeWhile((x) => x != 2) // unsubscribe at the second side-effect
+        takeWhile((x) => x !== 2 && (!typeIs(x, "string") || tonumber(x) !== 2)) // unsubscribe at the second side-effect
       )
       .subscribe(() => {
         /* noop */
@@ -330,7 +330,7 @@ describe('mergeScan', () => {
       const e1subs = '  ^----------!                        ';
       const expected = '--x-d--e--f--f-g--h--i--i-j--k--l--|';
 
-      const result = e1.pipe(mergeScan((acc, x) => inner[+x].pipe(startWith(acc)), 'x', 1));
+      const result = e1.pipe(mergeScan((acc, x) => inner[tonumber(x)!].pipe(startWith(acc)), 'x', 1));
 
       expectObservable(result).toBe(expected);
 
@@ -389,7 +389,7 @@ describe('mergeScan', () => {
       const e1subs = '  ^--------------!             ';
       const expected = '---x-e--f--f--i----i-l------|';
 
-      const result = e1.pipe(mergeScan((acc, x) => inner[+x].pipe(startWith(acc)), 'x', 1));
+      const result = e1.pipe(mergeScan((acc, x) => inner[tonumber(x)!].pipe(startWith(acc)), 'x', 1));
 
       expectObservable(result).toBe(expected);
 
@@ -414,7 +414,7 @@ describe('mergeScan', () => {
       const e1subs = '  ^------------------!               ';
       const expected = '----x--d-d-eg--fh--hi-j---k---l---|';
 
-      const result = e1.pipe(mergeScan((acc, x) => inner[+x].pipe(startWith(acc)), 'x', 2));
+      const result = e1.pipe(mergeScan((acc, x) => inner[tonumber(x)!].pipe(startWith(acc)), 'x', 2));
 
       expectObservable(result).toBe(expected);
 
@@ -439,7 +439,7 @@ describe('mergeScan', () => {
       const e1subs = '  ^--------------!             ';
       const expected = '---x-e-efh----hki----l------|';
 
-      const result = e1.pipe(mergeScan((acc, x) => inner[+x].pipe(startWith(acc)), 'x', 2));
+      const result = e1.pipe(mergeScan((acc, x) => inner[tonumber(x)!].pipe(startWith(acc)), 'x', 2));
 
       expectObservable(result).toBe(expected);
 

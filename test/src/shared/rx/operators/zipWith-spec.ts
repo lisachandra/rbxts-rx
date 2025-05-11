@@ -469,7 +469,7 @@ describe('zipWith', () => {
     let i = 0;
 
     a.pipe(zipWith(b)).subscribe({
-      next(vals) {
+      next: (vals) => {
         expect(vals).toEqual(r[i++]);
       },
       complete: done,

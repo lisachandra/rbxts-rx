@@ -462,7 +462,7 @@ describe('expand', () => {
       const e2shape = ' ---(z|)         ';
       const expected = 'a--b--c--d--(e|)';
 
-      const project = (x: any, index: number): Observable<any> => {
+      const project = (x: number, index: number): Observable<any> => {
         if (x === 16) {
           return EMPTY;
         }

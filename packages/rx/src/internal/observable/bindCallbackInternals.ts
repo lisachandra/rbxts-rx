@@ -11,14 +11,14 @@ export function bindCallbackInternals(
   callbackFunc: any,
   resultSelector?: any,
   scheduler?: SchedulerLike
-): (...args: any[]) => Observable<unknown> {
+): (this: void, ...args: any[]) => Observable<unknown> {
   if (resultSelector) {
     if (isScheduler(resultSelector)) {
       scheduler = resultSelector;
     } else {
       // The user provided a result selector.
-      return function (this: any, ...args: any[]) {
-        return bindCallbackInternals(isNodeStyle, callbackFunc, scheduler)(this, args).pipe(mapOneOrManyArgs(resultSelector));
+      return function (...args: any[]) {
+        return bindCallbackInternals(isNodeStyle, callbackFunc, scheduler)(args).pipe(mapOneOrManyArgs(resultSelector));
       };
     }
   }
@@ -26,12 +26,12 @@ export function bindCallbackInternals(
   // If a scheduler was passed, use our `subscribeOn` and `observeOn` operators
   // to compose that behavior for the user.
   if (scheduler) {
-    return function (this: any, ...args: any[]) {
-      return bindCallbackInternals(isNodeStyle, callbackFunc)(this, args).pipe(subscribeOn(scheduler), observeOn(scheduler));
+    return function (...args: any[]) {
+      return bindCallbackInternals(isNodeStyle, callbackFunc)(args).pipe(subscribeOn(scheduler), observeOn(scheduler));
     };
   }
 
-  return function (this: any, ...args: any[]): Observable<any> {
+  return function (...args: any[]): Observable<any> {
     // We're using AsyncSubject, because it emits when it completes,
     // and it will play the value to all late-arriving subscribers.
     const subject = new AsyncSubject<any>();
@@ -58,11 +58,9 @@ export function bindCallbackInternals(
         // call, an error is thrown, it will be caught by the Observable
         // subscription process and sent to the consumer.
         (callbackFunc as Callback)(
-          // Pass the appropriate `this` context.
-          this,
-          [
+          ...[
             // Pass the arguments.
-            ...args,
+            ...(args as defined[]),
             // And our callback handler.
             (...results: defined[]) => {
               if (isNodeStyle) {

@@ -58,7 +58,7 @@ describe('iif', () => {
     const expected = 42;
     const e1 = iif(
       () => true,
-      new Promise((resolve: any) => {
+      new Promise((resolve) => {
         resolve(expected);
       }),
       of()
@@ -82,7 +82,7 @@ describe('iif', () => {
     const e1 = iif(
       () => false,
       of('a'),
-      new Promise((resolve: any) => {
+      new Promise((resolve) => {
         resolve(expected);
       })
     );
@@ -105,7 +105,7 @@ describe('iif', () => {
     const e1 = iif(
       () => false,
       of('a'),
-      new Promise((resolve: any, reject: any) => {
+      new Promise((resolve, reject) => {
         reject(expected);
       })
     );
@@ -128,7 +128,7 @@ describe('iif', () => {
     const expected = 42;
     const e1 = iif(
       () => true,
-      new Promise((resolve: any, reject: any) => {
+      new Promise((resolve, reject) => {
         reject(expected);
       }),
       of()

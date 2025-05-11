@@ -21,6 +21,6 @@
 	],
 	"scripts": {},
 	"dependencies": {
-		"@rbxts/react-vendor": "*"
+		"@rbxts/react-vendor": "^17.2.3"
 	}
 }

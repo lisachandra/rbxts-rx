@@ -40,13 +40,13 @@ describe('scheduled', () => {
   });
 
   it('should schedule a promise', (_, done) => {
-    const results: any[] = [];
+    const results: defined[] = [];
     const input = Promise.resolve('x'); // strings are iterables
     scheduled(input, testScheduler).subscribe({
-      next(value) {
+      next: (value) => {
         results.push(value);
       },
-      complete() {
+      complete: () => {
         results.push('done');
       },
     });

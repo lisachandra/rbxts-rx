@@ -1,7 +1,7 @@
 import { describe, beforeEach, it, expect, afterAll, beforeAll, afterEach, jest, test } from '@rbxts/jest-globals';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { last, mergeMap } from '@rbxts/rx/out/operators';
-import { EmptyError, of, from, Observable } from '@rbxts/rx';
+import { EmptyError, of, from, Observable, MonoTypeOperatorFunction, filter } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 
 /** @test {last} */
@@ -167,8 +167,8 @@ describe('last', () => {
         ) {}
       }
 
-      const isBar = (x: any): x is Bar => x && (x as Bar).bar !== undefined;
-      const isBaz = (x: any): x is Baz => x && (x as Baz).baz !== undefined;
+      const isBar = (x: unknown): x is Bar => !!x && (x as Bar).bar !== undefined;
+      const isBaz = (x: unknown): x is Baz => !!x && (x as Baz).baz !== undefined;
 
       const foo: Foo = new Foo();
       of(foo)

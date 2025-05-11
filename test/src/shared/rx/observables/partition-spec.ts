@@ -29,7 +29,7 @@ describe('partition', () => {
         '                ----2----------4------6--|',
       ];
 
-      const result = partition(e1, (x: any) => x % 2 === 1);
+      const result = partition(e1, (x: any) => (x as number) % 2 === 1);
 
       expectObservableArray(result, expected);
       expectSubscriptions(e1.subscriptions).toBe([e1subs, e1subs]);
@@ -144,11 +144,11 @@ describe('partition', () => {
       ];
 
       let index = 0;
-      const error = 'error';
+      const err = 'error';
       function predicate(x: string) {
         const match = x === 'a';
         if (match && index++ > 1) {
-          throw error;
+          throw err;
         }
         return match;
       }
