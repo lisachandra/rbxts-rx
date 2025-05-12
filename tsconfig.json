@@ -4,6 +4,7 @@
 	"references": [
 		{ "path": "packages/rx" },
 		{ "path": "packages/rx-state" },
+    { "path": "packages/react-rx" },
 		{ "path": "test" }
 	]
 }

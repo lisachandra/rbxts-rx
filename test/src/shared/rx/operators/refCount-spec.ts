@@ -44,7 +44,7 @@ describe('refCount', () => {
 
   it('should unsub from the source when all other subscriptions are unsubbed', (_, done) => {
     let unsubscribeCalled = false;
-    const connectable = new Observable<boolean>((observer) => {
+    const connectable = new Observable<boolean>( function (observer) {
       observer.next(true);
       return () => {
         unsubscribeCalled = true;
@@ -74,7 +74,7 @@ describe('refCount', () => {
 
   it('should not unsubscribe when a subscriber synchronously unsubscribes if other subscribers are present', () => {
     let unsubscribeCalled = false;
-    const connectable = new Observable<boolean>((observer) => {
+    const connectable = new Observable<boolean>( function (observer) {
       observer.next(true);
       return () => {
         unsubscribeCalled = true;

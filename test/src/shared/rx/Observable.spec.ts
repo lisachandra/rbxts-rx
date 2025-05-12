@@ -155,7 +155,7 @@ describe('Observable', () => {
 
     it('should handle a synchronous throw from the next handler', () => {
       const expected = new Error('I told, you Bobby Boucher, threes are the debil!');
-      const syncObservable = new Observable<number>((observer) => {
+      const syncObservable = new Observable<number>( function (observer) {
         observer.next(1);
         observer.next(2);
         observer.next(3);
@@ -186,7 +186,7 @@ describe('Observable', () => {
 
     it('should handle an asynchronous throw from the next handler and tear down', () => {
       const expected = new Error('I told, you Bobby Boucher, twos are the debil!');
-      const asyncObservable = new Observable<number>((observer) => {
+      const asyncObservable = new Observable<number>( function (observer) {
         let i = 1;
         const id = setInterval(() => observer.next(i++), 1);
 
@@ -257,7 +257,7 @@ describe('Observable', () => {
       let subscribed = false;
       let nexted: string;
       let completed: boolean;
-      const source = new Observable<string>((observer) => {
+      const source = new Observable<string>( function (observer) {
         subscribed = true;
         observer.next('wee');
         expect(nexted).toEqual('wee');
@@ -338,7 +338,7 @@ describe('Observable', () => {
       jest.useFakeTimers();
 
       let unsubscribeCalled = false;
-      const source = new Observable<number>((observer) => {
+      const source = new Observable<number>( function (observer) {
         const id = setInterval(() => {
           observer.error(0);
         }, 1);
@@ -398,7 +398,7 @@ describe('Observable', () => {
     it('should ignore next messages after unsubscription', (_, done) => {
       let times = 0;
 
-      const subscription = new Observable<number>((observer) => {
+      const subscription = new Observable<number>( function (observer) {
         let i = 0;
         const id = setInterval(() => {
           observer.next(i++);
@@ -422,7 +422,7 @@ describe('Observable', () => {
       let times = 0;
       let errorCalled = false;
 
-      const subscription = new Observable<number>((observer) => {
+      const subscription = new Observable<number>( function (observer) {
         let i = 0;
         const id = setInterval(() => {
           observer.next(i++);
@@ -455,7 +455,7 @@ describe('Observable', () => {
       let times = 0;
       let completeCalled = false;
 
-      const subscription = new Observable<number>((observer) => {
+      const subscription = new Observable<number>( function (observer) {
         let i = 0;
         const id = setInterval(() => {
           observer.next(i++);
@@ -547,7 +547,7 @@ describe('Observable', () => {
       it('should ignore next messages after unsubscription', (_, done) => {
         let times = 0;
 
-        const subscription = new Observable<number>((observer) => {
+        const subscription = new Observable<number>( function (observer) {
           let i = 0;
           const id = setInterval(() => {
             observer.next(i++);
@@ -573,7 +573,7 @@ describe('Observable', () => {
         let times = 0;
         let errorCalled = false;
 
-        const subscription = new Observable<number>((observer) => {
+        const subscription = new Observable<number>( function (observer) {
           let i = 0;
           const id = setInterval(() => {
             observer.next(i++);
@@ -605,7 +605,7 @@ describe('Observable', () => {
         let times = 0;
         let completeCalled = false;
 
-        const subscription = new Observable<number>((observer) => {
+        const subscription = new Observable<number>( function (observer) {
           let i = 0;
           const id = setInterval(() => {
             observer.next(i++);
@@ -1051,7 +1051,7 @@ describe('Observable.lift', () => {
   });
 
   it('should be overridable in a custom Observable type that composes', (_, done) => {
-    const result = new MyCustomObservable<number>((observer) => {
+    const result = new MyCustomObservable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);
@@ -1080,7 +1080,7 @@ describe('Observable.lift', () => {
   });
 
   it('should compose through multicast and refCount', (_, done) => {
-    const result = new MyCustomObservable<number>((observer) => {
+    const result = new MyCustomObservable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);
@@ -1109,7 +1109,7 @@ describe('Observable.lift', () => {
   });
 
   it('should compose through publish and refCount', (_, done) => {
-    const result = new MyCustomObservable<number>((observer) => {
+    const result = new MyCustomObservable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);
@@ -1138,7 +1138,7 @@ describe('Observable.lift', () => {
   });
 
   it('should compose through publishLast and refCount', (_, done) => {
-    const result = new MyCustomObservable<number>((observer) => {
+    const result = new MyCustomObservable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);
@@ -1167,7 +1167,7 @@ describe('Observable.lift', () => {
   });
 
   it('should compose through publishBehavior and refCount', (_, done) => {
-    const result = new MyCustomObservable<number>((observer) => {
+    const result = new MyCustomObservable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);
@@ -1341,7 +1341,7 @@ describe('Observable.lift', () => {
   });
 
   it('should compose through multicast with selector function', (_, done) => {
-    const result = new MyCustomObservable<number>((observer) => {
+    const result = new MyCustomObservable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);
@@ -1491,7 +1491,7 @@ describe('Observable.lift', () => {
     }
 
     // Use the LogObservable
-    const result = new LogObservable<number>((observer) => {
+    const result = new LogObservable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);

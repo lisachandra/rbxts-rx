@@ -259,7 +259,7 @@ describe('publishReplay operator', () => {
     const results2: number[] = [];
     let subscriptions = 0;
 
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       subscriptions++;
       observer.next(1);
       observer.next(2);
@@ -293,7 +293,7 @@ describe('publishReplay operator', () => {
     const results2: number[] = [];
     let subscriptions = 0;
 
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       subscriptions++;
       observer.next(1);
       observer.next(2);
@@ -328,7 +328,7 @@ describe('publishReplay operator', () => {
     const results2: number[] = [];
     let subscriptions = 0;
 
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       subscriptions++;
       observer.next(1);
       observer.next(2);
@@ -369,7 +369,7 @@ describe('publishReplay operator', () => {
     const results2: number[] = [];
     let subscriptions = 0;
 
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       subscriptions++;
       observer.next(1);
       observer.next(2);

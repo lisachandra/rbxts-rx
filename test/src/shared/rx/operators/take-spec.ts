@@ -164,7 +164,7 @@ describe('take', () => {
   });
 
   it('should unsubscribe from the source when it reaches the limit', () => {
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       expect(observer.closed).toBe(false);
       observer.next(42);
       expect(observer.closed).toBe(true);

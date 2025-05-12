@@ -1,0 +1,54 @@
+{
+	"name": "@rbxts/react-rx",
+	"version": "0.10.8-rc.1",
+	"description": "React bindings for RxJS. (Ported to Roblox-TS)",
+	"main": "out/init.luau",
+	"types": "out/index.d.ts",
+	"files": [
+		"out",
+		"default.project.json",
+		"!**/*.tsbuildinfo",
+		"!**/__tests__"
+	],
+	"scripts": {
+		"build": "shx rm -rf out && rbxtsc --verbose --allowCommentDirectives",
+		"dev": "shx rm -rf out && rbxtsc -w --allowCommentDirectives"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lisachandra/rbxts-rx.git"
+	},
+	"contributors": [
+		"lisachandra <lisachandra@proton.me>"
+	],
+	"authors": [
+		"Josep M Sobrepere (https://github.com/josepot)",
+		"Victor Oliva (https://github.com/voliva)"
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/lisachandra/rbxts-rx/issues"
+	},
+	"homepage": "https://github.com/lisachandra/rbxts-rx/tree/main/packages/react-rx#readme",
+	"peerDependencies": {
+		"@rbxts/react": ">=17",
+		"@rbxts/rx": ">=7"
+	},
+	"dependencies": {
+		"@rbxts/luau-polyfill": "^1.0.0",
+		"@rbxts/regexp": "^0.2.1-ts.4",
+		"@rbxts/rx-state": "workspace:^",
+		"@rbxts/services": "^1.0.0",
+		"@rbxts/use-sync-external-store": "^1.0.0"
+	},
+	"devDependencies": {
+		"@rbxts/compiler-types": "^3.0.0-types.0",
+		"@rbxts/react": "^17.2.3",
+		"@rbxts/rx": "workspace:^",
+		"@rbxts/types": "^1.0.844",
+		"ajv": "^8.12.0",
+		"pkg-up": "^3.1.0",
+		"roblox-ts": "^3.0.0",
+		"shx": "^0.3.4"
+	}
+}

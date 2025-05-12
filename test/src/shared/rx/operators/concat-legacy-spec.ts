@@ -26,7 +26,7 @@ describe('concat operator', () => {
   it('should work properly with scalar observables', (_, done) => {
     const results: string[] = [];
 
-    const s1 = new Observable<number>((observer) => {
+    const s1 = new Observable<number>( function (observer) {
       setTimeout(() => {
         observer.next(1);
         observer.complete();

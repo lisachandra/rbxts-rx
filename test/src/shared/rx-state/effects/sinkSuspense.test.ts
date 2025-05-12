@@ -24,7 +24,7 @@ describe('sinkSuspense', () => {
 
   it('keeps the source subscription alive after synchronously re-subscribing upon receiving a SUSPENSE', () => {
     let nSubscriptions = 0;
-    const source = new Observable<number | SUSPENSE>((observer) => {
+    const source = new Observable<number | SUSPENSE>( function (observer) {
       nSubscriptions++;
       for (let i = 0; i < 10 && !observer.closed; i++) {
         observer.next(i === 3 ? SUSPENSE : i);
@@ -57,7 +57,7 @@ describe('sinkSuspense', () => {
 
   it('propagates errors', () => {
     let nSubscriptions = 0;
-    const source = new Observable<number | SUSPENSE>((observer) => {
+    const source = new Observable<number | SUSPENSE>( function (observer) {
       nSubscriptions++;
       for (let i = 0; i < 10 && !observer.closed; i++) {
         if (i === 2) observer.error(2);
@@ -91,7 +91,7 @@ describe('sinkSuspense', () => {
 
   it('propagates completes', () => {
     let nSubscriptions = 0;
-    const source = new Observable<number | SUSPENSE>((observer) => {
+    const source = new Observable<number | SUSPENSE>( function (observer) {
       nSubscriptions++;
       for (let i = 0; i < 10 && !observer.closed; i++) {
         if (i === 2) observer.complete();

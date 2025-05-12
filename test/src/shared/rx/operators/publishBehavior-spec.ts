@@ -238,7 +238,7 @@ describe('publishBehavior operator', () => {
     const results2: number[] = [];
     let subscriptions = 0;
 
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       subscriptions++;
       observer.next(1);
       observer.next(2);
@@ -323,7 +323,7 @@ describe('publishBehavior operator', () => {
     const results2: number[] = [];
     let subscriptions = 0;
 
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       subscriptions++;
       observer.next(1);
       observer.next(2);
@@ -356,7 +356,7 @@ describe('publishBehavior operator', () => {
   it('should follow the RxJS 4 behavior and emit nothing to observer after completed', (_, done) => {
     const results: number[] = [];
 
-    const source = new Observable<number>((observer) => {
+    const source = new Observable<number>( function (observer) {
       observer.next(1);
       observer.next(2);
       observer.next(3);

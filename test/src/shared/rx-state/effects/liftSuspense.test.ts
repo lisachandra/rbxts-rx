@@ -7,7 +7,7 @@ import { setTimeout } from '@rbxts/luau-polyfill';
 describe('liftSuspense', () => {
   it('lifts SUSPENSE', () => {
     let nSubscriptions = 0;
-    const source = new Observable<number | SUSPENSE>((observer) => {
+    const source = new Observable<number | SUSPENSE>( function (observer) {
       nSubscriptions++;
       for (let i = 0; i < 10 && !observer.closed; i++) {
         observer.next([3, 6].includes(i) ? SUSPENSE : i);

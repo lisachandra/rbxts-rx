@@ -432,12 +432,12 @@ describe('catchError operator', () => {
   // referenced issue. Closed subscribers should remain closed.
 
   it('Properly handle async handled result if source is synchronous', (_, done) => {
-    const source = new Observable<string>((observer) => {
+    const source = new Observable<string>( function (observer) {
       observer.error(new Error('kaboom!'));
       observer.complete();
     });
 
-    const sourceWithDelay = new Observable<string>((observer) => {
+    const sourceWithDelay = new Observable<string>( function (observer) {
       observer.next('delayed');
       observer.complete();
     }).pipe(delay(0));
