@@ -75,7 +75,7 @@ export function onErrorResumeNext<A extends readonly unknown[]>(
 ): Observable<A[number]> {
   const nextSources: ObservableInputTuple<A> = argsOrArgArray(sources) as any;
 
-  return new Observable((subscriber) => {
+  return new Observable(function (subscriber) {
     let sourceIndex = 0;
     const subscribeNext = () => {
       if (sourceIndex < nextSources.size()) {

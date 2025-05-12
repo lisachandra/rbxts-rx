@@ -51,7 +51,7 @@ describe('switchScan', () => {
       .pipe(
         switchScan(
           (_acc, x) =>
-            new Observable<string>((subscriber) => {
+            new Observable<string>(function (subscriber) {
               subscriber.complete();
               return () => {
                 unsubbed.push(x);

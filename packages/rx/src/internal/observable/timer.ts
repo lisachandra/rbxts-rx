@@ -152,7 +152,7 @@ export function timer(
     }
   }
 
-  return new Observable((subscriber) => {
+  return new Observable(function (subscriber) {
     // If a valid date is passed, calculate how long to wait before
     // executing the first value... otherwise, if it's a number just schedule
     // that many milliseconds (or scheduler-specified unit size) in the future.

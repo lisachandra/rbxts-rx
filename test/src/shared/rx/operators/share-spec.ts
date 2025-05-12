@@ -482,7 +482,7 @@ describe('share', () => {
 
       it('should stop listening to a synchronous observable when unsubscribed', () => {
         const sideEffects: number[] = [];
-        const synchronousObservable = new Observable<number>((subscriber) => {
+        const synchronousObservable = new Observable<number>(function (subscriber) {
           // This will check to see if the subscriber was closed on each loop
           // when the unsubscribe hits (from the `take`), it should be closed
           for (let i = 0; !subscriber.closed && i < 10; i++) {
@@ -681,7 +681,7 @@ describe('share', () => {
   describe('share(config) with async/deferred reset notifiers', () => {
     it('should reset on refCount 0 when synchronously resubscribing to a firehose and using a sync reset notifier', () => {
       let subscriptionCount = 0;
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriptionCount++;
         for (let i = 0; i < 3 && !subscriber.closed; i++) {
           subscriber.next(i);

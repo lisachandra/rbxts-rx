@@ -11,7 +11,7 @@ export function bindCallbackInternals(
   callbackFunc: any,
   resultSelector?: any,
   scheduler?: SchedulerLike
-): (this: void, ...args: any[]) => Observable<unknown> {
+): (...args: any[]) => Observable<unknown> {
   if (resultSelector) {
     if (isScheduler(resultSelector)) {
       scheduler = resultSelector;
@@ -38,7 +38,7 @@ export function bindCallbackInternals(
 
     // If this is true, then we haven't called our function yet.
     let uninitialized = true;
-    return new Observable((subscriber) => {
+    return new Observable(function (subscriber) {
       // Add our subscriber to the subject.
       const subs = subject.subscribe(subscriber);
 

@@ -70,7 +70,7 @@ export function range(start: number, count?: number, scheduler?: SchedulerLike):
   return new Observable(
     scheduler
       ? // The deprecated scheduled path.
-        (subscriber) => {
+        function (subscriber) {
           let n = start;
           return scheduler.schedule(function () {
             if (n < endRange) {
@@ -82,7 +82,7 @@ export function range(start: number, count?: number, scheduler?: SchedulerLike):
           });
         }
       : // Standard synchronous range.
-        (subscriber) => {
+        function (subscriber) {
           let n = start;
           while (n < endRange && !subscriber.closed) {
             subscriber.next(n++);

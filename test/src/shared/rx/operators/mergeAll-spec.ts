@@ -4,6 +4,7 @@ import { TestScheduler } from '@rbxts/rx/out/testing';
 import { throwError, from, of, queueScheduler, Observable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
 import { Error } from '@rbxts/luau-polyfill';
+import Symbol from "@rbxts/rx/out/internal/polyfill/symbol"
 
 /** @test {mergeAll} */
 describe('mergeAll', () => {
@@ -559,7 +560,7 @@ describe('mergeAll', () => {
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
     const sideEffects: number[] = [];
-    const synchronousObservable = new Observable<number>((subscriber) => {
+    const synchronousObservable = new Observable<number>(function (subscriber) {
       // This will check to see if the subscriber was closed on each loop
       // when the unsubscribe hits (from the `take`), it should be closed
       for (let i = 0; !subscriber.closed && i < 10; i++) {

@@ -57,7 +57,7 @@ export function zip(...args: unknown[]): Observable<unknown> {
   const sources = argsOrArgArray(args) as Observable<unknown>[];
 
   return sources.size()
-    ? new Observable<unknown[]>((subscriber) => {
+    ? new Observable<unknown[]>(function (subscriber) {
         // A collection of buffers of values from each source.
         // Keyed by the same index with which the sources were passed in.
         let buffers: unknown[][] = sources.map(() => []);

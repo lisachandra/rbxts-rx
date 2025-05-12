@@ -8,7 +8,7 @@ export function scheduleAsyncIterable<T>(input: AsyncIterable<T>, scheduler: Sch
   if (!input) {
     throw new Error('Iterable cannot be undefined');
   }
-  return new Observable<T>((subscriber) => {
+  return new Observable<T>(function (subscriber) {
     executeSchedule(subscriber, scheduler, () => {
       const iterator = getAsyncIterator(input);
       executeSchedule(

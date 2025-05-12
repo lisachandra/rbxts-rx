@@ -21,19 +21,19 @@ export class AsyncSubject<T> extends Subject<T> {
     }
   }
 
-  next(value: T): void {
+  next: (this: void, value: T) => void = function (this: AsyncSubject<T>, value: T): void {
     if (!this.isStopped) {
       this._value = value;
       this._hasValue = true;
     }
-  }
+  } as never
 
-  complete(): void {
+  complete: (this: void) => void = function (this: AsyncSubject<T>): void {
     const { _hasValue, _value, _isComplete } = this;
     if (!_isComplete) {
       this._isComplete = true;
-      _hasValue && super.next(_value!);
-      super.complete();
+      _hasValue && this._next(_value!);
+      this._complete();
     }
-  }
+  } as never
 }

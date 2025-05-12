@@ -13,5 +13,7 @@ import { Subscribable } from '../types';
  * @param subscribable A subscribable
  */
 export function fromSubscribable<T>(subscribable: Subscribable<T>) {
-  return new Observable((subscriber: Subscriber<T>) => subscribable.subscribe(subscriber));
+  return new Observable<T>(function (subscriber) {
+    subscribable.subscribe(subscriber)
+  });
 }

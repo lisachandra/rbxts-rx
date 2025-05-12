@@ -137,7 +137,7 @@ describe('repeat operator', () => {
 
   it('should always finalization before starting the next cycle', async () => {
     const results: defined[] = [];
-    const source = new Observable<number>((subscriber) => {
+    const source = new Observable<number>(function (subscriber) {
       Promise.resolve().then(() => {
         subscriber.next(1);
         Promise.resolve().then(() => {
@@ -159,7 +159,7 @@ describe('repeat operator', () => {
 
   it('should always finalize before starting the next cycle, even when synchronous', () => {
     const results: defined[] = [];
-    const source = new Observable<number>((subscriber) => {
+    const source = new Observable<number>(function (subscriber) {
       subscriber.next(1);
       subscriber.next(2);
       subscriber.complete();
@@ -347,7 +347,7 @@ describe('repeat operator', () => {
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
     const sideEffects: number[] = [];
-    const synchronousObservable = new Observable<number>((subscriber) => {
+    const synchronousObservable = new Observable<number>(function (subscriber) {
       // This will check to see if the subscriber was closed on each loop
       // when the unsubscribe hits (from the `take`), it should be closed
       for (let i = 0; !subscriber.closed && i < 10; i++) {

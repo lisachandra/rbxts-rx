@@ -3,16 +3,16 @@ import { SchedulerLike } from '../types';
 import { bindCallbackInternals } from './bindCallbackInternals';
 
 export function bindNodeCallback(
-  callbackFunc: (this: void, ...args: any[]) => void,
-  resultSelector: (this: void, ...args: any[]) => any,
+  callbackFunc: (...args: any[]) => void,
+  resultSelector: (...args: any[]) => any,
   scheduler?: SchedulerLike
-): (this: void, ...args: any[]) => Observable<any>;
+): (...args: any[]) => Observable<any>;
 
 // args is the arguments array and we push the callback on the rest tuple since the rest parameter must be last (only item) in a parameter list
 export function bindNodeCallback<A extends readonly unknown[], R extends readonly unknown[]>(
-  callbackFunc: (this: void, ...args: [...A, (err: any, ...res: R) => void]) => void,
+  callbackFunc: (...args: [...A, (err: any, ...res: R) => void]) => void,
   schedulerLike?: SchedulerLike
-): (this: void, ...arg: A) => Observable<R extends [] ? void : R extends [any] ? R[0] : R>;
+): (...arg: A) => Observable<R extends [] ? void : R extends [any] ? R[0] : R>;
 
 /**
  * Converts a Node.js-style callback API to a function that returns an
@@ -122,9 +122,9 @@ export function bindNodeCallback<A extends readonly unknown[], R extends readonl
  * Node.js callback would deliver.
  */
 export function bindNodeCallback(
-  callbackFunc: (this: void, ...args: [...any[], (err: any, ...res: any) => void]) => void,
-  resultSelector?: ((this: void, ...args: any[]) => any) | SchedulerLike,
+  callbackFunc: (...args: [...any[], (err: any, ...res: any) => void]) => void,
+  resultSelector?: ((...args: any[]) => any) | SchedulerLike,
   scheduler?: SchedulerLike
-): (this: void, ...args: any[]) => Observable<any> {
+): (...args: any[]) => Observable<any> {
   return bindCallbackInternals(true, callbackFunc, resultSelector, scheduler);
 }

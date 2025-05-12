@@ -2,7 +2,7 @@ import { Operator } from './Operator';
 import { Observable } from './Observable';
 import { Subscriber } from './Subscriber';
 import { Subscription, EMPTY_SUBSCRIPTION } from './Subscription';
-import { Observer, SubscriptionLike, TeardownLogic } from './types';
+import { Observer, SubjectLike, SubscriptionLike, TeardownLogic } from './types';
 import { ObjectUnsubscribedError } from './util/ObjectUnsubscribedError';
 import { arrRemove } from './util/arrRemove';
 import { errorContext } from './util/errorContext';
@@ -56,7 +56,20 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
     }
   }
 
-  next(value: T) {
+  next: (this: void, value: T) => void = function (this: Subject<T>, value: T): void {
+    this._next(value)
+  } as never
+
+  error: (this: void, err: any) => void = function (this: Subject<T>, err: any): void {
+    this._error(err)
+  } as never
+
+  complete: (this: void) => void = function (this: Subject<T>): void {
+    this._complete()
+  } as never
+
+  /** @internal */
+  protected _next(value: T) {
     errorContext(() => {
       this._throwIfClosed();
       if (!this.isStopped) {
@@ -70,7 +83,8 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
     });
   }
 
-  error(err: any) {
+  /** @internal */
+  protected _error(err: any) {
     errorContext(() => {
       this._throwIfClosed();
       if (!this.isStopped) {
@@ -84,7 +98,8 @@ export class Subject<T> extends Observable<T> implements SubscriptionLike {
     });
   }
 
-  complete() {
+  /** @internal */
+  protected _complete() {
     errorContext(() => {
       this._throwIfClosed();
       if (!this.isStopped) {
@@ -166,17 +181,17 @@ export class AnonymousSubject<T> extends Subject<T> {
     this.source = source;
   }
 
-  next(value: T) {
+  next: (this: void, value: T) => void = function (this: AnonymousSubject<T>, value: T): void {
     this.destination?.next?.(value);
-  }
+  } as never
 
-  error(err: any) {
+  error: (this: void, err: any) => void = function (this: AnonymousSubject<T>, err: any): void {
     this.destination?.error?.(err);
-  }
+  } as never
 
-  complete() {
-    this.destination?.complete?.();
-  }
+  complete: (this: void) => void = function (this: AnonymousSubject<T>): void {
+   this.destination?.complete?.();
+  } as never
 
   /** @internal */
   protected _subscribe(subscriber: Subscriber<T>): Subscription {

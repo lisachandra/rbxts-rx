@@ -9,7 +9,7 @@ import { getIterator } from 'internal/polyfill/iterable';
  * @param scheduler The scheduler to use
  */
 export function scheduleIterable<T>(input: Iterable<T>, scheduler: SchedulerLike) {
-  return new Observable<T>((subscriber) => {
+  return new Observable<T>(function (subscriber) {
     let iterator: Iterator<T, T>;
 
     // Schedule the initial creation of the iterator from

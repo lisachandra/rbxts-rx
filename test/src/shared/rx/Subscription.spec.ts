@@ -120,20 +120,20 @@ describe('Subscription', () => {
     it('should unsubscribe from all subscriptions, when some of them throw', (_, done) => {
       const finalizers: number[] = [];
 
-      const source1 = new Observable(() => {
+      const source1 = new Observable(function () {
         return () => {
           finalizers.push(1);
         };
       });
 
-      const source2 = new Observable(() => {
+      const source2 = new Observable(function () {
         return () => {
           finalizers.push(2);
           throw new Error('oops, I am a bad unsubscribe!');
         };
       });
 
-      const source3 = new Observable(() => {
+      const source3 = new Observable(function () {
         return () => {
           finalizers.push(3);
         };
@@ -155,13 +155,13 @@ describe('Subscription', () => {
 
       const sub = new Subscription();
 
-      const source1 = new Observable(() => {
+      const source1 = new Observable(function () {
         return () => {
           finalizers.push(1);
         };
       });
 
-      const source2 = new Observable(() => {
+      const source2 = new Observable(function () {
         return () => {
           finalizers.push(2);
           sub.add(<any>{
@@ -173,7 +173,7 @@ describe('Subscription', () => {
         };
       });
 
-      const source3 = new Observable(() => {
+      const source3 = new Observable(function () {
         return () => {
           finalizers.push(3);
         };

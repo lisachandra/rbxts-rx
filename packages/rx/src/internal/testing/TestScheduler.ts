@@ -676,12 +676,12 @@ export class TestScheduler extends VirtualTimeScheduler {
     performanceTimestampProvider.delegate = this;
 
     const helpers: RunHelpers = {
-      cold: bind(false, this['createColdObservable' as never], this),
-      hot: bind(false, this['createHotObservable' as never], this),
-      flush: bind(false, this['flush' as never], this),
-      time: bind(false, this['createTime' as never], this),
-      expectObservable: bind(false, this['expectObservable' as never], this),
-      expectSubscriptions: bind(false, this['expectSubscriptions' as never], this),
+      cold: this['createColdObservable' as never],
+      hot: this['createHotObservable' as never],
+      flush: this['flush' as never],
+      time: this['createTime' as never],
+      expectObservable: this['expectObservable' as never],
+      expectSubscriptions: this['expectSubscriptions' as never],
       animate: animator.animate,
     };
     try {

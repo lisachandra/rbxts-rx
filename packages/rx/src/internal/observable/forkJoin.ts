@@ -145,7 +145,7 @@ export function forkJoin<T extends Record<string, ObservableInput<any>>>(
 export function forkJoin(...args: any[]): Observable<any> {
   const resultSelector = popResultSelector(args);
   const { args: sources, keys } = argsArgArrayOrObject(args as defined[]);
-  const result = new Observable((subscriber) => {
+  const result = new Observable(function (subscriber) {
     const length = sources.size();
     if (!length) {
       subscriber.complete();

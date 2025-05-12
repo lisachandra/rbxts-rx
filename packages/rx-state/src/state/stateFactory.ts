@@ -36,7 +36,7 @@ export default function connectFactoryObservable<A extends [], O>(
       cache.delete(keys);
     });
 
-    const publicShared = new Observable<O>((subscriber) => {
+    const publicShared = new Observable<O>(function (subscriber) {
       const inCache = cache.get(keys);
       let source: StateObservable<O> = sharedObservable;
 
@@ -93,7 +93,7 @@ class NestedMap<K extends [], V extends object> {
     const maps: Map<K, any>[] = [this.root];
     let current: Map<K, any> = this.root;
 
-    for (let i = 0; i < keys.size() - 1; i++) {
+    for (let i = 0; i < keys.size(); i++) {
       maps.push((current = current.get(keys[i]) as never));
     }
 

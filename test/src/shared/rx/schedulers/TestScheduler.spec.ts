@@ -584,11 +584,11 @@ describe('TestScheduler', () => {
           const values: string[] = [];
 
           testScheduler.schedule(() => {
-            animationFrameProvider.schedule((t) => values.push(`a@${t}`));
+            animationFrameProvider.schedule(function (t) { values.push(`a@${t}`) } );
             expect(values).toEqual([]);
           }, 0);
           testScheduler.schedule(() => {
-            animationFrameProvider.schedule((t) => values.push(`b@${t}`));
+            animationFrameProvider.schedule(function (t) { values.push(`b@${t}`) } );
             expect(values).toEqual([]);
           }, 1);
           testScheduler.schedule(() => {
@@ -605,8 +605,8 @@ describe('TestScheduler', () => {
           const values: string[] = [];
 
           testScheduler.schedule(() => {
-            animationFrameProvider.schedule((t) => values.push(`a@${t}`));
-            animationFrameProvider.schedule((t) => values.push(`b@${t}`));
+            animationFrameProvider.schedule(function (t) { values.push(`a@${t}`) } );
+            animationFrameProvider.schedule(function (t) { values.push(`b@${t}`) } );
             expect(values).toEqual([]);
           }, 1);
           testScheduler.schedule(() => {
@@ -623,8 +623,8 @@ describe('TestScheduler', () => {
           const values: string[] = [];
 
           testScheduler.schedule(() => {
-            const subscription = animationFrameProvider.schedule((t) => values.push(`a@${t}`));
-            animationFrameProvider.schedule((t) => values.push(`b@${t}`));
+            const subscription = animationFrameProvider.schedule(function (t) { values.push(`a@${t}`) } );
+            animationFrameProvider.schedule(function (t) { values.push(`b@${t}`) } );
             subscription.unsubscribe();
             expect(values).toEqual([]);
           }, 1);

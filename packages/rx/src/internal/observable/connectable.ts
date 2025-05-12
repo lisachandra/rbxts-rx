@@ -43,7 +43,7 @@ export function connectable<T>(source: ObservableInput<T>, config: ConnectableCo
   const { connector, resetOnDisconnect = true } = config;
   let subject = connector();
 
-  const result: any = new Observable<T>((subscriber) => {
+  const result: any = new Observable<T>(function (subscriber) {
     return subject.subscribe(subscriber);
   });
 

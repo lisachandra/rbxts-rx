@@ -3,16 +3,16 @@ import { Observable } from '../Observable';
 import { bindCallbackInternals } from './bindCallbackInternals';
 
 export function bindCallback(
-  callbackFunc: (this: void, ...args: any[]) => void,
-  resultSelector: (this: void, ...args: any[]) => any,
+  callbackFunc: (...args: any[]) => void,
+  resultSelector: (...args: any[]) => any,
   scheduler?: SchedulerLike
-): (this: void, ...args: any[]) => Observable<any>;
+): (...args: any[]) => Observable<any>;
 
 // args is the arguments array and we push the callback on the rest tuple since the rest parameter must be last (only item) in a parameter list
 export function bindCallback<A extends readonly unknown[], R extends readonly unknown[]>(
-  callbackFunc: (this: void, ...args: [...A, (...res: R) => void]) => void,
+  callbackFunc: (...args: [...A, (...res: R) => void]) => void,
   schedulerLike?: SchedulerLike
-): (this: void, ...arg: A) => Observable<R extends [] ? void : R extends [any] ? R[0] : R>;
+): (...arg: A) => Observable<R extends [] ? void : R extends [any] ? R[0] : R>;
 
 /**
  * Converts a callback API to a function that returns an Observable.
@@ -140,9 +140,9 @@ export function bindCallback<A extends readonly unknown[], R extends readonly un
  * values the callback would deliver.
  */
 export function bindCallback(
-  callbackFunc: (this: void, ...args: [...any[], (...res: any) => void]) => void,
-  resultSelector?: ((this: void, ...args: any[]) => any) | SchedulerLike,
+  callbackFunc: (...args: [...any[], (...res: any) => void]) => void,
+  resultSelector?: ((...args: any[]) => any) | SchedulerLike,
   scheduler?: SchedulerLike
-): (this: void, ...args: any[]) => Observable<unknown> {
+): (...args: any[]) => Observable<unknown> {
   return bindCallbackInternals(false, callbackFunc, resultSelector, scheduler);
 }

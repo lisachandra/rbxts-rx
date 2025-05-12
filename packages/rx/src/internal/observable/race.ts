@@ -60,7 +60,7 @@ export function race<T>(...sources: (ObservableInput<T> | ObservableInput<T>[])[
  * @param sources The sources to race
  */
 export function raceInit<T>(sources: ObservableInput<T>[]) {
-  return (subscriber: Subscriber<T>) => {
+  return function (this: any, subscriber: Subscriber<T>) {
     let subscriptions: Subscription[] = [];
 
     // Subscribe to all of the sources. Note that we are checking `subscriptions` here

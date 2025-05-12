@@ -209,7 +209,7 @@ describe('Subscriber', () => {
     it('should allow changing the context of `this` in a POJO subscriber', () => {
       const results: defined[] = [];
 
-      const source = new Observable<number>((subscriber) => {
+      const source = new Observable<number>(function (subscriber) {
         for (let i = 0; i < 10 && !subscriber.closed; i++) {
           subscriber.next(i);
         }
@@ -242,10 +242,6 @@ describe('Subscriber', () => {
       // This is a contrived class to illustrate that we can pass another
       // object that is "observer shaped"
       class CustomConsumer {
-        constructor() {
-          this.next = bind(false, this['next' as never], this);
-        }
-
         valuesProcessed: string[] = [];
 
         // In here, we access instance state and alter it.

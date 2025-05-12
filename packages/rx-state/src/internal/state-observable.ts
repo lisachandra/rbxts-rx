@@ -23,7 +23,7 @@ export default class StateObservable<T> extends Observable<T> {
     private defaultValue: T,
     teardown = noop
   ) {
-    super((subscriber) => {
+    super(((_: Observable<T>, subscriber: Subscriber<T>) => {
       const subscriberWithoutComplete = new Subscriber({
         next: bind(false, subscriber['next' as never], subscriber),
         error: bind(false, subscriber['error' as never], subscriber),
@@ -110,7 +110,7 @@ export default class StateObservable<T> extends Observable<T> {
           subscriber.next(this.currentValue);
         }
       }
-    });
+    }) as never);
 
     if (defaultValue === EMPTY_VALUE) {
       // Remove the getDefaultValue property from this object, as it's not part of the interface

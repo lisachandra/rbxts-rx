@@ -144,7 +144,7 @@ export function fromEventPattern<T>(
     return fromEventPattern<T>(addHandler, removeHandler).pipe(mapOneOrManyArgs(resultSelector));
   }
 
-  return new Observable<T | T[]>((subscriber) => {
+  return new Observable<T | T[]>(function (subscriber) {
     const handler = (...e: T[]) => subscriber.next(e.size() === 1 ? e[0] : e);
     const retValue = addHandler(handler);
     return isFunction(removeHandler) ? () => removeHandler(handler, retValue) : undefined;

@@ -29,7 +29,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable<number>((subscriber) => {
+      const source = new Observable<number>(function (subscriber) {
         subscriber.next(1);
         subscriber.error('bad');
       });
@@ -51,7 +51,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable<number>((subscriber) => {
+      const source = new Observable<number>(function (subscriber) {
         subscriber.next(1);
         subscriber.error('bad');
       });
@@ -69,7 +69,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriber.error('bad');
       });
 
@@ -91,7 +91,7 @@ describe('config', () => {
         called = true;
       };
 
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriber.error('handled');
         subscriber.error('swallowed');
       });
@@ -132,7 +132,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriber.error('handled');
         throw 'bad';
       });
@@ -158,7 +158,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriber.complete();
         throw 'bad';
       });
@@ -185,7 +185,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriber.next(1);
         subscriber.complete();
         subscriber.next(2);
@@ -211,7 +211,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriber.error('handled');
         subscriber.error('swallowed');
       });
@@ -235,7 +235,7 @@ describe('config', () => {
         done();
       };
 
-      const source = new Observable((subscriber) => {
+      const source = new Observable(function (subscriber) {
         subscriber.complete();
         subscriber.complete();
       });

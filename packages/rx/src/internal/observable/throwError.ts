@@ -120,6 +120,10 @@ export function throwError(errorOrErrorFactory: any, scheduler: SchedulerLike): 
 
 export function throwError(errorOrErrorFactory: any, scheduler?: SchedulerLike): Observable<never> {
   const errorFactory = isFunction(errorOrErrorFactory) ? errorOrErrorFactory : () => errorOrErrorFactory;
-  const init = (subscriber: Subscriber<never>) => subscriber.error(errorFactory());
-  return new Observable(scheduler ? (subscriber) => scheduler.schedule(init as any, 0, subscriber) : init);
+  const init = function (this: any, subscriber: Subscriber<never>) {
+    subscriber.error(errorFactory())
+  };
+  return new Observable(scheduler ? function(subscriber) {
+    scheduler.schedule(init, 0, subscriber)
+  } : init);
 }

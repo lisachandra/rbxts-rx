@@ -37,7 +37,7 @@ const disconnect = (connection: ConnectionLike) => {
 };
 
 export function fromSignal<T extends SignalLike<C>, C extends Callback>(signal: T): Observable<Parameters<C>> {
-  return new Observable((subscriber) => {
+  return new Observable(function (subscriber) {
     const connection = connect(signal, (...args: any[]) => {
       subscriber.next(args as Parameters<C>);
     });

@@ -3,6 +3,7 @@ import { expand, mergeMap, map, take, toArray } from '@rbxts/rx/out/operators';
 import { TestScheduler } from '@rbxts/rx/out/testing';
 import { EMPTY, Observable, of, Observer, asapScheduler, asyncScheduler, InteropObservable } from '@rbxts/rx';
 import { observableMatcher } from '../helpers/observableMatcher';
+import Symbol from "@rbxts/rx/out/internal/polyfill/symbol"
 
 /** @test {expand} */
 describe('expand', () => {
@@ -500,7 +501,7 @@ describe('expand', () => {
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
     const sideEffects: number[] = [];
-    const synchronousObservable = new Observable<number>((subscriber) => {
+    const synchronousObservable = new Observable<number>(function (subscriber) {
       // This will check to see if the subscriber was closed on each loop
       // when the unsubscribe hits (from the `take`), it should be closed
       for (let i = 0; !subscriber.closed && i < 10; i++) {

@@ -2,7 +2,7 @@ import { Observable } from '../Observable';
 import { SchedulerLike } from '../types';
 
 export function scheduleArray<T>(input: ArrayLike<T>, scheduler: SchedulerLike) {
-  return new Observable<T>((subscriber) => {
+  return new Observable<T>(function (subscriber) {
     // The current array index.
     let i = 0;
     // Start iterating over the array like on a schedule.

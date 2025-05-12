@@ -290,7 +290,7 @@ export function fromEvent<T>(
     throw new Error('Invalid event target');
   }
 
-  return new Observable<T>((subscriber) => {
+  return new Observable<T>(function (subscriber) {
     // The handler we are going to register. Forwards the event object, by itself, or
     // an array of arguments to the event handler, if there is more than one argument,
     // to the consumer.

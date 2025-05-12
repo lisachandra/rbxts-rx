@@ -33,7 +33,7 @@ describe('retry', () => {
   it('should retry a number of times, without error, then complete', (_, done) => {
     let errors = 0;
     const retries = 2;
-    new Observable((observer: Observer<number>) => {
+    new Observable(function (observer: Observer<number>) {
       observer.next(42);
       observer.complete();
     })
@@ -61,7 +61,7 @@ describe('retry', () => {
   it('should retry a number of times, then call error handler', (_, done) => {
     let errors = 0;
     const retries = 2;
-    new Observable((observer: Observer<number>) => {
+    new Observable(function (observer: Observer<number>) {
       observer.next(42);
       observer.complete();
     })
@@ -89,7 +89,7 @@ describe('retry', () => {
   it('should retry a number of times, then call error handler (with resetOnSuccess)', (_, done) => {
     let errors = 0;
     const retries = 2;
-    new Observable((observer: Observer<number>) => {
+    new Observable(function (observer: Observer<number>) {
       observer.next(42);
       observer.complete();
     })
@@ -147,7 +147,7 @@ describe('retry', () => {
 
   it('should always finalize before starting the next cycle, even when synchronous', () => {
     const results: defined[] = [];
-    const source = new Observable<number>((subscriber) => {
+    const source = new Observable<number>(function (subscriber) {
       subscriber.next(1);
       subscriber.next(2);
       subscriber.error('bad');
@@ -198,7 +198,7 @@ describe('retry', () => {
   it('should retry until successful completion', (_, done) => {
     let errors = 0;
     const retries = 10;
-    new Observable((observer: Observer<number>) => {
+    new Observable(function (observer: Observer<number>) {
       observer.next(42);
       observer.complete();
     })
@@ -381,7 +381,7 @@ describe('retry', () => {
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
     const sideEffects: number[] = [];
-    const synchronousObservable = new Observable<number>((subscriber) => {
+    const synchronousObservable = new Observable<number>(function (subscriber) {
       // This will check to see if the subscriber was closed on each loop
       // when the unsubscribe hits (from the `take`), it should be closed
       for (let i = 0; !subscriber.closed && i < 10; i++) {

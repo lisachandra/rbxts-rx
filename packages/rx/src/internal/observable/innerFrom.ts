@@ -12,6 +12,8 @@ import { reportUnhandledError } from '../util/reportUnhandledError';
 import { Error } from '@rbxts/luau-polyfill';
 import { getAsyncIterator, getIterator } from 'internal/polyfill/iterable';
 import { isReadableStreamLike, readableStreamLikeToAsyncGenerator } from 'internal/util/isReadableStreamLike';
+import { typeAssertIs } from 'internal/polyfill/type';
+import Symbol from 'internal/polyfill/symbol';
 
 export function innerFrom<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
@@ -47,7 +49,7 @@ export function innerFrom<T>(input: ObservableInput<T>): Observable<T> {
  * @param obj An object that properly implements `Symbol.observable`.
  */
 export function fromInteropObservable<T>(obj: any) {
-  return new Observable((subscriber: Subscriber<T>) => {
+  return new Observable(function (subscriber: Subscriber<T>) {
     const obs = (obj as InteropObservable<any>)[Symbol.observable]();
     if (isFunction(obs['subscribe' as never])) {
       return obs.subscribe(subscriber);
@@ -65,7 +67,7 @@ export function fromInteropObservable<T>(obj: any) {
  * @param array The array to emit values from
  */
 export function fromArrayLike<T>(array: ArrayLike<T>) {
-  return new Observable((subscriber: Subscriber<T>) => {
+  return new Observable(function (subscriber: Subscriber<T>) {
     // Loop over the array and emit each value. Note two things here:
     // 1. We're making sure that the subscriber is not closed on each loop.
     //    This is so we don't continue looping over a very large array after
@@ -75,6 +77,7 @@ export function fromArrayLike<T>(array: ArrayLike<T>) {
     //    This is a known issue, but considered an edge case. The alternative would
     //    be to copy the array before executing the loop, but this has
     //    performance implications.
+    typeAssertIs<T[]>(array)
     for (let i = 0; i < array.size() && !subscriber.closed; i++) {
       subscriber.next(array[i]);
     }
@@ -83,7 +86,7 @@ export function fromArrayLike<T>(array: ArrayLike<T>) {
 }
 
 export function fromPromise<T>(promise: Promise<T>) {
-  return new Observable((subscriber: Subscriber<T>) => {
+  return new Observable(function (subscriber: Subscriber<T>) {
     promise
       .then(
         (value) => {
@@ -99,7 +102,7 @@ export function fromPromise<T>(promise: Promise<T>) {
 }
 
 export function fromIterable<T>(iterable: Iterable<T>) {
-  return new Observable((subscriber: Subscriber<T>) => {
+  return new Observable(function (subscriber: Subscriber<T>) {
     const iterator = getIterator(iterable);
     let result;
     while (!(result = iterator.next()).done) {
@@ -115,7 +118,7 @@ export function fromIterable<T>(iterable: Iterable<T>) {
 }
 
 export function fromAsyncIterable<T>(asyncIterable: AsyncIterable<T>) {
-  return new Observable((subscriber: Subscriber<T>) => {
+  return new Observable(function (subscriber: Subscriber<T>) {
     process(asyncIterable, subscriber).catch((err) => subscriber.error(err));
   });
 }

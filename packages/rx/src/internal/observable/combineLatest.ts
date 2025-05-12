@@ -228,7 +228,7 @@ export function combineLatestInit(
   scheduler?: SchedulerLike,
   valueTransform: (values: any[]) => any = identity
 ) {
-  return (subscriber: Subscriber<any>) => {
+  return function (this: any, subscriber: Subscriber<any>) {
     // The outer subscription. We're capturing this in a function
     // because we may have to schedule it.
     maybeSchedule(

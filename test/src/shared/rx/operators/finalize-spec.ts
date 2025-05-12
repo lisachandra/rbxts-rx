@@ -243,7 +243,7 @@ describe('finalize', () => {
 
   it('should finalize after the finalizer with synchronous completion', () => {
     const order: string[] = [];
-    const source = new Observable<void>((subscriber) => {
+    const source = new Observable<void>(function (subscriber) {
       subscriber.complete();
       return () => order.push('finalizer');
     });
@@ -253,7 +253,7 @@ describe('finalize', () => {
 
   it('should stop listening to a synchronous observable when unsubscribed', () => {
     const sideEffects: number[] = [];
-    const synchronousObservable = new Observable<number>((subscriber) => {
+    const synchronousObservable = new Observable<number>(function (subscriber) {
       // This will check to see if the subscriber was closed on each loop
       // when the unsubscribe hits (from the `take`), it should be closed
       for (let i = 0; !subscriber.closed && i < 10; i++) {
@@ -278,7 +278,7 @@ describe('finalize', () => {
 
   it('should execute finalize even with a sync thrown error', () => {
     let called = false;
-    const badObservable = new Observable(() => {
+    const badObservable = new Observable(function () {
       throw new Error('bad');
     }).pipe(
       finalize(() => {
@@ -295,7 +295,7 @@ describe('finalize', () => {
 
   it('should execute finalize in order even with a sync error', () => {
     const results: defined[] = [];
-    const badObservable = new Observable((subscriber) => {
+    const badObservable = new Observable(function (subscriber) {
       subscriber.error(new Error('bad'));
     }).pipe(
       finalize(() => {
@@ -315,7 +315,7 @@ describe('finalize', () => {
 
   it('should execute finalize in order even with a sync thrown error', () => {
     const results: defined[] = [];
-    const badObservable = new Observable(() => {
+    const badObservable = new Observable(function () {
       throw new Error('bad');
     }).pipe(
       finalize(() => {

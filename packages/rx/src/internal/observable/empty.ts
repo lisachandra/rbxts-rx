@@ -63,7 +63,9 @@ import { SchedulerLike } from '../types';
  * @see {@link of}
  * @see {@link throwError}
  */
-export const EMPTY = new Observable<never>((subscriber) => subscriber.complete());
+export const EMPTY = new Observable<never>(function (subscriber) {
+  subscriber.complete()
+});
 
 /**
  * @param scheduler A {@link SchedulerLike} to use for scheduling
@@ -75,5 +77,7 @@ export function empty(scheduler?: SchedulerLike) {
 }
 
 function emptyScheduled(scheduler: SchedulerLike) {
-  return new Observable<never>((subscriber) => scheduler.schedule(() => subscriber.complete()));
+  return new Observable<never>(function (subscriber) {
+    scheduler.schedule(() => subscriber.complete())
+  });
 }

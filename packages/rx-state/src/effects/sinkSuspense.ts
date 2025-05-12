@@ -7,7 +7,7 @@ export const sinkSuspense: typeof ISinkSuspense = () => {
   return <T>(source: Observable<T>) => {
     let waiting: SubscriberWithInner<any> | undefined = undefined;
 
-    return new Observable((observer) => {
+    return new Observable(function (observer) {
       if (waiting) {
         waiting.inner = observer;
         const outter = waiting;

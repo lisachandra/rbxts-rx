@@ -4,7 +4,7 @@ import type { liftSuspense as ILiftSuspense } from '../types';
 
 export const liftSuspense: typeof ILiftSuspense = () => {
   return <T>(source: Observable<T>): Observable<T | SUSPENSE> => {
-    return new Observable((observer) => {
+    return new Observable(function (observer) {
       let subscriber: Subscriber<any>;
 
       const setSubscriber = () => {

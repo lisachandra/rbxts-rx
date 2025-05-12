@@ -50,7 +50,7 @@ import { innerFrom } from './innerFrom';
  * given Observable factory function.
  */
 export function defer<R extends ObservableInput<any>>(observableFactory: () => R): Observable<ObservedValueOf<R>> {
-  return new Observable<ObservedValueOf<R>>((subscriber) => {
+  return new Observable<ObservedValueOf<R>>(function (subscriber) {
     innerFrom(observableFactory()).subscribe(subscriber);
   });
 }

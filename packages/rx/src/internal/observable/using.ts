@@ -33,7 +33,7 @@ export function using<T extends ObservableInput<any>>(
   resourceFactory: () => Unsubscribable | void,
   observableFactory: (resource: Unsubscribable | void) => T | void
 ): Observable<ObservedValueOf<T>> {
-  return new Observable<ObservedValueOf<T>>((subscriber) => {
+  return new Observable<ObservedValueOf<T>>(function (subscriber) {
     const resource = resourceFactory();
     const result = observableFactory(resource);
     const source = result ? innerFrom(result) : EMPTY;

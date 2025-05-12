@@ -11,7 +11,7 @@ describe('VirtualTimeScheduler', () => {
   it('should schedule things in order when flushed if each this is scheduled synchronously', () => {
     const v = new VirtualTimeScheduler();
     const invoked: number[] = [];
-    const invoke: any = (state: number) => {
+    const invoke: any = function (this: any, state: number) {
       invoked.push(state);
     };
     v.schedule(invoke, 0, 1);
@@ -28,7 +28,7 @@ describe('VirtualTimeScheduler', () => {
   it('should schedule things in order when flushed if each this is scheduled at random', () => {
     const v = new VirtualTimeScheduler();
     const invoked: number[] = [];
-    const invoke: any = (state: number) => {
+    const invoke: any = function (this: any, state: number) {
       invoked.push(state);
     };
     v.schedule(invoke, 0, 1);
@@ -46,7 +46,7 @@ describe('VirtualTimeScheduler', () => {
   it('should schedule things in order when there are negative delays', () => {
     const v = new VirtualTimeScheduler();
     const invoked: number[] = [];
-    const invoke: any = (state: number) => {
+    const invoke: any = function (this: any, state: number) {
       invoked.push(state);
     };
     v.schedule(invoke, 0, 1);
@@ -87,7 +87,7 @@ describe('VirtualTimeScheduler', () => {
     const v = new VirtualTimeScheduler();
     const messages: string[] = [];
 
-    const action: VirtualAction<string> = <VirtualAction<string>>v.schedule((state) => messages.push(state!), 10, 'first message');
+    const action: VirtualAction<string> = <VirtualAction<string>>v.schedule<string>(function (state) { messages.push(state!), 10, 'first message' } );
 
     action.schedule('second message', 10);
     v.flush();
@@ -103,7 +103,7 @@ describe('VirtualTimeScheduler', () => {
     const actualMessages: string[] = [];
 
     messages.forEach((message, index) => {
-      v.schedule((state) => actualMessages.push(state!), index * MAX_FRAMES, message);
+      v.schedule<string>(function (state) { actualMessages.push(state!), index * MAX_FRAMES, message } );
     });
 
     v.flush();
@@ -120,7 +120,7 @@ describe('VirtualTimeScheduler', () => {
     const actualMessages: string[] = [];
 
     messages.forEach((message, index) => {
-      v.schedule((state) => actualMessages.push(state!), index * MAX_FRAMES, message);
+      v.schedule<string>(function (state) { actualMessages.push(state!), index * MAX_FRAMES, message } );
     });
 
     v.flush();

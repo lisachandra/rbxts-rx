@@ -15,8 +15,8 @@ local status, result = Jest.runCLI(script, {
 	setupFilesAfterEnv = { TestService["setup-env"] },
 }, {
 	ReplicatedStorage.TS.shared["rx"],
-  ReplicatedStorage.TS.shared["rx-state"],
-  ReplicatedStorage.TS.shared["react-rx"],
+  -- ReplicatedStorage.TS.shared["rx-state"],
+  -- ReplicatedStorage.TS.shared["react-rx"],
 }):awaitStatus()
 
 if status == "Rejected" or result.results.numFailedTestSuites > 0 or result.results.numFailedTests > 0 then

@@ -27,7 +27,7 @@ export class BehaviorSubject<T> extends Subject<T> {
     return _value;
   }
 
-  next(value: T): void {
-    super.next((this._value = value));
-  }
+  next: (this: void, value: T) => void = function (this: BehaviorSubject<T>, value: T): void {
+    this._next((this._value = value));
+  } as never
 }
