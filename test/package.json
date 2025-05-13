@@ -8,10 +8,15 @@
 		"dev": "shx rm -rf out && rbxtsc --rojo ../default.project.json --includePath out/include --noInclude --allowCommentDirectives -w"
 	},
 	"dependencies": {
+		"@rbxts/dom-testing-library": "^8.14.0-rc.3",
 		"@rbxts/jest": "^0.1.0",
 		"@rbxts/jest-globals": "^0.1.0",
 		"@rbxts/jest-vendor": "./packages/jest-vendor",
 		"@rbxts/luau-polyfill": "^1.0.0",
+		"@rbxts/react": "^17.2.3",
+		"@rbxts/react-roblox-fire": "^0.1.0",
+		"@rbxts/react-rx": "workspace:^",
+		"@rbxts/react-testing-library": "^12.1.5-rc.3",
 		"@rbxts/regexp": "^0.2.1-ts.4",
 		"@rbxts/rx": "workspace:^",
 		"@rbxts/rx-state": "workspace:^",
